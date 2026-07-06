@@ -116,12 +116,12 @@
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="#">서비스</a>
-<a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="news.html">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://map.naver.com/v5/search/대구광역시%20수성구%20수성동1가%2072-3번지" target="_blank">오시는 길</a></div>
+<a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="news.html">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
             </a>
-<button class="md:hidden text-primary">
+<button class="md:hidden text-primary" id="mobile-menu-toggle">
 <span class="material-symbols-outlined">menu</span>
 </button>
 </div>
@@ -173,9 +173,9 @@
             <div>
                 <h3 class="font-nav text-nav text-surface-container-lowest mb-md">Social</h3>
                 <div class="flex gap-md">
-                    <a href="#" class="text-faint hover:text-surface-bright transition-colors">블로그</a>
-                    <a href="#" class="text-faint hover:text-surface-bright transition-colors">유튜브</a>
-                    <a href="#" class="text-faint hover:text-surface-bright transition-colors">인스타그램</a>
+                    <a href="https://blog.naver.com/freemo_co_kr" target="_blank" class="text-faint hover:text-surface-bright transition-colors">블로그</a>
+                    <a href="https://www.youtube.com/@auction-choi" target="_blank" rel="noopener noreferrer" class="text-faint hover:text-surface-bright transition-colors">유튜브</a>
+                    <a href="https://www.instagram.com/cym10003" target="_blank" class="text-faint hover:text-surface-bright transition-colors">인스타그램</a>
                 </div>
             </div>
         </div>
@@ -190,6 +190,10 @@
     <span class="material-symbols-outlined text-2xl">home</span>
     <span class="text-[10px] font-medium">홈</span>
   </a>
+  <a href="about.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
+    <span class="material-symbols-outlined text-2xl">info</span>
+    <span class="text-[10px] font-medium">소개</span>
+  </a>
   <a href="news.html" class="flex flex-col items-center justify-center text-primary w-12 h-12">
     <span class="material-symbols-outlined text-2xl">feed</span>
     <span class="text-[10px] font-medium">소식</span>
@@ -202,6 +206,29 @@
     <span class="material-symbols-outlined text-2xl">admin_panel_settings</span>
     <span class="text-[10px] font-medium">관리자</span>
   </a>
+</div>
+
+<!-- Mobile Drawer Menu -->
+<div id="mobile-drawer" class="fixed inset-0 bg-ink/50 z-50 hidden transition-opacity duration-300 opacity-0">
+  <div class="fixed right-0 top-0 bottom-0 w-64 bg-surface-container-lowest shadow-strong-elevated p-lg flex flex-col gap-lg transform translate-x-full transition-transform duration-300">
+    <div class="flex justify-between items-center border-b border-hairline pb-sm">
+      <span class="font-bold text-primary">메뉴</span>
+      <button id="mobile-drawer-close" class="text-muted hover:text-ink">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-md font-nav text-nav">
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="news.html">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
+    </nav>
+    <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
+      <span class="material-symbols-outlined text-[18px]">call</span>
+      010-3548-4000
+    </a>
+  </div>
 </div>
 <script src="db.js"></script>
 <script>
@@ -259,6 +286,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (e) {
         console.error("Error loading article details:", e);
         document.getElementById('post-content').innerText = "내용을 불러오는데 실패했습니다: " + e.message;
+    }
+    // Mobile Drawer Toggle
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const drawer = document.getElementById('mobile-drawer');
+    const drawerClose = document.getElementById('mobile-drawer-close');
+    const drawerContent = drawer ? drawer.querySelector('.transform') : null;
+
+    if (toggleBtn && drawer && drawerClose && drawerContent) {
+      const openDrawer = () => {
+        drawer.classList.remove('hidden');
+        setTimeout(() => {
+          drawer.classList.remove('opacity-0');
+          drawerContent.classList.remove('translate-x-full');
+        }, 10);
+      };
+      const closeDrawer = () => {
+        drawer.classList.add('opacity-0');
+        drawerContent.classList.add('translate-x-full');
+        setTimeout(() => {
+          drawer.classList.add('hidden');
+        }, 300);
+      };
+      toggleBtn.addEventListener('click', openDrawer);
+      drawerClose.addEventListener('click', closeDrawer);
+      drawer.addEventListener('click', (e) => {
+        if (e.target === drawer) closeDrawer();
+      });
     }
 });
 </script>
