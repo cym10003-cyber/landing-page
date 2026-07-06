@@ -1,0 +1,6 @@
+{
+  "github_token": "YOUR_GITHUB_TOKEN",
+  "github_owner": "cym10003-cyber",
+  "github_repo": "landing-page",
+  "data_file_path": "data/posts.json"
+}

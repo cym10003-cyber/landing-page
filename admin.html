@@ -1,0 +1,280 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>관리자 페이지 - 최가네부동산공인중개사사무소</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "muted": "#495057",
+                        "surface-container-highest": "#e2e2ec",
+                        "background": "#faf8ff",
+                        "tertiary": "#732300",
+                        "surface-tint": "#1957ca",
+                        "outline": "#737685",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-surface-variant": "#434653",
+                        "inverse-primary": "#b2c5ff",
+                        "tint": "#edf6fe",
+                        "secondary-fixed": "#dae1ff",
+                        "surface": "#f4f7fb",
+                        "secondary-container": "#a3bafe",
+                        "surface-dim": "#d9d9e3",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "ink-footer": "#13192d",
+                        "tertiary-container": "#9a3200",
+                        "on-primary-container": "#b8c9ff",
+                        "ink": "#212529",
+                        "surface-container-high": "#e7e7f1",
+                        "on-surface": "#191b22",
+                        "on-secondary-container": "#314885",
+                        "tertiary-fixed-dim": "#ffb59b",
+                        "secondary-fixed-dim": "#b3c5ff",
+                        "on-primary-fixed": "#001848",
+                        "surface-variant": "#e2e2ec",
+                        "primary-container": "#004dc1",
+                        "on-secondary-fixed": "#001849",
+                        "tertiary-fixed": "#ffdbcf",
+                        "primary": "#003891",
+                        "outline-variant": "#c3c6d6",
+                        "error": "#ba1a1a",
+                        "heading": "#1e1f21",
+                        "on-background": "#191b22",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#812900",
+                        "on-secondary-fixed-variant": "#2c4480",
+                        "blue-deep": "#074499",
+                        "hairline": "#ced4da",
+                        "surface-container-low": "#f3f3fd",
+                        "surface-bright": "#faf8ff",
+                        "blue-mid": "#0575e6",
+                        "surface-container": "#ededf7",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "on-tertiary": "#ffffff",
+                        "primary-bright": "#0069ed",
+                        "inverse-on-surface": "#f0f0fa",
+                        "primary-fixed": "#dae2ff",
+                        "inverse-surface": "#2e3038",
+                        "faint": "#969faa",
+                        "on-tertiary-container": "#ffbba3",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#380d00",
+                        "on-secondary": "#ffffff",
+                        "dark-chip": "#35343c",
+                        "secondary": "#455c9a",
+                        "soft-blue": "#dcedfd",
+                        "corporate-navy": "#0a2864"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "lg": "24px",
+                        "md": "12px",
+                        "base": "16px",
+                        "xxl": "48px",
+                        "section": "64px",
+                        "sm": "8px",
+                        "xl": "28px"
+                    },
+                    "fontFamily": {
+                        "display-hero": ["Inter"],
+                        "nav": ["Inter"],
+                        "body": ["Inter"],
+                        "section-h2": ["Inter"],
+                        "display-hero-mobile": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "subsection-h3": ["Inter"],
+                        "button": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-hero": ["58px", { "lineHeight": "1.36", "letterSpacing": "-0.4px", "fontWeight": "700" }],
+                        "nav": ["15px", { "lineHeight": "1.50", "fontWeight": "500" }],
+                        "body": ["15px", { "lineHeight": "1.50", "fontWeight": "400" }],
+                        "section-h2": ["40px", { "lineHeight": "1.30", "letterSpacing": "-0.4px", "fontWeight": "700" }],
+                        "display-hero-mobile": ["36px", { "lineHeight": "1.30", "letterSpacing": "-0.4px", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "1.50", "fontWeight": "500" }],
+                        "subsection-h3": ["32px", { "lineHeight": "1.20", "letterSpacing": "-0.4px", "fontWeight": "700" }],
+                        "button": ["14px", { "lineHeight": "1.50", "fontWeight": "600" }]
+                    },
+                    "boxShadow": {
+                        "card-soft": "0 8px 13px rgba(159, 176, 199, 0.3)",
+                        "button-strong": "0 2px 10px rgba(54, 55, 61, 0.25)"
+                    }
+                }
+            }
+        }
+    }catch(_e){}</script></head><body class="bg-surface text-ink font-body antialiased min-h-screen pb-20 md:pb-0">
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface w-full top-0 sticky border-b border-hairline dark:border-outline-variant z-50 flat no-shadows">
+<div class="flex justify-between items-center px-lg py-md max-w-7xl mx-auto">
+<div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
+<div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="#">최가네부동산 소개</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="#">서비스</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="news.html">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://map.naver.com/v5/search/대구광역시%20수성구%20수성동1가%2072-3번지" target="_blank">오시는 길</a></div>
+<a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
+<span class="material-symbols-outlined text-[18px]">call</span>
+                010-3548-4000
+            </a>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-lg py-[80px]">
+    <!-- Non-logged in State (Login Form) -->
+    <div id="login-view" class="hidden max-w-md mx-auto bg-surface-container-lowest p-lg md:p-xl rounded-xl shadow-card-soft border border-hairline my-12">
+        <h2 class="font-subsection-h3 text-xl font-bold text-center text-ink mb-lg">관리자 로그인</h2>
+        <form id="login-form" class="space-y-base">
+            <div>
+                <label for="password" class="block text-sm font-semibold text-ink mb-xs">비밀번호</label>
+                <input type="password" id="password" required class="block w-full border-hairline rounded-lg py-2.5 focus:ring-primary focus:border-primary text-sm bg-surface-container-low" placeholder="비밀번호를 입력해 주세요.">
+            </div>
+            <div id="login-error" class="hidden text-error text-sm font-medium"></div>
+            <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-button text-button hover:bg-blue-deep transition-all min-h-[44px]">로그인</button>
+        </form>
+    </div>
+
+    <!-- Logged in State (Dashboard) -->
+    <div id="dashboard-view" class="hidden flex flex-col gap-lg">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md border-b border-hairline pb-lg">
+            <div>
+                <h1 class="font-subsection-h3 text-2xl text-ink font-bold">게시글 관리 대시보드</h1>
+                <p class="text-muted text-sm mt-xs">등록된 부동산 소식 및 뉴스 목록을 관리합니다.</p>
+            </div>
+            <div class="flex gap-sm w-full sm:w-auto">
+                <a href="news-write.html" class="flex-1 sm:flex-initial bg-primary-container text-white px-lg py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-mid transition-all flex items-center justify-center gap-xs shadow-sm min-h-[44px]">
+                    <span class="material-symbols-outlined text-[18px]">add_circle</span> 새 글 작성
+                </a>
+                <button id="logout-btn" class="flex-1 sm:flex-initial bg-surface-container-high hover:bg-surface-dim text-ink px-lg py-2.5 rounded-lg text-sm font-semibold transition-all min-h-[44px]">로그아웃</button>
+            </div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-ink border-collapse">
+                    <thead class="bg-surface-container text-muted border-b border-hairline font-semibold text-xs uppercase tracking-wider">
+                        <tr>
+                            <th class="px-lg py-4 w-16 text-center">번호</th>
+                            <th class="px-lg py-4 w-32">카테고리</th>
+                            <th class="px-lg py-4">제목</th>
+                            <th class="px-lg py-4 w-36">작성일</th>
+                            <th class="px-lg py-4 w-44 text-center">작업</th>
+                        </tr>
+                    </thead>
+                    <tbody id="posts-tbody" class="divide-y divide-hairline">
+                    </tbody>
+                </table>
+            </div>
+            <div id="empty-dashboard" class="hidden py-xxl text-center border-t border-hairline">
+                <span class="material-symbols-outlined text-4xl text-muted mb-md">folder_open</span>
+                <p class="text-muted text-sm">작성된 게시글이 없습니다.</p>
+            </div>
+        </div>
+    </div>
+</main>
+<div class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-hairline flex justify-around items-center py-2 z-50 md:hidden shadow-lg">
+  <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
+    <span class="material-symbols-outlined text-2xl">home</span>
+    <span class="text-[10px] font-medium">홈</span>
+  </a>
+  <a href="news.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
+    <span class="material-symbols-outlined text-2xl">feed</span>
+    <span class="text-[10px] font-medium">소식</span>
+  </a>
+  <a href="tel:010-3548-4000" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
+    <span class="material-symbols-outlined text-2xl">call</span>
+    <span class="text-[10px] font-medium">전화</span>
+  </a>
+  <a href="admin.html" class="flex flex-col items-center justify-center text-primary w-12 h-12">
+    <span class="material-symbols-outlined text-2xl">admin_panel_settings</span>
+    <span class="text-[10px] font-medium">관리자</span>
+  </a>
+</div>
+<script src="db.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const config = await loadConfig();
+
+    if (isAdmin()) {
+        document.getElementById('dashboard-view').classList.remove('hidden');
+        loadDashboardList();
+        
+        document.getElementById('logout-btn').onclick = () => {
+            sessionStorage.removeItem('isAdmin');
+            window.location.reload();
+        };
+    } else {
+        document.getElementById('login-view').classList.remove('hidden');
+        
+        document.getElementById('login-form').onsubmit = (e) => {
+            e.preventDefault();
+            const passwordInput = document.getElementById('password').value;
+            const errorDiv = document.getElementById('login-error');
+            errorDiv.classList.add('hidden');
+
+            if (passwordInput === config.admin_password) {
+                sessionStorage.setItem('isAdmin', 'true');
+                window.location.reload();
+            } else {
+                errorDiv.innerText = "비밀번호가 올바르지 않습니다.";
+                errorDiv.classList.remove('hidden');
+            }
+        };
+    }
+});
+
+async function loadDashboardList() {
+    const tbody = document.getElementById('posts-tbody');
+    const emptyDiv = document.getElementById('empty-dashboard');
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-lg text-muted">불러오는 중...</td></tr>';
+    
+    try {
+        const posts = await getPosts();
+        if (!posts || posts.length === 0) {
+            tbody.innerHTML = '';
+            emptyDiv.classList.remove('hidden');
+            return;
+        }
+
+        emptyDiv.classList.add('hidden');
+        tbody.innerHTML = posts.map((post, idx) => {
+            return `
+                <tr class="hover:bg-surface-container-low transition-colors text-ink">
+                    <td class="px-lg py-4 text-center font-medium text-muted">${posts.length - idx}</td>
+                    <td class="px-lg py-4 font-semibold text-xs text-muted">${post.category || '일반'}</td>
+                    <td class="px-lg py-4 font-semibold text-primary hover:underline cursor-pointer" onclick="location.href='news-detail.html?id=${post.id}'">${post.title}</td>
+                    <td class="px-lg py-4 text-muted font-medium text-xs">${post.date}</td>
+                    <td class="px-lg py-4 text-center">
+                        <div class="flex items-center justify-center gap-sm">
+                            <a href="news-write.html?id=${post.id}" class="bg-surface-container-high hover:bg-surface-dim px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-xs">
+                                <span class="material-symbols-outlined text-[14px]">edit</span> 수정
+                            </a>
+                            <button onclick="handleDelete('${post.id}')" class="bg-error-container hover:bg-error/20 text-error px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-xs">
+                                <span class="material-symbols-outlined text-[14px]">delete</span> 삭제
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    } catch (e) {
+        console.error("Dashboard list error:", e);
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-lg text-error">불러오는데 실패했습니다: ${e.message}</td></tr>`;
+    }
+}
+
+async function handleDelete(id) {
+    if (confirm("정말로 이 소식을 삭제하시겠습니까?")) {
+        try {
+            await deletePost(id);
+            alert("삭제되었습니다.");
+            loadDashboardList();
+        } catch (e) {
+            alert("삭제 실패: " + e.message);
+        }
+    }
+}
+</script>
+</body></html>
