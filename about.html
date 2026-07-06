@@ -1,122 +1,142 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>최가네부동산 소개 - 최가네부동산공인중개사사무소</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+<!DOCTYPE html><html class="light" lang="ko"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>최가네부동산 - 중개사소개</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
-                        "muted": "#495057",
-                        "surface-container-highest": "#e2e2ec",
-                        "background": "#faf8ff",
-                        "tertiary": "#732300",
-                        "surface-tint": "#1957ca",
-                        "outline": "#737685",
-                        "on-error": "#ffffff",
-                        "primary-fixed-dim": "#b2c5ff",
-                        "on-surface-variant": "#434653",
-                        "inverse-primary": "#b2c5ff",
-                        "tint": "#edf6fe",
-                        "secondary-fixed": "#dae1ff",
-                        "surface": "#f4f7fb",
-                        "secondary-container": "#a3bafe",
-                        "surface-dim": "#d9d9e3",
-                        "error-container": "#ffdad6",
-                        "on-primary": "#ffffff",
-                        "ink-footer": "#13192d",
-                        "tertiary-container": "#9a3200",
-                        "on-primary-container": "#b8c9ff",
-                        "ink": "#212529",
-                        "surface-container-high": "#e7e7f1",
-                        "on-surface": "#191b22",
-                        "on-secondary-container": "#314885",
-                        "tertiary-fixed-dim": "#ffb59b",
-                        "secondary-fixed-dim": "#b3c5ff",
-                        "on-primary-fixed": "#001848",
-                        "surface-variant": "#e2e2ec",
-                        "primary-container": "#004dc1",
-                        "on-secondary-fixed": "#001849",
-                        "tertiary-fixed": "#ffdbcf",
-                        "primary": "#003891",
-                        "outline-variant": "#c3c6d6",
-                        "error": "#ba1a1a",
-                        "heading": "#1e1f21",
-                        "on-background": "#191b22",
-                        "surface-container-lowest": "#ffffff",
-                        "on-tertiary-fixed-variant": "#812900",
-                        "on-secondary-fixed-variant": "#2c4480",
-                        "blue-deep": "#074499",
-                        "hairline": "#ced4da",
-                        "surface-container-low": "#f3f3fd",
-                        "surface-bright": "#faf8ff",
-                        "blue-mid": "#0575e6",
-                        "surface-container": "#ededf7",
-                        "on-primary-fixed-variant": "#0040a2",
-                        "on-tertiary": "#ffffff",
-                        "primary-bright": "#0069ed",
-                        "inverse-on-surface": "#f0f0fa",
-                        "primary-fixed": "#dae2ff",
-                        "inverse-surface": "#2e3038",
-                        "faint": "#969faa",
-                        "on-tertiary-container": "#ffbba3",
-                        "on-error-container": "#93000a",
-                        "on-tertiary-fixed": "#380d00",
-                        "on-secondary": "#ffffff",
-                        "dark-chip": "#35343c",
-                        "secondary": "#455c9a",
-                        "soft-blue": "#dcedfd",
-                        "corporate-navy": "#0a2864"
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans KR', 'sans-serif'],
+                        "subsection-h3": ["Inter", "Noto Sans KR", "sans-serif"],
+                        "display-hero-mobile": ["Inter", "Noto Sans KR", "sans-serif"],
+                        "nav": ["Inter", "Noto Sans KR", "sans-serif"],
+                        "label-sm": ["Inter", "Noto Sans KR", "sans-serif"],
+                        "display-hero": ["Inter", "Noto Sans KR", "sans-serif"],
+                        "body": ["Inter", "Noto Sans KR", "sans-serif"],
+                        "button": ["Inter", "Noto Sans KR", "sans-serif"],
+                        "section-h2": ["Inter", "Noto Sans KR", "sans-serif"]
                     },
-                    "borderRadius": {
+                    colors: {
+                        "surface-tint": "#1957ca",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#191b22",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#2c4480",
+                        "tertiary-fixed": "#ffdbcf",
+                        "on-secondary-fixed": "#001849",
+                        "blue-deep": "#074499",
+                        "tertiary-fixed-dim": "#ffb59b",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-tertiary-container": "#ffbba3",
+                        "on-secondary-container": "#314885",
+                        "on-primary": "#ffffff",
+                        "background": "#faf8ff",
+                        "faint": "#969faa",
+                        "outline-variant": "#c3c6d6",
+                        "primary-fixed": "#dae2ff",
+                        "surface-container-highest": "#e2e2ec",
+                        "inverse-on-surface": "#f0f0fa",
+                        "heading": "#1e1f21",
+                        "on-tertiary-fixed-variant": "#812900",
+                        "surface": "#f4f7fb",
+                        "inverse-primary": "#b2c5ff",
+                        "primary-container": "#004dc1",
+                        "secondary": "#455c9a",
+                        "surface-bright": "#faf8ff",
+                        "ink-footer": "#13192d",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f3f3fd",
+                        "secondary-fixed": "#dae1ff",
+                        "on-background": "#191b22",
+                        "primary": "#003891",
+                        "on-primary-container": "#b8c9ff",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#e2e2ec",
+                        "outline": "#737685",
+                        "blue-mid": "#0575e6",
+                        "surface-dim": "#d9d9e3",
+                        "muted": "#495057",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "on-surface-variant": "#434653",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#732300",
+                        "ink": "#212529",
+                        "tertiary-container": "#9a3200",
+                        "secondary-container": "#a3bafe",
+                        "soft-blue": "#dcedfd",
+                        "primary-bright": "#0069ed",
+                        "secondary-fixed-dim": "#b3c5ff",
+                        "surface-container-high": "#e7e7f1",
+                        "surface-container": "#ededf7",
+                        "on-tertiary-fixed": "#380d00",
+                        "hairline": "#ced4da",
+                        "dark-chip": "#35343c",
+                        "tint": "#edf6fe",
+                        "on-primary-fixed": "#001848",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2e3038",
+                        "corporate-navy": "#0a2864",
+                    },
+                    borderRadius: {
                         "DEFAULT": "0.125rem",
                         "lg": "0.25rem",
                         "xl": "0.5rem",
-                        "full": "0.75rem"
+                        "full": "0.75rem",
+                        "button": "3px",
+                        "card": "8px"
                     },
-                    "spacing": {
-                        "xs": "4px",
-                        "lg": "24px",
-                        "md": "12px",
+                    spacing: {
                         "base": "16px",
-                        "xxl": "48px",
-                        "section": "64px",
                         "sm": "8px",
-                        "xl": "28px"
+                        "section": "64px",
+                        "lg": "24px",
+                        "xl": "28px",
+                        "xxl": "48px",
+                        "md": "12px",
+                        "xs": "4px"
                     },
-                    "fontFamily": {
-                        "display-hero": ["Inter"],
-                        "nav": ["Inter"],
-                        "body": ["Inter"],
-                        "section-h2": ["Inter"],
-                        "display-hero-mobile": ["Inter"],
-                        "label-sm": ["Inter"],
-                        "subsection-h3": ["Inter"],
-                        "button": ["Inter"]
+                    fontSize: {
+                        "subsection-h3": ["32px", { lineHeight: "1.20", letterSpacing: "-0.4px", fontWeight: "700" }],
+                        "display-hero-mobile": ["36px", { lineHeight: "1.30", letterSpacing: "-0.4px", fontWeight: "700" }],
+                        "nav": ["15px", { lineHeight: "1.50", fontWeight: "500" }],
+                        "label-sm": ["12px", { lineHeight: "1.50", fontWeight: "500" }],
+                        "display-hero": ["58px", { lineHeight: "1.36", letterSpacing: "-0.4px", fontWeight: "700" }],
+                        "body": ["15px", { lineHeight: "1.50", fontWeight: "400" }],
+                        "button": ["14px", { lineHeight: "1.50", fontWeight: "600" }],
+                        "section-h2": ["40px", { lineHeight: "1.30", letterSpacing: "-0.4px", fontWeight: "700" }]
                     },
-                    "fontSize": {
-                        "display-hero": ["58px", { "lineHeight": "1.36", "letterSpacing": "-0.4px", "fontWeight": "700" }],
-                        "nav": ["15px", { "lineHeight": "1.50", "fontWeight": "500" }],
-                        "body": ["15px", { "lineHeight": "1.50", "fontWeight": "400" }],
-                        "section-h2": ["40px", { "lineHeight": "1.30", "letterSpacing": "-0.4px", "fontWeight": "700" }],
-                        "display-hero-mobile": ["36px", { "lineHeight": "1.30", "letterSpacing": "-0.4px", "fontWeight": "700" }],
-                        "label-sm": ["12px", { "lineHeight": "1.50", "fontWeight": "500" }],
-                        "subsection-h3": ["32px", { "lineHeight": "1.20", "letterSpacing": "-0.4px", "fontWeight": "700" }],
-                        "button": ["14px", { "lineHeight": "1.50", "fontWeight": "600" }]
-                    },
-                    "boxShadow": {
-                        "card-soft": "0 8px 13px rgba(159, 176, 199, 0.3)",
-                        "button-strong": "0 2px 10px rgba(54, 55, 61, 0.25)"
+                    boxShadow: {
+                        'soft-blue': '0 4px 20px rgba(159, 176, 199, 0.3)',
+                        'strong-elevated': '0 8px 24px rgba(54, 55, 61, 0.25)',
                     }
-                }
-            }
+                },
+            },
         }
-    }catch(_e){}</script></head><body class="bg-surface text-ink font-body antialiased pb-20 md:pb-0">
-<nav class="bg-surface-container-lowest dark:bg-inverse-surface w-full top-0 sticky border-b border-hairline dark:border-outline-variant z-50 flat no-shadows">
-<div class="flex justify-between items-center px-lg py-md max-w-7xl mx-auto">
-<div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
-<div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
+    </script>
+<style>
+        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen pb-20 md:pb-0">
+<!-- TopNavBar -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface w-full top-0 sticky border-b border-hairline dark:border-outline-variant z-50 flat no-shadows">
+<div class="flex justify-between items-center px-lg py-md max-w-7xl mx-auto w-full">
+<a class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed" href="index.html">최가네부동산</a>
+<nav class="hidden md:flex gap-lg items-center"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="#">서비스</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="news.html">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="news.html">부동산 소식</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a></nav>
+<div class="flex items-center gap-md">
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -124,112 +144,147 @@
 <button class="md:hidden text-primary">
 <span class="material-symbols-outlined">menu</span>
 </button>
-</div>
-</nav>
-<header class="w-full bg-corporate-navy relative overflow-hidden border-b border-hairline py-[120px] px-lg">
-<div class="max-w-7xl mx-auto text-center relative z-10">
-<h1 class="font-display-hero-mobile md:font-display-hero text-display-hero-mobile md:text-display-hero mb-lg text-white">최가네부동산 소개</h1>
-<p class="font-body text-body text-inverse-on-surface opacity-90 max-w-2xl mx-auto text-lg">
-                정직과 신뢰를 바탕으로 최적의 비즈니스 공간을 매칭해 드립니다.
-            </p>
-</div>
-<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 32px 32px;"></div>
+</div></div>
 </header>
-<main class="max-w-7xl mx-auto px-lg py-[100px] flex flex-col gap-[100px]">
-    <!-- Greetings Section -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-xxl items-center">
-        <div class="relative h-[480px] w-full rounded-xl overflow-hidden bg-surface-container shadow-card-soft">
-            <img alt="최이명 대표소장" class="object-cover w-full h-full" src="agent.jpg">
-        </div>
-        <div class="flex flex-col gap-md">
-            <span class="text-primary font-bold tracking-wider text-sm">REPRESENTATIVE GREETING</span>
-            <h2 class="font-section-h2 text-3xl font-bold text-ink">"고객의 성공을 중개합니다."</h2>
-            <div class="text-muted leading-relaxed space-y-md text-base">
-                <p>안녕하십니까! 최가네부동산공인중개사사무소 대표소장 <strong>최이명</strong>입니다.</p>
-                <p>저희 최가네부동산은 대구광역시 전 지역의 <strong>사무실, 상가, 빌딩 등 상업용 부동산 중개</strong>를 전문으로 하고 있습니다.</p>
-                <p>단순한 계약 체결을 넘어, 공공기관 및 대형법인, 보험회사 등의 다수 중개 경험에서 축적한 데이터 분석력을 토대로 입지 조건 분석부터 권리 분석, 임대차 협상 조율까지 원스톱 맞춤 솔루션을 제시해 드립니다.</p>
-                <p>고객의 신뢰를 제1가치로 삼고, 안정적이고 가치 있는 자산 거래를 위해 성심성의껏 파트너가 되어드릴 것을 약속드립니다.</p>
-            </div>
-            <div class="mt-md border-t border-hairline pt-md">
-                <p class="font-bold text-ink text-lg">대표소장 공인중개사 최이명</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Vision & Philosophy Section -->
-    <section class="bg-surface-container-lowest rounded-2xl border border-hairline p-lg md:p-xxl flex flex-col gap-lg shadow-card-soft">
-        <div class="text-center max-w-2xl mx-auto">
-            <h3 class="font-subsection-h3 text-2xl font-bold text-ink mb-sm">최가네부동산의 3대 핵심 철학</h3>
-            <p class="text-muted text-sm">우리는 고객의 자산을 다루는 책임감으로 매 순간 임합니다.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-lg mt-md">
-            <div class="flex flex-col items-start gap-sm p-md">
-                <div class="w-12 h-12 rounded bg-soft-blue flex items-center justify-center text-primary mb-sm">
-                    <span class="material-symbols-outlined text-2xl">verified_user</span>
-                </div>
-                <h4 class="font-bold text-lg text-ink">철저한 권리 및 상권 분석</h4>
-                <p class="text-muted text-sm leading-relaxed">복잡한 등기 권리 관계와 용도 분석은 물론 주변 상권 동향까지 과학적인 데이터를 바탕으로 세밀하게 검수하여 분쟁 리스크를 사전에 예방합니다.</p>
-            </div>
-            <div class="flex flex-col items-start gap-sm p-md">
-                <div class="w-12 h-12 rounded bg-soft-blue flex items-center justify-center text-primary mb-sm">
-                    <span class="material-symbols-outlined text-2xl">handshake</span>
-                </div>
-                <h4 class="font-bold text-lg text-ink">고객 맞춤 신속 매칭</h4>
-                <p class="text-muted text-sm leading-relaxed">수성구 및 달구벌대로 중심의 중대형 사무실 및 상가 매물을 다량 확보하고 있어, 고객님이 원하시는 면적과 예산에 딱 맞는 공간을 신속하게 중개합니다.</p>
-            </div>
-            <div class="flex flex-col items-start gap-sm p-md">
-                <div class="w-12 h-12 rounded bg-soft-blue flex items-center justify-center text-primary mb-sm">
-                    <span class="material-symbols-outlined text-2xl">diversity_3</span>
-                </div>
-                <h4 class="font-bold text-lg text-ink">동반 성장 파트너십</h4>
-                <p class="text-muted text-sm leading-relaxed">한 번의 계약으로 끝나는 인연이 아닌, 개업 후 유지 관리 및 세제 혜택 등 사후 관리 컨설팅까지 함께하며 장기적인 비즈니스 동반자 역할을 지속합니다.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Key Performance Section -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-xxl items-center">
-        <div class="flex flex-col gap-md">
-            <span class="text-primary font-bold tracking-wider text-sm">PROVEN TRACK RECORD</span>
-            <h3 class="font-section-h2 text-2xl md:text-3xl font-bold text-ink">중개 실적이 증명하는<br>최가네부동산의 전문성</h3>
-            <p class="text-muted leading-relaxed text-base">
-                최가네부동산은 대형 업무용 공간과 법인 특화 중개 영역에서 강점을 보이고 있습니다. 다수의 대형 프로젝트 수행을 통해 축적된 노하우로 어떠한 까다로운 조건의 거래도 성공적으로 조율해 냅니다.
-            </p>
-            <div class="space-y-sm mt-md">
-                <div class="flex items-center gap-sm bg-surface p-sm rounded border border-hairline">
-                    <span class="material-symbols-outlined text-primary">emoji_events</span>
-                    <span class="font-bold text-ink text-sm">대구지방고용노동청 등 공공기관 중개 실적 보유</span>
-                </div>
-                <div class="flex items-center gap-sm bg-surface p-sm rounded border border-hairline">
-                    <span class="material-symbols-outlined text-primary">corporate_fare</span>
-                    <span class="font-bold text-ink text-sm">대기업 보험사 Daegu 사옥 및 대형 법인 사무실 매칭 이력</span>
-                </div>
-                <div class="flex items-center gap-sm bg-surface p-sm rounded border border-hairline">
-                    <span class="material-symbols-outlined text-primary">location_on</span>
-                    <span class="font-bold text-ink text-sm">수성구 및 달구벌대로변 50~300평대 중대형 임대차 전문</span>
-                </div>
-            </div>
-        </div>
-        <div class="bg-surface-container-low border border-hairline rounded-2xl p-lg grid grid-cols-2 gap-md text-center">
-            <div class="bg-surface-container-lowest rounded-xl p-lg border border-hairline flex flex-col justify-center">
-                <span class="text-3xl font-bold text-primary">100%</span>
-                <span class="text-xs text-muted mt-xs">고객 맞춤 권리분석 보증</span>
-            </div>
-            <div class="bg-surface-container-lowest rounded-xl p-lg border border-hairline flex flex-col justify-center">
-                <span class="text-3xl font-bold text-primary">300평+</span>
-                <span class="text-xs text-muted mt-xs">대형 상업용 공간 다량 보유</span>
-            </div>
-            <div class="bg-surface-container-lowest rounded-xl p-lg border border-hairline flex flex-col justify-center">
-                <span class="text-3xl font-bold text-primary">수성구</span>
-                <span class="text-xs text-muted mt-xs">달구벌대로 집중 서비스</span>
-            </div>
-            <div class="bg-surface-container-lowest rounded-xl p-lg border border-hairline flex flex-col justify-center">
-                <span class="text-3xl font-bold text-primary">전문가</span>
-                <span class="text-xs text-muted mt-xs">상업용/오피스 전문 조율</span>
-            </div>
-        </div>
-    </section>
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="bg-corporate-navy text-surface-container-lowest relative overflow-hidden">
+<div class="max-w-7xl mx-auto px-lg md:px-lg py-section grid md:grid-cols-2 gap-xl items-center relative z-10">
+<div class="order-2 md:order-1 flex flex-col gap-lg">
+<div class="inline-flex items-center gap-2 bg-dark-chip text-surface-container-lowest px-3 py-1.5 rounded-full font-label-sm text-label-sm w-fit">
+<span class="" style="font-family: Inter; letter-spacing: 0.6px; text-transform: uppercase;">Premium Commercial Real Estate</span></div>
+<h1 class="font-display-hero-mobile md:font-display-hero text-surface-container-lowest text-display-hero-mobile md:text-display-hero">대구 전 지역<br class="">사무실, 상가 전문 부동산<div class="">최가네부동산</div></h1>
+<p class="font-body text-body text-primary-fixed-dim max-w-xl text-lg leading-relaxed">수성구 및 달구벌대로 50~300평 중대형 매물 다량 확보 중.<br class="">공공기관 및 대형법인, 보험사 사무실 등 중개이력 다수.</p>
+<div class="pt-sm">
+<a class="bg-surface-container-lowest text-primary-container font-button text-button rounded-button px-[25px] py-[14px] hover:bg-surface-container-low transition-colors shadow-strong-elevated inline-flex items-center justify-center" href="tel:010-3548-4000"><span class="material-symbols-outlined text-[20px] mr-2">phone_in_talk</span>상담 전화 연결</a>
+</div>
+</div>
+<div class="order-1 md:order-2 flex justify-center md:justify-end relative">
+<div class="w-full max-w-[400px] aspect-[3/4] rounded-card overflow-hidden shadow-strong-elevated border-4 border-surface-container-lowest/10 relative">
+<img alt="최가네부동산 대표 중개사 프로필 사진" class="w-full h-full object-cover" src="agent.jpg">
+<div class="absolute inset-0 bg-gradient-to-t from-corporate-navy/80 to-transparent flex items-end p-lg">
+<div>
+<p class="font-nav text-nav text-primary-fixed-dim">대표 공인중개사</p>
+<p class="font-subsection-h3 text-subsection-h3 text-surface-container-lowest">최이명</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative subtle pattern -->
+<div class="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-container/20 via-transparent to-transparent opacity-50 pointer-events-none"></div>
+</section>
+<!-- Expertise & Values -->
+<section class="py-section bg-surface">
+<div class="max-w-7xl mx-auto px-lg">
+<div class="text-center mb-xl">
+<h2 class="font-section-h2 text-section-h2 text-on-surface">핵심 경쟁력</h2>
+<p class="font-body text-body text-muted mt-sm">철저한 검증과 시스템으로 안전한 거래를 보장합니다.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-lg">
+<!-- Value 1 -->
+<div class="bg-surface-container-lowest p-lg rounded-card shadow-soft-blue flex flex-col gap-md border border-outline-variant/30">
+<div class="w-12 h-12 bg-soft-blue text-primary-container rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-[24px]" data-icon="analytics" data-weight="fill" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+<h3 class="font-subsection-h3 text-[20px] text-on-surface">Professional Analysis</h3>
+<p class="font-body text-body text-muted">
+                            입지 분석, 상권 데이터, 법적 권리 관계까지 다각도로 철저하게 분석하여 리스크를 최소화합니다.
+                        </p>
+</div>
+<!-- Value 2 -->
+<div class="bg-surface-container-lowest p-lg rounded-card shadow-soft-blue flex flex-col gap-md border border-outline-variant/30">
+<div class="w-12 h-12 bg-soft-blue text-primary-container rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-[24px]" data-icon="verified_user" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<h3 class="font-subsection-h3 text-[20px] text-on-surface">Trustworthy Systems</h3>
+<p class="font-body text-body text-muted">
+                            표준화된 중개 프로세스와 투명한 정보 공개를 통해 고객이 신뢰할 수 있는 안심 중개 시스템을 운영합니다.
+                        </p>
+</div>
+<!-- Value 3 -->
+<div class="bg-surface-container-lowest p-lg rounded-card shadow-soft-blue flex flex-col gap-md border border-outline-variant/30">
+<div class="w-12 h-12 bg-soft-blue text-primary-container rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-[24px]" data-icon="handshake" data-weight="fill" style="font-variation-settings: 'FILL' 1;">handshake</span>
+</div>
+<h3 class="font-subsection-h3 text-[20px] text-on-surface">Client-First Consulting</h3>
+<p class="font-body text-body text-muted">
+                            고객의 사업 비전과 예산에 맞춘 1:1 맞춤형 컨설팅으로 최적의 비즈니스 공간을 매칭해 드립니다.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Key Achievements (Bento Grid Style) -->
+<section class="py-section bg-surface-container-lowest border-y border-outline-variant/20">
+<div class="max-w-7xl mx-auto px-lg">
+<div class="flex flex-col md:flex-row justify-between items-end mb-xl gap-sm">
+<div>
+<h2 class="font-section-h2 text-section-h2 text-on-surface">주요 중개 실적</h2>
+<p class="font-body text-body text-muted mt-sm">공공기관 및 대형 법인이 선택한 검증된 실력입니다.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-lg auto-rows-[200px]">
+<!-- Large Card -->
+<div class="md:col-span-2 md:row-span-2 bg-surface rounded-card p-lg border border-outline-variant/30 flex flex-col justify-between relative overflow-hidden group">
+<div class="relative z-10">
+<div class="inline-flex items-center gap-1 bg-surface-container-lowest text-primary-container px-2 py-1 rounded border border-primary-container/20 font-label-sm text-label-sm mb-md">
+                                공공기관 중개
+                            </div>
+<h3 class="font-subsection-h3 text-subsection-h3 text-on-surface mt-sm">대구지방고용노동청 고용관리과&nbsp;<br>업무 시설 확충</h3>
+<p class="font-body text-body text-muted mt-sm max-w-sm">공공기관의 조건과 행정 절차를 완벽하게 수행하며 대규모 사무 공간 중개를 성공적으로 완료했습니다.</p>
+</div>
+<div class="absolute bottom-0 right-0 w-64 h-64 bg-primary-container/5 rounded-full blur-3xl group-hover:bg-primary-container/10 transition-colors"></div>
+</div>
+<!-- Medium Card 1 -->
+<div class="md:col-span-2 bg-corporate-navy text-surface-container-lowest rounded-card p-lg flex flex-col justify-center relative overflow-hidden">
+<div class="relative z-10 flex items-start gap-md">
+<span class="material-symbols-outlined text-[32px] text-primary-fixed-dim" data-icon="domain" data-weight="fill" style="font-variation-settings: 'FILL' 1;">domain</span>
+<div>
+<h3 class="font-subsection-h3 text-[24px] text-surface-container-lowest">대형 법인 및 보험사, 학원, 치과의원 등 다수 중개&nbsp;&nbsp;</h3>
+<p class="font-body text-body text-primary-fixed-dim mt-xs text-xs sm:text-sm">삼성화*금융서비스, 메타리*, 법무법인 초*, 온*수학학원, 타이*수학학원, 만촌리더*치과, 테이블오더 티오*, 노무법인 인*, 법무법인 율* 등 다수</p>
+</div>
+</div>
+</div>
+<!-- Small Card 1 -->
+<div class="bg-surface rounded-card p-lg border border-outline-variant/30 flex flex-col justify-center items-center text-center hover:shadow-soft-blue transition-shadow">
+<span class="font-section-h2 text-section-h2 text-primary-container mb-xs">1,000+</span>
+<span class="font-nav text-nav text-muted">누적 상담 고객</span>
+</div>
+<!-- Small Card 2 -->
+<div class="bg-surface rounded-card p-lg border border-outline-variant/30 flex flex-col justify-center items-center text-center hover:shadow-soft-blue transition-shadow">
+<span class="font-section-h2 text-section-h2 text-primary-container mb-xs">0%</span>
+<span class="font-nav text-nav text-muted">권리 사고 발생률</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Service Areas & CTA -->
+<section class="py-section bg-surface">
+<div class="max-w-4xl mx-auto px-lg text-center">
+<div class="mb-lg">
+<span class="inline-flex items-center gap-2 bg-soft-blue text-primary-container px-4 py-2 rounded-full font-label-sm text-label-sm font-semibold tracking-wide uppercase">
+                        Specialized Area
+                    </span>
+</div>
+<h2 class="font-section-h2 text-section-h2 text-on-surface mb-md">대구 전 지역 · 달구벌대로 중심</h2>
+<p class="font-subsection-h3 text-[24px] text-muted mb-xl font-normal">
+                    50~300평 규모의 중대형 상업용 공간 전문
+                </p>
+<div class="bg-surface-container-lowest p-xl rounded-card shadow-soft-blue border border-outline-variant/20 max-w-2xl mx-auto mt-xl flex flex-col items-center">
+<h3 class="font-subsection-h3 text-[20px] text-on-surface mb-sm">최적의 공간을 찾고 계신가요?</h3>
+<p class="font-body text-body text-muted mb-lg text-center">
+                        간단한 조건만 말씀해 주시면, 철저히 분석된 A급 매물 리스트를 제안해 드립니다.
+                    </p>
+<a class="inline-flex items-center gap-sm bg-primary-container text-on-primary font-button text-[16px] rounded-button px-[32px] py-[16px] hover:bg-primary-bright transition-colors shadow-strong-elevated" href="tel:01035484000">
+<span class="material-symbols-outlined text-[20px]" data-icon="call" data-weight="fill" style="font-variation-settings: 'FILL' 1;">call</span>
+                        상담 문의 010-3548-4000
+                    </a>
+</div>
+</div>
+</section>
 </main>
+<!-- Footer -->
 <footer class="bg-ink-footer dark:bg-on-surface text-surface-variant py-xxl px-lg border-t border-outline-variant">
 <div class="max-w-7xl mx-auto">
 <div class="grid grid-cols-1 md:grid-cols-4 gap-xl mb-xl">
@@ -254,7 +309,7 @@
 <div class="flex gap-md">
 <a class="text-faint hover:text-surface-bright transition-colors" href="https://blog.naver.com/freemo_co_kr" target="_blank">블로그</a>
 <a class="text-faint hover:text-surface-bright transition-colors" href="https://www.youtube.com/@auction-choi" rel="noopener noreferrer" target="_blank">유튜브</a>
-<a class="text-faint hover:text-surface-bright transition-colors" href="https://www.instagram.com/cym10003" rel="noopener noreferrer" target="_blank">인스타그램</a>
+<a class="text-faint hover:text-surface-bright transition-colors" href="https://www.instagram.com/cym10003" target="_blank">인스타그램</a>
 </div>
 </div>
 </div>
@@ -282,4 +337,5 @@
     <span class="text-[10px] font-medium">관리자</span>
   </a>
 </div>
+<script src="db.js"></script>
 </body></html>
