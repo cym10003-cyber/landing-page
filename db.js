@@ -408,8 +408,8 @@ async function uploadImageFile(file) {
       
       if (hasGit) {
         try {
-          const base64Content = dataUrl.split(',')[1];
-          const filename = `post_img_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+          const rand = Math.random().toString(36).substring(2, 6);
+          const filename = `post_img_${Date.now()}_${rand}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
           const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/images/${filename}`;
           
           const body = {
@@ -464,7 +464,8 @@ async function uploadVideoFile(file) {
       if (hasGit) {
         try {
           const base64Content = dataUrl.split(',')[1];
-          const filename = `post_vid_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+          const rand = Math.random().toString(36).substring(2, 6);
+          const filename = `post_vid_${Date.now()}_${rand}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
           const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/videos/${filename}`;
           
           const body = {

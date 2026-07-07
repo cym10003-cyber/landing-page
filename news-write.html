@@ -149,7 +149,7 @@
                 <div class="flex justify-between items-center mb-xs">
                     <label for="content" class="block text-sm font-semibold text-ink">본문 내용 (마크다운 지원)</label>
                     <div class="flex items-center gap-md">
-                        <input type="file" id="image-upload" accept="image/*" class="hidden">
+                        <input type="file" id="image-upload" accept="image/*" class="hidden" multiple>
                         <button type="button" id="upload-btn" class="text-xs text-primary hover:text-blue-mid font-semibold flex items-center gap-xs bg-transparent border-0 cursor-pointer">
                             <span class="material-symbols-outlined text-[16px]">image</span> 사진 첨부
                         </button>
@@ -331,32 +331,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (uploadBtn && imageUpload) {
         uploadBtn.onclick = () => imageUpload.click();
         imageUpload.onchange = async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
 
             try {
                 uploadBtn.disabled = true;
                 uploadBtn.style.opacity = '0.5';
-                if (uploadSpinner) uploadSpinner.classList.remove('hidden');
+                if (uploadSpinner) {
+                    uploadSpinner.innerText = `업로드 중 (0/${files.length})...`;
+                    uploadSpinner.classList.remove('hidden');
+                }
 
-                const url = await uploadImageFile(file);
+                let uploadedCount = 0;
+                const uploadPromises = files.map(async (file) => {
+                    const url = await uploadImageFile(file);
+                    uploadedCount++;
+                    if (uploadSpinner) {
+                        uploadSpinner.innerText = `업로드 중 (${uploadedCount}/${files.length})...`;
+                    }
+                    return { name: file.name.split('.')[0], url };
+                });
+
+                const results = await Promise.all(uploadPromises);
 
                 const textarea = document.getElementById('content');
                 const start = textarea.selectionStart;
                 const end = textarea.selectionEnd;
                 const text = textarea.value;
-                const imageMarkdown = `\n\n![${file.name.split('.')[0]}](${url})\n\n`;
+                const imageMarkdown = results.map(res => `![${res.name}](${res.url})`).join('\n\n') + '\n\n';
 
-                textarea.value = text.substring(0, start) + imageMarkdown + text.substring(end);
+                textarea.value = text.substring(0, start) + '\n\n' + imageMarkdown + text.substring(end);
                 textarea.focus();
-                textarea.selectionStart = textarea.selectionEnd = start + imageMarkdown.length;
+                textarea.selectionStart = textarea.selectionEnd = start + imageMarkdown.length + 2;
             } catch (err) {
                 console.error(err);
-                alert("사진 업로드 실패: " + err.message);
+                alert("일부 사진 업로드 실패: " + err.message);
             } finally {
                 uploadBtn.disabled = false;
                 uploadBtn.style.opacity = '1';
-                if (uploadSpinner) uploadSpinner.classList.add('hidden');
+                if (uploadSpinner) {
+                    uploadSpinner.innerText = "업로드 중...";
+                    uploadSpinner.classList.add('hidden');
+                }
                 imageUpload.value = '';
             }
         };
