@@ -333,7 +333,19 @@ function renderMarkdown(src) {
     return `<p class="leading-relaxed my-md">${renderInline(block)}</p>`;
   });
 
-  return processedBlocks.join('\n');
+  let result = processedBlocks.join('\n');
+  
+  // Unescape safe iframe and video elements
+  result = result.replace(/&lt;iframe ([\s\S]*?)&gt;&lt;\/iframe&gt;/g, (match, attrs) => {
+    return `<iframe ${attrs.replace(/&quot;/g, '"').replace(/&#039;/g, "'")}></iframe>`;
+  });
+  result = result.replace(/&lt;video ([\s\S]*?)&gt;&lt;\/video&gt;/g, (match, attrs) => {
+    return `<video ${attrs.replace(/&quot;/g, '"').replace(/&#039;/g, "'")}></video>`;
+  });
+  result = result.replace(/&lt;div class=&quot;relative w-full aspect-video rounded-xl overflow-hidden shadow-card-soft border border-hairline my-lg&quot;&gt;/g, '<div class="relative w-full aspect-video rounded-xl overflow-hidden shadow-card-soft border border-hairline my-lg">');
+  result = result.replace(/&lt;\/div&gt;/g, '</div>');
+  
+  return result;
 
   function renderInline(text) {
     let parts = text.split('`');
@@ -347,6 +359,16 @@ function renderMarkdown(src) {
     text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
     text = text.replace(/_(.*?)_/g, '<em>$1</em>');
     text = text.replace(/~~(.*?)~~/g, '<del>$1</del>');
+    
+    // Support image syntax ![alt](url)
+    text = text.replace(/!\[(.*?)\]\((.*?)\)/g, (match, altText, url) => {
+      const cleanUrl = url.trim();
+      if (/^(https?:\/\/|data:image\/)/i.test(cleanUrl)) {
+        return `<img src="${cleanUrl}" alt="${altText}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" />`;
+      }
+      return match;
+    });
+
     text = text.replace(/\[(.*?)\]\((.*?)\)/g, (match, linkText, url) => safeLink(url, linkText));
     text = text.replace(/\n/g, '<br>');
 
