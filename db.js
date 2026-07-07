@@ -122,22 +122,26 @@ async function savePost(postData) {
   const hasGit = config.github_token && config.github_owner && config.github_repo;
   if (hasGit) {
     const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}`;
+    const getUrl = `${url}?t=${Date.now()}`;
     let sha = null;
     
     try {
-      const getRes = await fetch(url, {
+      const getRes = await fetch(getUrl, {
         headers: {
           'Authorization': `token ${config.github_token}`,
           'Accept': 'application/vnd.github.v3+json',
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
         }
       });
       if (getRes.ok) {
         const getData = await getRes.json();
         sha = getData.sha;
+      } else if (getRes.status !== 404) {
+        throw new Error(`Failed to fetch file metadata (Status: ${getRes.status})`);
       }
     } catch (e) {
-      console.warn("Could not retrieve SHA:", e);
+      throw new Error(`GitHub Connection Error (SHA Fetch): ${e.message}`);
     }
 
     const base64Content = btoa(unescape(encodeURIComponent(postsStr)));
@@ -184,21 +188,27 @@ async function deletePost(id) {
   const hasGit = config.github_token && config.github_owner && config.github_repo;
   if (hasGit) {
     const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}`;
+    const getUrl = `${url}?t=${Date.now()}`;
     let sha = null;
     
     try {
-      const getRes = await fetch(url, {
+      const getRes = await fetch(getUrl, {
         headers: {
           'Authorization': `token ${config.github_token}`,
           'Accept': 'application/vnd.github.v3+json',
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
         }
       });
       if (getRes.ok) {
         const getData = await getRes.json();
         sha = getData.sha;
+      } else {
+        throw new Error(`Failed to fetch file metadata (Status: ${getRes.status})`);
       }
-    } catch (e) {}
+    } catch (e) {
+      throw new Error(`GitHub Connection Error (SHA Fetch): ${e.message}`);
+    }
 
     if (sha) {
       const base64Content = btoa(unescape(encodeURIComponent(postsStr)));
