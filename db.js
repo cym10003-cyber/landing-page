@@ -38,13 +38,18 @@ async function getPosts() {
   if (hasGit) {
     try {
       const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}`;
-      const res = await fetch(url, {
-        headers: {
-          'Authorization': `token ${config.github_token}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'Cache-Control': 'no-cache'
-        }
-      });
+      const getUrl = `${url}?t=${Date.now()}`;
+      
+      let res = await fetch(getUrl);
+      if (!res.ok && res.status === 404 && config.github_token) {
+        res = await fetch(getUrl, {
+          headers: {
+            'Authorization': `token ${config.github_token}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+      }
+      
       if (res.ok) {
         const data = await res.json();
         const content = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
