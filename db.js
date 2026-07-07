@@ -128,14 +128,16 @@ async function savePost(postData) {
     let getResponseInfo = "";
     
     try {
-      const getRes = await fetch(getUrl, {
-        headers: {
-          'Authorization': `token ${config.github_token}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache'
-        }
-      });
+      let getRes = await fetch(getUrl);
+      if (!getRes.ok && getRes.status === 404 && config.github_token) {
+        getRes = await fetch(getUrl, {
+          headers: {
+            'Authorization': `token ${config.github_token}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+      }
+      
       getStatus = getRes.status;
       if (getRes.ok) {
         const getData = await getRes.json();
@@ -203,14 +205,15 @@ async function deletePost(id) {
     let sha = null;
     
     try {
-      const getRes = await fetch(getUrl, {
-        headers: {
-          'Authorization': `token ${config.github_token}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache'
-        }
-      });
+      let getRes = await fetch(getUrl);
+      if (!getRes.ok && getRes.status === 404 && config.github_token) {
+        getRes = await fetch(getUrl, {
+          headers: {
+            'Authorization': `token ${config.github_token}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+      }
       if (getRes.ok) {
         const getData = await getRes.json();
         sha = getData.sha;
