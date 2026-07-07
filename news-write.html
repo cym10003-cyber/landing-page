@@ -147,9 +147,16 @@
             <div>
                 <div class="flex justify-between items-center mb-xs">
                     <label for="content" class="block text-sm font-semibold text-ink">본문 내용 (마크다운 지원)</label>
-                    <a href="templates/post-template.md" target="_blank" class="text-xs text-primary-container hover:underline flex items-center gap-xs">
-                        <span class="material-symbols-outlined text-[14px]">description</span> 템플릿 보기
-                    </a>
+                    <div class="flex items-center gap-md">
+                        <input type="file" id="image-upload" accept="image/*" class="hidden">
+                        <button type="button" id="upload-btn" class="text-xs text-primary hover:text-blue-mid font-semibold flex items-center gap-xs bg-transparent border-0 cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px]">image</span> 사진 첨부
+                        </button>
+                        <span class="text-muted text-[11px] hidden" id="upload-spinner">업로드 중...</span>
+                        <a href="templates/post-template.md" target="_blank" class="text-xs text-primary-container hover:underline flex items-center gap-xs">
+                            <span class="material-symbols-outlined text-[14px]">description</span> 템플릿 보기
+                        </a>
+                    </div>
                 </div>
                 <textarea id="content" required rows="12" class="block w-full border-hairline rounded-lg py-2.5 focus:ring-primary focus:border-primary text-sm font-mono bg-surface-container-low" placeholder="마크다운(Markdown) 문법을 사용해 본문을 작성할 수 있습니다.&#10;예:&#10;# 큰 제목&#10;## 소제목&#10;- 리스트 아이템&#10;**굵은 글씨** 등"></textarea>
             </div>
@@ -242,7 +249,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260707"></script>
+<script src="db.js?v=20260708"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     requireAdmin();
@@ -270,6 +277,45 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (e) {
             console.error("Error loading post:", e);
         }
+    }
+
+    // Image Upload Logic
+    const uploadBtn = document.getElementById('upload-btn');
+    const imageUpload = document.getElementById('image-upload');
+    const uploadSpinner = document.getElementById('upload-spinner');
+
+    if (uploadBtn && imageUpload) {
+        uploadBtn.onclick = () => imageUpload.click();
+        imageUpload.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            try {
+                uploadBtn.disabled = true;
+                uploadBtn.style.opacity = '0.5';
+                if (uploadSpinner) uploadSpinner.classList.remove('hidden');
+
+                const url = await uploadImageFile(file);
+
+                const textarea = document.getElementById('content');
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                const text = textarea.value;
+                const imageMarkdown = `\n\n![${file.name.split('.')[0]}](${url})\n\n`;
+
+                textarea.value = text.substring(0, start) + imageMarkdown + text.substring(end);
+                textarea.focus();
+                textarea.selectionStart = textarea.selectionEnd = start + imageMarkdown.length;
+            } catch (err) {
+                console.error(err);
+                alert("사진 업로드 실패: " + err.message);
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.style.opacity = '1';
+                if (uploadSpinner) uploadSpinner.classList.add('hidden');
+                imageUpload.value = '';
+            }
+        };
     }
 
     document.getElementById('cancel-btn').onclick = () => {

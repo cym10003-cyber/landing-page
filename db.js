@@ -375,6 +375,57 @@ function markdownToText(src) {
   return text;
 }
 
+async function uploadImageFile(file) {
+  const config = await loadConfig();
+  const hasGit = config.github_token && config.github_owner && config.github_repo;
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = reader.result;
+      
+      if (hasGit) {
+        try {
+          const base64Content = dataUrl.split(',')[1];
+          const filename = `post_img_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+          const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/images/${filename}`;
+          
+          const body = {
+            message: `feat: upload image ${filename}`,
+            content: base64Content,
+            branch: 'main'
+          };
+          
+          const putRes = await fetch(url, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `token ${config.github_token}`,
+              'Content-Type': 'application/json',
+              'Accept': 'application/vnd.github.v3+json'
+            },
+            body: JSON.stringify(body)
+          });
+          
+          if (!putRes.ok) {
+            const errorMsg = await putRes.text();
+            throw new Error(`GitHub Upload Failed: ${putRes.status} ${errorMsg}`);
+          }
+          
+          const rawUrl = `https://raw.githubusercontent.com/${config.github_owner}/${config.github_repo}/main/images/${filename}`;
+          resolve(rawUrl);
+        } catch (err) {
+          reject(err);
+        }
+      } else {
+        // Local Fallback: return base64 Data URL directly
+        resolve(dataUrl);
+      }
+    };
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(file);
+  });
+}
+
 window.loadConfig = loadConfig;
 window.isAdmin = isAdmin;
 window.requireAdmin = requireAdmin;
@@ -383,3 +434,4 @@ window.savePost = savePost;
 window.deletePost = deletePost;
 window.renderMarkdown = renderMarkdown;
 window.markdownToText = markdownToText;
+window.uploadImageFile = uploadImageFile;
