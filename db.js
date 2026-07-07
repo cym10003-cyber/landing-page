@@ -124,6 +124,8 @@ async function savePost(postData) {
     const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}`;
     const getUrl = `${url}?t=${Date.now()}`;
     let sha = null;
+    let getStatus = 0;
+    let getResponseInfo = "";
     
     try {
       const getRes = await fetch(getUrl, {
@@ -134,14 +136,23 @@ async function savePost(postData) {
           'Pragma': 'no-cache'
         }
       });
+      getStatus = getRes.status;
       if (getRes.ok) {
         const getData = await getRes.json();
-        sha = getData.sha;
-      } else if (getRes.status !== 404) {
-        throw new Error(`Failed to fetch file metadata (Status: ${getRes.status})`);
+        if (Array.isArray(getData)) {
+          getResponseInfo = "directory_list";
+        } else {
+          sha = getData.sha;
+          getResponseInfo = `file_sha_${sha ? "present" : "absent"}_keys_${Object.keys(getData).join(",")}`;
+        }
+      } else {
+        getResponseInfo = `status_${getRes.status}`;
+        if (getRes.status !== 404) {
+          throw new Error(`Failed to fetch file metadata (Status: ${getRes.status})`);
+        }
       }
     } catch (e) {
-      throw new Error(`GitHub Connection Error (SHA Fetch): ${e.message}`);
+      throw new Error(`GitHub Connection Error (SHA Fetch): ${e.message} (URL: ${getUrl})`);
     }
 
     const base64Content = btoa(unescape(encodeURIComponent(postsStr)));
@@ -165,7 +176,7 @@ async function savePost(postData) {
 
     if (!putRes.ok) {
       const errorMsg = await putRes.text();
-      throw new Error(`GitHub Save Failed: ${putRes.status} ${errorMsg}`);
+      throw new Error(`GitHub Save Failed: ${putRes.status} ${errorMsg} (Diagnostics: GET_status=${getStatus}, GET_info=${getResponseInfo}, path=${config.data_file_path}, owner/repo=${config.github_owner}/${config.github_repo})`);
     }
   }
 
