@@ -153,6 +153,9 @@
                         <button type="button" id="upload-btn" class="text-xs text-primary hover:text-blue-mid font-semibold flex items-center gap-xs bg-transparent border-0 cursor-pointer">
                             <span class="material-symbols-outlined text-[16px]">image</span> 사진 첨부
                         </button>
+                        <button type="button" id="video-btn" class="text-xs text-primary hover:text-blue-mid font-semibold flex items-center gap-xs bg-transparent border-0 cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px]">movie</span> 동영상 첨부
+                        </button>
                         <span class="text-muted text-[11px] hidden" id="upload-spinner">업로드 중...</span>
                         <a href="templates/post-template.md" target="_blank" class="text-xs text-primary-container hover:underline flex items-center gap-xs">
                             <span class="material-symbols-outlined text-[14px]">description</span> 템플릿 보기
@@ -171,6 +174,46 @@
         </form>
     </div>
 </main>
+
+<!-- Responsive Video Attach Modal -->
+<div id="video-modal" class="fixed inset-0 bg-ink/50 z-50 hidden flex items-center justify-center p-md">
+  <div class="bg-surface-container-lowest p-lg rounded-xl border border-hairline max-w-md w-full shadow-strong-elevated flex flex-col gap-md relative">
+    <div class="flex justify-between items-center border-b border-hairline pb-sm">
+      <h3 class="font-bold text-primary flex items-center gap-xs">
+        <span class="material-symbols-outlined">movie</span> 동영상 첨부
+      </h3>
+      <button id="video-modal-close" class="text-muted hover:text-ink cursor-pointer bg-transparent border-0 outline-none">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    
+    <!-- Tab Controls -->
+    <div class="flex border-b border-hairline">
+      <button type="button" id="tab-youtube" class="flex-1 py-xs text-xs font-semibold text-primary border-b-2 border-primary">유튜브 링크</button>
+      <button type="button" id="tab-upload" class="flex-1 py-xs text-xs font-semibold text-muted hover:text-primary">동영상 파일 업로드</button>
+    </div>
+
+    <!-- YouTube Link Tab Content -->
+    <div id="content-youtube" class="flex flex-col gap-sm">
+      <label for="youtube-url-input" class="text-xs text-muted">유튜브 동영상 주소(URL)를 입력해 주세요.</label>
+      <input type="text" id="youtube-url-input" class="block w-full border-hairline rounded-lg py-2 focus:ring-primary focus:border-primary text-xs bg-surface-container-low" placeholder="예: https://www.youtube.com/watch?v=... 또는 https://youtu.be/...">
+      <button type="button" id="youtube-insert-btn" class="bg-primary text-white text-xs py-2 rounded-lg hover:bg-blue-mid font-semibold mt-xs">본문에 삽입</button>
+    </div>
+
+    <!-- File Upload Tab Content -->
+    <div id="content-upload" class="hidden flex flex-col gap-sm">
+      <p class="text-xs text-muted">50MB 이하의 동영상 파일(mp4, webm 등)을 선택해 주세요.</p>
+      <input type="file" id="video-file-input" accept="video/*" class="hidden">
+      <button type="button" id="video-file-trigger" class="border border-primary text-primary hover:bg-soft-blue text-xs py-3 rounded-lg font-semibold flex items-center justify-center gap-xs cursor-pointer">
+        <span class="material-symbols-outlined text-[16px]">upload</span> 동영상 파일 선택
+      </button>
+      <div id="video-upload-status" class="hidden text-center text-xs text-muted mt-xs">
+        <span class="material-symbols-outlined animate-spin text-[16px] align-middle mr-xs">sync</span>
+        <span>업로드 진행 중... 잠시만 기다려 주세요.</span>
+      </div>
+    </div>
+  </div>
+</div>
 <footer class="bg-ink-footer dark:bg-on-surface text-surface-variant py-xxl px-lg border-t border-outline-variant">
     <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-xl mb-xl">
@@ -315,6 +358,120 @@ document.addEventListener('DOMContentLoaded', async () => {
                 uploadBtn.style.opacity = '1';
                 if (uploadSpinner) uploadSpinner.classList.add('hidden');
                 imageUpload.value = '';
+            }
+        };
+    }
+
+    // Video Attachment Logic (Modal and YouTube/File upload)
+    const videoBtn = document.getElementById('video-btn');
+    const videoModal = document.getElementById('video-modal');
+    const videoModalClose = document.getElementById('video-modal-close');
+    
+    // Tab switching
+    const tabYoutube = document.getElementById('tab-youtube');
+    const tabUpload = document.getElementById('tab-upload');
+    const contentYoutube = document.getElementById('content-youtube');
+    const contentUpload = document.getElementById('content-upload');
+    
+    // YouTube Insertion
+    const youtubeUrlInput = document.getElementById('youtube-url-input');
+    const youtubeInsertBtn = document.getElementById('youtube-insert-btn');
+    
+    // Video File Uploading
+    const videoFileInput = document.getElementById('video-file-input');
+    const videoFileTrigger = document.getElementById('video-file-trigger');
+    const videoUploadStatus = document.getElementById('video-upload-status');
+    
+    if (videoBtn && videoModal && videoModalClose) {
+        // Toggle Modal
+        videoBtn.onclick = () => {
+            videoModal.classList.remove('hidden');
+            youtubeUrlInput.value = '';
+            videoFileInput.value = '';
+        };
+        videoModalClose.onclick = () => {
+            videoModal.classList.add('hidden');
+        };
+        videoModal.onclick = (e) => {
+            if (e.target === videoModal) videoModal.classList.add('hidden');
+        };
+        
+        // Tab switching logic
+        tabYoutube.onclick = () => {
+            tabYoutube.className = "flex-1 py-xs text-xs font-semibold text-primary border-b-2 border-primary";
+            tabUpload.className = "flex-1 py-xs text-xs font-semibold text-muted hover:text-primary";
+            contentYoutube.classList.remove('hidden');
+            contentUpload.classList.add('hidden');
+        };
+        tabUpload.onclick = () => {
+            tabUpload.className = "flex-1 py-xs text-xs font-semibold text-primary border-b-2 border-primary";
+            tabYoutube.className = "flex-1 py-xs text-xs font-semibold text-muted hover:text-primary";
+            contentUpload.classList.remove('hidden');
+            contentYoutube.classList.add('hidden');
+        };
+        
+        // Helper to extract YouTube ID
+        function getYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+        
+        // Insert YouTube Embed Iframe
+        youtubeInsertBtn.onclick = () => {
+            const url = youtubeUrlInput.value.trim();
+            if (!url) return;
+            const ytId = getYouTubeId(url);
+            if (!ytId) {
+                alert("올바른 유튜브 주소가 아닙니다. 주소를 다시 확인해 주세요.");
+                return;
+            }
+            
+            const iframeEmbed = `\n\n<div class="relative w-full aspect-video rounded-xl overflow-hidden shadow-card-soft border border-hairline my-lg">\n  <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>\n</div>\n\n`;
+            
+            const textarea = document.getElementById('content');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            
+            textarea.value = text.substring(0, start) + iframeEmbed + text.substring(end);
+            videoModal.classList.add('hidden');
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = start + iframeEmbed.length;
+        };
+        
+        // Direct Video File Upload
+        videoFileTrigger.onclick = () => videoFileInput.click();
+        videoFileInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            try {
+                videoFileTrigger.disabled = true;
+                videoFileTrigger.style.opacity = '0.5';
+                videoUploadStatus.classList.remove('hidden');
+                
+                const url = await uploadVideoFile(file);
+                
+                const videoTag = `\n\n<video src="${url}" controls class="w-full rounded-xl overflow-hidden shadow-card-soft border border-hairline my-lg"></video>\n\n`;
+                
+                const textarea = document.getElementById('content');
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                const text = textarea.value;
+                
+                textarea.value = text.substring(0, start) + videoTag + text.substring(end);
+                videoModal.classList.add('hidden');
+                textarea.focus();
+                textarea.selectionStart = textarea.selectionEnd = start + videoTag.length;
+            } catch (err) {
+                console.error(err);
+                alert("동영상 파일 업로드 실패: " + err.message);
+            } finally {
+                videoFileTrigger.disabled = false;
+                videoFileTrigger.style.opacity = '1';
+                videoUploadStatus.classList.add('hidden');
+                videoFileInput.value = '';
             }
         };
     }

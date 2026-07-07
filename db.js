@@ -426,6 +426,61 @@ async function uploadImageFile(file) {
   });
 }
 
+async function uploadVideoFile(file) {
+  const config = await loadConfig();
+  const hasGit = config.github_token && config.github_owner && config.github_repo;
+
+  if (file.size > 50 * 1024 * 1024) {
+    throw new Error("파일 크기가 너무 큽니다. 50MB 이하의 동영상 파일만 업로드할 수 있습니다.");
+  }
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = reader.result;
+      
+      if (hasGit) {
+        try {
+          const base64Content = dataUrl.split(',')[1];
+          const filename = `post_vid_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+          const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/videos/${filename}`;
+          
+          const body = {
+            message: `feat: upload video ${filename}`,
+            content: base64Content,
+            branch: 'main'
+          };
+          
+          const putRes = await fetch(url, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `token ${config.github_token}`,
+              'Content-Type': 'application/json',
+              'Accept': 'application/vnd.github.v3+json'
+            },
+            body: JSON.stringify(body)
+          });
+          
+          if (!putRes.ok) {
+            const errorMsg = await putRes.text();
+            throw new Error(`GitHub Upload Failed: ${putRes.status} ${errorMsg}`);
+          }
+          
+          const rawUrl = `https://raw.githubusercontent.com/${config.github_owner}/${config.github_repo}/main/videos/${filename}`;
+          resolve(rawUrl);
+        } catch (err) {
+          reject(err);
+        }
+      } else {
+        // Local Fallback: return base64 Data URL directly
+        resolve(dataUrl);
+      }
+    };
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(file);
+  });
+}
+
 window.loadConfig = loadConfig;
 window.isAdmin = isAdmin;
 window.requireAdmin = requireAdmin;
@@ -435,3 +490,4 @@ window.deletePost = deletePost;
 window.renderMarkdown = renderMarkdown;
 window.markdownToText = markdownToText;
 window.uploadImageFile = uploadImageFile;
+window.uploadVideoFile = uploadVideoFile;
