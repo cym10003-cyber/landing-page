@@ -146,11 +146,12 @@
                 </button>
             </div>
         </div>
-        <div id="post-content" class="text-ink leading-relaxed prose prose-blue max-w-none text-base">
-            내용을 불러오는 중입니다...
+        <!-- Post Images at the beginning -->
+        <div id="post-images" class="text-ink leading-relaxed prose prose-blue max-w-none text-base hidden">
         </div>
+        
         <!-- Map Section -->
-        <div id="map-section" class="hidden border border-hairline rounded-xl overflow-hidden bg-surface-container-lowest shadow-card-soft p-lg my-lg">
+        <div id="map-section" class="hidden border border-hairline rounded-xl overflow-hidden bg-surface-container-lowest shadow-card-soft p-lg my-lg relative z-10">
             <h3 class="font-bold text-ink text-sm mb-md flex items-center gap-xs">
                 <span class="material-symbols-outlined text-primary text-[20px]">location_on</span> 대략적인 위치
             </h3>
@@ -163,6 +164,11 @@
                     카카오 맵으로 보기
                 </a>
             </div>
+        </div>
+
+        <!-- Post Text Content -->
+        <div id="post-text-content" class="text-ink leading-relaxed prose prose-blue max-w-none text-base">
+            내용을 불러오는 중입니다...
         </div>
     </article>
 </main>
@@ -246,7 +252,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v19"></script>
+<script src="db.js?v=20260708_v20"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
@@ -276,7 +282,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('post-title').innerText = post.title;
         document.getElementById('post-category').innerText = post.category || '일반';
         document.getElementById('post-date').innerText = post.date;
-        document.getElementById('post-content').innerHTML = renderMarkdown(post.content);
+        // Split content by images at the beginning
+        function splitContentByImages(content) {
+            const lines = content.split('\n');
+            const imageLines = [];
+            const textLines = [];
+            let parsingImages = true;
+
+            for (let line of lines) {
+                const trimmed = line.trim();
+                if (parsingImages) {
+                    if (trimmed === '' || /^\s*!\[.*?\]\(.*?\)\s*$/.test(line)) {
+                        imageLines.push(line);
+                    } else {
+                        parsingImages = false;
+                        textLines.push(line);
+                    }
+                } else {
+                    textLines.push(line);
+                }
+            }
+
+            return {
+                imagesMarkdown: imageLines.join('\n'),
+                textMarkdown: textLines.join('\n')
+            };
+        }
+
+        const splitResult = splitContentByImages(post.content);
+        if (splitResult.imagesMarkdown.trim()) {
+            document.getElementById('post-images').innerHTML = renderMarkdown(splitResult.imagesMarkdown);
+            document.getElementById('post-images').classList.remove('hidden');
+        } else {
+            document.getElementById('post-images').classList.add('hidden');
+        }
+        document.getElementById('post-text-content').innerHTML = renderMarkdown(splitResult.textMarkdown);
+
         renderLinkPreviews();
 
         if (post.address) {
@@ -322,7 +363,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     } catch (e) {
         console.error("Error loading article details:", e);
-        document.getElementById('post-content').innerText = "내용을 불러오는데 실패했습니다: " + e.message;
+        document.getElementById('post-text-content').innerText = "내용을 불러오는데 실패했습니다: " + e.message;
     }
     // Mobile Drawer Toggle
     const toggleBtn = document.getElementById('mobile-menu-toggle');
