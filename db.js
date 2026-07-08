@@ -344,22 +344,46 @@ function renderMarkdown(src) {
     }
     text = parts.join('');
 
+    const imgPlaceholders = [];
+    const linkPlaceholders = [];
+
+    // 1. Extract Images
+    text = text.replace(/!\[(.*?)\]\((.*?)\)/g, (match, altText, url) => {
+      const idx = imgPlaceholders.length;
+      imgPlaceholders.push({ altText, url });
+      return `___IMG_PLACEHOLDER_${idx}___`;
+    });
+
+    // 2. Extract Links
+    text = text.replace(/\[(.*?)\]\((.*?)\)/g, (match, linkText, url) => {
+      const idx = linkPlaceholders.length;
+      linkPlaceholders.push({ linkText, url });
+      return `___LINK_PLACEHOLDER_${idx}___`;
+    });
+
+    // 3. Process Bold, Italics, Strikethrough
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     text = text.replace(/__(.*?)__/g, '<strong>$1</strong>');
     text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
     text = text.replace(/_(.*?)_/g, '<em>$1</em>');
     text = text.replace(/~~(.*?)~~/g, '<del>$1</del>');
-    
-    // Support image syntax ![alt](url)
-    text = text.replace(/!\[(.*?)\]\((.*?)\)/g, (match, altText, url) => {
+
+    // 4. Restore Images
+    text = text.replace(/___IMG_PLACEHOLDER_(\d+)___/g, (match, idx) => {
+      const { altText, url } = imgPlaceholders[parseInt(idx, 10)];
       const cleanUrl = url.trim();
       if (/^(https?:\/\/|data:image\/)/i.test(cleanUrl)) {
         return `<img src="${cleanUrl}" alt="${altText}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" />`;
       }
-      return match;
+      return `![${altText}](${url})`;
     });
 
-    text = text.replace(/\[(.*?)\]\((.*?)\)/g, (match, linkText, url) => safeLink(url, linkText));
+    // 5. Restore Links
+    text = text.replace(/___LINK_PLACEHOLDER_(\d+)___/g, (match, idx) => {
+      const { linkText, url } = linkPlaceholders[parseInt(idx, 10)];
+      return safeLink(url, linkText);
+    });
+
     text = text.replace(/\n/g, '<br>');
 
     return text;
