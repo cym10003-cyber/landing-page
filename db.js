@@ -1,3 +1,4 @@
+console.log("Antigravity db.js version: 20260708_v7");
 let _config = null;
 let _cachedPosts = null;
 
