@@ -259,7 +259,11 @@ async function deletePost(id) {
 
 function renderMarkdown(src) {
   if (!src) return '';
-  let html = src
+  
+  // Convert GitHub raw URLs to high-speed jsDelivr CDN URLs for ultra-fast asset loading
+  let convertedSrc = src.replace(/raw\.githubusercontent\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)\/main\//g, 'cdn.jsdelivr.net/gh/$1/$2@main/');
+
+  let html = convertedSrc
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -333,20 +337,6 @@ function renderMarkdown(src) {
     return `<p class="leading-relaxed my-md">${renderInline(block)}</p>`;
   });
 
-  let result = processedBlocks.join('\n');
-  
-  // Unescape safe iframe and video elements
-  result = result.replace(/&lt;iframe ([\s\S]*?)&gt;&lt;\/iframe&gt;/g, (match, attrs) => {
-    return `<iframe ${attrs.replace(/&quot;/g, '"').replace(/&#039;/g, "'")}></iframe>`;
-  });
-  result = result.replace(/&lt;video ([\s\S]*?)&gt;&lt;\/video&gt;/g, (match, attrs) => {
-    return `<video ${attrs.replace(/&quot;/g, '"').replace(/&#039;/g, "'")}></video>`;
-  });
-  result = result.replace(/&lt;div class=&quot;relative w-full aspect-video rounded-xl overflow-hidden shadow-card-soft border border-hairline my-lg&quot;&gt;/g, '<div class="relative w-full aspect-video rounded-xl overflow-hidden shadow-card-soft border border-hairline my-lg">');
-  result = result.replace(/&lt;\/div&gt;/g, '</div>');
-  
-  return result;
-
   function renderInline(text) {
     let parts = text.split('`');
     for (let i = 1; i < parts.length; i += 2) {
@@ -374,6 +364,20 @@ function renderMarkdown(src) {
 
     return text;
   }
+
+  let result = processedBlocks.join('\n');
+  
+  // Unescape safe iframe and video elements
+  result = result.replace(/&lt;iframe ([\s\S]*?)&gt;&lt;\/iframe&gt;/g, (match, attrs) => {
+    return `<iframe ${attrs.replace(/&quot;/g, '"').replace(/&#039;/g, "'")}></iframe>`;
+  });
+  result = result.replace(/&lt;video ([\s\S]*?)&gt;&lt;\/video&gt;/g, (match, attrs) => {
+    return `<video ${attrs.replace(/&quot;/g, '"').replace(/&#039;/g, "'")}></video>`;
+  });
+  result = result.replace(/&lt;div class=&quot;relative w-full aspect-video rounded-xl overflow-hidden shadow-card-soft border border-hairline my-lg&quot;&gt;/g, '<div class="relative w-full aspect-video rounded-xl overflow-hidden shadow-card-soft border border-hairline my-lg">');
+  result = result.replace(/&lt;\/div&gt;/g, '</div>');
+  
+  return result;
 }
 
 function markdownToText(src) {
@@ -433,7 +437,7 @@ async function uploadImageFile(file) {
             throw new Error(`GitHub Upload Failed: ${putRes.status} ${errorMsg}`);
           }
           
-          const rawUrl = `https://raw.githubusercontent.com/${config.github_owner}/${config.github_repo}/main/images/${filename}`;
+          const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/${config.github_repo}@main/images/${filename}`;
           resolve(rawUrl);
         } catch (err) {
           reject(err);
@@ -489,7 +493,7 @@ async function uploadVideoFile(file) {
             throw new Error(`GitHub Upload Failed: ${putRes.status} ${errorMsg}`);
           }
           
-          const rawUrl = `https://raw.githubusercontent.com/${config.github_owner}/${config.github_repo}/main/videos/${filename}`;
+          const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/${config.github_repo}@main/videos/${filename}`;
           resolve(rawUrl);
         } catch (err) {
           reject(err);
