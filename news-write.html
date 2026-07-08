@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>소식 작성/수정 - 관리자 전용 - 최가네부동산공인중개사사무소</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>소식 작성/수정 - 관리자 전용 - 최가네부동산공인중개사사무소</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -147,7 +147,14 @@
             </div>
             <div>
                 <label for="address" class="block text-sm font-semibold text-ink mb-xs">매물 대략적 위치/주소 (선택)</label>
-                <input type="text" id="address" class="block w-full border-hairline rounded-lg py-2.5 focus:ring-primary focus:border-primary text-sm bg-surface-container-low" placeholder="예: 대구광역시 달서구 장기동 555 또는 대구 수성구 수성동1가 (입력 시 글 상세보기 화면에 지도가 자동 생성됩니다)">
+                <div class="flex gap-sm mb-xs">
+                    <input type="text" id="address" class="block w-full border-hairline rounded-lg py-2.5 focus:ring-primary focus:border-primary text-sm bg-surface-container-low" placeholder="예: 대구광역시 달서구 장기동 555 또는 아래 지도에서 직접 클릭하여 핀을 찍어주세요.">
+                    <button type="button" id="search-address-btn" class="bg-primary-container text-white font-button text-xs px-md rounded-lg hover:bg-blue-mid shrink-0 flex items-center gap-xs cursor-pointer border-0">
+                        <span class="material-symbols-outlined text-[16px]">search</span> 주소 검색
+                    </button>
+                </div>
+                <div id="editor-map" class="w-full h-64 rounded-lg bg-surface-container border border-hairline relative z-10 mb-xs"></div>
+                <p class="text-muted text-[11px]">지도를 클릭하여 파란색 핀을 찍으면 주소가 자동 입력되며, 주소를 적고 검색을 누르면 핀이 이동합니다.</p>
             </div>
             <div>
                 <div class="flex justify-between items-center mb-xs">
@@ -298,10 +305,75 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v12"></script>
+<script src="db.js?v=20260708_v13"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     requireAdmin();
+
+    let chosenCoords = null;
+    const editorMap = L.map('editor-map', {
+        zoomControl: true,
+        scrollWheelZoom: false
+    }).setView([35.8714, 128.6014], 12); // Center in Daegu
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(editorMap);
+
+    let editorMarker = null;
+
+    // Handle map click
+    editorMap.on('click', async (e) => {
+        const { lat, lng } = e.latlng;
+        chosenCoords = [lat, lng];
+        
+        if (editorMarker) {
+            editorMarker.setLatLng(e.latlng);
+        } else {
+            editorMarker = L.marker(e.latlng).addTo(editorMap);
+        }
+        
+        // Reverse geocoding
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data) {
+                    const cleanAddr = formatNominatimAddress(data);
+                    document.getElementById('address').value = cleanAddr;
+                }
+            }
+        } catch (err) {
+            console.error("Reverse geocoding failed:", err);
+        }
+    });
+
+    // Handle address search click
+    document.getElementById('search-address-btn').onclick = async () => {
+        const addr = document.getElementById('address').value.trim();
+        if (!addr) return;
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr)}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+                    chosenCoords = [lat, lon];
+                    if (editorMarker) {
+                        editorMarker.setLatLng(chosenCoords);
+                    } else {
+                        editorMarker = L.marker(chosenCoords).addTo(editorMap);
+                    }
+                    editorMap.setView(chosenCoords, 15);
+                } else {
+                    alert("주소를 찾을 수 없습니다. 지도에서 직접 클릭해 주세요.");
+                }
+            }
+        } catch (err) {
+            console.error("Geocoding failed:", err);
+        }
+    };
 
     const params = new URLSearchParams(window.location.search);
     const postId = params.get('id');
@@ -320,6 +392,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('content').value = post.content;
                 document.getElementById('address').value = post.address || '';
                 postDate = post.date;
+
+                // Prefill marker on editor map
+                if (post.coordinates) {
+                    chosenCoords = post.coordinates;
+                    editorMarker = L.marker(chosenCoords).addTo(editorMap);
+                    editorMap.setView(chosenCoords, 15);
+                } else if (post.address) {
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(post.address)}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data && data.length > 0) {
+                                const lat = parseFloat(data[0].lat);
+                                const lon = parseFloat(data[0].lon);
+                                chosenCoords = [lat, lon];
+                                editorMarker = L.marker(chosenCoords).addTo(editorMap);
+                                editorMap.setView(chosenCoords, 15);
+                            }
+                        }).catch(err => console.error(err));
+                }
             } else {
                 alert("수정할 소식을 찾을 수 없습니다.");
                 window.location.href = 'news.html';
@@ -531,7 +622,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 title,
                 category,
                 content,
-                address
+                address,
+                coordinates: chosenCoords
             };
             if (postId) {
                 payload.id = postId;
@@ -575,6 +667,31 @@ document.addEventListener('DOMContentLoaded', async () => {
       drawer.addEventListener('click', (e) => {
         if (e.target === drawer) closeDrawer();
       });
+    }
+
+    function formatNominatimAddress(data) {
+        const addrObj = data.address || {};
+        const parts = [];
+        
+        const province = addrObj.province || addrObj.city || '';
+        if (province) parts.push(province);
+        
+        const district = addrObj.city_district || addrObj.district || addrObj.county || '';
+        if (district && district !== province) parts.push(district);
+        
+        const suburb = addrObj.suburb || addrObj.neighbourhood || addrObj.quarter || '';
+        if (suburb) parts.push(suburb);
+        
+        const road = addrObj.road || addrObj.pedestrian || '';
+        if (road) parts.push(road);
+        
+        const houseNumber = addrObj.house_number || '';
+        if (houseNumber) parts.push(houseNumber);
+        
+        if (parts.length > 0) {
+            return parts.join(' ');
+        }
+        return data.display_name || '';
     }
 });
 </script>

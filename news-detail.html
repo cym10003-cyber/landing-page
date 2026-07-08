@@ -246,7 +246,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v12"></script>
+<script src="db.js?v=20260708_v13"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('kakao-map-btn').href = `https://map.kakao.com/?q=${encodeURIComponent(post.address)}`;
             
             loadLeaflet().then(() => {
-                renderMap(post.address);
+                renderMap(post.address, post.coordinates);
             });
         }
 
@@ -436,23 +436,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    async function renderMap(address) {
+    async function renderMap(address, coordinates) {
         try {
-            // Query Nominatim API for coordinates
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
-            if (!res.ok) throw new Error("Geocoding API failed");
-            const data = await res.json();
-            
             let lat = 35.8714; // Default Daegu center coordinates
             let lon = 128.6014;
             let zoom = 12;
             let found = false;
 
-            if (data && data.length > 0) {
-                lat = parseFloat(data[0].lat);
-                lon = parseFloat(data[0].lon);
+            if (coordinates && coordinates.length === 2) {
+                lat = parseFloat(coordinates[0]);
+                lon = parseFloat(coordinates[1]);
                 zoom = 15;
                 found = true;
+            } else {
+                // Query Nominatim API for coordinates
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.length > 0) {
+                        lat = parseFloat(data[0].lat);
+                        lon = parseFloat(data[0].lon);
+                        zoom = 15;
+                        found = true;
+                    }
+                }
             }
 
             const map = L.map('map', {
