@@ -149,6 +149,21 @@
         <div id="post-content" class="text-ink leading-relaxed prose prose-blue max-w-none text-base">
             내용을 불러오는 중입니다...
         </div>
+        <!-- Map Section -->
+        <div id="map-section" class="hidden border border-hairline rounded-xl overflow-hidden bg-surface-container-lowest shadow-card-soft p-lg my-lg">
+            <h3 class="font-bold text-ink text-sm mb-md flex items-center gap-xs">
+                <span class="material-symbols-outlined text-primary text-[20px]">location_on</span> 대략적인 위치
+            </h3>
+            <div id="map" class="w-full h-64 rounded-lg bg-surface-container mb-md relative z-10"></div>
+            <div class="flex gap-sm">
+                <a id="naver-map-btn" href="#" target="_blank" class="flex-1 bg-surface border border-[#03c75a] text-[#03c75a] px-md py-sm rounded-lg font-button text-xs text-center hover:bg-[#03c75a]/5 transition-colors flex items-center justify-center gap-xs">
+                    네이버 지도로 보기
+                </a>
+                <a id="kakao-map-btn" href="#" target="_blank" class="flex-1 bg-surface border border-[#fee500] text-[#3c1e1e] px-md py-sm rounded-lg font-button text-xs text-center hover:bg-[#fee500]/10 transition-colors flex items-center justify-center gap-xs">
+                    카카오 맵으로 보기
+                </a>
+            </div>
+        </div>
     </article>
 </main>
 <footer class="bg-ink-footer dark:bg-on-surface text-surface-variant py-xxl px-lg border-t border-outline-variant">
@@ -231,7 +246,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v11"></script>
+<script src="db.js?v=20260708_v12"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
@@ -263,6 +278,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('post-date').innerText = post.date;
         document.getElementById('post-content').innerHTML = renderMarkdown(post.content);
         renderLinkPreviews();
+
+        if (post.address) {
+            document.getElementById('map-section').classList.remove('hidden');
+            document.getElementById('naver-map-btn').href = `https://map.naver.com/v5/search/${encodeURIComponent(post.address)}`;
+            document.getElementById('kakao-map-btn').href = `https://map.kakao.com/?q=${encodeURIComponent(post.address)}`;
+            
+            loadLeaflet().then(() => {
+                renderMap(post.address);
+            });
+        }
 
         if (isAdmin()) {
             document.getElementById('admin-controls').classList.remove('hidden');
@@ -389,6 +414,76 @@ document.addEventListener('DOMContentLoaded', async () => {
                 `;
             }
         });
+    }
+
+    function loadLeaflet() {
+        return new Promise((resolve) => {
+            if (window.L) {
+                resolve();
+                return;
+            }
+            // Load CSS
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+            document.head.appendChild(link);
+            
+            // Load JS
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+            script.onload = () => resolve();
+            document.body.appendChild(script);
+        });
+    }
+
+    async function renderMap(address) {
+        try {
+            // Query Nominatim API for coordinates
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+            if (!res.ok) throw new Error("Geocoding API failed");
+            const data = await res.json();
+            
+            let lat = 35.8714; // Default Daegu center coordinates
+            let lon = 128.6014;
+            let zoom = 12;
+            let found = false;
+
+            if (data && data.length > 0) {
+                lat = parseFloat(data[0].lat);
+                lon = parseFloat(data[0].lon);
+                zoom = 15;
+                found = true;
+            }
+
+            const map = L.map('map', {
+                zoomControl: true,
+                scrollWheelZoom: false
+            }).setView([lat, lon], zoom);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            if (found) {
+                L.marker([lat, lon]).addTo(map)
+                    .bindPopup(`<b>${address}</b><br>대략적인 위치입니다.`)
+                    .openPopup();
+            } else {
+                L.popup()
+                    .setLatLng([lat, lon])
+                    .setContent(`위치를 찾을 수 없어 대구 중심을 표시합니다.<br>입력된 주소: <b>${address}</b>`)
+                    .openOn(map);
+            }
+        } catch (err) {
+            console.error("Map rendering failed:", err);
+            document.getElementById('map').innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full text-muted p-md text-center">
+                    <span class="material-symbols-outlined text-3xl mb-xs">map</span>
+                    <p class="text-xs">지도를 로드할 수 없습니다.</p>
+                    <p class="text-[10px] opacity-75">${err.message}</p>
+                </div>
+            `;
+        }
     }
 });
 </script>
