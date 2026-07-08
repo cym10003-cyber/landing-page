@@ -351,14 +351,14 @@ function renderMarkdown(src) {
     text = text.replace(/!\[(.*?)\]\((.*?)\)/g, (match, altText, url) => {
       const idx = imgPlaceholders.length;
       imgPlaceholders.push({ altText, url });
-      return `%%IMG_PLACEHOLDER_${idx}%%`;
+      return `%%IMGPLACEHOLDER${idx}%%`;
     });
 
     // 2. Extract Links
     text = text.replace(/\[(.*?)\]\((.*?)\)/g, (match, linkText, url) => {
       const idx = linkPlaceholders.length;
       linkPlaceholders.push({ linkText, url });
-      return `%%LINK_PLACEHOLDER_${idx}%%`;
+      return `%%LINKPLACEHOLDER${idx}%%`;
     });
 
     // 3. Process Bold, Italics, Strikethrough
@@ -369,7 +369,7 @@ function renderMarkdown(src) {
     text = text.replace(/~~(.*?)~~/g, '<del>$1</del>');
 
     // 4. Restore Images
-    text = text.replace(/%%IMG_PLACEHOLDER_(\d+)%%/g, (match, idx) => {
+    text = text.replace(/%%IMGPLACEHOLDER(\d+)%%/g, (match, idx) => {
       const { altText, url } = imgPlaceholders[parseInt(idx, 10)];
       const cleanUrl = url.trim();
       if (/^(https?:\/\/|data:image\/)/i.test(cleanUrl)) {
@@ -379,7 +379,7 @@ function renderMarkdown(src) {
     });
 
     // 5. Restore Links
-    text = text.replace(/%%LINK_PLACEHOLDER_(\d+)%%/g, (match, idx) => {
+    text = text.replace(/%%LINKPLACEHOLDER(\d+)%%/g, (match, idx) => {
       const { linkText, url } = linkPlaceholders[parseInt(idx, 10)];
       return safeLink(url, linkText);
     });
