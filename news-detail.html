@@ -281,8 +281,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (post.address) {
             document.getElementById('map-section').classList.remove('hidden');
-            document.getElementById('naver-map-btn').href = `https://map.naver.com/v5/search/${encodeURIComponent(post.address)}`;
-            document.getElementById('kakao-map-btn').href = `https://map.kakao.com/?q=${encodeURIComponent(post.address)}`;
+            
+            if (post.coordinates && post.coordinates.length === 2) {
+                const lat = post.coordinates[0];
+                const lon = post.coordinates[1];
+                document.getElementById('naver-map-btn').href = `https://map.naver.com/v5/search/${lat},${lon}`;
+                document.getElementById('kakao-map-btn').href = `https://map.kakao.com/?q=${lat},${lon}`;
+            } else {
+                document.getElementById('naver-map-btn').href = `https://map.naver.com/v5/search/${encodeURIComponent(post.address)}`;
+                document.getElementById('kakao-map-btn').href = `https://map.kakao.com/?q=${encodeURIComponent(post.address)}`;
+            }
             
             loadLeaflet().then(() => {
                 renderMap(post.address, post.coordinates);
