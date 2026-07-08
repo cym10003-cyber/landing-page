@@ -99,6 +99,8 @@ async function savePost(postData) {
       posts[idx].title = postData.title;
       posts[idx].category = postData.category;
       posts[idx].content = postData.content;
+      posts[idx].address = postData.address;
+      posts[idx].coordinates = postData.coordinates;
       posts[idx].date = postData.date || posts[idx].date || new Date().toLocaleDateString('ko-KR').replace(/\.$/, "");
       updatedPost = posts[idx];
     } else {
@@ -116,6 +118,8 @@ async function savePost(postData) {
       title: postData.title,
       category: postData.category,
       content: postData.content,
+      address: postData.address,
+      coordinates: postData.coordinates,
       date: dateStr
     };
     posts.unshift(updatedPost);
