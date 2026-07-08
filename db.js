@@ -414,6 +414,13 @@ function renderMarkdown(src) {
 function markdownToText(src) {
   if (!src) return '';
   let text = src;
+  
+  // Completely strip image markdown ![altText](url)
+  text = text.replace(/!\[(.*?)\]\((.*?)\)/g, '');
+  
+  // Completely strip HTML tags (like video, iframe, etc.)
+  text = text.replace(/<[^>]*>/g, '');
+
   text = text.replace(/^---[\s\S]*?---/, '');
   text = text.replace(/^#{1,6}\s+/gm, '');
   text = text.replace(/^>\s+/gm, '');
