@@ -230,7 +230,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v7"></script>
+<script src="db.js?v=20260708_v8"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
@@ -261,6 +261,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('post-category').innerText = post.category || '일반';
         document.getElementById('post-date').innerText = post.date;
         document.getElementById('post-content').innerHTML = renderMarkdown(post.content);
+        renderLinkPreviews();
 
         if (isAdmin()) {
             document.getElementById('admin-controls').classList.remove('hidden');
@@ -313,6 +314,80 @@ document.addEventListener('DOMContentLoaded', async () => {
       drawer.addEventListener('click', (e) => {
         if (e.target === drawer) closeDrawer();
       });
+    }
+
+    async function renderLinkPreviews() {
+        const cards = document.querySelectorAll('.link-preview-card');
+        cards.forEach(async (card) => {
+            const url = card.getAttribute('data-url');
+            if (!url) return;
+
+            // Render loading state placeholder
+            card.innerHTML = `
+                <a href="${url}" target="_blank" class="flex flex-col md:flex-row items-center border border-hairline rounded-xl overflow-hidden bg-surface-container-lowest hover:bg-surface-container-low hover:shadow-card-soft transition-all duration-300 group cursor-pointer text-current no-underline w-full min-h-[120px]">
+                    <div class="w-full md:w-40 aspect-video md:h-full bg-surface-container-high animate-pulse shrink-0 flex items-center justify-center text-muted">
+                        <span class="material-symbols-outlined animate-spin text-[24px]">sync</span>
+                    </div>
+                    <div class="p-md flex-1 flex flex-col justify-between gap-xs min-w-0">
+                        <div class="h-4 bg-surface-container-high rounded w-3/4 animate-pulse"></div>
+                        <div class="h-3 bg-surface-container-high rounded w-full animate-pulse mt-xs"></div>
+                        <span class="text-[11px] text-primary font-semibold mt-sm truncate">${new URL(url).hostname}</span>
+                    </div>
+                </a>
+            `;
+
+            try {
+                const res = await fetch(`https://api.microlink.io?url=${encodeURIComponent(url)}`);
+                if (!res.ok) throw new Error("API failed");
+                const json = await res.json();
+                
+                if (json.status === 'success' && json.data) {
+                    const data = json.data;
+                    const title = data.title || url;
+                    const description = data.description || '';
+                    const imageUrl = data.image ? data.image.url : null;
+                    const hostname = new URL(url).hostname;
+
+                    card.innerHTML = `
+                        <a href="${url}" target="_blank" class="flex flex-col md:flex-row items-stretch border border-hairline rounded-xl overflow-hidden bg-surface-container-lowest hover:bg-surface-container-low hover:shadow-card-soft transition-all duration-300 group cursor-pointer text-current no-underline w-full min-h-[120px]">
+                            ${imageUrl ? `
+                            <div class="w-full md:w-40 aspect-video md:h-auto shrink-0 relative overflow-hidden bg-surface-container">
+                                <img src="${imageUrl}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="preview" onerror="this.parentNode.remove()">
+                            </div>
+                            ` : ''}
+                            <div class="p-md flex-1 flex flex-col justify-between gap-xs min-w-0">
+                                <div>
+                                    <h4 class="font-bold text-ink text-sm group-hover:text-primary transition-colors line-clamp-1 mb-xs">${title}</h4>
+                                    ${description ? `<p class="text-xs text-muted line-clamp-2 leading-relaxed">${description}</p>` : ''}
+                                </div>
+                                <span class="text-[11px] text-primary font-semibold mt-sm truncate flex items-center gap-xs">
+                                    <span class="material-symbols-outlined text-[12px]">link</span> ${hostname}
+                                </span>
+                            </div>
+                        </a>
+                    `;
+                } else {
+                    throw new Error("Invalid data");
+                }
+            } catch (err) {
+                console.error("Link preview fetch failed:", err);
+                // Fallback preview card (text only)
+                const hostname = new URL(url).hostname;
+                card.innerHTML = `
+                    <a href="${url}" target="_blank" class="flex flex-col md:flex-row items-stretch border border-hairline rounded-xl overflow-hidden bg-surface-container-lowest hover:bg-surface-container-low hover:shadow-card-soft transition-all duration-300 group cursor-pointer text-current no-underline w-full min-h-[120px]">
+                        <div class="p-md flex-1 flex flex-col justify-between gap-xs min-w-0">
+                            <div>
+                                <h4 class="font-bold text-ink text-sm group-hover:text-primary transition-colors line-clamp-1 mb-xs">${url}</h4>
+                                <p class="text-xs text-muted line-clamp-2 leading-relaxed">이 링크로 이동하려면 클릭해 주세요.</p>
+                            </div>
+                            <span class="text-[11px] text-primary font-semibold mt-sm truncate flex items-center gap-xs">
+                                <span class="material-symbols-outlined text-[12px]">link</span> ${hostname}
+                            </span>
+                        </div>
+                    </a>
+                `;
+            }
+        });
     }
 });
 </script>

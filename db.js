@@ -284,6 +284,12 @@ function renderMarkdown(src) {
     block = block.trim();
     if (!block) return '';
 
+    // Check if the block is a single clean URL on its own line
+    const urlPattern = /^(https?:\/\/[^\s]+)$/i;
+    if (urlPattern.test(block)) {
+      return `<div class="link-preview-card my-lg" data-url="${block.trim()}"></div>`;
+    }
+
     if (block.startsWith('```')) {
       const match = block.match(/^```([a-zA-Z0-9_-]*)\n([\s\S]*?)\n?```$/);
       if (match) {
