@@ -246,7 +246,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v18"></script>
+<script src="db.js?v=20260708_v19"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
@@ -285,12 +285,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (post.coordinates && post.coordinates.length === 2) {
                 const lat = post.coordinates[0];
                 const lon = post.coordinates[1];
-                // Naver mobile search does not support raw GPS coordinate input, so we use text address for Naver Map
-                document.getElementById('naver-map-btn').href = `https://map.naver.com/v5/search/${encodeURIComponent(post.address)}`;
-                document.getElementById('kakao-map-btn').href = `https://map.kakao.com/?q=${lat},${lon}`;
+                const mapTitle = post.address || '매물 대략적 위치';
+                document.getElementById('naver-map-btn').href = `https://map.naver.com/?lng=${lon}&lat=${lat}&title=${encodeURIComponent(mapTitle)}`;
+                document.getElementById('kakao-map-btn').href = `https://map.kakao.com/link/map/${encodeURIComponent(mapTitle)},${lat},${lon}`;
             } else {
-                document.getElementById('naver-map-btn').href = `https://map.naver.com/v5/search/${encodeURIComponent(post.address)}`;
-                document.getElementById('kakao-map-btn').href = `https://map.kakao.com/?q=${encodeURIComponent(post.address)}`;
+                const mapTitle = post.address || '매물 대략적 위치';
+                document.getElementById('naver-map-btn').href = `https://map.naver.com/v5/search/${encodeURIComponent(mapTitle)}`;
+                document.getElementById('kakao-map-btn').href = `https://map.kakao.com/?q=${encodeURIComponent(mapTitle)}`;
             }
             
             loadLeaflet().then(() => {
