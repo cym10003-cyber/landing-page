@@ -154,7 +154,10 @@
                     </button>
                 </div>
                 <div id="editor-map" class="w-full h-64 rounded-lg bg-surface-container border border-hairline relative z-10 mb-xs"></div>
-                <p class="text-muted text-[11px]">지도를 클릭하여 파란색 핀을 찍으면 주소가 자동 입력되며, 주소를 적고 검색을 누르면 핀이 이동합니다.</p>
+                <div id="addr-suggestion-container" class="hidden text-xs mt-xs mb-sm text-primary">
+                    추천 주소: <span id="addr-suggestion" class="underline cursor-pointer font-medium hover:text-blue-mid"></span> (클릭 시 적용)
+                </div>
+                <p class="text-muted text-[11px]">지도에서 핀을 직접 클릭하여 이동하거나 드래그하여 상세 위치를 조정할 수 있습니다.</p>
             </div>
             <div>
                 <div class="flex justify-between items-center mb-xs">
@@ -305,7 +308,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v13"></script>
+<script src="db.js?v=20260708_v17"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     requireAdmin();
@@ -322,6 +325,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let editorMarker = null;
 
+    function setupMarkerDrag(marker) {
+        marker.on('dragend', async (e) => {
+            const latlng = marker.getLatLng();
+            chosenCoords = [latlng.lat, latlng.lng];
+            reverseGeocode(latlng.lat, latlng.lng);
+        });
+    }
+
+    async function reverseGeocode(lat, lng) {
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data) {
+                    const cleanAddr = formatNominatimAddress(data);
+                    const sugContainer = document.getElementById('addr-suggestion-container');
+                    const sugSpan = document.getElementById('addr-suggestion');
+                    sugSpan.innerText = cleanAddr;
+                    sugContainer.classList.remove('hidden');
+                    sugSpan.onclick = () => {
+                        document.getElementById('address').value = cleanAddr;
+                        sugContainer.classList.add('hidden');
+                    };
+                }
+            }
+        } catch (err) {
+            console.error("Reverse geocoding failed:", err);
+        }
+    }
+
     // Handle map click
     editorMap.on('click', async (e) => {
         const { lat, lng } = e.latlng;
@@ -330,22 +363,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (editorMarker) {
             editorMarker.setLatLng(e.latlng);
         } else {
-            editorMarker = L.marker(e.latlng).addTo(editorMap);
+            editorMarker = L.marker(e.latlng, { draggable: true }).addTo(editorMap);
+            setupMarkerDrag(editorMarker);
         }
         
-        // Reverse geocoding
-        try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-            if (res.ok) {
-                const data = await res.json();
-                if (data) {
-                    const cleanAddr = formatNominatimAddress(data);
-                    document.getElementById('address').value = cleanAddr;
-                }
-            }
-        } catch (err) {
-            console.error("Reverse geocoding failed:", err);
-        }
+        reverseGeocode(lat, lng);
     });
 
     // Handle address search click
@@ -363,9 +385,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (editorMarker) {
                         editorMarker.setLatLng(chosenCoords);
                     } else {
-                        editorMarker = L.marker(chosenCoords).addTo(editorMap);
+                        editorMarker = L.marker(chosenCoords, { draggable: true }).addTo(editorMap);
+                        setupMarkerDrag(editorMarker);
                     }
                     editorMap.setView(chosenCoords, 15);
+                    document.getElementById('addr-suggestion-container').classList.add('hidden');
                 } else {
                     alert("주소를 찾을 수 없습니다. 지도에서 직접 클릭해 주세요.");
                 }
@@ -396,7 +420,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Prefill marker on editor map
                 if (post.coordinates) {
                     chosenCoords = post.coordinates;
-                    editorMarker = L.marker(chosenCoords).addTo(editorMap);
+                    editorMarker = L.marker(chosenCoords, { draggable: true }).addTo(editorMap);
+                    setupMarkerDrag(editorMarker);
                     editorMap.setView(chosenCoords, 15);
                 } else if (post.address) {
                     fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(post.address)}`)
@@ -406,7 +431,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 const lat = parseFloat(data[0].lat);
                                 const lon = parseFloat(data[0].lon);
                                 chosenCoords = [lat, lon];
-                                editorMarker = L.marker(chosenCoords).addTo(editorMap);
+                                editorMarker = L.marker(chosenCoords, { draggable: true }).addTo(editorMap);
+                                setupMarkerDrag(editorMarker);
                                 editorMap.setView(chosenCoords, 15);
                             }
                         }).catch(err => console.error(err));
