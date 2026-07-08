@@ -389,9 +389,34 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v9"></script>
+<script src="db.js?v=20260708_v10"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
+    const fallbackImages = [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCkR-wQyhx_M0SJF0T5FH04XUIMeg6qiswo7SylZDzAmaNZvZNKh-wSI9vVX9PD3ylL4DgGtEcd9m-jU4fF9tHKVSy84-4kUI67OMbysZG-c-eZ-HNPMnu2O57NDO0AJxiPsGRrtHLH_CUoVJXqZF9XBhPBL4bFlBVSwxWLNpZySjR3UivnfVo-2scUE5413YQbsf2XE13SapJwBA4jwKU5GONGrtt6hTLhBS3CDMiaaNXF9Hn9317Qs6JQYBaTuvRjbvGd69nQyzw",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuB7T1E6cl0rIAlxbl18yLfhOQB4k3VKaWB3VtjbIYdLBUrTNQ4y0ON2qZUAzy-BhUUjXPaEppcFn_ufN6HtOAOv75HFW_AwcuuQPz2dEs7LFw7gyvcVwhbxZTYIdAHeiyoKWwNvPRkQg2acdcVJMhUJ5Ad2kp8h5-SpmtpVSySIdc2z-uYYgdn_WziLPNvWmLrDsR7FOQt2cLVbHHlRXuu3q1mET9_mIIY5pV1F5C3dyJcxGE4bJFlWWca1YKr-1LCUSqw3Bz3JAbA",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuDSPLN1-SGjcEvbjw9WnBsD6clfPaz-0RsQBNAzLGqKPoDXhrQ-j0UVR2O0Hbx5oPlmkKnIEeZqm8f9gBjahcMmLU9PyBfCBRuwZ6oq62qhPdy2oCCCPIpquntvosL7d_wCt0lmwcFnp_btQnN54oJTlojjqKAuV5vktthcAcSWZr1jmMDyixvnSqlSYJTp_qMsNfopnzjYpJCGf-YbCbS5S0P3P6XMAh-cu7xuwPalCbdUnaJDjoEvXFpwhqKYuuLgb5WBFdxvCew",
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBX-myFJEALqPkFc0UZCHTJBXA6awz2lb1x7CsHBsodkyWcOb4dFyIrQ7miBRsZzkCQsts2rpJQTJ_N47oxy9pqCPTEfNXS3NHKCMkRR70oJMLmv9PL22NpqPbHRPIKlHi-Qs7QQ7TknYmky-L46atqcY8lpca7UO2sMXud3m1jVI3hdBWoATZ_cU4-lSpj9kMOE_jCyevOxw6lK_GnvTrhScMpybyiamp8f-e7gNBHU232V9aXqK1Kl8B_O1atEmar0FARd4PHHPI"
+    ];
+
+    function getFirstImage(markdown) {
+        if (!markdown) return null;
+        const match = markdown.match(/!\[.*?\]\((.*?)\)/);
+        if (match) {
+            let url = match[1];
+            if (url.includes('raw.githubusercontent.com')) {
+                url = url.replace(/raw\.githubusercontent\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)\/main\//g, 'cdn.jsdelivr.net/gh/$1/$2@main/');
+            }
+            return url;
+        }
+        return null;
+    }
+
+    function getFallbackImage(id) {
+        const code = String(id).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        return fallbackImages[code % fallbackImages.length];
+    }
+
     try {
         const posts = await getPosts();
         const section = document.getElementById('latest-board-section');
@@ -403,11 +428,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const latest = posts.slice(0, 3);
         container.innerHTML = latest.map(post => {
             const summary = markdownToText(post.content).slice(0, 60) + '...';
+            const image = getFirstImage(post.content) || getFallbackImage(post.id);
             return `
                 <div class="bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline overflow-hidden group cursor-pointer flex flex-col transition-transform hover:-translate-y-1 hover:scale-[1.02] duration-300" onclick="location.href='news-detail.html?id=${post.id}'">
+                    <div class="h-48 w-full relative overflow-hidden bg-surface-container">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${image}"/>
+                        <div class="absolute top-md left-md bg-dark-chip text-white font-label-sm text-label-sm px-sm py-xs rounded">
+                            ${post.category || '일반'}
+                        </div>
+                    </div>
                     <div class="p-lg flex-1 flex flex-col gap-sm">
                         <div class="flex justify-between items-center text-muted font-label-sm text-label-sm mb-xs">
-                            <span class="bg-dark-chip text-white px-2 py-0.5 rounded text-[10px] font-semibold">${post.category || '일반'}</span>
                             <span>${post.date}</span>
                         </div>
                         <h4 class="font-subsection-h3 text-lg mb-xs text-ink group-hover:text-primary-container transition-colors line-clamp-2">${post.title}</h4>

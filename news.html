@@ -295,7 +295,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v9"></script>
+<script src="db.js?v=20260708_v10"></script>
 <script>
 let allPosts = [];
 let selectedCategory = 'ALL';
@@ -310,7 +310,14 @@ const fallbackImages = [
 function getFirstImage(markdown) {
     if (!markdown) return null;
     const match = markdown.match(/!\[.*?\]\((.*?)\)/);
-    return match ? match[1] : null;
+    if (match) {
+        let url = match[1];
+        if (url.includes('raw.githubusercontent.com')) {
+            url = url.replace(/raw\.githubusercontent\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)\/main\//g, 'cdn.jsdelivr.net/gh/$1/$2@main/');
+        }
+        return url;
+    }
+    return null;
 }
 
 function getFallbackImage(id) {
