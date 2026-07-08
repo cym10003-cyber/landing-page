@@ -123,6 +123,19 @@
     </script>
 <style>
         body { font-family: 'Inter', 'Noto Sans KR', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 2px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
     </style>
 </head>
 <body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen pb-20 md:pb-0">
@@ -226,7 +239,7 @@
 </div>
 <div class="grid grid-cols-1 md:grid-cols-4 gap-lg md:auto-rows-[200px]">
 <!-- Large Card -->
-<div class="md:col-span-2 bg-surface rounded-card p-lg border border-outline-variant/30 flex flex-col justify-between relative overflow-hidden group col-span-1">
+<div class="md:col-span-2 md:row-span-2 bg-surface rounded-card p-lg border border-outline-variant/30 flex flex-col justify-between relative overflow-hidden group col-span-1">
 <div class="relative z-10">
 <div class="inline-flex items-center gap-1 bg-surface-container-lowest text-primary-container px-2 py-1 rounded border border-primary-container/20 font-label-sm text-label-sm mb-md">
                                 공공기관 중개
@@ -237,45 +250,45 @@
 <div class="absolute bottom-0 right-0 w-64 h-64 bg-primary-container/5 rounded-full blur-3xl group-hover:bg-primary-container/10 transition-colors"></div>
 </div>
 <!-- Medium Card 1 -->
-<div class="md:col-span-4 bg-corporate-navy text-surface-container-lowest rounded-card p-lg flex flex-col justify-start relative overflow-hidden col-span-1">
-<div class="relative z-10 flex items-start gap-md">
-<span class="material-symbols-outlined text-[32px] text-primary-fixed-dim" data-icon="domain" data-weight="fill" style="font-variation-settings: 'FILL' 1;">domain</span>
-<div class="w-full">
-<h3 class="font-subsection-h3 text-[24px] text-surface-container-lowest mb-md">대형 법인 및 보험사, 학원, 치과의원 등 다수 중개&nbsp;&nbsp;</h3>
-<div class="font-body text-body text-primary-fixed-dim mt-md text-xs sm:text-sm columns-1 md:columns-2 gap-x-xl leading-relaxed opacity-95">
-    <div class="mb-xs break-inside-avoid-column">대구지방고용노동청 본청 고용관리과 확장입주 KT대구타워 중개</div>
-    <div class="mb-xs break-inside-avoid-column">삼성화*금융서비스 GA 보험사 대구 지사 JM타워 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">만촌리더*치과 만촌동 성원넥서스 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">메타리* GA 보험사 대구 중구 지사 반월타워 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">테이블오더 회사 티오* 대구경북 지사 디센터1976 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">법무법인 초* 범어역 대구분사무소 범어엔타워 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">법무법인 율* 범어동 대구사무소 법무빌딩 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">노무법인 인* 경대병원역 사무실 삼덕타워 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">만촌동 온* 수학학원 수성엠비션타워 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">만촌역 김정* 수학학원 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">만촌역 타이* 수학학원 수성S큐브 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">주식회사 최앤* 건설시행사 사무실 범어네거리클래시아 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">헤어바이신* 미용실 달구벌대로 대구은행역 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">유퍼스* GA 보험사 대구 달서구 대리점 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">미래에* GA 보험사 대명동 대리점 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">아이쉼터 개발사 (주)에쓰* 이천동 사무실 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">피지*보이스 발성전문학원 범어역 범어네거리클래시아 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">여행짝* 여행사 중앙로역 사무실 동성로하우스디어반 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">산학협력업체 대명동 사무실 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">더행*심리상담센터 동인동 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">믹*스튜디오 사진관 대명동 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">한국매*금거래소 범물동 리엔메디컬타워 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">사)대구문화****** 대봉동 사무실 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">대한안전연* 대명동 사무실 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">비* 광고대행사 두류동 사무실 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">프롬프* 광고대행사 지산동 사무실 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">미술공방화실 수성동 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">세무 중개업 사무실 남산동 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">리*필라테스PT샵 진천역 애플프라자 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">지니*붙임머리 상인동 매장 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">커피****** 카페 감삼동 중개,</div>
-    <div class="mb-xs break-inside-avoid-column">L*상사 호산동 사무실 중개,</div>
-    <div class="mt-xs pt-xs border-t border-primary-fixed-dim/20 font-semibold break-inside-avoid-column">이외 다수 보험사, 일반사무실 및 카페, 음식점 등 중개</div>
+<div class="md:col-span-2 md:row-span-2 bg-corporate-navy text-surface-container-lowest rounded-card p-lg flex flex-col justify-start gap-md relative overflow-hidden col-span-1 min-h-[420px]">
+<div class="relative z-10 flex items-start gap-md h-full w-full">
+<span class="material-symbols-outlined text-[32px] text-primary-fixed-dim shrink-0" data-icon="domain" data-weight="fill" style="font-variation-settings: 'FILL' 1;">domain</span>
+<div class="flex-1 flex flex-col h-full min-w-0">
+<h3 class="font-subsection-h3 text-[24px] text-surface-container-lowest leading-tight">대형 법인 및 보험사, 학원, 치과의원 등 다수 중개&nbsp;&nbsp;</h3>
+<div class="overflow-y-auto max-h-[300px] mt-sm pr-xs text-[12px] sm:text-[13px] text-primary-fixed-dim/90 leading-relaxed font-body custom-scrollbar" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.25) transparent;">
+대구지방고용노동청 본청 고용관리과 확장입주 KT대구타워 중개<br>
+삼성화*금융서비스 GA 보험사 대구 지사 JM타워 중개,<br>
+만촌리더*치과 만촌동 성원넥서스 중개,<br>
+메타리* GA 보험사 대구 중구 지사 반월타워 중개,<br>
+테이블오더 회사 티오* 대구경북 지사 디센터1976 중개,<br>
+법무법인 초* 범어역 대구분사무소 범어엔타워 중개,<br>
+법무법인 율* 범어동 대구사무소 법무빌딩 중개,<br>
+노무법인 인* 경대병원역 사무실 삼덕타워 중개,<br>
+만촌동 온* 수학학원 수성엠비션타워 중개,<br>
+만촌역 김정* 수학학원 중개,<br>
+만촌역 타이* 수학학원 수성S큐브 중개,<br>
+주식회사 최앤* 건설시행사 사무실 범어네거리클래시아 중개,<br>
+헤어바이신* 미용실 달구벌대로 대구은행역 중개,<br>
+유퍼스* GA 보험사 대구 달서구 대리점 중개,<br>
+미래에* GA 보험사 대명동 대리점 중개,<br>
+아이쉼터 개발사 (주)에쓰* 이천동 사무실 중개,<br>
+피지*보이스 발성전문학원 범어역 범어네거리클래시아 중개,<br>
+여행짝* 여행사 중앙로역 사무실 동성로하우스디어반 중개,<br>
+산학협력업체 대명동 사무실 중개,<br>
+더행*심리상담센터 동인동 중개,<br>
+믹*스튜디오 사진관 대명동 중개,<br>
+한국매*금거래소 범물동 리엔메디컬타워 중개,<br>
+사)대구문화****** 대봉동 사무실 중개,<br>
+대한안전연* 대명동 사무실 중개,<br>
+비* 광고대행사 두류동 사무실 중개,<br>
+프롬프* 광고대행사 지산동 사무실 중개,<br>
+미술공방화실 수성동 중개,<br>
+세무 중개업 사무실 남산동 중개,<br>
+리*필라테스PT샵 진천역 애플프라자 중개,<br>
+지니*붙임머리 상인동 매장 중개,<br>
+커피****** 카페 감삼동 중개,<br>
+L*상사 호산동 사무실 중개,<br>
+이외 다수 보험사, 일반사무실 및 카페, 음식점 등 중개
 </div>
 </div>
 </div>
@@ -399,7 +412,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v13"></script>
+<script src="db.js?v=20260708_v14"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     // Mobile Drawer Toggle
