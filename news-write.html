@@ -310,7 +310,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v21"></script>
+<script src="db.js?v=20260708_v22"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     requireAdmin();
@@ -468,16 +468,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
 
                 let uploadedCount = 0;
-                const uploadPromises = files.map(async (file) => {
+                const results = [];
+                for (let file of files) {
                     const url = await uploadImageFile(file);
                     uploadedCount++;
                     if (uploadSpinner) {
                         uploadSpinner.innerText = `업로드 중 (${uploadedCount}/${files.length})...`;
                     }
-                    return { name: file.name.split('.')[0], url };
-                });
-
-                const results = await Promise.all(uploadPromises);
+                    results.push({ name: file.name.split('.')[0], url });
+                }
 
                 const textarea = document.getElementById('content');
                 const start = textarea.selectionStart;
