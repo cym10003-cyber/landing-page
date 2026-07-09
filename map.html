@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>매물지도 - 최가네부동산공인중개사사무소</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        try {
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        "colors": {
+                            "muted": "#495057",
+                            "surface-container-highest": "#e2e2ec",
+                            "background": "#faf8ff",
+                            "tertiary": "#732300",
+                            "surface-tint": "#1957ca",
+                            "outline": "#737685",
+                            "on-error": "#ffffff",
+                            "primary-fixed-dim": "#b2c5ff",
+                            "on-surface-variant": "#434653",
+                            "inverse-primary": "#b2c5ff",
+                            "tint": "#edf6fe",
+                            "secondary-fixed": "#dae1ff",
+                            "surface": "#f4f7fb",
+                            "secondary-container": "#a3bafe",
+                            "surface-dim": "#d9d9e3",
+                            "error-container": "#ffdad6",
+                            "on-primary": "#ffffff",
+                            "ink-footer": "#13192d",
+                            "tertiary-container": "#9a3200",
+                            "on-primary-container": "#b8c9ff",
+                            "ink": "#212529",
+                            "surface-container-high": "#e7e7f1",
+                            "on-surface": "#191b22",
+                            "on-secondary-container": "#314885",
+                            "tertiary-fixed-dim": "#ffb59b",
+                            "secondary-fixed-dim": "#b3c5ff",
+                            "on-primary-fixed": "#001848",
+                            "surface-variant": "#e2e2ec",
+                            "primary-container": "#004dc1",
+                            "on-secondary-fixed": "#001849",
+                            "tertiary-fixed": "#ffdbcf",
+                            "primary": "#003891",
+                            "outline-variant": "#c3c6d6",
+                            "error": "#ba1a1a",
+                            "heading": "#1e1f21",
+                            "on-background": "#191b22",
+                            "surface-container-lowest": "#ffffff",
+                            "on-tertiary-fixed-variant": "#812900",
+                            "on-secondary-fixed-variant": "#2c4480",
+                            "blue-deep": "#074499",
+                            "hairline": "#ced4da",
+                            "surface-container-low": "#f3f3fd",
+                            "surface-bright": "#faf8ff",
+                            "blue-mid": "#0575e6",
+                            "surface-container": "#ededf7",
+                            "on-primary-fixed-variant": "#0040a2",
+                            "on-tertiary": "#ffffff",
+                            "primary-bright": "#0069ed",
+                            "inverse-on-surface": "#f0f0fa",
+                            "primary-fixed": "#dae2ff",
+                            "inverse-surface": "#2e3038",
+                            "faint": "#969faa",
+                            "on-tertiary-container": "#ffbba3",
+                            "on-error-container": "#93000a",
+                            "on-tertiary-fixed": "#380d00",
+                            "on-secondary": "#ffffff",
+                            "dark-chip": "#35343c",
+                            "secondary": "#455c9a",
+                            "soft-blue": "#dcedfd",
+                            "corporate-navy": "#0a2864"
+                        },
+                        "borderRadius": {
+                            "DEFAULT": "0.125rem",
+                            "lg": "0.25rem",
+                            "xl": "0.5rem",
+                            "full": "0.75rem"
+                        },
+                        "spacing": {
+                            "xs": "4px",
+                            "lg": "24px",
+                            "md": "12px",
+                            "base": "16px",
+                            "xxl": "48px",
+                            "section": "64px",
+                            "sm": "8px",
+                            "xl": "28px"
+                        },
+                        "fontFamily": {
+                            "display-hero": ["Inter"],
+                            "nav": ["Inter"],
+                            "body": ["Inter"],
+                            "section-h2": ["Inter"],
+                            "display-hero-mobile": ["Inter"],
+                            "label-sm": ["Inter"],
+                            "subsection-h3": ["Inter"],
+                            "button": ["Inter"]
+                        },
+                        "fontSize": {
+                            "display-hero": ["58px", { "lineHeight": "1.36", "letterSpacing": "-0.4px", "fontWeight": "700" }],
+                            "nav": ["15px", { "lineHeight": "1.50", "fontWeight": "500" }],
+                            "body": ["15px", { "lineHeight": "1.50", "fontWeight": "400" }],
+                            "section-h2": ["40px", { "lineHeight": "1.30", "letterSpacing": "-0.4px", "fontWeight": "700" }],
+                            "display-hero-mobile": ["36px", { "lineHeight": "1.30", "letterSpacing": "-0.4px", "fontWeight": "700" }],
+                            "label-sm": ["12px", { "lineHeight": "1.50", "fontWeight": "500" }],
+                            "subsection-h3": ["32px", { "lineHeight": "1.20", "letterSpacing": "-0.4px", "fontWeight": "700" }],
+                            "button": ["14px", { "lineHeight": "1.50", "fontWeight": "600" }]
+                        },
+                        "boxShadow": {
+                            "card-soft": "0 8px 13px rgba(159, 176, 199, 0.3)",
+                            "button-strong": "0 2px 10px rgba(54, 55, 61, 0.25)",
+                            "strong-elevated": "0 8px 24px rgba(54, 55, 61, 0.25)"
+                        }
+                    }
+                }
+            }
+        } catch (_e) {}
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        /* Custom Leaflet popup design styling */
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        .leaflet-popup-content {
+            margin: 0;
+            width: 260px !important;
+        }
+        .leaflet-popup-tip-container {
+            margin-top: -1px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-ink font-body antialiased flex flex-col min-h-screen pb-20 md:pb-0">
+
+<!-- TopNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface w-full top-0 sticky border-b border-hairline dark:border-outline-variant z-50 flat no-shadows shrink-0">
+<div class="flex justify-between items-center px-lg py-md max-w-7xl mx-auto">
+<div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
+<div class="hidden md:flex gap-lg items-center font-nav text-nav">
+    <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
+    <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
+    <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
+    <a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
+    <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="news.html?category=매물리스트">매물리스트</a>
+    <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="news.html">부동산 소식</a>
+    <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
+</div>
+<a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
+    <span class="material-symbols-outlined text-[18px]">call</span>
+    010-3548-4000
+</a>
+<button class="md:hidden text-primary" id="mobile-menu-toggle">
+    <span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+
+<!-- Main Interactive Panel Area -->
+<div class="flex flex-col md:flex-row flex-grow h-[calc(100vh-73px)] w-full overflow-hidden relative">
+    
+    <!-- Sidebar / List Panel -->
+    <div id="list-panel" class="w-full md:w-[380px] h-full flex flex-col bg-surface border-r border-hairline shrink-0 z-20 transition-all duration-300">
+        <!-- Search & Filters Header -->
+        <div class="p-md border-b border-hairline bg-surface-container-lowest flex flex-col gap-sm shrink-0">
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-2.5 text-muted text-[20px]">search</span>
+                <input type="text" id="search-input" class="w-full pl-10 pr-4 py-2 border border-hairline rounded-lg focus:ring-primary focus:border-primary text-sm bg-surface-container-low" placeholder="매물명 또는 위치 검색...">
+            </div>
+            <div class="flex justify-between items-center text-xs text-muted">
+                <span>총 <strong id="list-count" class="text-primary font-bold">0</strong>개의 매물 등록됨</span>
+                <button id="mobile-to-map-btn" class="md:hidden bg-primary text-white px-3 py-1.5 rounded font-semibold text-xs flex items-center gap-xs border-0 cursor-pointer">
+                    <span class="material-symbols-outlined text-[14px]">map</span> 지도 보기
+                </button>
+            </div>
+        </div>
+        <!-- Scrollable list items -->
+        <div id="property-list" class="flex-grow overflow-y-auto p-md space-y-md custom-scrollbar">
+            <div class="text-center py-xxl text-muted text-sm">매물 정보를 불러오는 중...</div>
+        </div>
+    </div>
+    
+    <!-- Map Panel -->
+    <div id="map-panel" class="flex-grow h-full relative z-10 hidden md:block">
+        <!-- Floating Mobile List Toggle Button -->
+        <button id="mobile-to-list-btn" class="md:hidden absolute top-4 left-4 z-[999] bg-surface-container-lowest text-ink shadow-strong-elevated border border-hairline px-4 py-2.5 rounded-full font-semibold text-sm flex items-center gap-xs cursor-pointer">
+            <span class="material-symbols-outlined text-primary text-[18px]">format_list_bulleted</span> 목록 보기
+        </button>
+        <div id="map" class="w-full h-full"></div>
+    </div>
+</div>
+
+<!-- Mobile Menu Drawer -->
+<div id="mobile-drawer" class="fixed inset-0 bg-ink/50 z-50 hidden transition-opacity duration-300 opacity-0">
+  <div class="fixed right-0 top-0 bottom-0 w-64 bg-surface-container-lowest shadow-strong-elevated p-lg flex flex-col gap-lg transform translate-x-full transition-transform duration-300">
+    <div class="flex justify-between items-center border-b border-hairline pb-sm">
+      <span class="font-bold text-primary">메뉴</span>
+      <button id="mobile-drawer-close" class="text-muted hover:text-ink border-0 bg-transparent cursor-pointer">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-md font-nav text-nav">
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
+      <a class="text-primary hover:text-primary py-sm border-b border-hairline/50 font-bold" href="map.html">매물지도</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="news.html?category=매물리스트">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="news.html">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
+    </nav>
+    <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
+      <span class="material-symbols-outlined text-[18px]">call</span>
+      010-3548-4000
+    </a>
+  </div>
+</div>
+
+<!-- Mobile Bottom Bar Navigation -->
+<div class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-hairline flex justify-around items-center py-2 z-50 md:hidden shadow-lg shrink-0">
+  <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
+    <span class="material-symbols-outlined text-2xl">home</span>
+    <span class="text-[10px] font-medium">홈</span>
+  </a>
+  <a href="about.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
+    <span class="material-symbols-outlined text-2xl">info</span>
+    <span class="text-[10px] font-medium">소개</span>
+  </a>
+  <a href="map.html" class="flex flex-col items-center justify-center text-primary w-12 h-12">
+    <span class="material-symbols-outlined text-2xl">map</span>
+    <span class="text-[10px] font-medium font-bold">지도</span>
+  </a>
+  <a href="news.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
+    <span class="material-symbols-outlined text-2xl">feed</span>
+    <span class="text-[10px] font-medium">소식</span>
+  </a>
+  <a href="tel:010-3548-4000" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
+    <span class="material-symbols-outlined text-2xl">call</span>
+    <span class="text-[10px] font-medium">전화</span>
+  </a>
+</div>
+
+<!-- Load Database and Page Logic -->
+<script src="db.js?v=20260708_v20"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Setup Mobile Menu Drawer
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const drawer = document.getElementById('mobile-drawer');
+    const drawerClose = document.getElementById('mobile-drawer-close');
+    const drawerContent = drawer ? drawer.querySelector('.transform') : null;
+
+    if (toggleBtn && drawer && drawerClose && drawerContent) {
+        const openDrawer = () => {
+            drawer.classList.remove('hidden');
+            setTimeout(() => {
+                drawer.classList.remove('opacity-0');
+                drawerContent.classList.remove('translate-x-full');
+            }, 10);
+        };
+        const closeDrawer = () => {
+            drawer.classList.add('opacity-0');
+            drawerContent.classList.add('translate-x-full');
+            setTimeout(() => {
+                drawer.classList.add('hidden');
+            }, 300);
+        };
+        toggleBtn.addEventListener('click', openDrawer);
+        drawerClose.addEventListener('click', closeDrawer);
+        drawer.addEventListener('click', (e) => {
+            if (e.target === drawer) closeDrawer();
+        });
+    }
+
+    // 2. Setup Mobile View Panel Toggling
+    const listPanel = document.getElementById('list-panel');
+    const mapPanel = document.getElementById('map-panel');
+    const mobileToMapBtn = document.getElementById('mobile-to-map-btn');
+    const mobileToListBtn = document.getElementById('mobile-to-list-btn');
+
+    mobileToMapBtn.addEventListener('click', () => {
+        listPanel.classList.add('hidden');
+        mapPanel.classList.remove('hidden');
+        if (editorMap) {
+            setTimeout(() => {
+                editorMap.invalidateSize();
+            }, 100);
+        }
+    });
+
+    mobileToListBtn.addEventListener('click', () => {
+        mapPanel.classList.add('hidden');
+        listPanel.classList.remove('hidden');
+    });
+
+    // 3. Initialize Leaflet Map
+    const editorMap = L.map('map', {
+        zoomControl: true,
+        scrollWheelZoom: true
+    }).setView([35.8714, 128.6014], 13); // Default Daegu Center
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(editorMap);
+
+    // Beautiful premium custom divIcon
+    const customMarkerHtml = `
+        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white border-2 border-white shadow-strong-elevated hover:bg-blue-mid transition-all duration-300">
+            <span class="material-symbols-outlined text-[18px]">home</span>
+        </div>
+    `;
+    const customIcon = L.divIcon({
+        html: customMarkerHtml,
+        className: '',
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
+    });
+
+    // 4. Fetch & Process Properties data
+    let allProperties = [];
+    let markersMap = new Map(); // Keep track of Leaflet markers by post id
+
+    // Helper: Geocoding fallback
+    async function geocodeAddress(address) {
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+                }
+            }
+        } catch (e) {
+            console.error("Geocoding failed: ", e);
+        }
+        return null;
+    }
+
+    // Helper: extract details from markdown content
+    function parsePropertyDetails(content) {
+        const details = {
+            price: "보증금/월세 협의",
+            area: "면적 정보 없음",
+            parking: "주차 정보 없음"
+        };
+        
+        const lines = content.split('\n');
+        let bo = "";
+        let wol = "";
+        
+        lines.forEach(line => {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('▶') || trimmed.startsWith('O') || trimmed.startsWith('★')) {
+                const match = trimmed.match(/[▶O★]\s*(.*?)\s*:\s*(.*)/);
+                if (match) {
+                    const key = match[1].trim();
+                    const val = match[2].trim();
+                    if (key.includes("보증금")) {
+                        bo = val;
+                    } else if (key.includes("월세")) {
+                        wol = val;
+                    } else if (key.includes("면적")) {
+                        details.area = val;
+                    } else if (key.includes("주차")) {
+                        details.parking = val;
+                    }
+                }
+            }
+        });
+        
+        if (bo || wol) {
+            if (bo && wol) {
+                details.price = `보증금 ${bo} / 월세 ${wol}`;
+            } else if (bo) {
+                details.price = `보증금 ${bo}`;
+            } else {
+                details.price = `월세 ${wol}`;
+            }
+        }
+        return details;
+    }
+
+    function getFirstImage(content) {
+        const match = content.match(/!\[.*?\]\((.*?)\)/);
+        return match ? match[1] : null;
+    }
+
+    function getFallbackImage() {
+        return "https://lh3.googleusercontent.com/aida-public/AB6AXuCkR-wQyhx_M0SJF0T5FH04XUIMeg6qiswo7SylZDzAmaNZvZNKh-wSI9vVX9PD3ylL4DgGtEcd9m-jU4fF9tHKVSy84-4kUI67OMbysZG-c-eZ-HNPMnu2O57NDO0AJxiPsGRrtHLH_CUoVJXqZF9XBhPBL4bFlBVSwxWLNpZySjR3UivnfVo-2scUE5413YQbsf2XE13SapJwBA4jwKU5GONGrtt6hTLhBS3CDMiaaNXF9Hn9317Qs6JQYBaTuvRjbvGd69nQyzw";
+    }
+
+    // Load and render
+    try {
+        const rawPosts = await getPosts();
+        // Filter only properties under '매물리스트' category
+        const properties = rawPosts.filter(p => p.category === '매물리스트');
+        
+        // Geocoding fallback with throttle delay to prevent IP bans
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        
+        for (let post of properties) {
+            const parsedDetails = parsePropertyDetails(post.content);
+            const firstImage = getFirstImage(post.content) || getFallbackImage();
+            
+            let coords = post.coordinates;
+            if ((!coords || coords.length !== 2) && post.address) {
+                // Try Nominatim geocoding with 800ms spacing
+                await delay(800);
+                coords = await geocodeAddress(post.address);
+            }
+            
+            if (coords && coords.length === 2) {
+                allProperties.push({
+                    id: post.id,
+                    title: post.title,
+                    address: post.address,
+                    coordinates: coords,
+                    price: parsedDetails.price,
+                    area: parsedDetails.area,
+                    parking: parsedDetails.parking,
+                    image: firstImage,
+                    original: post
+                });
+            }
+        }
+        
+        // Render initial UI state
+        renderListAndMarkers(allProperties);
+        
+        // Center map bounding box to cover all loaded markers
+        if (allProperties.length > 0) {
+            const bounds = L.latLngBounds(allProperties.map(p => p.coordinates));
+            editorMap.fitBounds(bounds, { padding: [50, 50] });
+        }
+        
+    } catch (e) {
+        console.error("Failed to load map listings", e);
+        document.getElementById('property-list').innerHTML = `
+            <div class="text-center py-xxl text-error">
+                <span class="material-symbols-outlined text-3xl mb-sm">error</span>
+                <p class="text-sm font-semibold">매물을 불러오는 도중 오류가 발생했습니다.</p>
+            </div>
+        `;
+    }
+
+    // Rendering Function
+    function renderListAndMarkers(listings) {
+        // 1. Update List Count
+        document.getElementById('list-count').innerText = listings.length;
+        
+        // 2. Clear previous markers from Leaflet map
+        markersMap.forEach(m => editorMap.removeLayer(m));
+        markersMap.clear();
+        
+        // 3. Render list panel cards
+        const container = document.getElementById('property-list');
+        if (listings.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-xxl text-muted text-sm">
+                    검색 결과와 매칭되는 매물이 없습니다.
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = '';
+        listings.forEach(item => {
+            // Render card
+            const card = document.createElement('div');
+            card.className = "bg-surface-container-lowest rounded-xl border border-hairline shadow-card-soft overflow-hidden hover:shadow-strong-elevated cursor-pointer transition-all duration-300 flex flex-row h-28 group relative";
+            card.innerHTML = `
+                <div class="w-28 h-full overflow-hidden shrink-0 relative bg-surface-container-high">
+                    <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                </div>
+                <div class="p-sm flex-1 flex flex-col justify-between min-w-0">
+                    <div class="flex flex-col gap-xs min-w-0">
+                        <h4 class="font-bold text-ink text-sm truncate group-hover:text-primary transition-colors">${item.title}</h4>
+                        <p class="text-[11px] text-muted truncate">${item.address}</p>
+                    </div>
+                    <div class="flex flex-wrap gap-xs shrink-0">
+                        <span class="bg-primary-container/10 text-primary-container px-2 py-0.5 rounded text-[10px] font-bold">${item.price}</span>
+                        <span class="bg-dark-chip text-white px-2 py-0.5 rounded text-[10px] font-semibold">${item.area}</span>
+                    </div>
+                </div>
+            `;
+            
+            // Card click behavior: center map and trigger popup
+            card.onclick = () => {
+                // If on mobile, slide to map panel
+                if (window.innerWidth < 768) {
+                    listPanel.classList.add('hidden');
+                    mapPanel.classList.remove('hidden');
+                    setTimeout(() => {
+                        editorMap.invalidateSize();
+                        centerAndPopup(item);
+                    }, 150);
+                } else {
+                    centerAndPopup(item);
+                }
+            };
+            container.appendChild(card);
+            
+            // 4. Create Leaflet Marker with Custom Label popup
+            const marker = L.marker(item.coordinates, { icon: customIcon }).addTo(editorMap);
+            
+            const popupHtml = `
+                <div class="flex flex-col overflow-hidden bg-surface-container-lowest">
+                    <div class="w-full aspect-video overflow-hidden bg-surface-container-high">
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-md flex flex-col gap-sm">
+                        <div class="flex flex-col gap-xs">
+                            <span class="bg-primary-container/10 text-primary-container w-fit px-2 py-0.5 rounded text-[10px] font-bold">${item.price}</span>
+                            <h4 class="font-bold text-ink text-sm leading-tight">${item.title}</h4>
+                            <p class="text-[11px] text-muted mt-xs leading-normal">${item.address}</p>
+                        </div>
+                        <a href="news-detail.html?id=${item.id}" class="w-full bg-primary hover:bg-blue-mid text-white font-button text-xs py-2 rounded text-center transition-colors shadow-button-strong block no-underline">
+                            상세보기
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            marker.bindPopup(popupHtml, {
+                maxWidth: 260,
+                closeButton: true
+            });
+            
+            markersMap.set(item.id, marker);
+        });
+    }
+
+    function centerAndPopup(item) {
+        const marker = markersMap.get(item.id);
+        if (marker) {
+            editorMap.flyTo(item.coordinates, 16);
+            marker.openPopup();
+        }
+    }
+
+    // 5. Search filtering logic
+    const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+        if (!query) {
+            renderListAndMarkers(allProperties);
+            return;
+        }
+        const filtered = allProperties.filter(p => 
+            p.title.toLowerCase().includes(query) || 
+            p.address.toLowerCase().includes(query) ||
+            p.price.toLowerCase().includes(query)
+        );
+        renderListAndMarkers(filtered);
+    });
+});
+</script>
+</body>
+</html>
