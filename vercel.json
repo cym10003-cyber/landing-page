@@ -1,4 +1,8 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/news-detail", "destination": "/api/news-detail" },
+    { "source": "/news-detail.html", "destination": "/api/news-detail" }
+  ]
 }
