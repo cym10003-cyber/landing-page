@@ -262,7 +262,7 @@
 </div>
 
 <!-- Load Database and Page Logic -->
-<script src="db.js?v=20260708_v23"></script>
+<script src="db.js?v=20260708_v24"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Setup Mobile Menu Drawer
@@ -368,6 +368,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const lines = content.split('\n');
         let bo = "";
         let wol = "";
+        let maemae = "";
+        let daeji = "";
+        let jeonyong = "";
         
         lines.forEach(line => {
             const trimmed = line.trim();
@@ -380,8 +383,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                         bo = val;
                     } else if (key.includes("월세")) {
                         wol = val;
+                    } else if (key.includes("매매가") || key.includes("매매가격")) {
+                        maemae = val;
+                    } else if (key.includes("대지면적")) {
+                        daeji = val;
+                    } else if (key.includes("전용면적")) {
+                        jeonyong = val;
                     } else if (key.includes("면적")) {
-                        details.area = val;
+                        if (!jeonyong) jeonyong = val;
                     } else if (key.includes("주차")) {
                         details.parking = val;
                     }
@@ -389,13 +398,29 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
         
-        if (bo || wol) {
-            if (bo && wol) {
-                details.price = `보증금 ${bo} / 월세 ${wol}`;
-            } else if (bo) {
-                details.price = `보증금 ${bo}`;
-            } else {
-                details.price = `월세 ${wol}`;
+        if (maemae) {
+            details.price = `매매 ${maemae}`;
+            if (daeji && jeonyong) {
+                const cleanDaeji = daeji.replace(/약\s*/g, '');
+                const cleanJeonyong = jeonyong.replace(/약\s*/g, '');
+                details.area = `대지 ${cleanDaeji} / 건물전용 ${cleanJeonyong}`;
+            } else if (daeji) {
+                details.area = `대지 ${daeji.replace(/약\s*/g, '')}`;
+            } else if (jeonyong) {
+                details.area = `건물전용 ${jeonyong.replace(/약\s*/g, '')}`;
+            }
+        } else {
+            if (bo || wol) {
+                if (bo && wol) {
+                    details.price = `보증금 ${bo} / 월세 ${wol}`;
+                } else if (bo) {
+                    details.price = `보증금 ${bo}`;
+                } else {
+                    details.price = `월세 ${wol}`;
+                }
+            }
+            if (jeonyong) {
+                details.area = jeonyong;
             }
         }
         return details;
