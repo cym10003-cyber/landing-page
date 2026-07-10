@@ -305,7 +305,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (editorMap) {
             setTimeout(() => {
                 editorMap.invalidateSize();
-            }, 100);
+                if (activeProperties && activeProperties.length > 0) {
+                    if (activeProperties.length === 1) {
+                        editorMap.setView(activeProperties[0].coordinates, 15);
+                    } else {
+                        const bounds = L.latLngBounds(activeProperties.map(p => p.coordinates));
+                        editorMap.fitBounds(bounds, { padding: [50, 50] });
+                    }
+                }
+            }, 150);
         }
     });
 
@@ -339,6 +347,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 4. Fetch & Process Properties data
     let allProperties = [];
+    let activeProperties = [];
     let markersMap = new Map(); // Keep track of Leaflet markers by post id
 
     // Helper: Geocoding fallback
@@ -471,12 +480,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
         // Render initial UI state
+        activeProperties = allProperties;
         renderListAndMarkers(allProperties);
         
         // Center map bounding box to cover all loaded markers
         if (allProperties.length > 0) {
-            const bounds = L.latLngBounds(allProperties.map(p => p.coordinates));
-            editorMap.fitBounds(bounds, { padding: [50, 50] });
+            if (allProperties.length === 1) {
+                editorMap.setView(allProperties[0].coordinates, 15);
+            } else {
+                const bounds = L.latLngBounds(allProperties.map(p => p.coordinates));
+                editorMap.fitBounds(bounds, { padding: [50, 50] });
+            }
         }
         
     } catch (e) {
@@ -589,6 +603,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase().trim();
         if (!query) {
+            activeProperties = allProperties;
             renderListAndMarkers(allProperties);
             return;
         }
@@ -597,6 +612,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             p.address.toLowerCase().includes(query) ||
             p.price.toLowerCase().includes(query)
         );
+        activeProperties = filtered;
         renderListAndMarkers(filtered);
     });
 });
