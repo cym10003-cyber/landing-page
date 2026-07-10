@@ -319,6 +319,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.head.appendChild(ogUrl);
             }
             ogUrl.content = window.location.href;
+
+            let ogImage = document.querySelector('meta[property="og:image"]');
+            if (!ogImage) {
+                ogImage = document.createElement('meta');
+                ogImage.setAttribute('property', 'og:image');
+                document.head.appendChild(ogImage);
+            }
+            const firstImgMatch = post.content.match(/!\[.*?\]\((.*?)\)/);
+            ogImage.content = firstImgMatch ? firstImgMatch[1] : "https://choi114.com/og_home.jpg";
         } catch (e) {
             console.error("Failed to update SEO tags dynamically", e);
         }
