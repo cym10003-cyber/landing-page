@@ -148,6 +148,11 @@
             margin: 0;
             width: 260px !important;
         }
+        .leaflet-popup-content a.popup-detail-btn {
+            color: #ffffff !important;
+            text-decoration: none !important;
+            font-weight: 700 !important;
+        }
         .leaflet-popup-tip-container {
             margin-top: -1px;
         }
@@ -570,7 +575,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <h4 class="font-bold text-ink text-sm leading-tight">${item.title}</h4>
                             <p class="text-[11px] text-muted mt-xs leading-normal">${item.address}</p>
                         </div>
-                        <a href="news-detail.html?id=${item.id}" class="w-full bg-primary hover:bg-blue-mid text-white font-button text-xs py-2 rounded text-center transition-colors shadow-button-strong block no-underline">
+                        <a href="news-detail.html?id=${item.id}" class="popup-detail-btn w-full bg-primary hover:bg-blue-mid text-white font-button text-xs py-2 rounded text-center transition-colors shadow-button-strong block no-underline">
                             상세보기
                         </a>
                     </div>
