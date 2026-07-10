@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://choi114.com/sitemap.xml

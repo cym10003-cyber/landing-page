@@ -254,7 +254,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260708_v21"></script>
+<script src="db.js?v=20260708_v23"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
@@ -281,9 +281,47 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        document.title = `${post.title} - 최가네부동산공인중개사사무소`;
         document.getElementById('post-title').innerText = post.title;
         document.getElementById('post-category').innerText = post.category || '일반';
         document.getElementById('post-date').innerText = post.date;
+
+        try {
+            const cleanText = window.markdownToText ? window.markdownToText(post.content).substring(0, 150).replace(/\s+/g, ' ').trim() : post.title;
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (!metaDesc) {
+                metaDesc = document.createElement('meta');
+                metaDesc.name = "description";
+                document.head.appendChild(metaDesc);
+            }
+            metaDesc.content = cleanText;
+
+            let ogTitle = document.querySelector('meta[property="og:title"]');
+            if (!ogTitle) {
+                ogTitle = document.createElement('meta');
+                ogTitle.setAttribute('property', 'og:title');
+                document.head.appendChild(ogTitle);
+            }
+            ogTitle.content = post.title;
+
+            let ogDesc = document.querySelector('meta[property="og:description"]');
+            if (!ogDesc) {
+                ogDesc = document.createElement('meta');
+                ogDesc.setAttribute('property', 'og:description');
+                document.head.appendChild(ogDesc);
+            }
+            ogDesc.content = cleanText;
+
+            let ogUrl = document.querySelector('meta[property="og:url"]');
+            if (!ogUrl) {
+                ogUrl = document.createElement('meta');
+                ogUrl.setAttribute('property', 'og:url');
+                document.head.appendChild(ogUrl);
+            }
+            ogUrl.content = window.location.href;
+        } catch (e) {
+            console.error("Failed to update SEO tags dynamically", e);
+        }
         // Split content by images at the beginning
         function splitContentByImages(content) {
             const lines = content.split('\n');
