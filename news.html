@@ -110,34 +110,40 @@
         }
     }catch(_e){}</script>
 <style>
-    /* Prevent category filter buttons from shrinking on mobile */
+    /* Prevent category filter buttons from shrinking on mobile using traditional inline-block layout */
     #category-filter {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        width: max-content !important;
+        display: block !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
         list-style-type: none !important;
         padding: 0 !important;
         margin: 0 !important;
-        gap: 8px !important;
     }
     #category-filter li {
-        flex-shrink: 0 !important;
-        display: block !important;
+        display: inline-block !important;
         list-style: none !important;
         padding: 0 !important;
-        margin: 0 !important;
+        margin: 0 4px !important;
+        vertical-align: middle !important;
     }
     #category-filter .category-btn {
+        display: inline-block !important;
         width: auto !important;
         white-space: nowrap !important;
     }
     @media (min-width: 768px) {
         #category-filter {
+            display: flex !important;
             flex-direction: column !important;
             width: 100% !important;
+            white-space: normal !important;
+        }
+        #category-filter li {
+            display: block !important;
+            margin: 4px 0 !important;
         }
         #category-filter .category-btn {
+            display: block !important;
             width: 100% !important;
         }
     }
