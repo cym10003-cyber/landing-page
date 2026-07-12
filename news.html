@@ -110,12 +110,11 @@
         }
     }catch(_e){}</script>
 <style>
-    /* Prevent category filter buttons from shrinking on mobile using modern flexbox layout */
+    /* Prevent category filter buttons from shrinking on mobile using wrapping tags */
     #category-filter {
         display: flex !important;
         flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        overflow-x: auto !important;
+        flex-wrap: wrap !important;
         width: 100% !important;
         list-style-type: none !important;
         padding: 0 !important;
@@ -125,36 +124,24 @@
     #category-filter li {
         display: block !important;
         flex-shrink: 0 !important;
-        min-width: 100px !important;
         list-style: none !important;
         padding: 0 !important;
         margin: 0 !important;
     }
     #category-filter li button {
         display: block !important;
-        width: 100% !important;
-        min-width: 100px !important;
+        width: auto !important;
         text-align: center !important;
         white-space: nowrap !important;
-    }
-    #category-filter li button[data-category="상업용 매물 가이드"] {
-        min-width: 150px !important;
-    }
-    #category-filter li:has(button[data-category="상업용 매물 가이드"]) {
-        min-width: 150px !important;
     }
     @media (min-width: 768px) {
         #category-filter {
             flex-direction: column !important;
+            flex-wrap: nowrap !important;
             gap: 4px !important;
-        }
-        #category-filter li {
-            min-width: 0 !important;
-            margin: 0 !important;
         }
         #category-filter li button {
             width: 100% !important;
-            min-width: 0 !important;
             text-align: left !important;
         }
     }
