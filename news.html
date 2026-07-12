@@ -143,10 +143,15 @@
 <main class="max-w-7xl mx-auto px-lg py-[120px] grid grid-cols-1 md:grid-cols-12 gap-lg items-start">
 <!-- Sidebar / Filters -->
 <aside class="md:col-span-3 sticky top-[100px]">
-<ul class="flex flex-row md:flex-col gap-sm overflow-x-auto md:overflow-visible pb-sm md:pb-0 scrollbar-hide" id="category-filter">
+<ul class="flex flex-row md:flex-col gap-sm overflow-x-auto md:overflow-visible pb-sm md:pb-0 scrollbar-hide list-none" id="category-filter">
 <li class="shrink-0">
 <button data-category="ALL" class="w-full text-left font-button text-button px-md py-sm rounded bg-soft-blue text-primary-container transition-colors category-btn whitespace-nowrap">
                         전체 소식
+                    </button>
+</li>
+<li class="shrink-0">
+<button data-category="매물리스트" class="w-full text-left font-button text-button px-md py-sm rounded hover:bg-surface-container-high text-muted transition-colors category-btn whitespace-nowrap">
+                        매물리스트
                     </button>
 </li>
 <li class="shrink-0">
@@ -172,11 +177,6 @@
 <li class="shrink-0">
 <button data-category="부동산 상식" class="w-full text-left font-button text-button px-md py-sm rounded hover:bg-surface-container-high text-muted transition-colors category-btn whitespace-nowrap">
                         부동산 상식
-                    </button>
-</li>
-<li class="shrink-0">
-<button data-category="매물리스트" class="w-full text-left font-button text-button px-md py-sm rounded hover:bg-surface-container-high text-muted transition-colors category-btn whitespace-nowrap">
-                        매물리스트
                     </button>
 </li>
 </ul>
