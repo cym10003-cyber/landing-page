@@ -110,12 +110,12 @@
         }
     }catch(_e){}</script>
 <style>
-    /* Prevent category filter buttons from shrinking on mobile using wrapping tags */
+    /* Prevent category filter buttons from shrinking on mobile using modern horizontal scroll layout */
     #category-filter {
         display: flex !important;
         flex-direction: row !important;
-        flex-wrap: wrap !important;
-        width: 100% !important;
+        flex-wrap: nowrap !important;
+        width: max-content !important;
         list-style-type: none !important;
         padding: 0 !important;
         margin: 0 !important;
@@ -138,6 +138,7 @@
         #category-filter {
             flex-direction: column !important;
             flex-wrap: nowrap !important;
+            width: 100% !important;
             gap: 4px !important;
         }
         #category-filter li button {
@@ -189,8 +190,8 @@
 <!-- Main Content Container -->
 <main class="max-w-7xl mx-auto px-lg py-[120px] grid grid-cols-1 md:grid-cols-12 gap-lg items-start">
 <!-- Sidebar / Filters -->
-<aside class="md:col-span-3 md:sticky md:top-[100px] w-full overflow-hidden md:overflow-visible">
-<ul class="flex flex-row md:flex-col gap-sm list-none w-full scrollbar-hide" id="category-filter">
+<aside class="md:col-span-3 md:sticky md:top-[100px] w-full overflow-x-auto md:overflow-visible scrollbar-hide">
+<ul class="flex flex-row md:flex-col gap-sm list-none w-max md:w-full" id="category-filter">
 <li class="shrink-0">
 <button data-category="ALL" class="w-auto md:w-full text-left font-button text-button px-md py-sm rounded bg-soft-blue text-primary-container transition-colors category-btn whitespace-nowrap">
                         전체 소식
