@@ -1,6 +1,6 @@
-<!DOCTYPE html><html class="light" lang="ko"><head><script>
+﻿<!DOCTYPE html><html class="light" lang="ko"><head><script>
     // Force browser to load fresh news.html page if version mismatch
-    const currentVersion = '20260713_v24';
+    const currentVersion = '20260713_v25';
     const params = new URLSearchParams(window.location.search);
     if (params.get('v') !== currentVersion) {
         params.set('v', currentVersion);
@@ -118,26 +118,19 @@
         }
     }catch(_e){}</script>
 <style>
-    /* Prevent category filter buttons from shrinking on mobile using modern horizontal scroll layout */
+    /* Prevent category filter buttons from shrinking on mobile using flat flex layout */
     #category-filter {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         width: max-content !important;
-        list-style-type: none !important;
         padding: 0 !important;
         margin: 0 !important;
         gap: 8px !important;
     }
-    #category-filter li {
+    #category-filter .category-btn {
         display: block !important;
         flex-shrink: 0 !important;
-        list-style: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-    #category-filter li button {
-        display: block !important;
         width: auto !important;
         text-align: center !important;
         white-space: nowrap !important;
@@ -145,11 +138,10 @@
     @media (min-width: 768px) {
         #category-filter {
             flex-direction: column !important;
-            flex-wrap: nowrap !important;
             width: 100% !important;
             gap: 4px !important;
         }
-        #category-filter li button {
+        #category-filter .category-btn {
             width: 100% !important;
             text-align: left !important;
         }
@@ -174,10 +166,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="news.html?category=매물리스트&v=20260713_v24">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="news.html?category=매물리스트&v=20260713_v25">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="news.html?v=20260713_v24">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a></div>
+<a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="news.html?v=20260713_v25">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -202,43 +194,29 @@
 <main class="max-w-7xl mx-auto px-lg py-md md:py-[120px] grid grid-cols-1 md:grid-cols-12 gap-lg items-start">
 <!-- Sidebar / Filters -->
 <aside class="md:col-span-3 md:sticky md:top-[100px] w-full overflow-x-auto md:overflow-visible scrollbar-hide">
-<ul class="flex flex-row md:flex-col gap-sm list-none w-max md:w-full" id="category-filter">
-<li class="shrink-0">
+<div class="flex flex-row md:flex-col gap-sm w-max md:w-full" id="category-filter">
 <button data-category="ALL" class="w-auto md:w-full text-left font-button text-button px-md py-sm rounded bg-soft-blue text-primary-container transition-colors category-btn whitespace-nowrap">
-                        전체 소식
-                    </button>
-</li>
-<li class="shrink-0">
+    전체 소식
+</button>
 <button data-category="매물리스트" class="w-auto md:w-full text-left font-button text-button px-md py-sm rounded hover:bg-surface-container-high text-muted transition-colors category-btn whitespace-nowrap">
-                        매물리스트
-                    </button>
-</li>
-<li class="shrink-0">
+    매물리스트
+</button>
 <button data-category="수성구 소식" class="w-auto md:w-full text-left font-button text-button px-md py-sm rounded hover:bg-surface-container-high text-muted transition-colors category-btn whitespace-nowrap">
-                        수성구 소식
-                    </button>
-</li>
-<li class="shrink-0">
+    수성구 소식
+</button>
 <button data-category="상업용 매물 가이드" class="w-auto md:w-full text-left font-button text-button px-md py-sm rounded hover:bg-surface-container-high text-muted transition-colors category-btn whitespace-nowrap">
-                        상업용 매물 가이드
-                    </button>
-</li>
-<li class="shrink-0">
+    상업용 매물 가이드
+</button>
 <button data-category="부동산 뉴스" class="w-auto md:w-full text-left font-button text-button px-md py-sm rounded hover:bg-surface-container-high text-muted transition-colors category-btn whitespace-nowrap">
-                        부동산 뉴스
-                    </button>
-</li>
-<li class="shrink-0">
+    부동산 뉴스
+</button>
 <button data-category="정부 정책" class="w-auto md:w-full text-left font-button text-button px-md py-sm rounded hover:bg-surface-container-high text-muted transition-colors category-btn whitespace-nowrap">
-                        정부 정책
-                    </button>
-</li>
-<li class="shrink-0">
+    정부 정책
+</button>
 <button data-category="부동산 상식" class="w-auto md:w-full text-left font-button text-button px-md py-sm rounded hover:bg-surface-container-high text-muted transition-colors category-btn whitespace-nowrap">
-                        부동산 상식
-                    </button>
-</li>
-</ul>
+    부동산 상식
+</button>
+</div>
 <div class="mt-lg border-t border-hairline pt-lg hidden md:block" id="sidebar-profile">
     <div class="flex items-center gap-md mb-md">
         <img src="agent.jpg" alt="최이명 소장" class="w-12 h-12 rounded-full object-cover">
@@ -341,10 +319,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="news.html?category=매물리스트&v=20260713_v24">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="news.html?category=매물리스트&v=20260713_v25">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="news.html?v=20260713_v24">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="news.html?v=20260713_v25">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
     </nav>
     <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
