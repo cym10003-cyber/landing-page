@@ -121,6 +121,7 @@
     }
     #category-filter li {
         display: inline-block !important;
+        min-width: max-content !important;
         list-style: none !important;
         padding: 0 !important;
         margin: 0 4px !important;
@@ -129,6 +130,7 @@
     #category-filter .category-btn {
         display: inline-block !important;
         width: auto !important;
+        min-width: max-content !important;
         white-space: nowrap !important;
     }
     @media (min-width: 768px) {
@@ -140,11 +142,13 @@
         }
         #category-filter li {
             display: block !important;
+            min-width: 0 !important;
             margin: 4px 0 !important;
         }
         #category-filter .category-btn {
             display: block !important;
             width: 100% !important;
+            min-width: 0 !important;
         }
     }
     /* Hide scrollbar for Chrome, Safari and Opera */
