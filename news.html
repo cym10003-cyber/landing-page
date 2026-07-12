@@ -119,19 +119,17 @@
         padding: 0 !important;
         margin: 0 !important;
     }
-    #category-filter li {
-        display: inline-block !important;
-        min-width: max-content !important;
-        list-style: none !important;
-        padding: 0 !important;
-        margin: 0 4px !important;
-        vertical-align: middle !important;
-    }
-    #category-filter .category-btn {
+    #category-filter li, #category-filter li button {
         display: inline-block !important;
         width: auto !important;
         min-width: max-content !important;
         white-space: nowrap !important;
+    }
+    #category-filter li {
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0 4px !important;
+        vertical-align: middle !important;
     }
     @media (min-width: 768px) {
         #category-filter {
@@ -145,7 +143,7 @@
             min-width: 0 !important;
             margin: 4px 0 !important;
         }
-        #category-filter .category-btn {
+        #category-filter li button {
             display: block !important;
             width: 100% !important;
             min-width: 0 !important;
@@ -195,8 +193,8 @@
 <!-- Main Content Container -->
 <main class="max-w-7xl mx-auto px-lg py-[120px] grid grid-cols-1 md:grid-cols-12 gap-lg items-start">
 <!-- Sidebar / Filters -->
-<aside class="md:col-span-3 sticky top-[100px] w-full overflow-x-auto md:overflow-visible scrollbar-hide">
-<ul class="flex flex-row md:flex-col gap-sm list-none w-max md:w-full" id="category-filter">
+<aside class="md:col-span-3 md:sticky md:top-[100px] w-full overflow-hidden md:overflow-visible">
+<ul class="flex flex-row md:flex-col gap-sm list-none w-max md:w-full scrollbar-hide" id="category-filter">
 <li class="shrink-0">
 <button data-category="ALL" class="w-auto md:w-full text-left font-button text-button px-md py-sm rounded bg-soft-blue text-primary-container transition-colors category-btn whitespace-nowrap">
                         전체 소식
