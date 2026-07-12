@@ -110,49 +110,49 @@
         }
     }catch(_e){}</script>
 <style>
-    /* Prevent category filter buttons from shrinking on mobile using traditional inline-block layout */
+    /* Prevent category filter buttons from shrinking on mobile using modern flexbox layout */
     #category-filter {
-        display: block !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
         overflow-x: auto !important;
-        white-space: nowrap !important;
+        width: 100% !important;
         list-style-type: none !important;
         padding: 0 !important;
         margin: 0 !important;
-        width: 100% !important;
-    }
-    #category-filter li, #category-filter li button {
-        display: inline-block !important;
-        width: auto !important;
-        white-space: nowrap !important;
-        text-align: center !important;
+        gap: 8px !important;
     }
     #category-filter li {
+        display: block !important;
+        flex-shrink: 0 !important;
         min-width: 100px !important;
         list-style: none !important;
         padding: 0 !important;
-        margin: 0 4px !important;
-        vertical-align: middle !important;
+        margin: 0 !important;
     }
     #category-filter li button {
+        display: block !important;
+        width: 100% !important;
         min-width: 100px !important;
+        text-align: center !important;
+        white-space: nowrap !important;
     }
     #category-filter li button[data-category="상업용 매물 가이드"] {
         min-width: 150px !important;
     }
+    #category-filter li:has(button[data-category="상업용 매물 가이드"]) {
+        min-width: 150px !important;
+    }
     @media (min-width: 768px) {
         #category-filter {
-            display: flex !important;
             flex-direction: column !important;
-            width: 100% !important;
-            white-space: normal !important;
+            gap: 4px !important;
         }
         #category-filter li {
-            display: block !important;
             min-width: 0 !important;
-            margin: 4px 0 !important;
+            margin: 0 !important;
         }
         #category-filter li button {
-            display: block !important;
             width: 100% !important;
             min-width: 0 !important;
             text-align: left !important;
