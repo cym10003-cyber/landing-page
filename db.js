@@ -451,7 +451,7 @@ async function uploadImageFile(file) {
           const base64Content = dataUrl.split(',')[1];
           const rand = Math.random().toString(36).substring(2, 6);
           const filename = `post_img_${Date.now()}_${rand}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-          const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/images/${filename}`;
+          const url = `https://api.github.com/repos/${config.github_owner}/landing-page-assets/contents/images/${filename}`;
           
           const body = {
             message: `feat: upload image ${filename}`,
@@ -474,7 +474,7 @@ async function uploadImageFile(file) {
             throw new Error(`GitHub Upload Failed: ${putRes.status} ${errorMsg}`);
           }
           
-          const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/${config.github_repo}@main/images/${filename}`;
+          const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@main/images/${filename}`;
           resolve(rawUrl);
         } catch (err) {
           reject(err);
@@ -507,7 +507,7 @@ async function uploadVideoFile(file) {
           const base64Content = dataUrl.split(',')[1];
           const rand = Math.random().toString(36).substring(2, 6);
           const filename = `post_vid_${Date.now()}_${rand}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-          const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/videos/${filename}`;
+          const url = `https://api.github.com/repos/${config.github_owner}/landing-page-assets/contents/videos/${filename}`;
           
           const body = {
             message: `feat: upload video ${filename}`,
@@ -530,7 +530,7 @@ async function uploadVideoFile(file) {
             throw new Error(`GitHub Upload Failed: ${putRes.status} ${errorMsg}`);
           }
           
-          const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/${config.github_repo}@main/videos/${filename}`;
+          const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@main/videos/${filename}`;
           resolve(rawUrl);
         } catch (err) {
           reject(err);
