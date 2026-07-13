@@ -3,14 +3,14 @@ import path from 'path';
 
 export default function handler(req, res) {
   const { id } = req.query;
-  const htmlPath = path.join(process.cwd(), 'news-detail.html');
+  const htmlPath = path.join(process.cwd(), 'templates', 'news-detail.html');
   const postsPath = path.join(process.cwd(), 'data', 'posts.json');
 
   let html = '';
   try {
     html = fs.readFileSync(htmlPath, 'utf8');
   } catch (e) {
-    return res.status(500).send('Error reading news-detail.html template');
+    return res.status(500).send('Error reading templates/news-detail.html template');
   }
 
   // If there is an ID, find the post
