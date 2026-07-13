@@ -193,7 +193,10 @@
         <div class="p-md border-b border-hairline bg-surface-container-lowest flex flex-col gap-sm shrink-0">
             <div class="relative">
                 <span class="material-symbols-outlined absolute left-3 top-2.5 text-muted text-[20px]">search</span>
-                <input type="text" id="search-input" class="w-full pl-10 pr-4 py-2 border border-hairline rounded-lg focus:ring-primary focus:border-primary text-sm bg-surface-container-low" placeholder="매물명 또는 위치 검색...">
+                <input type="text" id="search-input" class="w-full pl-10 pr-12 py-2 border border-hairline rounded-lg focus:ring-primary focus:border-primary text-sm bg-surface-container-low" placeholder="매물명 또는 위치 검색...">
+                <button id="search-button" class="absolute inset-y-0 right-0 pr-4 flex items-center text-primary dark:text-primary-bright hover:text-blue-mid border-0 bg-transparent cursor-pointer font-bold text-sm">
+                    검색
+                </button>
             </div>
             <div class="flex justify-between items-center text-xs text-muted">
                 <span>총 <strong id="list-count" class="text-primary font-bold">0</strong>개의 매물 등록됨</span>
@@ -605,21 +608,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 5. Search filtering logic
     const searchInput = document.getElementById('search-input');
-    searchInput.addEventListener('input', () => {
+    const searchBtn = document.getElementById('search-button');
+
+    const triggerSearch = () => {
         const query = searchInput.value.toLowerCase().trim();
         if (!query) {
             activeProperties = allProperties;
             renderListAndMarkers(allProperties);
             return;
         }
-        const filtered = allProperties.filter(p => 
-            p.title.toLowerCase().includes(query) || 
-            p.address.toLowerCase().includes(query) ||
-            p.price.toLowerCase().includes(query)
-        );
+        
+        const keywords = query.split(/\s+/).filter(k => k.length > 0);
+        const filtered = allProperties.filter(p => {
+            const searchTarget = (p.title + ' ' + p.address + ' ' + p.price + ' ' + (p.original.content || '')).toLowerCase();
+            return keywords.every(kw => searchTarget.includes(kw));
+        });
+        
         activeProperties = filtered;
         renderListAndMarkers(filtered);
-    });
+    };
+
+    if (searchBtn) {
+        searchBtn.addEventListener('click', triggerSearch);
+    }
+    if (searchInput) {
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                triggerSearch();
+            }
+        });
+    }
 });
 </script>
 </body>
