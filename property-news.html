@@ -202,10 +202,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260713_v29">매물리스트</a>
+<a id="nav-maemul" class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260713_v29">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260713_v29">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a></div>
+<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260713_v29">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -355,10 +355,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260713_v29">매물리스트</a>
+      <a id="mobile-nav-maemul" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260713_v29">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260713_v29">부동산 소식</a>
+      <a id="mobile-nav-news" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260713_v29">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
     </nav>
     <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
@@ -397,12 +397,62 @@ function getFallbackImage(id) {
     return fallbackImages[code % fallbackImages.length];
 }
 
+function updateNavHighlight(category) {
+    const desktopMaemul = document.getElementById('nav-maemul');
+    const desktopNews = document.getElementById('nav-news');
+    const mobileMaemul = document.getElementById('mobile-nav-maemul');
+    const mobileNews = document.getElementById('mobile-nav-news');
+    
+    const activeClasses = ['text-primary', 'dark:text-primary-bright', 'font-bold', 'border-b-2', 'border-primary'];
+    const inactiveClasses = ['text-muted', 'dark:text-on-surface-variant'];
+    
+    if (category === '매물리스트') {
+        // Desktop
+        if (desktopMaemul) {
+            desktopMaemul.classList.remove(...inactiveClasses);
+            desktopMaemul.classList.add(...activeClasses);
+        }
+        if (desktopNews) {
+            desktopNews.classList.remove(...activeClasses);
+            desktopNews.classList.add(...inactiveClasses);
+        }
+        // Mobile
+        if (mobileMaemul) {
+            mobileMaemul.classList.add('text-primary', 'font-bold');
+            mobileMaemul.classList.remove('text-muted');
+        }
+        if (mobileNews) {
+            mobileNews.classList.remove('text-primary', 'font-bold');
+            mobileNews.classList.add('text-muted');
+        }
+    } else {
+        // Desktop
+        if (desktopMaemul) {
+            desktopMaemul.classList.remove(...activeClasses);
+            desktopMaemul.classList.add(...inactiveClasses);
+        }
+        if (desktopNews) {
+            desktopNews.classList.remove(...inactiveClasses);
+            desktopNews.classList.add(...activeClasses);
+        }
+        // Mobile
+        if (mobileMaemul) {
+            mobileMaemul.classList.remove('text-primary', 'font-bold');
+            mobileMaemul.classList.add('text-muted');
+        }
+        if (mobileNews) {
+            mobileNews.classList.add('text-primary', 'font-bold');
+            mobileNews.classList.remove('text-muted');
+        }
+    }
+}
+
 function updateSEOAndHeader(category) {
     const titleEl = document.getElementById('header-title');
     const descEl = document.getElementById('header-description');
     
     const defaultTitle = "부동산 뉴스 & 소식";
-    const defaultDesc = "대구광역시의 최신 부동산 동향, 정부 정책 변화, 그리고 실생활에 유용한 부동산 상식을 빠르고 정확하게 전달해 드립니다.";
+    const defaultDesc = "대구광역시의 최신 부동산 동향, 정책 분석 및 유용한 지식을 신속하고 정확하게 전달합니다.";
     const defaultMetaTitle = "부동산 뉴스 & 소식 - 최가네부동산공인중개사사무소";
     const defaultMetaDesc = "대구 지역 상가 임대 정보, 매물리스트, 부동산 시장 동향 및 유용한 상식을 전해드립니다.";
     
@@ -437,6 +487,8 @@ function updateSEOAndHeader(category) {
         const ogDesc = document.querySelector('meta[property="og:description"]');
         if (ogDesc) ogDesc.setAttribute('content', defaultMetaDesc);
     }
+    
+    updateNavHighlight(category);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
