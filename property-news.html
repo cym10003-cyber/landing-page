@@ -210,7 +210,7 @@
 <!-- Main Content Container -->
 <main id="main-container" class="max-w-7xl mx-auto px-lg grid grid-cols-1 md:grid-cols-12 gap-lg items-start">
 <!-- Sidebar / Filters -->
-<aside class="md:col-span-3 md:sticky md:top-[100px] w-full">
+<aside id="sidebar-container" class="md:col-span-3 md:sticky md:top-[100px] w-full">
 <div class="hidden md:flex md:flex-col gap-sm w-full scrollbar-hide" id="category-filter">
 <button data-category="ALL" class="w-auto md:w-full text-left font-button text-button px-md py-sm rounded bg-soft-blue text-primary-container transition-colors category-btn whitespace-nowrap">
     전체 소식
@@ -247,7 +247,7 @@
 </div>
 </aside>
 <!-- News Content Area -->
-<div class="col-span-12 md:col-span-9 flex flex-col gap-lg">
+<div id="news-content-area" class="col-span-12 md:col-span-9 flex flex-col gap-lg">
 <div class="flex flex-col sm:flex-row gap-md justify-between items-center bg-surface-container-lowest p-md rounded-xl border border-hairline shadow-sm">
     <div class="flex flex-row gap-sm items-center w-full sm:max-w-md">
         <div class="relative flex-1">
@@ -435,6 +435,31 @@ function updateNavHighlight(category) {
     }
 }
 
+function updateLayoutForCategory(category) {
+    const aside = document.getElementById('sidebar-container');
+    const contentArea = document.getElementById('news-content-area');
+    const maemulBtn = document.querySelector('.category-btn[data-category="매물리스트"]');
+    
+    // Hide 매물리스트 button from the news sidebar completely
+    if (maemulBtn) {
+        maemulBtn.classList.add('hidden');
+    }
+    
+    if (category === '매물리스트') {
+        if (aside) aside.classList.add('hidden');
+        if (contentArea) {
+            contentArea.classList.remove('md:col-span-9');
+            contentArea.classList.add('md:col-span-12');
+        }
+    } else {
+        if (aside) aside.classList.remove('hidden');
+        if (contentArea) {
+            contentArea.classList.remove('md:col-span-12');
+            contentArea.classList.add('md:col-span-9');
+        }
+    }
+}
+
 function updateSEOAndHeader(category) {
     const titleEl = document.getElementById('header-title');
     const descEl = document.getElementById('header-description');
@@ -477,6 +502,7 @@ function updateSEOAndHeader(category) {
     }
     
     updateNavHighlight(category);
+    updateLayoutForCategory(category);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -563,7 +589,7 @@ function renderList() {
     const emptyState = document.getElementById('empty-state');
 
     const filtered = allPosts.filter(post => {
-        const matchesCategory = (selectedCategory === 'ALL' || post.category === selectedCategory);
+        const matchesCategory = selectedCategory === 'ALL' ? post.category !== '매물리스트' : post.category === selectedCategory;
         const matchesSearch = (!query || 
             post.title.toLowerCase().includes(query) || 
             post.content.toLowerCase().includes(query)
