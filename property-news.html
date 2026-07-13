@@ -611,7 +611,7 @@ function renderList() {
         if (query) {
             const keywords = query.split(/\s+/).filter(k => k.length > 0);
             let searchableContent = post.content || '';
-            const historyIdx = searchableContent.indexOf('[주요 중개 이력]');
+            const historyIdx = searchableContent.indexOf('주요 중개 이력');
             if (historyIdx !== -1) {
                 searchableContent = searchableContent.slice(0, historyIdx);
             }

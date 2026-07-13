@@ -621,7 +621,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const keywords = query.split(/\s+/).filter(k => k.length > 0);
         const filtered = allProperties.filter(p => {
             let searchableContent = p.original.content || '';
-            const historyIdx = searchableContent.indexOf('[주요 중개 이력]');
+            const historyIdx = searchableContent.indexOf('주요 중개 이력');
             if (historyIdx !== -1) {
                 searchableContent = searchableContent.slice(0, historyIdx);
             }
