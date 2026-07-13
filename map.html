@@ -165,7 +165,7 @@
         }
     </style>
 </head>
-<body class="bg-surface text-ink font-body antialiased flex flex-col min-h-screen pb-20 md:pb-0">
+<body class="bg-surface text-ink font-body antialiased flex flex-col h-screen overflow-hidden">
 
 <!-- TopNavBar -->
 <nav class="bg-surface-container-lowest dark:bg-inverse-surface w-full top-0 sticky border-b border-hairline dark:border-outline-variant z-50 flat no-shadows shrink-0">
@@ -191,7 +191,7 @@
 </nav>
 
 <!-- Main Interactive Panel Area -->
-<div class="flex flex-col md:flex-row flex-grow h-[calc(100vh-73px)] w-full overflow-hidden relative">
+<div class="flex flex-col md:flex-row flex-grow w-full overflow-hidden relative">
     
     <!-- Sidebar / List Panel -->
     <div id="list-panel" class="hidden md:flex w-full md:w-[380px] h-full flex-col bg-surface border-r border-hairline shrink-0 z-20 transition-all duration-300">
@@ -253,7 +253,7 @@
 </div>
 
 <!-- Mobile Bottom Bar Navigation -->
-<div class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-hairline flex justify-around items-center py-2 z-50 md:hidden shadow-lg shrink-0">
+<div class="bg-surface-container-lowest border-t border-hairline flex justify-around items-center py-2 z-50 md:hidden shadow-lg shrink-0">
   <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
     <span class="material-symbols-outlined text-2xl">home</span>
     <span class="text-[10px] font-medium">홈</span>
