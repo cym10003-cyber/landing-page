@@ -144,26 +144,13 @@
         }
     }
 
-    /* Prevent category filter buttons from shrinking on mobile using wrap layout */
+    /* Hide category filter on mobile */
     #category-filter {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
-        width: 100% !important;
-        padding: 0 0 4px 0 !important;
-        margin: 0 !important;
-        gap: 6px !important;
-    }
-    #category-filter .category-btn {
-        display: block !important;
-        width: auto !important;
-        text-align: center !important;
-        white-space: nowrap !important;
-        padding: 6px 12px !important;
-        font-size: 14px !important;
+        display: none !important;
     }
     @media (min-width: 768px) {
         #category-filter {
+            display: flex !important;
             flex-direction: column !important;
             width: 100% !important;
             overflow-x: visible !important;
@@ -171,6 +158,7 @@
             padding: 0 !important;
         }
         #category-filter .category-btn {
+            display: block !important;
             width: 100% !important;
             text-align: left !important;
         }
