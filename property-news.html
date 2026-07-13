@@ -223,7 +223,7 @@
 <main id="main-container" class="max-w-7xl mx-auto px-lg grid grid-cols-1 md:grid-cols-12 gap-lg items-start">
 <!-- Sidebar / Filters -->
 <aside class="md:col-span-3 md:sticky md:top-[100px] w-full">
-<div class="flex flex-row md:flex-col gap-sm w-full scrollbar-hide" id="category-filter">
+<div class="hidden md:flex md:flex-col gap-sm w-full scrollbar-hide" id="category-filter">
 <button data-category="ALL" class="w-auto md:w-full text-left font-button text-button px-md py-sm rounded bg-soft-blue text-primary-container transition-colors category-btn whitespace-nowrap">
     전체 소식
 </button>
@@ -261,11 +261,18 @@
 <!-- News Content Area -->
 <div class="col-span-12 md:col-span-9 flex flex-col gap-lg">
 <div class="flex flex-col sm:flex-row gap-md justify-between items-center bg-surface-container-lowest p-md rounded-xl border border-hairline shadow-sm">
-    <div class="relative w-full sm:max-w-md">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span class="material-symbols-outlined text-muted text-[20px]">search</span>
+    <div class="flex flex-row gap-sm items-center w-full sm:max-w-md">
+        <div class="relative flex-1">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="material-symbols-outlined text-muted text-[20px]">search</span>
+            </div>
+            <input type="text" id="search-input" class="focus:ring-primary focus:border-primary block w-full pl-10 text-sm border-hairline rounded-lg py-2.5 bg-surface-container-low" placeholder="검색어를 입력해 주세요...">
         </div>
-        <input type="text" id="search-input" class="focus:ring-primary focus:border-primary block w-full pl-10 text-sm border-hairline rounded-lg py-2.5 bg-surface-container-low" placeholder="검색어를 입력해 주세요...">
+        <!-- 지도보기 (모바일 전용) -->
+        <a href="map.html" class="md:hidden flex items-center justify-center gap-xs bg-primary text-white px-md py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-mid transition-all shadow-sm whitespace-nowrap">
+            <span class="material-symbols-outlined text-[18px]">map</span>
+            지도보기
+        </a>
     </div>
     <div id="admin-actions" class="hidden w-full sm:w-auto">
         <a href="news-write.html" class="bg-primary-container text-white px-lg py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-mid transition-all flex items-center justify-center gap-sm shadow-sm w-full sm:w-auto">
