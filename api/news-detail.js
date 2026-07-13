@@ -72,6 +72,10 @@ export default function handler(req, res) {
               `<meta property="og:url" content="${urlEscaped}" />`
             )
             .replace(
+              /<link rel="canonical" href="https:\/\/choi114.com\/news-detail"\s*\/?>/,
+              `<link rel="canonical" href="${urlEscaped}" />`
+            )
+            .replace(
               /<meta name="twitter:title" content="부동산 뉴스 &amp; 소식 상세 - 최가네부동산공인중개사사무소"\s*\/?>/,
               `<meta name="twitter:title" content="${titleEscaped}" />`
             )
