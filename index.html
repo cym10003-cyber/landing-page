@@ -294,11 +294,11 @@
 <div class="max-w-7xl mx-auto">
 <div class="flex justify-between items-end mb-xl">
 <div>
-<h2 class="font-section-h2 text-section-h2 mb-[24px] text-ink">최신 소식</h2>
-<p class="font-body text-body text-muted">최가네부동산의 새로운 알림 및 정책 분석</p>
+<h2 class="font-section-h2 text-section-h2 mb-[24px] text-ink">실시간 업데이트 추천 매물</h2>
+<p class="font-body text-body text-muted">현장 확인과 꼼꼼한 상권 분석을 마친 확실한 부동산 매물만 소개합니다.</p>
 </div>
-<a class="hidden md:flex text-primary-container font-button text-button hover:text-blue-deep items-center gap-xs font-bold" href="property-news.html?v=20260713_v29">
-                    전체 게시글 보기 <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+<a class="hidden md:flex text-primary-container font-button text-button hover:text-blue-deep items-center gap-xs font-bold" href="property-news.html?category=매물리스트&v=20260713_v29">
+                    전체 매물 보기 <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
 </a>
 </div>
 <div id="board-preview" class="grid grid-cols-1 md:grid-cols-3 gap-lg">
@@ -424,7 +424,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             section.style.display = 'none';
             return;
         }
-        const latest = posts.slice(0, 3);
+        const maemulPosts = posts.filter(p => p.category === '매물리스트');
+        if (maemulPosts.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+        const latest = maemulPosts.slice(0, 3);
         container.innerHTML = latest.map(post => {
             const summary = markdownToText(post.content).slice(0, 60) + '...';
             const image = getFirstImage(post.content) || getFallbackImage(post.id);
