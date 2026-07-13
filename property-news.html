@@ -610,7 +610,12 @@ function renderList() {
         let matchesSearch = true;
         if (query) {
             const keywords = query.split(/\s+/).filter(k => k.length > 0);
-            const searchTarget = (post.title + ' ' + (post.content || '')).toLowerCase();
+            let searchableContent = post.content || '';
+            const historyIdx = searchableContent.indexOf('[주요 중개 이력]');
+            if (historyIdx !== -1) {
+                searchableContent = searchableContent.slice(0, historyIdx);
+            }
+            const searchTarget = (post.title + ' ' + (post.address || '') + ' ' + searchableContent).toLowerCase();
             matchesSearch = keywords.every(kw => searchTarget.includes(kw));
         }
         

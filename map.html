@@ -620,7 +620,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const keywords = query.split(/\s+/).filter(k => k.length > 0);
         const filtered = allProperties.filter(p => {
-            const searchTarget = (p.title + ' ' + p.address + ' ' + p.price + ' ' + (p.original.content || '')).toLowerCase();
+            let searchableContent = p.original.content || '';
+            const historyIdx = searchableContent.indexOf('[주요 중개 이력]');
+            if (historyIdx !== -1) {
+                searchableContent = searchableContent.slice(0, historyIdx);
+            }
+            const searchTarget = (p.title + ' ' + p.address + ' ' + p.price + ' ' + searchableContent).toLowerCase();
             return keywords.every(kw => searchTarget.includes(kw));
         });
         
