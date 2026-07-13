@@ -29,8 +29,12 @@ export default function handler(req, res) {
   // Get the latest 30 posts
   const latestPosts = posts.slice(0, 30);
 
+  const host = req.headers.host || 'choi114.com';
+  const protocol = req.headers['x-forwarded-proto'] || 'https';
+  const baseUrl = `${protocol}://${host}`;
+
   const rssItems = latestPosts.map(post => {
-    const postUrl = `https://choi114.com/news-detail?id=${post.id}`;
+    const postUrl = `${baseUrl}/news-detail?id=${post.id}`;
     
     // Convert content to plain text and escape
     let plainText = (post.content || '')
@@ -62,11 +66,11 @@ export default function handler(req, res) {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>최가네부동산공인중개사사무소</title>
-    <link>https://choi114.com</link>
+    <link>${baseUrl}</link>
     <description>대구 전 지역 상가, 사무실 임대 및 건물 매매 추천 리스트</description>
     <language>ko-KR</language>
     <lastBuildDate>${nowString}</lastBuildDate>
-    <atom:link href="https://choi114.com/rss" rel="self" type="application/rss+xml" />
+    <atom:link href="${baseUrl}/rss" rel="self" type="application/rss+xml" />
     ${rssItems}
   </channel>
 </rss>`;
