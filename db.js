@@ -1,4 +1,4 @@
-console.log("Antigravity db.js version: 20260708_v7");
+console.log("Antigravity db.js version: 20260713_v29");
 let _config = null;
 let _cachedPosts = null;
 
@@ -41,15 +41,13 @@ async function getPosts() {
       const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}`;
       const getUrl = `${url}?t=${Date.now()}`;
       
-      let res = await fetch(getUrl);
-      if (!res.ok && res.status === 404 && config.github_token) {
-        res = await fetch(getUrl, {
-          headers: {
-            'Authorization': `token ${config.github_token}`,
-            'Accept': 'application/vnd.github.v3+json'
-          }
-        });
+      const headers = {
+        'Accept': 'application/vnd.github.v3+json'
+      };
+      if (config.github_token) {
+        headers['Authorization'] = `token ${config.github_token}`;
       }
+      let res = await fetch(getUrl, { headers });
       
       if (res.ok) {
         const data = await res.json();
@@ -138,15 +136,13 @@ async function savePost(postData) {
     let getResponseInfo = "";
     
     try {
-      let getRes = await fetch(getUrl);
-      if (!getRes.ok && getRes.status === 404 && config.github_token) {
-        getRes = await fetch(getUrl, {
-          headers: {
-            'Authorization': `token ${config.github_token}`,
-            'Accept': 'application/vnd.github.v3+json'
-          }
-        });
+      const headers = {
+        'Accept': 'application/vnd.github.v3+json'
+      };
+      if (config.github_token) {
+        headers['Authorization'] = `token ${config.github_token}`;
       }
+      let getRes = await fetch(getUrl, { headers });
       
       getStatus = getRes.status;
       if (getRes.ok) {
@@ -215,15 +211,13 @@ async function deletePost(id) {
     let sha = null;
     
     try {
-      let getRes = await fetch(getUrl);
-      if (!getRes.ok && getRes.status === 404 && config.github_token) {
-        getRes = await fetch(getUrl, {
-          headers: {
-            'Authorization': `token ${config.github_token}`,
-            'Accept': 'application/vnd.github.v3+json'
-          }
-        });
+      const headers = {
+        'Accept': 'application/vnd.github.v3+json'
+      };
+      if (config.github_token) {
+        headers['Authorization'] = `token ${config.github_token}`;
       }
+      let getRes = await fetch(getUrl, { headers });
       if (getRes.ok) {
         const getData = await getRes.json();
         sha = getData.sha;
