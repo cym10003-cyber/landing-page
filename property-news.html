@@ -1,4 +1,7 @@
 <!DOCTYPE html><html class="light" lang="ko"><head><script>
+    if (window.location.hostname.endsWith(".vercel.app")) {
+        window.location.replace("https://choi114.com" + window.location.pathname + window.location.search);
+    }
     // Force browser to load fresh property-news.html page if version mismatch
     const currentVersion = '20260713_v29';
     const params = new URLSearchParams(window.location.search);
