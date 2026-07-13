@@ -188,7 +188,7 @@
 <div class="flex flex-col md:flex-row flex-grow h-[calc(100vh-73px)] w-full overflow-hidden relative">
     
     <!-- Sidebar / List Panel -->
-    <div id="list-panel" class="w-full md:w-[380px] h-full flex flex-col bg-surface border-r border-hairline shrink-0 z-20 transition-all duration-300">
+    <div id="list-panel" class="hidden md:flex w-full md:w-[380px] h-full flex-col bg-surface border-r border-hairline shrink-0 z-20 transition-all duration-300">
         <!-- Search & Filters Header -->
         <div class="p-md border-b border-hairline bg-surface-container-lowest flex flex-col gap-sm shrink-0">
             <div class="relative">
@@ -209,7 +209,7 @@
     </div>
     
     <!-- Map Panel -->
-    <div id="map-panel" class="flex-grow h-full relative z-10 hidden md:block">
+    <div id="map-panel" class="flex-grow h-full relative z-10">
         <!-- Floating Mobile List Toggle Button -->
         <button id="mobile-to-list-btn" class="md:hidden absolute top-4 left-4 z-[999] bg-surface-container-lowest text-ink shadow-strong-elevated border border-hairline px-4 py-2.5 rounded-full font-semibold text-sm flex items-center gap-xs cursor-pointer">
             <span class="material-symbols-outlined text-primary text-[18px]">format_list_bulleted</span> 목록 보기
@@ -493,6 +493,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const bounds = L.latLngBounds(allProperties.map(p => p.coordinates));
                 editorMap.fitBounds(bounds, { padding: [50, 50] });
             }
+            setTimeout(() => {
+                editorMap.invalidateSize();
+            }, 100);
         }
         
     } catch (e) {

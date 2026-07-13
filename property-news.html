@@ -254,7 +254,10 @@
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <span class="material-symbols-outlined text-muted text-[20px]">search</span>
             </div>
-            <input type="text" id="search-input" class="focus:ring-primary focus:border-primary block w-full pl-10 text-sm border-hairline rounded-lg py-2.5 bg-surface-container-low" placeholder="검색어를 입력해 주세요...">
+            <input type="text" id="search-input" class="focus:ring-primary focus:border-primary block w-full pl-10 pr-12 text-sm border-hairline rounded-lg py-2.5 bg-surface-container-low" placeholder="검색어를 입력해 주세요...">
+            <button id="search-button" class="absolute inset-y-0 right-0 pr-4 flex items-center text-primary dark:text-primary-bright hover:text-blue-mid border-0 bg-transparent cursor-pointer font-bold text-sm">
+                검색
+            </button>
         </div>
         <!-- 지도보기 (모바일 전용) -->
         <a href="map.html" class="md:hidden flex items-center justify-center gap-xs bg-primary text-white px-md py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-mid transition-all shadow-sm whitespace-nowrap">
@@ -525,9 +528,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    document.getElementById('search-input').addEventListener('input', () => {
+    const triggerSearch = () => {
         renderList();
-    });
+    };
+
+    const searchBtn = document.getElementById('search-button');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', triggerSearch);
+    }
+
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                triggerSearch();
+            }
+        });
+    }
 
     try {
         allPosts = await getPosts();
@@ -590,10 +607,13 @@ function renderList() {
 
     const filtered = allPosts.filter(post => {
         const matchesCategory = selectedCategory === 'ALL' ? post.category !== '매물리스트' : post.category === selectedCategory;
-        const matchesSearch = (!query || 
-            post.title.toLowerCase().includes(query) || 
-            post.content.toLowerCase().includes(query)
-        );
+        let matchesSearch = true;
+        if (query) {
+            const keywords = query.split(/\s+/).filter(k => k.length > 0);
+            const searchTarget = (post.title + ' ' + (post.content || '')).toLowerCase();
+            matchesSearch = keywords.every(kw => searchTarget.includes(kw));
+        }
+        
         return matchesCategory && matchesSearch;
     });
 
