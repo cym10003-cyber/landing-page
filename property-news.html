@@ -144,30 +144,23 @@
         }
     }
 
-    /* Prevent category filter buttons from shrinking on mobile using flat flex layout */
+    /* Prevent category filter buttons from shrinking on mobile using wrap layout */
     #category-filter {
         display: flex !important;
         flex-direction: row !important;
-        flex-wrap: nowrap !important;
+        flex-wrap: wrap !important;
         width: 100% !important;
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch !important;
         padding: 0 0 4px 0 !important;
         margin: 0 !important;
-        gap: 8px !important;
+        gap: 6px !important;
     }
     #category-filter .category-btn {
         display: block !important;
-        flex-shrink: 0 !important;
         width: auto !important;
-        min-width: 100px !important;
-        min-width: -webkit-fit-content !important;
-        min-width: fit-content !important;
         text-align: center !important;
         white-space: nowrap !important;
-    }
-    #category-filter .category-btn[data-category="상업용 매물 가이드"] {
-        min-width: 150px !important;
+        padding: 6px 12px !important;
+        font-size: 14px !important;
     }
     @media (min-width: 768px) {
         #category-filter {
