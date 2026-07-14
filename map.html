@@ -490,6 +490,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
         
+        // Shuffle the properties array to display in a random order (Fisher-Yates)
+        for (let i = allProperties.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allProperties[i], allProperties[j]] = [allProperties[j], allProperties[i]];
+        }
+        
         // Render initial UI state
         activeProperties = allProperties;
         renderListAndMarkers(allProperties);
