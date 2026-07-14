@@ -95,5 +95,8 @@ export default function handler(req, res) {
   }
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Cache-Control', 's-maxage=0, max-age=0, must-revalidate, no-store, no-cache');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.status(200).send(html);
 }
