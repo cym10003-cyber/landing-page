@@ -633,7 +633,42 @@ function renderList() {
 
     emptyState.classList.add('hidden');
     container.innerHTML = filtered.map(post => {
-        const textSummary = markdownToText(post.content).slice(0, 100) + '...';
+        let textSummary = '';
+        const featureIdx = post.content ? post.content.indexOf('[매물특징]') : -1;
+        if (featureIdx !== -1) {
+            const afterFeatures = post.content.substring(featureIdx + '[매물특징]'.length);
+            const lines = afterFeatures.split('\n');
+            const featureLines = [];
+            for (let line of lines) {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+                    break;
+                }
+                if (trimmed) {
+                    let cleanLine = trimmed
+                        .replace(/^[oO0\-▶\*\•]\s*/, '')
+                        .replace(/^\s*O\s+/, '')
+                        .trim();
+                    if (cleanLine) {
+                        featureLines.push(cleanLine);
+                    }
+                }
+                if (featureLines.length >= 3) {
+                    break;
+                }
+            }
+            if (featureLines.length > 0) {
+                textSummary = featureLines.map(line => '• ' + line).join(' ');
+            }
+        }
+        if (!textSummary) {
+            let textOnly = post.content || '';
+            const boilerplateIdx = textOnly.indexOf('주요 중개 이력');
+            if (boilerplateIdx !== -1) {
+                textOnly = textOnly.substring(0, boilerplateIdx);
+            }
+            textSummary = markdownToText(textOnly).replace(/\s+/g, ' ').trim().slice(0, 100) + '...';
+        }
         const image = getFirstImage(post.content) || getFallbackImage(post.id);
         return `
             <article class="bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline overflow-hidden group cursor-pointer flex flex-col transition-transform hover:-translate-y-1 hover:scale-[1.02] duration-300" onclick="location.href='news-detail.html?id=${post.id}'">
