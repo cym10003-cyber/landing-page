@@ -163,9 +163,13 @@
         .leaflet-left .leaflet-control {
             margin-left: 16px !important;
         }
+        #property-list {
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 </head>
-<body class="bg-surface text-ink font-body antialiased flex flex-col h-screen overflow-hidden">
+<body class="bg-surface text-ink font-body antialiased flex flex-col h-screen h-[100dvh] overflow-hidden">
 
 <!-- TopNavBar -->
 <nav class="bg-surface-container-lowest dark:bg-inverse-surface w-full top-0 sticky border-b border-hairline dark:border-outline-variant z-50 flat no-shadows shrink-0">
