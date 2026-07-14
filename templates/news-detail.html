@@ -128,9 +128,14 @@
 </div>
 </nav>
 <main class="max-w-4xl mx-auto px-lg py-[80px]">
-    <a href="property-news.html?v=20260713_v29" class="flex items-center gap-xs text-primary mb-md font-button text-button min-h-[44px] hover:underline">
-        <span class="material-symbols-outlined">arrow_back</span> 소식 목록으로
-    </a>
+    <div class="flex justify-between items-center mb-md">
+        <a id="back-link" href="property-news.html?v=20260713_v29" class="flex items-center gap-xs text-primary font-button text-button min-h-[44px] hover:underline">
+            <span class="material-symbols-outlined">arrow_back</span> 소식 목록으로
+        </a>
+        <a id="map-link" href="#" class="hidden bg-primary text-white px-4 py-2 rounded-lg font-semibold text-xs md:text-sm flex items-center gap-xs hover:bg-blue-mid shadow-sm transition-colors border-0 cursor-pointer min-h-[38px]">
+            <span class="material-symbols-outlined text-[16px]">map</span> 지도보기
+        </a>
+    </div>
     <article id="article-detail" class="bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline p-lg md:p-xxl flex flex-col gap-lg">
         <div class="border-b border-hairline pb-lg flex flex-col gap-md">
             <div class="flex items-center justify-between">
@@ -281,6 +286,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('post-title').innerText = post.title;
         document.getElementById('post-category').innerText = post.category || '일반';
         document.getElementById('post-date').innerText = post.date;
+
+        const backLink = document.getElementById('back-link');
+        const mapLink = document.getElementById('map-link');
+        if (post.category === '매물리스트') {
+            if (backLink) {
+                backLink.href = 'property-news.html?category=매물리스트&v=20260713_v29';
+                backLink.innerHTML = `<span class="material-symbols-outlined">arrow_back</span> 매물리스트로`;
+            }
+            if (mapLink) {
+                mapLink.href = `map.html?id=${post.id}`;
+                mapLink.classList.remove('hidden');
+            }
+        } else {
+            if (backLink) {
+                backLink.href = 'property-news.html?v=20260713_v29';
+                backLink.innerHTML = `<span class="material-symbols-outlined">arrow_back</span> 부동산 소식으로`;
+            }
+            if (mapLink) {
+                mapLink.classList.add('hidden');
+            }
+        }
 
         try {
             const cleanText = window.markdownToText ? window.markdownToText(post.content).substring(0, 150).replace(/\s+/g, ' ').trim() : post.title;

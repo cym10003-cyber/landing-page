@@ -568,6 +568,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             }, 100);
         }
         
+        // Handle post ID or search query from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchId = urlParams.get('id');
+        if (searchId) {
+            const target = allProperties.find(p => String(p.id) === String(searchId));
+            if (target) {
+                if (window.innerWidth < 768) {
+                    listPanel.classList.add('hidden');
+                    mapPanel.classList.remove('hidden');
+                }
+                setTimeout(() => {
+                    centerAndPopup(target);
+                }, 600);
+            }
+        }
+        
     } catch (e) {
         console.error("Failed to load map listings", e);
         document.getElementById('property-list').innerHTML = `
