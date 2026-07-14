@@ -167,6 +167,15 @@
             overscroll-behavior-y: contain;
             -webkit-overflow-scrolling: touch;
         }
+        @media (max-w: 767px) {
+            #list-panel, #map-panel {
+                position: absolute !important;
+                top: 0;
+                left: 0;
+                width: 100% !important;
+                height: 100% !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-surface text-ink font-body antialiased flex flex-col h-screen h-[100dvh] overflow-hidden">
