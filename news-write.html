@@ -178,6 +178,11 @@
                     </div>
                 </div>
                 <textarea id="content" required rows="12" class="block w-full border-hairline rounded-lg py-2.5 focus:ring-primary focus:border-primary text-sm font-mono bg-surface-container-low" placeholder="마크다운(Markdown) 문법을 사용해 본문을 작성할 수 있습니다.&#10;예:&#10;# 큰 제목&#10;## 소제목&#10;- 리스트 아이템&#10;**굵은 글씨** 등"></textarea>
+                <!-- Attached Images Preview -->
+                <div id="attached-images-section" class="hidden mt-sm p-sm bg-surface-container rounded-lg border border-hairline">
+                    <span class="block text-[11px] font-semibold text-muted mb-xs">본문 첨부 사진 목록 ( X 버튼 클릭 시 본문에서 해당 사진 삭제 )</span>
+                    <div id="attached-images-preview" class="flex flex-wrap gap-sm"></div>
+                </div>
             </div>
             <div id="error-msg" class="hidden text-error text-sm font-medium"></div>
             <div class="flex justify-end gap-sm border-t border-hairline pt-lg mt-lg">
@@ -311,6 +316,82 @@
 document.addEventListener('DOMContentLoaded', async () => {
     requireAdmin();
 
+    // ----------------------------------------------------
+    // Attached Images Preview & Deletion Logic
+    // ----------------------------------------------------
+    function updateAttachedImagesPreview() {
+        const textarea = document.getElementById('content');
+        if (!textarea) return;
+        const content = textarea.value;
+        const previewSection = document.getElementById('attached-images-section');
+        const previewContainer = document.getElementById('attached-images-preview');
+        
+        if (!previewSection || !previewContainer) return;
+        
+        const imgRegex = /!\[(.*?)\]\((.*?)\)/g;
+        const matches = [...content.matchAll(imgRegex)];
+        
+        if (matches.length === 0) {
+            previewSection.classList.add('hidden');
+            previewContainer.innerHTML = '';
+            return;
+        }
+        
+        previewSection.classList.remove('hidden');
+        
+        previewContainer.innerHTML = matches.map((match, index) => {
+            const altText = match[1];
+            const url = match[2];
+            
+            // Clean/simplify filename for display
+            let cleanName = altText || '사진';
+            if (cleanName.includes('-KakaoTalk_')) {
+                const parts = cleanName.split('-KakaoTalk_');
+                cleanName = '카톡_' + parts[parts.length - 1];
+            } else if (url) {
+                const urlParts = url.split('/');
+                cleanName = urlParts[urlParts.length - 1];
+            }
+            if (cleanName.length > 12) {
+                cleanName = cleanName.slice(0, 10) + '...';
+            }
+            
+            return `
+                <div class="relative flex flex-col items-center p-1 bg-surface-container-lowest border border-hairline rounded shadow-card-soft group" style="width: 80px;">
+                    <div class="relative w-16 h-16 overflow-hidden rounded bg-surface-container">
+                        <img src="${url}" class="w-full h-full object-cover" />
+                        <button type="button" class="absolute top-0.5 right-0.5 bg-error text-white rounded-full w-4 h-4 flex items-center justify-center shadow hover:bg-red-700 cursor-pointer border-0" onclick="removeImageFromContent(${index})" title="본문에서 삭제">
+                            <span class="material-symbols-outlined text-[10px] font-bold">close</span>
+                        </button>
+                    </div>
+                    <span class="text-[9px] text-muted truncate w-full text-center mt-1" title="${altText}">${cleanName}</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    window.removeImageFromContent = function(index) {
+        const textarea = document.getElementById('content');
+        if (!textarea) return;
+        const content = textarea.value;
+        const imgRegex = /!\[(.*?)\]\((.*?)\)/g;
+        const matches = [...content.matchAll(imgRegex)];
+        
+        if (matches[index]) {
+            const fullMatch = matches[index][0];
+            const matchIndex = matches[index].index;
+            const newContent = content.slice(0, matchIndex) + content.slice(matchIndex + fullMatch.length);
+            textarea.value = newContent;
+            textarea.dispatchEvent(new Event('input'));
+        }
+    };
+
+    // Bind event listener to textarea
+    const contentTextarea = document.getElementById('content');
+    if (contentTextarea) {
+        contentTextarea.addEventListener('input', updateAttachedImagesPreview);
+    }
+
     let chosenCoords = null;
     const editorMap = L.map('editor-map', {
         zoomControl: true,
@@ -412,6 +493,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('title').value = post.title;
                 document.getElementById('category').value = post.category || '매물리스트';
                 document.getElementById('content').value = post.content;
+                document.getElementById('content').dispatchEvent(new Event('input'));
                 document.getElementById('address').value = post.address || '';
                 postDate = post.date;
 
@@ -524,6 +606,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const imageMarkdown = results.map(res => `![${res.name}](${res.url})`).join('\n\n') + '\n\n';
 
                 textarea.value = text.substring(0, start) + '\n\n' + imageMarkdown + text.substring(end);
+                textarea.dispatchEvent(new Event('input'));
                 textarea.focus();
                 textarea.selectionStart = textarea.selectionEnd = start + imageMarkdown.length + 2;
             } catch (err) {
