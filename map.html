@@ -474,12 +474,43 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             let cleanDesc = '';
             if (post.content) {
-                let contentText = post.content;
-                const boilerplateIdx = contentText.indexOf('주요 중개 이력');
-                if (boilerplateIdx !== -1) {
-                    contentText = contentText.substring(0, boilerplateIdx);
+                const contentText = post.content;
+                const featureIdx = contentText.indexOf('[매물특징]');
+                if (featureIdx !== -1) {
+                    const afterFeatures = contentText.substring(featureIdx + '[매물특징]'.length);
+                    const lines = afterFeatures.split('\n');
+                    const featureLines = [];
+                    for (let line of lines) {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+                            break;
+                        }
+                        if (trimmed) {
+                            let cleanLine = trimmed
+                                .replace(/^[oO0\-▶\*\•]\s*/, '')
+                                .replace(/^\s*O\s+/, '')
+                                .trim();
+                            if (cleanLine) {
+                                featureLines.push(cleanLine);
+                            }
+                        }
+                        if (featureLines.length >= 3) {
+                            break;
+                        }
+                    }
+                    if (featureLines.length > 0) {
+                        cleanDesc = featureLines.map(line => '• ' + line).join(' ');
+                    }
                 }
-                cleanDesc = markdownToText(contentText).replace(/\s+/g, ' ').trim();
+                
+                if (!cleanDesc) {
+                    let textOnly = contentText;
+                    const boilerplateIdx = textOnly.indexOf('주요 중개 이력');
+                    if (boilerplateIdx !== -1) {
+                        textOnly = textOnly.substring(0, boilerplateIdx);
+                    }
+                    cleanDesc = markdownToText(textOnly).replace(/\s+/g, ' ').trim().slice(0, 80);
+                }
             }
             
             let coords = post.coordinates;
