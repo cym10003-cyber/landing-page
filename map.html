@@ -207,7 +207,7 @@
 <div class="flex flex-col md:flex-row flex-grow w-full overflow-hidden relative">
     
     <!-- Sidebar / List Panel -->
-    <div id="list-panel" class="hidden flex w-full md:w-[420px] h-full flex-col bg-surface border-r border-hairline shrink-0 z-20 transition-all duration-300">
+    <div id="list-panel" class="hidden md:flex w-full md:w-[420px] h-full flex-col bg-surface border-r border-hairline shrink-0 z-20 transition-all duration-300">
         <!-- Search & Filters Header -->
         <div class="p-md border-b border-hairline bg-surface-container-lowest flex flex-col gap-sm shrink-0">
             <div class="relative">
@@ -325,7 +325,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     mobileToMapBtn.addEventListener('click', () => {
         listPanel.classList.add('hidden');
+        listPanel.classList.remove('flex');
         mapPanel.classList.remove('hidden');
+        mapPanel.classList.add('flex');
         if (editorMap) {
             setTimeout(() => {
                 editorMap.invalidateSize();
@@ -343,7 +345,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     mobileToListBtn.addEventListener('click', () => {
         mapPanel.classList.add('hidden');
+        mapPanel.classList.remove('flex');
         listPanel.classList.remove('hidden');
+        listPanel.classList.add('flex');
     });
 
     // 3. Initialize Leaflet Map
@@ -576,7 +580,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (target) {
                 if (window.innerWidth < 768) {
                     listPanel.classList.add('hidden');
+                    listPanel.classList.remove('flex');
                     mapPanel.classList.remove('hidden');
+                    mapPanel.classList.add('flex');
                 }
                 setTimeout(() => {
                     centerAndPopup(target);
@@ -644,7 +650,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // If on mobile, slide to map panel
                 if (window.innerWidth < 768) {
                     listPanel.classList.add('hidden');
+                    listPanel.classList.remove('flex');
                     mapPanel.classList.remove('hidden');
+                    mapPanel.classList.add('flex');
                     setTimeout(() => {
                         editorMap.invalidateSize();
                         centerAndPopup(item);
