@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260713_v29">매물리스트</a>
+<a id="nav-maemul" class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260713_v29">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260713_v29">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
+<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260713_v29">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -289,6 +289,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const backLink = document.getElementById('back-link');
         const mapLink = document.getElementById('map-link');
+        const navMaemul = document.getElementById('nav-maemul');
+        const navNews = document.getElementById('nav-news');
+
         if (post.category === '매물리스트') {
             if (backLink) {
                 backLink.href = 'property-news.html?category=매물리스트&v=20260713_v29';
@@ -298,6 +301,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 mapLink.href = `map.html?id=${post.id}`;
                 mapLink.classList.remove('hidden');
             }
+            if (navMaemul && navNews) {
+                navMaemul.className = "text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all";
+                navNews.className = "text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all";
+            }
         } else {
             if (backLink) {
                 backLink.href = 'property-news.html?v=20260713_v29';
@@ -305,6 +312,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             if (mapLink) {
                 mapLink.classList.add('hidden');
+            }
+            if (navMaemul && navNews) {
+                navMaemul.className = "text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all";
+                navNews.className = "text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all";
             }
         }
 
