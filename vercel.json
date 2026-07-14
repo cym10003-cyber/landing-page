@@ -2,8 +2,8 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/news", "destination": "/property-news?v=20260713_v29", "permanent": false },
-    { "source": "/news.html", "destination": "/property-news?v=20260713_v29", "permanent": false }
+    { "source": "/news", "destination": "/property-news?v=20260715_v1", "permanent": false },
+    { "source": "/news.html", "destination": "/property-news?v=20260715_v1", "permanent": false }
   ],
   "rewrites": [
     { "source": "/rss", "destination": "/api/rss" },
