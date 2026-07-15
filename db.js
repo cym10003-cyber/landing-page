@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v6");
+console.log("Antigravity db.js version: 20260715_v7");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v6";
+const APP_VERSION = "20260715_v7";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -323,6 +323,26 @@ function renderMarkdown(src) {
     // Check if the block is a single clean URL on its own line
     const urlPattern = /^(https?:\/\/[^\s]+)$/i;
     if (urlPattern.test(block)) {
+      const cleanUrl = block.replace(/&amp;/g, '&').trim();
+      let ytVideoId = '';
+      if (/youtube\.com/i.test(cleanUrl)) {
+        if (cleanUrl.includes('/shorts/')) {
+          const match = cleanUrl.match(/\/shorts\/([a-zA-Z0-9_-]{11})/i);
+          if (match) ytVideoId = match[1];
+        } else {
+          const match = cleanUrl.match(/[?&]v=([a-zA-Z0-9_-]{11})/i);
+          if (match) ytVideoId = match[1];
+        }
+      } else if (/youtu\.be/i.test(cleanUrl)) {
+        const match = cleanUrl.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/i);
+        if (match) ytVideoId = match[1];
+      }
+
+      if (ytVideoId) {
+        return `<div class="relative w-full aspect-video rounded-xl overflow-hidden shadow-card-soft border border-hairline my-lg">
+          <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/${ytVideoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>`;
+      }
       return `<div class="link-preview-card my-lg" data-url="${block.trim()}"></div>`;
     }
 
