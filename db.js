@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v5");
+console.log("Antigravity db.js version: 20260715_v6");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v5";
+const APP_VERSION = "20260715_v6";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -279,6 +279,33 @@ function renderMarkdown(src) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+
+  // Restore safe <video> tags securely
+  html = html.replace(/&lt;video\s+([\s\S]*?)&gt;&lt;\/video&gt;/gi, (match, attrsHtml) => {
+    const srcMatch = attrsHtml.match(/src=&quot;([^&]+?)&quot;/i);
+    const classMatch = attrsHtml.match(/class=&quot;([^&]+?)&quot;/i);
+    const controls = attrsHtml.toLowerCase().includes('controls');
+    const autoplay = attrsHtml.toLowerCase().includes('autoplay');
+    const loop = attrsHtml.toLowerCase().includes('loop');
+    const muted = attrsHtml.toLowerCase().includes('muted');
+    const playsinline = attrsHtml.toLowerCase().includes('playsinline');
+    
+    if (srcMatch) {
+      const src = srcMatch[1].trim();
+      if (/^(https?:\/\/|\/)/i.test(src)) {
+        const cls = classMatch ? classMatch[1] : 'w-full rounded-xl overflow-hidden shadow-card-soft border border-hairline my-lg';
+        let videoTag = `<video src="${src}"`;
+        if (controls) videoTag += ' controls';
+        if (autoplay) videoTag += ' autoplay';
+        if (loop) videoTag += ' loop';
+        if (muted) videoTag += ' muted';
+        if (playsinline) videoTag += ' playsinline';
+        videoTag += ` class="${cls}"></video>`;
+        return videoTag;
+      }
+    }
+    return match;
+  });
 
   const safeLink = (url, text) => {
     const cleanUrl = url.trim();
