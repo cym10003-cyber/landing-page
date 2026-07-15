@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v7");
+console.log("Antigravity db.js version: 20260715_v8");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v7";
+const APP_VERSION = "20260715_v8";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -282,8 +282,8 @@ function renderMarkdown(src) {
 
   // Restore safe <video> tags securely
   html = html.replace(/&lt;video\s+([\s\S]*?)&gt;&lt;\/video&gt;/gi, (match, attrsHtml) => {
-    const srcMatch = attrsHtml.match(/src=&quot;([^&]+?)&quot;/i);
-    const classMatch = attrsHtml.match(/class=&quot;([^&]+?)&quot;/i);
+    const srcMatch = attrsHtml.match(/src=&quot;([\s\S]*?)&quot;/i);
+    const classMatch = attrsHtml.match(/class=&quot;([\s\S]*?)&quot;/i);
     const controls = attrsHtml.toLowerCase().includes('controls');
     const autoplay = attrsHtml.toLowerCase().includes('autoplay');
     const loop = attrsHtml.toLowerCase().includes('loop');
