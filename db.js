@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v15");
+console.log("Antigravity db.js version: 20260715_v16");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v15";
+const APP_VERSION = "20260715_v16";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -407,8 +407,16 @@ function renderMarkdown(src) {
     }
     text = parts.join('');
 
+    const htmlPlaceholders = [];
     const imgPlaceholders = [];
     const linkPlaceholders = [];
+
+    // 0. Extract Raw HTML Tags (to protect them from markdown parsing)
+    text = text.replace(/<[^>]+>/g, (match) => {
+      const idx = htmlPlaceholders.length;
+      htmlPlaceholders.push(match);
+      return `%%HTMLPLACEHOLDER${idx}%%`;
+    });
 
     // 1. Extract Images
     text = text.replace(/!\[(.*?)\]\((.*?)\)/g, (match, altText, url) => {
@@ -445,6 +453,11 @@ function renderMarkdown(src) {
     text = text.replace(/%%LINKPLACEHOLDER(\d+)%%/g, (match, idx) => {
       const { linkText, url } = linkPlaceholders[parseInt(idx, 10)];
       return safeLink(url, linkText);
+    });
+
+    // 6. Restore Raw HTML Tags
+    text = text.replace(/%%HTMLPLACEHOLDER(\d+)%%/g, (match, idx) => {
+      return htmlPlaceholders[parseInt(idx, 10)];
     });
 
     text = text.replace(/\n/g, '<br>');
