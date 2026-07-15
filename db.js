@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v11");
+console.log("Antigravity db.js version: 20260715_v12");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v11";
+const APP_VERSION = "20260715_v12";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -592,7 +592,9 @@ async function uploadVideoFile(file) {
             throw new Error(`GitHub Upload Failed: ${putRes.status} ${errorMsg}`);
           }
           
-          const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@main/videos/${filename}`;
+          const result = await putRes.json();
+          const commitSha = (result.commit && result.commit.sha) ? result.commit.sha : 'main';
+          const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@${commitSha}/videos/${filename}`;
           resolve(rawUrl);
         } catch (err) {
           reject(err);
