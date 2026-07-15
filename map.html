@@ -394,41 +394,45 @@ document.addEventListener('DOMContentLoaded', async () => {
         return null;
     }
 
-    // Helper: extract details from markdown content
     function parsePropertyDetails(content) {
         const details = {
             price: "보증금/월세 협의",
             area: "면적 정보 없음",
             parking: "주차 정보 없음"
         };
+        if (!content) return details;
         
         const lines = content.split('\n');
         let bo = "";
         let wol = "";
         let maemae = "";
         let daeji = "";
+        let gonggup = "";
         let jeonyong = "";
         
         lines.forEach(line => {
             const trimmed = line.trim();
-            if (trimmed.startsWith('▶') || trimmed.startsWith('O') || trimmed.startsWith('★')) {
-                const match = trimmed.match(/[▶O★]\s*(.*?)\s*:\s*(.*)/);
-                if (match) {
-                    const key = match[1].trim();
-                    const val = match[2].trim();
-                    if (key.includes("보증금")) {
+            if (trimmed.includes(':')) {
+                const parts = trimmed.split(':');
+                if (parts.length >= 2) {
+                    const rawKey = parts[0].replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]/g, '').trim();
+                    const val = parts.slice(1).join(':').trim();
+                    
+                    if (rawKey.includes("보증금")) {
                         bo = val;
-                    } else if (key.includes("월세")) {
+                    } else if (rawKey.includes("월세")) {
                         wol = val;
-                    } else if (key.includes("매매가") || key.includes("매매가격")) {
+                    } else if (rawKey.includes("매매가") || rawKey.includes("매매가격")) {
                         maemae = val;
-                    } else if (key.includes("대지면적")) {
+                    } else if (rawKey.includes("대지면적")) {
                         daeji = val;
-                    } else if (key.includes("전용면적")) {
+                    } else if (rawKey.includes("공급면적")) {
+                        gonggup = val;
+                    } else if (rawKey.includes("전용면적")) {
                         jeonyong = val;
-                    } else if (key.includes("면적")) {
+                    } else if (rawKey.includes("면적")) {
                         if (!jeonyong) jeonyong = val;
-                    } else if (key.includes("주차")) {
+                    } else if (rawKey.includes("주차")) {
                         details.parking = val;
                     }
                 }
@@ -456,8 +460,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     details.price = `월세 ${wol}`;
                 }
             }
-            if (jeonyong) {
+            if (gonggup && jeonyong) {
+                details.area = `공급 ${gonggup.replace(/약\s*/g, '')} / 전용 ${jeonyong.replace(/약\s*/g, '')}`;
+            } else if (jeonyong) {
                 details.area = jeonyong;
+            } else if (gonggup) {
+                details.area = gonggup;
             }
         }
         return details;
