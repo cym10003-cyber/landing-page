@@ -510,6 +510,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             let cleanLine = trimmed
                                 .replace(/^[oO0\-▶\*\•🔎✅✨⭐]\s*/, '')
                                 .replace(/^\s*O\s+/, '')
+                                .replace(/\uFFFD/g, '')
                                 .trim();
                             if (cleanLine) {
                                 featureLines.push(cleanLine);
@@ -520,7 +521,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
                     }
                     if (featureLines.length > 0) {
-                        cleanDesc = featureLines.map(line => '• ' + line).join(' ');
+                        cleanDesc = featureLines.map(line => '• ' + line).join(' ').replace(/\uFFFD/g, '');
                     }
                 }
                 
@@ -530,7 +531,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (boilerplateIdx !== -1) {
                         textOnly = textOnly.substring(0, boilerplateIdx);
                     }
-                    cleanDesc = markdownToText(textOnly).replace(/\s+/g, ' ').trim().slice(0, 80);
+                    cleanDesc = markdownToText(textOnly).replace(/\s+/g, ' ').replace(/\uFFFD/g, '').trim().slice(0, 80);
                 }
             }
             

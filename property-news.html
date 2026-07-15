@@ -656,6 +656,7 @@ function renderList() {
                     let cleanLine = trimmed
                         .replace(/^[oO0\-▶\*\•🔎✅✨⭐]\s*/, '')
                         .replace(/^\s*O\s+/, '')
+                        .replace(/\uFFFD/g, '')
                         .trim();
                     if (cleanLine) {
                         featureLines.push(cleanLine);
@@ -666,7 +667,7 @@ function renderList() {
                 }
             }
             if (featureLines.length > 0) {
-                textSummary = featureLines.map(line => '• ' + line).join(' ');
+                textSummary = featureLines.map(line => '• ' + line).join(' ').replace(/\uFFFD/g, '');
             }
         }
         if (!textSummary) {
@@ -675,7 +676,7 @@ function renderList() {
             if (boilerplateIdx !== -1) {
                 textOnly = textOnly.substring(0, boilerplateIdx);
             }
-            textSummary = markdownToText(textOnly).replace(/\s+/g, ' ').trim().slice(0, 100) + '...';
+            textSummary = markdownToText(textOnly).replace(/\s+/g, ' ').replace(/\uFFFD/g, '').trim().slice(0, 100) + '...';
         }
         const image = getFirstImage(post.content) || getFallbackImage(post.id);
         return `

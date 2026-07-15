@@ -456,6 +456,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         let cleanLine = trimmed
                             .replace(/^[oO0\-▶\*\•🔎✅✨⭐]\s*/, '')
                             .replace(/^\s*O\s+/, '')
+                            .replace(/\uFFFD/g, '')
                             .trim();
                         if (cleanLine) {
                             featureLines.push(cleanLine);
@@ -466,7 +467,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                 }
                 if (featureLines.length > 0) {
-                    summary = featureLines.map(line => '• ' + line).join(' ');
+                    summary = featureLines.map(line => '• ' + line).join(' ').replace(/\uFFFD/g, '');
                 }
             }
             if (!summary) {
@@ -475,7 +476,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (boilerplateIdx !== -1) {
                     textOnly = textOnly.substring(0, boilerplateIdx);
                 }
-                summary = markdownToText(textOnly).replace(/\s+/g, ' ').trim().slice(0, 60) + '...';
+                summary = markdownToText(textOnly).replace(/\s+/g, ' ').replace(/\uFFFD/g, '').trim().slice(0, 60) + '...';
             }
             const image = getFirstImage(post.content) || getFallbackImage(post.id);
             return `

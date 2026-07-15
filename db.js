@@ -51,7 +51,12 @@ async function getPosts() {
       
       if (res.ok) {
         const data = await res.json();
-        const content = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+        const binaryString = atob(data.content.replace(/\n/g, ''));
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        const content = new TextDecoder('utf-8').decode(bytes);
         const posts = JSON.parse(content);
         localStorage.setItem('posts_cache', JSON.stringify(posts));
         _cachedPosts = posts;
