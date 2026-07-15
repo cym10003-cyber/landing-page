@@ -177,7 +177,90 @@
                         </a>
                     </div>
                 </div>
-                <textarea id="content" required rows="12" class="block w-full border-hairline rounded-lg py-2.5 focus:ring-primary focus:border-primary text-sm font-mono bg-surface-container-low" placeholder="마크다운(Markdown) 문법을 사용해 본문을 작성할 수 있습니다.&#10;예:&#10;# 큰 제목&#10;## 소제목&#10;- 리스트 아이템&#10;**굵은 글씨** 등"></textarea>
+                <!-- Formatting Helper Toolbar -->
+                <div class="flex flex-wrap gap-xs items-center bg-surface-container border border-hairline border-b-0 rounded-t-lg p-sm select-none">
+                    <!-- Font Size dropdown -->
+                    <div class="relative inline-block text-left" id="toolbar-font-size-container">
+                        <button type="button" id="toolbar-font-size-btn" class="flex items-center gap-xs px-xs py-1 rounded text-ink hover:bg-surface-container-high text-xs font-semibold bg-transparent border-0 cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px]">format_size</span> 크기 <span class="material-symbols-outlined text-[10px]">arrow_drop_down</span>
+                        </button>
+                        <div id="toolbar-font-size-menu" class="hidden absolute left-0 mt-xs w-28 bg-surface-container-lowest border border-hairline rounded-lg shadow-card-soft z-50 flex flex-col py-xs">
+                            <button type="button" data-size="h1" class="text-left w-full px-md py-xs text-xs font-bold hover:bg-surface-container-high bg-transparent border-0 cursor-pointer">대제목 (H1)</button>
+                            <button type="button" data-size="h2" class="text-left w-full px-md py-xs text-xs font-semibold hover:bg-surface-container-high bg-transparent border-0 cursor-pointer">중제목 (H2)</button>
+                            <button type="button" data-size="h3" class="text-left w-full px-md py-xs text-xs font-medium hover:bg-surface-container-high bg-transparent border-0 cursor-pointer">소제목 (H3)</button>
+                            <button type="button" data-size="p" class="text-left w-full px-md py-xs text-xs hover:bg-surface-container-high bg-transparent border-0 cursor-pointer">일반 본문</button>
+                        </div>
+                    </div>
+                    
+                    <div class="w-px h-4 bg-hairline mx-xs"></div>
+
+                    <!-- Basic Formatting -->
+                    <button type="button" id="toolbar-bold" title="굵게" class="p-xs rounded text-ink hover:bg-surface-container-high bg-transparent border-0 cursor-pointer flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[18px]">format_bold</span>
+                    </button>
+                    <button type="button" id="toolbar-italic" title="기울임" class="p-xs rounded text-ink hover:bg-surface-container-high bg-transparent border-0 cursor-pointer flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[18px]">format_italic</span>
+                    </button>
+                    <button type="button" id="toolbar-underline" title="밑줄" class="p-xs rounded text-ink hover:bg-surface-container-high bg-transparent border-0 cursor-pointer flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[18px]">format_underlined</span>
+                    </button>
+                    <button type="button" id="toolbar-strikethrough" title="취소선" class="p-xs rounded text-ink hover:bg-surface-container-high bg-transparent border-0 cursor-pointer flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[18px]">strikethrough_s</span>
+                    </button>
+
+                    <div class="w-px h-4 bg-hairline mx-xs"></div>
+
+                    <!-- Font Colors -->
+                    <div class="relative inline-block text-left" id="toolbar-color-container">
+                        <button type="button" id="toolbar-color-btn" class="flex items-center gap-xs px-xs py-1 rounded text-ink hover:bg-surface-container-high text-xs font-semibold bg-transparent border-0 cursor-pointer" title="글자 색상">
+                            <span class="material-symbols-outlined text-[18px]">format_color_text</span> 색상 <span class="material-symbols-outlined text-[10px]">arrow_drop_down</span>
+                        </button>
+                        <div id="toolbar-color-menu" class="hidden absolute left-0 mt-xs w-32 bg-surface-container-lowest border border-hairline rounded-lg shadow-card-soft z-50 flex flex-col py-xs">
+                            <button type="button" data-color="#0069ed" class="text-left w-full px-md py-xs text-xs font-semibold hover:bg-surface-container-high bg-transparent border-0 cursor-pointer flex items-center gap-xs"><span class="w-3 h-3 rounded-full bg-[#0069ed]"></span>파란색</button>
+                            <button type="button" data-color="#ef4444" class="text-left w-full px-md py-xs text-xs font-semibold hover:bg-surface-container-high bg-transparent border-0 cursor-pointer flex items-center gap-xs"><span class="w-3 h-3 rounded-full bg-[#ef4444]"></span>빨간색</button>
+                            <button type="button" data-color="#10b981" class="text-left w-full px-md py-xs text-xs font-semibold hover:bg-surface-container-high bg-transparent border-0 cursor-pointer flex items-center gap-xs"><span class="w-3 h-3 rounded-full bg-[#10b981]"></span>초록색</button>
+                            <button type="button" data-color="#f59e0b" class="text-left w-full px-md py-xs text-xs font-semibold hover:bg-surface-container-high bg-transparent border-0 cursor-pointer flex items-center gap-xs"><span class="w-3 h-3 rounded-full bg-[#f59e0b]"></span>주황색</button>
+                            <button type="button" data-color="#6b7280" class="text-left w-full px-md py-xs text-xs font-semibold hover:bg-surface-container-high bg-transparent border-0 cursor-pointer flex items-center gap-xs"><span class="w-3 h-3 rounded-full bg-[#6b7280]"></span>회색</button>
+                        </div>
+                    </div>
+
+                    <div class="w-px h-4 bg-hairline mx-xs"></div>
+
+                    <!-- Lists -->
+                    <button type="button" id="toolbar-list-bullet" title="글머리 기호" class="p-xs rounded text-ink hover:bg-surface-container-high bg-transparent border-0 cursor-pointer flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+                    </button>
+                    <button type="button" id="toolbar-list-numbered" title="번호 매기기" class="p-xs rounded text-ink hover:bg-surface-container-high bg-transparent border-0 cursor-pointer flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[18px]">format_list_numbered</span>
+                    </button>
+
+                    <div class="w-px h-4 bg-hairline mx-xs"></div>
+
+                    <!-- Emojis Dropdown -->
+                    <div class="relative inline-block text-left" id="toolbar-emoji-container">
+                        <button type="button" id="toolbar-emoji-btn" class="flex items-center gap-xs px-xs py-1 rounded text-ink hover:bg-surface-container-high text-xs font-semibold bg-transparent border-0 cursor-pointer" title="이모티콘 삽입">
+                            <span class="material-symbols-outlined text-[18px]">mood</span> 이모지 <span class="material-symbols-outlined text-[10px]">arrow_drop_down</span>
+                        </button>
+                        <div id="toolbar-emoji-menu" class="hidden absolute left-0 mt-xs w-48 bg-surface-container-lowest border border-hairline rounded-lg shadow-card-soft z-50 p-sm grid grid-cols-5 gap-xs">
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="추천">✨</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="빌딩">🏢</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="상가">🏬</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="집">🏠</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="위치">📍</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="전화">📞</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="열쇠">🔑</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="별">⭐</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="알림">📢</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="네잎클로버">🍀</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="서류가방">💼</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="다이아몬드">💎</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="스마일">😊</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="체크">✅</button>
+                            <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="확인">🔎</button>
+                        </div>
+                    </div>
+                </div>
+                <textarea id="content" required rows="12" class="block w-full border-hairline rounded-b-lg rounded-t-none border-t-0 py-2.5 focus:ring-primary focus:border-primary text-sm font-mono bg-surface-container-low" placeholder="마크다운(Markdown) 문법을 사용해 본문을 작성할 수 있습니다.&#10;예:&#10;# 큰 제목&#10;## 소제목&#10;- 리스트 아이템&#10;**굵은 글씨** 등"></textarea>
                 <!-- Attached Images Preview -->
                 <div id="attached-images-section" class="hidden mt-sm p-sm bg-surface-container rounded-lg border border-hairline">
                     <span class="block text-[11px] font-semibold text-muted mb-xs">본문 첨부 사진 목록 ( X 버튼 클릭 시 본문에서 해당 사진 삭제 )</span>
@@ -315,6 +398,80 @@
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     requireAdmin();
+
+    // ----------------------------------------------------
+    // Formatting Helper Toolbar JS Logic
+    // ----------------------------------------------------
+    const textareaForToolbar = document.getElementById('content');
+    
+    function insertAtCursor(before, after = '') {
+        const startPos = textareaForToolbar.selectionStart;
+        const endPos = textareaForToolbar.selectionEnd;
+        const text = textareaForToolbar.value;
+        const selected = text.substring(startPos, endPos);
+        const replacement = before + selected + after;
+        
+        textareaForToolbar.value = text.substring(0, startPos) + replacement + text.substring(endPos);
+        textareaForToolbar.focus();
+        textareaForToolbar.selectionStart = startPos + before.length;
+        textareaForToolbar.selectionEnd = startPos + before.length + selected.length;
+        
+        textareaForToolbar.dispatchEvent(new Event('input', { bubbles: true }));
+        if (typeof updateAttachedImagesPreview === 'function') {
+            updateAttachedImagesPreview();
+        }
+    }
+
+    function setupDropdown(btnId, menuId) {
+        const btn = document.getElementById(btnId);
+        const menu = document.getElementById(menuId);
+        if (!btn || !menu) return;
+        
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.classList.toggle('hidden');
+            document.querySelectorAll('[id^="toolbar-"][id$="-menu"]').forEach(m => {
+                if (m.id !== menuId) m.classList.add('hidden');
+            });
+        });
+    }
+
+    setupDropdown('toolbar-font-size-btn', 'toolbar-font-size-menu');
+    setupDropdown('toolbar-color-btn', 'toolbar-color-menu');
+    setupDropdown('toolbar-emoji-btn', 'toolbar-emoji-menu');
+
+    document.addEventListener('click', () => {
+        document.querySelectorAll('[id^="toolbar-"][id$="-menu"]').forEach(m => m.classList.add('hidden'));
+    });
+
+    document.querySelectorAll('#toolbar-font-size-menu button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const size = btn.getAttribute('data-size');
+            if (size === 'h1') insertAtCursor('# ');
+            else if (size === 'h2') insertAtCursor('## ');
+            else if (size === 'h3') insertAtCursor('### ');
+        });
+    });
+
+    document.querySelectorAll('#toolbar-color-menu button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const color = btn.getAttribute('data-color');
+            insertAtCursor(`<span style="color: ${color};">`, '</span>');
+        });
+    });
+
+    document.querySelectorAll('.emoji-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+            insertAtCursor(btn.innerText);
+        });
+    });
+
+    document.getElementById('toolbar-bold').addEventListener('click', () => insertAtCursor('**', '**'));
+    document.getElementById('toolbar-italic').addEventListener('click', () => insertAtCursor('*', '*'));
+    document.getElementById('toolbar-underline').addEventListener('click', () => insertAtCursor('<u>', '</u>'));
+    document.getElementById('toolbar-strikethrough').addEventListener('click', () => insertAtCursor('~~', '~~'));
+    document.getElementById('toolbar-list-bullet').addEventListener('click', () => insertAtCursor('- '));
+    document.getElementById('toolbar-list-numbered').addEventListener('click', () => insertAtCursor('1. '));
 
     // ----------------------------------------------------
     // Attached Images Preview & Deletion Logic
