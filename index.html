@@ -434,19 +434,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         const latest = maemulPosts.slice(0, 3);
         container.innerHTML = latest.map(post => {
             let summary = '';
-            const featureIdx = post.content ? post.content.indexOf('[매물특징]') : -1;
+            let featureIdx = -1;
+            let matchLength = 0;
+            if (post.content) {
+                const match = post.content.match(/^.*매물\s*특징.*$/m);
+                if (match) {
+                    featureIdx = match.index;
+                    matchLength = match[0].length;
+                }
+            }
             if (featureIdx !== -1) {
-                const afterFeatures = post.content.substring(featureIdx + '[매물특징]'.length);
+                const afterFeatures = post.content.substring(featureIdx + matchLength);
                 const lines = afterFeatures.split('\n');
                 const featureLines = [];
                 for (let line of lines) {
                     const trimmed = line.trim();
-                    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+                    if (trimmed.includes('매물정보') || trimmed.includes('중개') || trimmed.includes('이력') || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
                         break;
                     }
                     if (trimmed) {
                         let cleanLine = trimmed
-                            .replace(/^[oO0\-▶\*\•]\s*/, '')
+                            .replace(/^[oO0\-▶\*\•🔎✅✨⭐]\s*/, '')
                             .replace(/^\s*O\s+/, '')
                             .trim();
                         if (cleanLine) {
