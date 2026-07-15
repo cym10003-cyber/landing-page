@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v14");
+console.log("Antigravity db.js version: 20260715_v15");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v14";
+const APP_VERSION = "20260715_v15";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -294,13 +294,13 @@ function renderMarkdown(src) {
       const src = srcMatch[1].trim();
       if (/^(https?:\/\/|\/)/i.test(src)) {
         const cls = classMatch ? classMatch[1] : 'w-full rounded-xl overflow-hidden shadow-card-soft border border-hairline my-lg';
-        let videoTag = `<video src="${src}"`;
-        if (controls) videoTag += ' controls';
-        if (autoplay) videoTag += ' autoplay';
-        if (loop) videoTag += ' loop';
-        if (muted) videoTag += ' muted';
-        if (playsinline) videoTag += ' playsinline';
-        videoTag += ` class="${cls}"></video>`;
+        let videoTag = `<video src="${src}" controls playsinline webkit-playsinline preload="metadata" class="${cls}" onerror="`;
+        videoTag += `console.error('Video load error:', this.error); `;
+        videoTag += `const errDiv = document.createElement('div'); `;
+        videoTag += `errDiv.style.cssText = 'color: #ba1a1a; background-color: #ffdad6; padding: 12px; border-radius: 8px; font-size: 11px; margin-top: 8px; text-align: center; border: 1px solid #ffb4ab; line-height: 1.4;'; `;
+        videoTag += `errDiv.innerText = '동영상 로딩 실패 (에러 코드: ' + (this.error ? this.error.code : '알수없음') + ') \\n주소: ' + this.src; `;
+        videoTag += `this.parentNode.insertBefore(errDiv, this.nextSibling);`;
+        videoTag += `"></video>`;
         return videoTag;
       }
     }
