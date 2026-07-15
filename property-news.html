@@ -3,7 +3,7 @@
         window.location.replace("https://choi114.com" + window.location.pathname + window.location.search);
     }
     // Force browser to load fresh property-news.html page if version mismatch
-    const currentVersion = '20260715_v2';
+    const currentVersion = '20260715_v3';
     const params = new URLSearchParams(window.location.search);
     if (params.get('v') !== currentVersion) {
         params.set('v', currentVersion);
@@ -186,10 +186,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a id="nav-maemul" class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v2">매물리스트</a>
+<a id="nav-maemul" class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v3">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v2">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a></div>
+<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v3">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -349,10 +349,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a id="mobile-nav-maemul" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v2">매물리스트</a>
+      <a id="mobile-nav-maemul" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v3">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a id="mobile-nav-news" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v2">부동산 소식</a>
+      <a id="mobile-nav-news" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v3">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
     </nav>
     <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
@@ -361,7 +361,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v2"></script>
+<script src="db.js?v=20260715_v3"></script>
 <script>
 let allPosts = [];
 let selectedCategory = 'ALL';
@@ -654,9 +654,7 @@ function renderList() {
                 }
                 if (trimmed) {
                     let cleanLine = trimmed
-                        .replace(/^[oO0\-▶\*\•🔎✅✨⭐]\s*/, '')
-                        .replace(/^\s*O\s+/, '')
-                        .replace(/\uFFFD/g, '')
+                        .replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s.,()\[\]{}~_\-+\*&%!?:;\/\\'"~`·•]/g, '')
                         .trim();
                     if (cleanLine) {
                         featureLines.push(cleanLine);
@@ -667,7 +665,7 @@ function renderList() {
                 }
             }
             if (featureLines.length > 0) {
-                textSummary = featureLines.map(line => '• ' + line).join(' ').replace(/\uFFFD/g, '');
+                textSummary = featureLines.map(line => '• ' + line).join(' ');
             }
         }
         if (!textSummary) {
@@ -676,7 +674,11 @@ function renderList() {
             if (boilerplateIdx !== -1) {
                 textOnly = textOnly.substring(0, boilerplateIdx);
             }
-            textSummary = markdownToText(textOnly).replace(/\s+/g, ' ').replace(/\uFFFD/g, '').trim().slice(0, 100) + '...';
+            textSummary = markdownToText(textOnly)
+                .replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s.,()\[\]{}~_\-+\*&%!?:;\/\\'"~`·•]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .slice(0, 100) + '...';
         }
         const image = getFirstImage(post.content) || getFallbackImage(post.id);
         return `
