@@ -87,6 +87,18 @@ export default function handler(req, res) {
               /<meta name="twitter:image" content="https:\/\/choi114.com\/og_home.jpg"\s*\/?>/,
               `<meta name="twitter:image" content="${imageEscaped}" />`
             );
+
+          // Render basic markdown to HTML for SEO body indexing
+          let bodyHtml = (post.content || '')
+            .split('\n')
+            .map(line => {
+              const trimmed = line.trim();
+              if (!trimmed) return '';
+              return `<p style="margin-bottom: 12px; line-height: 1.6;">${trimmed.replace(/[#*`_-]/g, '')}</p>`;
+            })
+            .join('\n');
+
+          html = html.replace('내용을 불러오는 중입니다...', bodyHtml);
         }
       }
     } catch (err) {
