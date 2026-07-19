@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v16");
+console.log("Antigravity db.js version: 20260715_v17");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v16";
+const APP_VERSION = "20260715_v17";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
