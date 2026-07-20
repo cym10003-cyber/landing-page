@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v20");
+console.log("Antigravity db.js version: 20260715_v21");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v20";
+const APP_VERSION = "20260715_v21";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -42,6 +42,12 @@ async function getPosts() {
   const config = await loadConfig();
   const hasGit = config.github_token && config.github_owner && config.github_repo;
 
+  let cachedPosts = [];
+  try {
+    const cached = localStorage.getItem('posts_cache');
+    if (cached) cachedPosts = JSON.parse(cached);
+  } catch(e) {}
+
   if (hasGit) {
     try {
       const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}`;
@@ -63,10 +69,25 @@ async function getPosts() {
           bytes[i] = binaryString.charCodeAt(i);
         }
         const content = new TextDecoder('utf-8').decode(bytes);
-        const posts = JSON.parse(content);
-        localStorage.setItem('posts_cache', JSON.stringify(posts));
-        _cachedPosts = posts;
-        return posts;
+        const remotePosts = JSON.parse(content);
+
+        // Merge any locally saved post created in the last 10 minutes that GitHub API hasn't propagated yet
+        if (Array.isArray(cachedPosts) && cachedPosts.length > 0) {
+          const remoteIds = new Set(remotePosts.map(p => String(p.id)));
+          const now = Date.now();
+          for (let cp of cachedPosts) {
+            if (cp && cp.id && !remoteIds.has(String(cp.id))) {
+              const postAge = now - Number(cp.id);
+              if (!isNaN(postAge) && postAge < 600000) {
+                remotePosts.unshift(cp);
+              }
+            }
+          }
+        }
+
+        localStorage.setItem('posts_cache', JSON.stringify(remotePosts));
+        _cachedPosts = remotePosts;
+        return remotePosts;
       }
     } catch (e) {
       console.error("Failed to fetch posts from GitHub:", e);
@@ -76,21 +97,30 @@ async function getPosts() {
   try {
     const res = await fetch(config.data_file_path + '?t=' + Date.now());
     if (res.ok) {
-      const posts = await res.json();
-      localStorage.setItem('posts_cache', JSON.stringify(posts));
-      _cachedPosts = posts;
-      return posts;
+      const localFilePosts = await res.json();
+      if (Array.isArray(cachedPosts) && cachedPosts.length > 0) {
+        const localIds = new Set(localFilePosts.map(p => String(p.id)));
+        const now = Date.now();
+        for (let cp of cachedPosts) {
+          if (cp && cp.id && !localIds.has(String(cp.id))) {
+            const postAge = now - Number(cp.id);
+            if (!isNaN(postAge) && postAge < 600000) {
+              localFilePosts.unshift(cp);
+            }
+          }
+        }
+      }
+      localStorage.setItem('posts_cache', JSON.stringify(localFilePosts));
+      _cachedPosts = localFilePosts;
+      return localFilePosts;
     }
   } catch (e) {
     console.error("Failed to fetch local posts.json:", e);
   }
 
-  const cached = localStorage.getItem('posts_cache');
-  if (cached) {
-    try {
-      _cachedPosts = JSON.parse(cached);
-      return _cachedPosts;
-    } catch(e) {}
+  if (cachedPosts.length > 0) {
+    _cachedPosts = cachedPosts;
+    return _cachedPosts;
   }
 
   _cachedPosts = [];
