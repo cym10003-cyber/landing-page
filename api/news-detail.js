@@ -202,17 +202,42 @@ export default function handler(req, res) {
               `<meta name="twitter:image" content="${imageEscaped}" />`
             );
 
-          // Render basic markdown to HTML for SEO body indexing
-          let bodyHtml = (post.content || '')
-            .split('\n')
-            .map(line => {
-              const trimmed = line.trim();
-              if (!trimmed) return '';
-              return `<p style="margin-bottom: 12px; line-height: 1.6;">${trimmed.replace(/[#*`_-]/g, '')}</p>`;
-            })
-            .join('\n');
+          // Parse content into pre-rendered images HTML and clean text HTML (prevents raw markdown link flashing)
+          const lines = (post.content || '').split('\n');
+          const preImages = [];
+          const preText = [];
 
-          html = html.replace('내용을 불러오는 중입니다...', bodyHtml);
+          for (let line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed) continue;
+
+            const mImg = trimmed.match(/!\[.*?\]\((.*?)\)/);
+            if (mImg) {
+              const imgUrl = mImg[1];
+              preImages.push(`<img src="${imgUrl}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" loading="lazy" alt="매물 사진" />`);
+            } else {
+              let cleanText = trimmed
+                .replace(/!\[.*?\]\(.*?\)/g, '')
+                .replace(/\[(.*?)\]\(.*?\)/g, '$1')
+                .replace(/[#*`_-]/g, '')
+                .trim();
+              if (cleanText) {
+                preText.push(`<p style="margin-bottom: 12px; line-height: 1.6;">${cleanText}</p>`);
+              }
+            }
+          }
+
+          const preImagesHtml = preImages.join('\n');
+          const preTextHtml = preText.join('\n');
+
+          if (preImagesHtml) {
+            html = html.replace(
+              '<div id="post-images" class="text-ink leading-relaxed prose prose-blue max-w-none text-base hidden">',
+              `<div id="post-images" class="text-ink leading-relaxed prose prose-blue max-w-none text-base">${preImagesHtml}`
+            );
+          }
+
+          html = html.replace('내용을 불러오는 중입니다...', preTextHtml);
         }
       }
     } catch (err) {
