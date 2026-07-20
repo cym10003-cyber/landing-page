@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v19");
+console.log("Antigravity db.js version: 20260715_v20");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v19";
+const APP_VERSION = "20260715_v20";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -141,61 +141,63 @@ async function savePost(postData) {
   const hasGit = config.github_token && config.github_owner && config.github_repo;
   if (hasGit) {
     const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}`;
-    const getUrl = `${url}?t=${Date.now()}`;
-    let sha = null;
-    let getStatus = 0;
-    let getResponseInfo = "";
-    
-    try {
-      const headers = {
-        'Accept': 'application/vnd.github.v3+json'
-      };
-      if (config.github_token) {
-        headers['Authorization'] = `token ${config.github_token}`;
-      }
-      let getRes = await fetch(getUrl, { headers });
-      
-      getStatus = getRes.status;
-      if (getRes.ok) {
-        const getData = await getRes.json();
-        if (Array.isArray(getData)) {
-          getResponseInfo = "directory_list";
+    const headers = {
+      'Accept': 'application/vnd.github.v3+json',
+      'Authorization': `token ${config.github_token}`
+    };
+
+    let lastErr = null;
+    let savedToGit = false;
+
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        // Step 1: GET current file SHA
+        const getUrl = `${url}?t=${Date.now()}`;
+        let sha = null;
+        const getRes = await fetch(getUrl, { headers });
+        if (getRes.ok) {
+          const getData = await getRes.json();
+          if (!Array.isArray(getData) && getData.sha) {
+            sha = getData.sha;
+          }
+        }
+
+        // Step 2: PUT updated posts.json
+        const base64Content = btoa(unescape(encodeURIComponent(postsStr)));
+        const bodyObj = {
+          message: postData.id ? `feat: update post ${postData.id}` : `feat: add new post`,
+          content: base64Content,
+          branch: 'main'
+        };
+        if (sha) bodyObj.sha = sha;
+
+        const putRes = await fetch(url, {
+          method: 'PUT',
+          headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(bodyObj)
+        });
+
+        if (putRes.ok) {
+          savedToGit = true;
+          break;
         } else {
-          sha = getData.sha;
-          getResponseInfo = `file_sha_${sha ? "present" : "absent"}_keys_${Object.keys(getData).join(",")}`;
+          const errorMsg = await putRes.text();
+          lastErr = new Error(`GitHub Save Failed (${putRes.status}): ${errorMsg}`);
         }
-      } else {
-        getResponseInfo = `status_${getRes.status}`;
-        if (getRes.status !== 404) {
-          throw new Error(`Failed to fetch file metadata (Status: ${getRes.status})`);
-        }
+      } catch (err) {
+        lastErr = err;
       }
-    } catch (e) {
-      throw new Error(`GitHub Connection Error (SHA Fetch): ${e.message} (URL: ${getUrl})`);
+
+      if (attempt < 3) {
+        await new Promise(r => setTimeout(r, 1000));
+      }
     }
 
-    const base64Content = btoa(unescape(encodeURIComponent(postsStr)));
-    
-    const body = {
-      message: postData.id ? `feat: update post ${postData.id}` : `feat: add new post`,
-      content: base64Content,
-      branch: 'main'
-    };
-    if (sha) body.sha = sha;
-
-    const putRes = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `token ${config.github_token}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/vnd.github.v3+json'
-      },
-      body: JSON.stringify(body)
-    });
-
-    if (!putRes.ok) {
-      const errorMsg = await putRes.text();
-      throw new Error(`GitHub Save Failed: ${putRes.status} ${errorMsg} (Diagnostics: GET_status=${getStatus}, GET_info=${getResponseInfo}, path=${config.data_file_path}, owner/repo=${config.github_owner}/${config.github_repo})`);
+    if (!savedToGit) {
+      console.warn("GitHub save failed after 3 attempts, saved to local cache:", lastErr);
     }
   }
 
