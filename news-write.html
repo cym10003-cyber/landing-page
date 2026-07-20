@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v17">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v18">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v17">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
+<a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v18">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -382,10 +382,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v17">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v18">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v17">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v18">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
     </nav>
     <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
@@ -394,7 +394,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v17"></script>
+<script src="db.js?v=20260715_v18"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     requireAdmin();
@@ -750,25 +750,31 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (uploadSpinner) {
                         uploadSpinner.innerText = `압축 및 업로드 중 (${uploadedCount + 1}/${files.length})...`;
                     }
-                    const compressedFile = await compressImage(file);
-                    const url = await uploadImageFile(compressedFile);
-                    uploadedCount++;
-                    results.push({ name: file.name.split('.')[0], url });
+                    try {
+                        const compressedFile = await compressImage(file, 1200, 0.75);
+                        const url = await uploadImageFile(compressedFile);
+                        uploadedCount++;
+                        results.push({ name: file.name.split('.')[0], url });
+                    } catch (singleErr) {
+                        console.error("Single image upload failed:", singleErr);
+                    }
                 }
 
-                const textarea = document.getElementById('content');
-                const start = textarea.selectionStart;
-                const end = textarea.selectionEnd;
-                const text = textarea.value;
-                const imageMarkdown = results.map(res => `![${res.name}](${res.url})`).join('\n\n') + '\n\n';
+                if (results.length > 0) {
+                    const textarea = document.getElementById('content');
+                    const start = textarea.selectionStart;
+                    const end = textarea.selectionEnd;
+                    const text = textarea.value;
+                    const imageMarkdown = results.map(res => `![${res.name}](${res.url})`).join('\n\n') + '\n\n';
 
-                textarea.value = text.substring(0, start) + '\n\n' + imageMarkdown + text.substring(end);
-                textarea.dispatchEvent(new Event('input'));
-                textarea.focus();
-                textarea.selectionStart = textarea.selectionEnd = start + imageMarkdown.length + 2;
+                    textarea.value = text.substring(0, start) + '\n\n' + imageMarkdown + text.substring(end);
+                    textarea.dispatchEvent(new Event('input'));
+                    textarea.focus();
+                    textarea.selectionStart = textarea.selectionEnd = start + imageMarkdown.length + 2;
+                }
             } catch (err) {
                 console.error(err);
-                alert("일부 사진 업로드 실패: " + err.message);
+                alert("일부 사진 처리 중 경고: " + err.message);
             } finally {
                 uploadBtn.disabled = false;
                 uploadBtn.style.opacity = '1';
