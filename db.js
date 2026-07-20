@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v18");
+console.log("Antigravity db.js version: 20260715_v19");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v18";
+const APP_VERSION = "20260715_v19";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -590,46 +590,58 @@ async function uploadVideoFile(file) {
       const dataUrl = reader.result;
       
       if (hasGit) {
-        try {
-          const base64Content = dataUrl.split(',')[1];
-          const rand = Math.random().toString(36).substring(2, 6);
-          const filename = `post_vid_${Date.now()}_${rand}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-          const url = `https://api.github.com/repos/${config.github_owner}/landing-page-assets/contents/videos/${filename}`;
-          
-          const body = {
-            message: `feat: upload video ${filename}`,
-            content: base64Content,
-            branch: 'main'
-          };
-          
-          const putRes = await fetch(url, {
-            method: 'PUT',
-            headers: {
-              'Authorization': `token ${config.github_token}`,
-              'Content-Type': 'application/json',
-              'Accept': 'application/vnd.github.v3+json'
-            },
-            body: JSON.stringify(body)
-          });
-          
-          if (!putRes.ok) {
-            const errorMsg = await putRes.text();
-            throw new Error(`GitHub Upload Failed: ${putRes.status} ${errorMsg}`);
+        const base64Content = dataUrl.split(',')[1];
+        const rand = Math.random().toString(36).substring(2, 6);
+        const safeName = (file.name || 'video.mp4').replace(/[^a-zA-Z0-9.]/g, '_');
+        const filename = `post_vid_${Date.now()}_${rand}_${safeName}`;
+        const url = `https://api.github.com/repos/${config.github_owner}/landing-page-assets/contents/videos/${filename}`;
+        
+        const bodyStr = JSON.stringify({
+          message: `feat: upload video ${filename}`,
+          content: base64Content,
+          branch: 'main'
+        });
+
+        const headers = {
+          'Authorization': `token ${config.github_token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        };
+
+        let lastErr = null;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            const putRes = await fetch(url, {
+              method: 'PUT',
+              headers: headers,
+              body: bodyStr
+            });
+            
+            if (putRes.ok) {
+              const result = await putRes.json();
+              const commitSha = (result.commit && result.commit.sha) ? result.commit.sha : 'main';
+              const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@${commitSha}/videos/${filename}`;
+              return resolve(rawUrl);
+            } else {
+              const errorMsg = await putRes.text();
+              lastErr = new Error(`GitHub Video Upload Failed (${putRes.status}): ${errorMsg}`);
+            }
+          } catch (err) {
+            lastErr = err;
           }
-          
-          const result = await putRes.json();
-          const commitSha = (result.commit && result.commit.sha) ? result.commit.sha : 'main';
-          const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@${commitSha}/videos/${filename}`;
-          resolve(rawUrl);
-        } catch (err) {
-          reject(err);
+          if (attempt < 3) {
+            await new Promise(r => setTimeout(r, 1000));
+          }
         }
+
+        console.warn('GitHub video upload failed after 3 attempts, using resilient base64 fallback:', lastErr);
+        resolve(dataUrl);
       } else {
         // Local Fallback: return base64 Data URL directly
         resolve(dataUrl);
       }
     };
-    reader.onerror = (error) => reject(error);
+    reader.onerror = (error) => resolve(URL.createObjectURL(file));
     reader.readAsDataURL(file);
   });
 }
