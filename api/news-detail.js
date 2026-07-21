@@ -63,17 +63,29 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   if (/매매/i.test(title) || /매매/i.test(content) || sale) trade = '매매';
   const fullType = `${pType} ${trade}`;
 
-  // Format Title: [매물종류] [지역] - [가격] | 최가네부동산
-  let metaTitle = `${fullType} ${cleanLoc}`;
+  // Target Keyword placement at the very front for maximum Search Ranking: "대구상가임대", "대구사무실임대", etc.
+  let targetKw = '대구상가임대';
+  if (/사무실/i.test(title) || /사무실/i.test(content)) {
+    targetKw = trade === '매매' ? '대구사무실매매' : '대구사무실임대';
+  } else if (/공장/i.test(title) || /공장/i.test(content)) {
+    targetKw = trade === '매매' ? '대구공장매매' : '대구공장임대';
+  } else if (/병의원|병원|의원/i.test(title) || /병의원|병원|의원/i.test(content)) {
+    targetKw = trade === '매매' ? '대구병원매매' : '대구병의원임대';
+  } else {
+    targetKw = trade === '매매' ? '대구상가매매' : '대구상가임대';
+  }
+
+  // Format Title: [타겟키워드] | [지역] [매물종류] - [가격] | 최가네부동산
+  let metaTitle = `${targetKw} | ${cleanLoc} ${fullType}`;
   if (priceStr) metaTitle += ` - ${priceStr}`;
   metaTitle += ' | 최가네부동산';
 
   // Format Description
-  const descParts = [`${cleanLoc} ${fullType}`];
+  const descParts = [`${targetKw}`, `${cleanLoc} ${fullType}`];
   if (area) descParts.push(`면적: ${area}`);
   if (priceStr) descParts.push(`가격: ${priceStr}`);
 
-  const mFeat = [...content.matchAll(/🔎\s*([^\n]+)/g)].map(m => m[1].trim());
+  const mFeat = [...content.matchAll(/(?:🔎|O|▶)\s*([^\n]+)/g)].map(m => m[1].trim());
   if (mFeat.length > 0) descParts.push(mFeat.slice(0, 2).join(', '));
 
   const metaDesc = descParts.join(' | ') + ' | 최가네부동산공인중개사사무소 (대표소장 최이명 010-3548-4000)';
