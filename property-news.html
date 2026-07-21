@@ -3,7 +3,7 @@
         window.location.replace("https://choi114.com" + window.location.pathname + window.location.search);
     }
     // Force browser to load fresh property-news.html page if version mismatch
-    const currentVersion = '20260715_v33';
+    const currentVersion = '20260715_v34';
     const params = new URLSearchParams(window.location.search);
     if (params.get('v') !== currentVersion) {
         params.set('v', currentVersion);
@@ -186,10 +186,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a id="nav-maemul" class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v33">매물리스트</a>
+<a id="nav-maemul" class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v34">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v33">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a></div>
+<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v34">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -252,21 +252,30 @@
 <!-- News Content Area -->
 <div id="news-content-area" class="col-span-12 md:col-span-9 flex flex-col gap-lg">
 <div class="flex flex-col sm:flex-row gap-md justify-between items-center bg-surface-container-lowest p-md rounded-xl border border-hairline shadow-sm">
-    <div class="flex flex-row gap-sm items-center w-full sm:max-w-md">
-        <div class="relative flex-1">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span class="material-symbols-outlined text-muted text-[20px]">search</span>
+    <div class="flex flex-col gap-xs w-full max-w-xl">
+        <div class="flex flex-row gap-sm items-center w-full">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="material-symbols-outlined text-muted text-[20px]">search</span>
+                </div>
+                <input type="text" id="search-input" class="focus:ring-primary focus:border-primary block w-full pl-10 pr-12 text-sm border-hairline rounded-lg py-2.5 bg-surface-container-low" placeholder="동 이름, 매물번호, 업종, 키워드로 검색...">
+                <button id="search-button" class="absolute inset-y-0 right-0 pr-4 flex items-center text-primary dark:text-primary-bright hover:text-blue-mid border-0 bg-transparent cursor-pointer font-bold text-sm z-10">
+                    검색
+                </button>
             </div>
-            <input type="text" id="search-input" class="focus:ring-primary focus:border-primary block w-full pl-10 pr-12 text-sm border-hairline rounded-lg py-2.5 bg-surface-container-low" placeholder="동 이름, 매물번호, 업종 검색 (예: 범어동, 5201, 식당)">
-            <button id="search-button" class="absolute inset-y-0 right-0 pr-4 flex items-center text-primary dark:text-primary-bright hover:text-blue-mid border-0 bg-transparent cursor-pointer font-bold text-sm z-10">
-                검색
-            </button>
+            <!-- 지도보기 (PC/모바일 공통) -->
+            <a href="map.html" class="flex items-center justify-center gap-xs bg-primary text-white px-md py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-mid transition-all shadow-sm whitespace-nowrap">
+                <span class="material-symbols-outlined text-[18px]">map</span>
+                지도보기
+            </a>
         </div>
-        <!-- 지도보기 (PC/모바일 공통) -->
-        <a href="map.html" class="flex items-center justify-center gap-xs bg-primary text-white px-md py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-mid transition-all shadow-sm whitespace-nowrap">
-            <span class="material-symbols-outlined text-[18px]">map</span>
-            지도보기
-        </a>
+        <div class="text-[12px] text-muted flex flex-wrap gap-x-2 gap-y-1 items-center px-1 pt-0.5">
+            <span class="font-bold text-primary dark:text-primary-bright">💡 검색 예시:</span>
+            <span class="bg-surface-container px-2 py-0.5 rounded text-[11px]">동 이름 (범어동, 월성동)</span>
+            <span class="bg-surface-container px-2 py-0.5 rounded text-[11px]">매물번호 (5201, 1667)</span>
+            <span class="bg-surface-container px-2 py-0.5 rounded text-[11px]">업종 (식당, 사무실)</span>
+            <span class="bg-surface-container px-2 py-0.5 rounded text-[11px]">특징 (무권리, 주차)</span>
+        </div>
     </div>
     <div id="admin-actions" class="hidden w-full sm:w-auto">
         <a href="news-write.html" class="bg-primary-container text-white px-lg py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-mid transition-all flex items-center justify-center gap-sm shadow-sm w-full sm:w-auto">
@@ -349,10 +358,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a id="mobile-nav-maemul" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v33">매물리스트</a>
+      <a id="mobile-nav-maemul" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v34">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a id="mobile-nav-news" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v33">부동산 소식</a>
+      <a id="mobile-nav-news" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v34">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
     </nav>
     <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
@@ -361,7 +370,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v33"></script>
+<script src="db.js?v=20260715_v34"></script>
 <script>
 let allPosts = [];
 let selectedCategory = 'ALL';
