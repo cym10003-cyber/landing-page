@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v43">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v44">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v43">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v44">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -288,10 +288,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v43">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v44">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v43">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v44">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
     </nav>
     <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
@@ -300,7 +300,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v43"></script>
+<script src="db.js?v=20260715_v44"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -346,7 +346,53 @@ document.addEventListener('DOMContentLoaded', async () => {
             sessionStorage.removeItem('isAdmin');
             window.location.reload();
         };
+    } else {
+        document.getElementById('login-view').classList.remove('hidden');
+        
+        document.getElementById('login-form').onsubmit = (e) => {
+            e.preventDefault();
+            const passwordInput = document.getElementById('password').value;
+            const errorDiv = document.getElementById('login-error');
+            errorDiv.classList.add('hidden');
+
+            if (passwordInput === config.admin_password) {
+                sessionStorage.setItem('isAdmin', 'true');
+                window.location.reload();
+            } else {
+                errorDiv.innerText = "비밀번호가 올바르지 않습니다.";
+                errorDiv.classList.remove('hidden');
+            }
+        };
     }
+
+    // Mobile Drawer Toggle
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const drawer = document.getElementById('mobile-drawer');
+    const drawerClose = document.getElementById('mobile-drawer-close');
+    const drawerContent = drawer ? drawer.querySelector('.transform') : null;
+
+    if (toggleBtn && drawer && drawerClose && drawerContent) {
+      const openDrawer = () => {
+        drawer.classList.remove('hidden');
+        setTimeout(() => {
+          drawer.classList.remove('opacity-0');
+          drawerContent.classList.remove('translate-x-full');
+        }, 10);
+      };
+      const closeDrawer = () => {
+        drawer.classList.add('opacity-0');
+        drawerContent.classList.add('translate-x-full');
+        setTimeout(() => {
+          drawer.classList.add('hidden');
+        }, 300);
+      };
+      toggleBtn.addEventListener('click', openDrawer);
+      drawerClose.addEventListener('click', closeDrawer);
+      drawer.addEventListener('click', (e) => {
+        if (e.target === drawer) closeDrawer();
+      });
+    }
+});
 
 async function renderAnalyticsView() {
     const summary = getAnalyticsSummary();
@@ -427,52 +473,7 @@ async function renderAnalyticsView() {
             `;
         }).join('');
     }
-} else {
-        document.getElementById('login-view').classList.remove('hidden');
-        
-        document.getElementById('login-form').onsubmit = (e) => {
-            e.preventDefault();
-            const passwordInput = document.getElementById('password').value;
-            const errorDiv = document.getElementById('login-error');
-            errorDiv.classList.add('hidden');
-
-            if (passwordInput === config.admin_password) {
-                sessionStorage.setItem('isAdmin', 'true');
-                window.location.reload();
-            } else {
-                errorDiv.innerText = "비밀번호가 올바르지 않습니다.";
-                errorDiv.classList.remove('hidden');
-            }
-        };
-    }
-    // Mobile Drawer Toggle
-    const toggleBtn = document.getElementById('mobile-menu-toggle');
-    const drawer = document.getElementById('mobile-drawer');
-    const drawerClose = document.getElementById('mobile-drawer-close');
-    const drawerContent = drawer ? drawer.querySelector('.transform') : null;
-
-    if (toggleBtn && drawer && drawerClose && drawerContent) {
-      const openDrawer = () => {
-        drawer.classList.remove('hidden');
-        setTimeout(() => {
-          drawer.classList.remove('opacity-0');
-          drawerContent.classList.remove('translate-x-full');
-        }, 10);
-      };
-      const closeDrawer = () => {
-        drawer.classList.add('opacity-0');
-        drawerContent.classList.add('translate-x-full');
-        setTimeout(() => {
-          drawer.classList.add('hidden');
-        }, 300);
-      };
-      toggleBtn.addEventListener('click', openDrawer);
-      drawerClose.addEventListener('click', closeDrawer);
-      drawer.addEventListener('click', (e) => {
-        if (e.target === drawer) closeDrawer();
-      });
-    }
-});
+}
 
 async function loadDashboardList() {
     const tbody = document.getElementById('posts-tbody');
