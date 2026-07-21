@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html><html lang="ko"><head><script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script><script defer src="/_vercel/insights/script.js"></script><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>관리자 페이지 - 최가네부동산공인중개사사무소</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+<!DOCTYPE html><html lang="ko"><head><script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script><script defer src="/_vercel/insights/script.js"></script><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>관리자 페이지 - 최가네부동산공인중개사사무소</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v42">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v43">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v42">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v43">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -145,8 +145,8 @@
     <div id="dashboard-view" class="hidden flex flex-col gap-lg">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md border-b border-hairline pb-lg">
             <div>
-                <h1 class="font-subsection-h3 text-2xl text-ink font-bold">게시글 관리 대시보드</h1>
-                <p class="text-muted text-sm mt-xs">등록된 부동산 소식 및 뉴스 목록을 관리합니다.</p>
+                <h1 class="font-subsection-h3 text-2xl text-ink font-bold">최가네부동산 통합 대시보드</h1>
+                <p class="text-muted text-sm mt-xs">등록된 매물 관리 및 손님 방문/검색어 실시간 데이터 분석</p>
             </div>
             <div class="flex gap-sm w-full sm:w-auto">
                 <a href="news-write.html" class="flex-1 sm:flex-initial bg-primary-container text-white px-lg py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-mid transition-all flex items-center justify-center gap-xs shadow-sm min-h-[44px]">
@@ -155,7 +155,19 @@
                 <button id="logout-btn" class="flex-1 sm:flex-initial bg-surface-container-high hover:bg-surface-dim text-ink px-lg py-2.5 rounded-lg text-sm font-semibold transition-all min-h-[44px]">로그아웃</button>
             </div>
         </div>
-        <div class="bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline overflow-hidden">
+
+        <!-- Dashboard Navigation Tabs -->
+        <div class="flex border-b border-hairline gap-md">
+            <button id="tab-posts-btn" class="pb-sm font-bold border-b-2 border-primary text-primary flex items-center gap-xs cursor-pointer text-sm md:text-base">
+                <span class="material-symbols-outlined text-[18px]">article</span> 게시글 관리
+            </button>
+            <button id="tab-analytics-btn" class="pb-sm font-semibold text-muted hover:text-ink flex items-center gap-xs cursor-pointer text-sm md:text-base">
+                <span class="material-symbols-outlined text-[18px]">analytics</span> 📊 방문자 & 검색어 분석
+            </button>
+        </div>
+
+        <!-- Tab 1: Posts Management -->
+        <div id="tab-posts-content" class="bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm text-ink border-collapse">
                     <thead class="bg-surface-container text-muted border-b border-hairline font-semibold text-xs uppercase tracking-wider">
@@ -174,6 +186,73 @@
             <div id="empty-dashboard" class="hidden py-xxl text-center border-t border-hairline">
                 <span class="material-symbols-outlined text-4xl text-muted mb-md">folder_open</span>
                 <p class="text-muted text-sm">작성된 게시글이 없습니다.</p>
+            </div>
+        </div>
+
+        <!-- Tab 2: Analytics & Loggings -->
+        <div id="tab-analytics-content" class="hidden flex flex-col gap-lg">
+            <!-- Analytics Summary KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-md">
+                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                    <span class="text-xs font-semibold text-muted mb-xs">총 수집 검색 횟수</span>
+                    <span id="stat-total-searches" class="text-3xl font-bold text-primary">0회</span>
+                </div>
+                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                    <span class="text-xs font-semibold text-muted mb-xs">📱 모바일 접속 비율</span>
+                    <span id="stat-mobile-pct" class="text-3xl font-bold text-ink">0%</span>
+                </div>
+                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                    <span class="text-xs font-semibold text-muted mb-xs">💻 PC 접속 비율</span>
+                    <span id="stat-desktop-pct" class="text-3xl font-bold text-ink">0%</span>
+                </div>
+            </div>
+
+            <!-- Two-Column Grid: Top Search Queries & Top Viewed Listings -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+                <!-- Top 10 Search Queries Card -->
+                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                    <h3 class="font-bold text-lg text-ink mb-md flex items-center gap-xs">
+                        <span class="material-symbols-outlined text-primary">search</span> 손님들의 인기 검색어 TOP 10
+                    </h3>
+                    <div id="top-queries-list" class="space-y-sm">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Top 10 Viewed Listings Card -->
+                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                    <h3 class="font-bold text-lg text-ink mb-md flex items-center gap-xs">
+                        <span class="material-symbols-outlined text-primary">visibility</span> 가장 많이 본 인기 매물 TOP 10
+                    </h3>
+                    <div id="top-views-list" class="space-y-sm">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Activity Log Table -->
+            <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                <div class="flex justify-between items-center mb-md">
+                    <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
+                        <span class="material-symbols-outlined text-primary">history</span> 최근 실시간 손님 검색 로그
+                    </h3>
+                    <button id="clear-logs-btn" class="bg-error-container hover:bg-error/20 text-error text-xs px-3 py-1.5 rounded font-semibold transition-all flex items-center gap-xs cursor-pointer">
+                        <span class="material-symbols-outlined text-[14px]">delete</span> 로그 초기화
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-ink border-collapse">
+                        <thead class="bg-surface-container text-muted border-b border-hairline font-semibold text-xs uppercase">
+                            <tr>
+                                <th class="px-md py-3 w-44">시각</th>
+                                <th class="px-md py-3 w-28 text-center">기기</th>
+                                <th class="px-md py-3">검색어 키워드</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-tbody" class="divide-y divide-hairline">
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -209,10 +288,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v42">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v43">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v42">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v43">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
     </nav>
     <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
@@ -221,7 +300,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v42"></script>
+<script src="db.js?v=20260715_v43"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -230,11 +309,125 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('dashboard-view').classList.remove('hidden');
         loadDashboardList();
         
+        // Tab Switching Handlers
+        const tabPostsBtn = document.getElementById('tab-posts-btn');
+        const tabAnalyticsBtn = document.getElementById('tab-analytics-btn');
+        const tabPostsContent = document.getElementById('tab-posts-content');
+        const tabAnalyticsContent = document.getElementById('tab-analytics-content');
+
+        if (tabPostsBtn && tabAnalyticsBtn && tabPostsContent && tabAnalyticsContent) {
+            tabPostsBtn.addEventListener('click', () => {
+                tabPostsBtn.className = 'pb-sm font-bold border-b-2 border-primary text-primary flex items-center gap-xs cursor-pointer text-sm md:text-base';
+                tabAnalyticsBtn.className = 'pb-sm font-semibold text-muted hover:text-ink flex items-center gap-xs cursor-pointer text-sm md:text-base';
+                tabPostsContent.classList.remove('hidden');
+                tabAnalyticsContent.classList.add('hidden');
+            });
+
+            tabAnalyticsBtn.addEventListener('click', () => {
+                tabAnalyticsBtn.className = 'pb-sm font-bold border-b-2 border-primary text-primary flex items-center gap-xs cursor-pointer text-sm md:text-base';
+                tabPostsBtn.className = 'pb-sm font-semibold text-muted hover:text-ink flex items-center gap-xs cursor-pointer text-sm md:text-base';
+                tabAnalyticsContent.classList.remove('hidden');
+                tabPostsContent.classList.add('hidden');
+                renderAnalyticsView();
+            });
+        }
+
+        const clearLogsBtn = document.getElementById('clear-logs-btn');
+        if (clearLogsBtn) {
+            clearLogsBtn.addEventListener('click', () => {
+                if (confirm("모든 실시간 검색어 및 매물 조회 로그를 삭제하시겠습니까?")) {
+                    clearAnalyticsLogs();
+                    renderAnalyticsView();
+                }
+            });
+        }
+        
         document.getElementById('logout-btn').onclick = () => {
             sessionStorage.removeItem('isAdmin');
             window.location.reload();
         };
+    }
+
+async function renderAnalyticsView() {
+    const summary = getAnalyticsSummary();
+    
+    // KPI
+    document.getElementById('stat-total-searches').textContent = summary.totalSearches + '회';
+    const totalDev = (summary.mobileCount + summary.desktopCount) || 1;
+    const mobPct = Math.round((summary.mobileCount / totalDev) * 100);
+    const deskPct = 100 - mobPct;
+    document.getElementById('stat-mobile-pct').textContent = (summary.totalSearches > 0 ? mobPct : 0) + '%';
+    document.getElementById('stat-desktop-pct').textContent = (summary.totalSearches > 0 ? deskPct : 0) + '%';
+
+    // Top Queries List
+    const qContainer = document.getElementById('top-queries-list');
+    if (!summary.topQueries || summary.topQueries.length === 0) {
+        qContainer.innerHTML = '<div class="text-center py-md text-muted text-sm">아직 수집된 검색어가 없습니다. (손님이 검색창 이용 시 자동 누적)</div>';
     } else {
+        const maxCount = summary.topQueries[0].count || 1;
+        qContainer.innerHTML = summary.topQueries.map((q, idx) => {
+            const badgeClass = idx === 0 ? 'bg-amber-500 text-white' : idx === 1 ? 'bg-slate-400 text-white' : idx === 2 ? 'bg-amber-700 text-white' : 'bg-surface-container text-muted';
+            const pct = Math.round((q.count / maxCount) * 100);
+            return `
+                <div class="flex flex-col gap-1 text-sm border-b border-hairline/50 pb-xs">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-xs">
+                            <span class="w-5 h-5 rounded-full ${badgeClass} text-[11px] font-bold flex items-center justify-center">${idx + 1}</span>
+                            <span class="font-bold text-ink">${q.query}</span>
+                        </div>
+                        <span class="text-xs font-semibold text-primary">${q.count}회</span>
+                    </div>
+                    <div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-primary h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Top Views List
+    const vContainer = document.getElementById('top-views-list');
+    if (!summary.topViews || summary.topViews.length === 0) {
+        vContainer.innerHTML = '<div class="text-center py-md text-muted text-sm">아직 수집된 매물 조회 기록이 없습니다.</div>';
+    } else {
+        const maxView = summary.topViews[0].count || 1;
+        vContainer.innerHTML = summary.topViews.map((v, idx) => {
+            const badgeClass = idx === 0 ? 'bg-amber-500 text-white' : idx === 1 ? 'bg-slate-400 text-white' : idx === 2 ? 'bg-amber-700 text-white' : 'bg-surface-container text-muted';
+            const pct = Math.round((v.count / maxView) * 100);
+            return `
+                <div class="flex flex-col gap-1 text-sm border-b border-hairline/50 pb-xs">
+                    <div class="flex justify-between items-center gap-xs">
+                        <div class="flex items-center gap-xs truncate">
+                            <span class="w-5 h-5 rounded-full ${badgeClass} text-[11px] font-bold flex items-center justify-center shrink-0">${idx + 1}</span>
+                            <a href="news-detail.html?id=${v.id}" target="_blank" class="font-medium text-primary hover:underline truncate">${v.title}</a>
+                        </div>
+                        <span class="text-xs font-semibold text-primary shrink-0">${v.count}회</span>
+                    </div>
+                    <div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-blue-mid h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Recent Activity Log
+    const lTbody = document.getElementById('logs-tbody');
+    if (!summary.searchLogs || summary.searchLogs.length === 0) {
+        lTbody.innerHTML = '<tr><td colspan="3" class="text-center py-md text-muted text-xs">수집된 실시간 검색 로그가 없습니다.</td></tr>';
+    } else {
+        lTbody.innerHTML = summary.searchLogs.slice(0, 20).map(log => {
+            const devBadge = log.device === 'mobile' ? '<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[11px] font-semibold">📱 모바일</span>' : '<span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px] font-semibold">💻 PC</span>';
+            return `
+                <tr class="hover:bg-surface-container-low transition-colors text-ink text-xs">
+                    <td class="px-md py-2.5 text-muted">${log.date}</td>
+                    <td class="px-md py-2.5 text-center">${devBadge}</td>
+                    <td class="px-md py-2.5 font-bold text-ink">${log.query}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+} else {
         document.getElementById('login-view').classList.remove('hidden');
         
         document.getElementById('login-form').onsubmit = (e) => {

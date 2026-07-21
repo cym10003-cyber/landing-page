@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v42");
+console.log("Antigravity db.js version: 20260715_v43");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v42";
+const APP_VERSION = "20260715_v43";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -678,6 +678,86 @@ async function uploadVideoFile(file) {
   });
 }
 
+// --- Analytics & Logging Helpers ---
+function recordSearchQuery(query) {
+    if (!query || typeof query !== 'string') return;
+    const cleanQ = query.trim();
+    if (cleanQ.length < 2) return;
+    try {
+        const logs = JSON.parse(localStorage.getItem('analytics_search_logs') || '[]');
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        logs.unshift({
+            query: cleanQ,
+            device: isMobile ? 'mobile' : 'desktop',
+            timestamp: Date.now(),
+            date: new Date().toLocaleString('ko-KR')
+        });
+        if (logs.length > 500) logs.pop();
+        localStorage.setItem('analytics_search_logs', JSON.stringify(logs));
+    } catch(e){}
+}
+
+function recordPostView(postId, postTitle) {
+    if (!postId) return;
+    try {
+        const views = JSON.parse(localStorage.getItem('analytics_post_views') || '{}');
+        if (!views[postId]) {
+            views[postId] = { id: postId, title: postTitle || '매물 상세', count: 0, lastViewed: Date.now() };
+        }
+        views[postId].count += 1;
+        views[postId].lastViewed = Date.now();
+        if (postTitle) views[postId].title = postTitle;
+        localStorage.setItem('analytics_post_views', JSON.stringify(views));
+    } catch(e){}
+}
+
+function getAnalyticsSummary() {
+    try {
+        const searchLogs = JSON.parse(localStorage.getItem('analytics_search_logs') || '[]');
+        const postViews = JSON.parse(localStorage.getItem('analytics_post_views') || '{}');
+
+        const qCounts = {};
+        let mobileCount = 0;
+        let desktopCount = 0;
+
+        searchLogs.forEach(log => {
+            qCounts[log.query] = (qCounts[log.query] || 0) + 1;
+            if (log.device === 'mobile') mobileCount++;
+            else desktopCount++;
+        });
+
+        const topQueries = Object.entries(qCounts)
+            .map(([query, count]) => ({ query, count }))
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 10);
+
+        const topViews = Object.values(postViews)
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 10);
+
+        return {
+            searchLogs,
+            topQueries,
+            topViews,
+            totalSearches: searchLogs.length,
+            mobileCount,
+            desktopCount
+        };
+    } catch(e) {
+        return { searchLogs: [], topQueries: [], topViews: [], totalSearches: 0, mobileCount: 0, desktopCount: 0 };
+    }
+}
+
+function clearAnalyticsLogs() {
+    localStorage.removeItem('analytics_search_logs');
+    localStorage.removeItem('analytics_post_views');
+}
+
+window.recordSearchQuery = recordSearchQuery;
+window.recordPostView = recordPostView;
+window.getAnalyticsSummary = getAnalyticsSummary;
+window.clearAnalyticsLogs = clearAnalyticsLogs;
+
 window.loadConfig = loadConfig;
 window.isAdmin = isAdmin;
 window.requireAdmin = requireAdmin;
@@ -688,5 +768,3 @@ window.renderMarkdown = renderMarkdown;
 window.markdownToText = markdownToText;
 window.uploadImageFile = uploadImageFile;
 window.uploadVideoFile = uploadVideoFile;
-
-// Force Vercel redeployment v13
