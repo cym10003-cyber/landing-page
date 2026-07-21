@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v44");
+console.log("Antigravity db.js version: 20260715_v45");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v44";
+const APP_VERSION = "20260715_v45";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -679,6 +679,24 @@ async function uploadVideoFile(file) {
 }
 
 // --- Analytics & Logging Helpers ---
+function recordPageView() {
+    try {
+        const todayStr = new Date().toISOString().split('T')[0];
+        let pageData = JSON.parse(localStorage.getItem('analytics_page_views') || '{"total":0,"today":0,"date":""}');
+        if (pageData.date !== todayStr) {
+            pageData.date = todayStr;
+            pageData.today = 0;
+        }
+        pageData.total += 1;
+        pageData.today += 1;
+        localStorage.setItem('analytics_page_views', JSON.stringify(pageData));
+    } catch(e){}
+}
+
+try {
+    recordPageView();
+} catch(e){}
+
 function recordSearchQuery(query) {
     if (!query || typeof query !== 'string') return;
     const cleanQ = query.trim();
@@ -715,6 +733,7 @@ function getAnalyticsSummary() {
     try {
         const searchLogs = JSON.parse(localStorage.getItem('analytics_search_logs') || '[]');
         const postViews = JSON.parse(localStorage.getItem('analytics_post_views') || '{}');
+        const pageData = JSON.parse(localStorage.getItem('analytics_page_views') || '{"total":0,"today":0}');
 
         const qCounts = {};
         let mobileCount = 0;
@@ -741,18 +760,23 @@ function getAnalyticsSummary() {
             topViews,
             totalSearches: searchLogs.length,
             mobileCount,
-            desktopCount
+            desktopCount,
+            totalPageviews: pageData.total || 0,
+            todayPageviews: pageData.today || 0,
+            postViewsMap: postViews
         };
     } catch(e) {
-        return { searchLogs: [], topQueries: [], topViews: [], totalSearches: 0, mobileCount: 0, desktopCount: 0 };
+        return { searchLogs: [], topQueries: [], topViews: [], totalSearches: 0, mobileCount: 0, desktopCount: 0, totalPageviews: 0, todayPageviews: 0, postViewsMap: {} };
     }
 }
 
 function clearAnalyticsLogs() {
     localStorage.removeItem('analytics_search_logs');
     localStorage.removeItem('analytics_post_views');
+    localStorage.removeItem('analytics_page_views');
 }
 
+window.recordPageView = recordPageView;
 window.recordSearchQuery = recordSearchQuery;
 window.recordPostView = recordPostView;
 window.getAnalyticsSummary = getAnalyticsSummary;

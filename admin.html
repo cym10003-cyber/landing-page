@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v44">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v45">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v44">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v45">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -175,6 +175,7 @@
                             <th class="px-lg py-4 w-16 text-center">번호</th>
                             <th class="px-lg py-4 w-32">카테고리</th>
                             <th class="px-lg py-4">제목</th>
+                            <th class="px-lg py-4 w-28 text-center">조회수</th>
                             <th class="px-lg py-4 w-36">작성일</th>
                             <th class="px-lg py-4 w-44 text-center">작업</th>
                         </tr>
@@ -192,18 +193,22 @@
         <!-- Tab 2: Analytics & Loggings -->
         <div id="tab-analytics-content" class="hidden flex flex-col gap-lg">
             <!-- Analytics Summary KPI Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-md">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-md">
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
-                    <span class="text-xs font-semibold text-muted mb-xs">총 수집 검색 횟수</span>
-                    <span id="stat-total-searches" class="text-3xl font-bold text-primary">0회</span>
+                    <span class="text-xs font-semibold text-muted mb-xs">👥 오늘 방문자 수</span>
+                    <span id="stat-today-views" class="text-2xl md:text-3xl font-bold text-primary">0명</span>
+                </div>
+                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                    <span class="text-xs font-semibold text-muted mb-xs">🌐 누적 총 방문 수</span>
+                    <span id="stat-total-views" class="text-2xl md:text-3xl font-bold text-ink">0회</span>
+                </div>
+                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                    <span class="text-xs font-semibold text-muted mb-xs">🔍 누적 총 검색 횟수</span>
+                    <span id="stat-total-searches" class="text-2xl md:text-3xl font-bold text-ink">0회</span>
                 </div>
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
                     <span class="text-xs font-semibold text-muted mb-xs">📱 모바일 접속 비율</span>
-                    <span id="stat-mobile-pct" class="text-3xl font-bold text-ink">0%</span>
-                </div>
-                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
-                    <span class="text-xs font-semibold text-muted mb-xs">💻 PC 접속 비율</span>
-                    <span id="stat-desktop-pct" class="text-3xl font-bold text-ink">0%</span>
+                    <span id="stat-mobile-pct" class="text-2xl md:text-3xl font-bold text-ink">0%</span>
                 </div>
             </div>
 
@@ -288,10 +293,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v44">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v45">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v44">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v45">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
     </nav>
     <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
@@ -300,7 +305,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v44"></script>
+<script src="db.js?v=20260715_v45"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -398,12 +403,12 @@ async function renderAnalyticsView() {
     const summary = getAnalyticsSummary();
     
     // KPI
+    document.getElementById('stat-today-views').textContent = (summary.todayPageviews || 0) + '명';
+    document.getElementById('stat-total-views').textContent = (summary.totalPageviews || 0) + '회';
     document.getElementById('stat-total-searches').textContent = summary.totalSearches + '회';
     const totalDev = (summary.mobileCount + summary.desktopCount) || 1;
     const mobPct = Math.round((summary.mobileCount / totalDev) * 100);
-    const deskPct = 100 - mobPct;
     document.getElementById('stat-mobile-pct').textContent = (summary.totalSearches > 0 ? mobPct : 0) + '%';
-    document.getElementById('stat-desktop-pct').textContent = (summary.totalSearches > 0 ? deskPct : 0) + '%';
 
     // Top Queries List
     const qContainer = document.getElementById('top-queries-list');
@@ -478,7 +483,7 @@ async function renderAnalyticsView() {
 async function loadDashboardList() {
     const tbody = document.getElementById('posts-tbody');
     const emptyDiv = document.getElementById('empty-dashboard');
-    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-lg text-muted">불러오는 중...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-lg text-muted">불러오는 중...</td></tr>';
     
     try {
         const posts = await getPosts();
@@ -488,13 +493,18 @@ async function loadDashboardList() {
             return;
         }
 
+        const summary = getAnalyticsSummary();
+        const viewsMap = summary.postViewsMap || {};
+
         emptyDiv.classList.add('hidden');
         tbody.innerHTML = posts.map((post, idx) => {
+            const vCount = viewsMap[post.id] ? viewsMap[post.id].count : 0;
             return `
                 <tr class="hover:bg-surface-container-low transition-colors text-ink">
                     <td class="px-lg py-4 text-center font-medium text-muted">${posts.length - idx}</td>
                     <td class="px-lg py-4 font-semibold text-xs text-muted">${post.category || '일반'}</td>
                     <td class="px-lg py-4 font-semibold text-primary hover:underline cursor-pointer" onclick="location.href='news-detail.html?id=${post.id}'">${post.title}</td>
+                    <td class="px-lg py-4 text-center font-bold text-xs text-primary">👁️ ${vCount}회</td>
                     <td class="px-lg py-4 text-muted font-medium text-xs">${post.date}</td>
                     <td class="px-lg py-4 text-center">
                         <div class="flex items-center justify-center gap-sm">
@@ -511,7 +521,7 @@ async function loadDashboardList() {
         }).join('');
     } catch (e) {
         console.error("Dashboard list error:", e);
-        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-lg text-error">불러오는데 실패했습니다: ${e.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-lg text-error">불러오는데 실패했습니다: ${e.message}</td></tr>`;
     }
 }
 
