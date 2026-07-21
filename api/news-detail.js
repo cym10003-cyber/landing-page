@@ -270,6 +270,7 @@ export default function handler(req, res) {
             );
           }
 
+          html = html.replace('id="map-link" href="map.html"', `id="map-link" href="map.html?id=${pid}"`);
           html = html.replace('내용을 불러오는 중입니다...', preTextHtml);
         }
       }
