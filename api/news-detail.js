@@ -80,7 +80,18 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   const kwList = [];
   if (dongStr) kwList.push(`${dongStr}${mainCategory}${trade}`);
   if (guStr) kwList.push(`${guStr}${mainCategory}${trade}`);
-  kwList.push(`대구${mainCategory}${trade}`);
+
+  if (trade === '임대') {
+    kwList.push('대구상가임대');
+    kwList.push('대구사무실임대');
+  } else {
+    if (mainCategory === '공장') {
+      kwList.push('대구공장매매');
+    } else {
+      kwList.push('대구상가매매');
+      kwList.push('대구사무실매매');
+    }
+  }
 
   const uniqueKws = [...new Set(kwList)];
   const targetKw = uniqueKws.join(' ');
