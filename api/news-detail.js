@@ -116,40 +116,67 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
 
   const schemaJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'RealEstateListing',
-    'name': metaTitle,
-    'description': metaDesc,
-    'url': postUrl,
-    'image': [ogImage],
-    'datePosted': dateStr,
-    'offers': {
-      '@type': 'Offer',
-      'priceCurrency': 'KRW',
-      'price': priceStr || '0',
-      'businessFunction': trade === '매매' ? 'http://purl.org/goodrelations/v1#Sell' : 'http://purl.org/goodrelations/v1#LeaseOut',
-      'availability': 'https://schema.org/InStock',
-      'seller': {
-        '@type': 'RealEstateAgent',
-        'name': '최가네부동산공인중개사사무소',
-        'telephone': '010-3548-4000',
-        'image': `${baseUrl}/og_home.jpg`
-      }
-    },
-    'itemOffered': {
-      '@type': 'CommercialProperty',
-      'name': title,
-      'address': {
-        '@type': 'PostalAddress',
-        'addressLocality': '대구광역시',
-        'streetAddress': cleanLoc,
-        'addressCountry': 'KR'
+    '@graph': [
+      {
+        '@type': 'RealEstateListing',
+        'name': metaTitle,
+        'description': metaDesc,
+        'url': postUrl,
+        'image': [ogImage],
+        'datePosted': dateStr,
+        'offers': {
+          '@type': 'Offer',
+          'priceCurrency': 'KRW',
+          'price': priceStr || '0',
+          'businessFunction': trade === '매매' ? 'http://purl.org/goodrelations/v1#Sell' : 'http://purl.org/goodrelations/v1#LeaseOut',
+          'availability': 'https://schema.org/InStock',
+          'seller': {
+            '@type': 'RealEstateAgent',
+            'name': '최가네부동산공인중개사사무소',
+            'telephone': '010-3548-4000',
+            'image': `${baseUrl}/og_home.jpg`
+          }
+        },
+        'itemOffered': {
+          '@type': 'CommercialProperty',
+          'name': title,
+          'address': {
+            '@type': 'PostalAddress',
+            'addressLocality': '대구광역시',
+            'streetAddress': cleanLoc,
+            'addressCountry': 'KR'
+          },
+          'geo': {
+            '@type': 'GeoCoordinates',
+            'latitude': coords[0] || 35.8589,
+            'longitude': coords[1] || 128.632
+          }
+        }
       },
-      'geo': {
-        '@type': 'GeoCoordinates',
-        'latitude': coords[0] || 35.8589,
-        'longitude': coords[1] || 128.632
+      {
+        '@type': 'WebSite',
+        'name': '최가네부동산공인중개사사무소',
+        'alternateName': '최가네부동산',
+        'url': baseUrl
+      },
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          {
+            '@type': 'ListItem',
+            'position': 1,
+            'name': '최가네부동산',
+            'item': baseUrl
+          },
+          {
+            '@type': 'ListItem',
+            'position': 2,
+            'name': '매물 소식',
+            'item': `${baseUrl}/property-news`
+          }
+        ]
       }
-    }
+    ]
   };
 
   return { metaTitle, metaDesc, ogImage, postUrl, schemaJsonLd };
