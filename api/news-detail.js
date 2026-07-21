@@ -171,8 +171,8 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
           {
             '@type': 'ListItem',
             'position': 2,
-            'name': '매물 소식',
-            'item': `${baseUrl}/property-news`
+            'name': '매물리스트',
+            'item': `${baseUrl}/property-news?category=매물리스트`
           }
         ]
       }
