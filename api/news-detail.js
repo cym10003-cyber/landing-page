@@ -63,23 +63,29 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   if (/매매/i.test(title) || /매매/i.test(content) || sale) trade = '매매';
   const fullType = `${pType} ${trade}`;
 
-  // Target Keyword placement at the very front for maximum Search Ranking: "대구상가임대", "대구사무실임대", etc.
-  let targetKw = '대구상가임대';
-  if (/상가/i.test(title)) {
-    targetKw = trade === '매매' ? '대구상가매매' : '대구상가임대';
-  } else if (/사무실/i.test(title)) {
-    targetKw = trade === '매매' ? '대구사무실매매' : '대구사무실임대';
-  } else if (/공장/i.test(title) || /공장/i.test(content)) {
-    targetKw = trade === '매매' ? '대구공장매매' : '대구공장임대';
-  } else if (/병의원|병원|의원/i.test(title) || /병의원|병원|의원/i.test(content)) {
-    targetKw = trade === '매매' ? '대구병원매매' : '대구병의원임대';
-  } else if (/사무실/i.test(content)) {
-    targetKw = trade === '매매' ? '대구사무실매매' : '대구사무실임대';
-  } else {
-    targetKw = trade === '매매' ? '대구상가매매' : '대구상가임대';
-  }
+  // 3-Tier Local Keyword extraction: Dong, Gu, Daegu (e.g. "범어동사무실임대 수성구사무실임대 대구사무실임대")
+  const fullLocText = `${cleanLoc} ${title} ${content.slice(0, 150)}`;
+  const mGu = fullLocText.match(/(달서구|수성구|중구|서구|북구|동구|남구|달성군)/);
+  const mDong = fullLocText.match(/([가-힣]{2,6}(?:동[0-9]*가?|읍|면))/);
+  const guStr = mGu ? mGu[1] : '';
+  const dongStr = mDong ? mDong[1] : '';
 
-  // Format Title: [타겟키워드] | [지역] [매물종류] - [가격] | 최가네부동산
+  let mainCategory = '상가';
+  if (/상가/i.test(title)) mainCategory = '상가';
+  else if (/사무실/i.test(title)) mainCategory = '사무실';
+  else if (/공장/i.test(title) || /공장/i.test(content)) mainCategory = '공장';
+  else if (/병의원|병원|의원/i.test(title) || /병의원|병원|의원/i.test(content)) mainCategory = '병의원';
+  else if (/사무실/i.test(content)) mainCategory = '사무실';
+
+  const kwList = [];
+  if (dongStr) kwList.push(`${dongStr}${mainCategory}${trade}`);
+  if (guStr) kwList.push(`${guStr}${mainCategory}${trade}`);
+  kwList.push(`대구${mainCategory}${trade}`);
+
+  const uniqueKws = [...new Set(kwList)];
+  const targetKw = uniqueKws.join(' ');
+
+  // Format Title: [타깃키워드] | [지역] [매물종류] - [가격] | 최가네부동산
   let metaTitle = `${targetKw} | ${cleanLoc} ${fullType}`;
   if (priceStr) metaTitle += ` - ${priceStr}`;
   metaTitle += ' | 최가네부동산';
