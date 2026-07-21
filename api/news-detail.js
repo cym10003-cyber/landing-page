@@ -65,12 +65,16 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
 
   // Target Keyword placement at the very front for maximum Search Ranking: "대구상가임대", "대구사무실임대", etc.
   let targetKw = '대구상가임대';
-  if (/사무실/i.test(title) || /사무실/i.test(content)) {
+  if (/상가/i.test(title)) {
+    targetKw = trade === '매매' ? '대구상가매매' : '대구상가임대';
+  } else if (/사무실/i.test(title)) {
     targetKw = trade === '매매' ? '대구사무실매매' : '대구사무실임대';
   } else if (/공장/i.test(title) || /공장/i.test(content)) {
     targetKw = trade === '매매' ? '대구공장매매' : '대구공장임대';
   } else if (/병의원|병원|의원/i.test(title) || /병의원|병원|의원/i.test(content)) {
     targetKw = trade === '매매' ? '대구병원매매' : '대구병의원임대';
+  } else if (/사무실/i.test(content)) {
+    targetKw = trade === '매매' ? '대구사무실매매' : '대구사무실임대';
   } else {
     targetKw = trade === '매매' ? '대구상가매매' : '대구상가임대';
   }
