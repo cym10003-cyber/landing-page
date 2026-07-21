@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a id="nav-maemul" class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v35">매물리스트</a>
+<a id="nav-maemul" class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v36">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v35">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
+<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v36">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -129,12 +129,22 @@
 </nav>
 <main class="max-w-4xl mx-auto px-lg py-[80px]">
     <div class="flex justify-between items-center mb-md">
-        <a id="back-link" href="property-news.html?v=20260715_v35" class="flex items-center gap-xs text-primary font-button text-button min-h-[44px] hover:underline">
+        <a id="back-link" href="property-news.html?v=20260715_v36" class="flex items-center gap-xs text-primary font-button text-button min-h-[44px] hover:underline">
             <span class="material-symbols-outlined">arrow_back</span> 소식 목록으로
         </a>
-        <a id="map-link" href="#" class="hidden bg-primary text-white px-4 py-2 rounded-lg font-semibold text-xs md:text-sm flex items-center gap-xs hover:bg-blue-mid shadow-sm transition-colors border-0 cursor-pointer min-h-[38px]">
-            <span class="material-symbols-outlined text-[16px]">map</span> 지도보기
-        </a>
+        <div class="flex items-center gap-xs">
+            <button id="share-btn" class="bg-surface-container-high hover:bg-surface-dim text-ink px-3.5 py-2 rounded-lg font-semibold text-xs md:text-sm flex items-center gap-xs shadow-sm transition-colors border border-hairline cursor-pointer min-h-[38px]">
+                <span class="material-symbols-outlined text-[18px]">share</span> 공유하기
+            </button>
+            <a id="map-link" href="#" class="hidden bg-primary text-white px-4 py-2 rounded-lg font-semibold text-xs md:text-sm flex items-center gap-xs hover:bg-blue-mid shadow-sm transition-colors border-0 cursor-pointer min-h-[38px]">
+                <span class="material-symbols-outlined text-[16px]">map</span> 지도보기
+            </a>
+        </div>
+    </div>
+    <!-- Toast Notification Message -->
+    <div id="toast-message" class="fixed top-16 left-1/2 -translate-x-1/2 bg-ink/90 text-white px-lg py-md rounded-xl shadow-strong-elevated text-sm font-semibold flex items-center gap-sm transition-all duration-300 opacity-0 pointer-events-none z-50">
+        <span class="material-symbols-outlined text-green-400 text-[20px]">check_circle</span>
+        <span id="toast-text">매물 링크가 복사되었습니다!</span>
     </div>
     <article id="article-detail" class="bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline p-lg md:p-xxl flex flex-col gap-lg">
         <div class="border-b border-hairline pb-lg flex flex-col gap-md">
@@ -225,6 +235,10 @@
     <span class="material-symbols-outlined text-2xl">map</span>
     <span class="text-[10px] font-medium">매물지도</span>
   </a>
+  <button id="mobile-share-btn" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12 border-0 bg-transparent cursor-pointer">
+    <span class="material-symbols-outlined text-2xl">share</span>
+    <span class="text-[10px] font-medium">공유</span>
+  </button>
   <a href="tel:010-3548-4000" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
     <span class="material-symbols-outlined text-2xl">call</span>
     <span class="text-[10px] font-medium">전화</span>
@@ -243,10 +257,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v35">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v36">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v35">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v36">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
     </nav>
     <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
@@ -255,7 +269,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v35"></script>
+<script src="db.js?v=20260715_v36"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
@@ -304,7 +318,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (post.category === '매물리스트') {
             if (backLink) {
-                backLink.href = 'property-news.html?category=매물리스트&v=20260715_v35';
+                backLink.href = 'property-news.html?category=매물리스트&v=20260715_v36';
                 backLink.innerHTML = `<span class="material-symbols-outlined">arrow_back</span> 매물리스트로`;
             }
             if (mapLink) {
@@ -317,7 +331,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } else {
             if (backLink) {
-                backLink.href = 'property-news.html?v=20260715_v35';
+                backLink.href = 'property-news.html?v=20260715_v36';
                 backLink.innerHTML = `<span class="material-symbols-outlined">arrow_back</span> 부동산 소식으로`;
             }
             if (mapLink) {
@@ -784,6 +798,53 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
         }
     }
+    // Share Functionality
+    function showToast(msg) {
+        const toast = document.getElementById('toast-message');
+        const toastText = document.getElementById('toast-text');
+        if (!toast || !toastText) return;
+        toastText.textContent = msg;
+        toast.classList.remove('opacity-0', 'pointer-events-none');
+        toast.classList.add('opacity-100');
+        setTimeout(() => {
+            toast.classList.remove('opacity-100');
+            toast.classList.add('opacity-0', 'pointer-events-none');
+        }, 2500);
+    }
+
+    async function handleShare() {
+        const title = (document.getElementById('post-title')?.innerText || '최가네부동산 매물 소식').trim();
+        const url = window.location.href;
+
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: title,
+                    text: title,
+                    url: url
+                });
+                return;
+            } catch (err) {
+                // User cancelled share sheet
+            }
+        }
+
+        try {
+            await navigator.clipboard.writeText(url);
+            showToast('📋 매물 링크가 복사되었습니다!');
+        } catch (err) {
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = url;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            showToast('📋 매물 링크가 복사되었습니다!');
+        }
+    }
+
+    document.getElementById('share-btn')?.addEventListener('click', handleShare);
+    document.getElementById('mobile-share-btn')?.addEventListener('click', handleShare);
 });
 </script>
 </body></html>
