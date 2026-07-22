@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v47");
+console.log("Antigravity db.js version: 20260715_v48");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v47";
+const APP_VERSION = "20260715_v48";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -679,9 +679,27 @@ async function uploadVideoFile(file) {
 }
 
 // --- Analytics & Logging Helpers ---
+function getReferrerSource() {
+    const ref = document.referrer || '';
+    if (!ref) return '직접 접속 / 카카오톡 링크';
+    try {
+        const url = new URL(ref);
+        const host = url.hostname.toLowerCase();
+        if (host.includes('naver.com')) return '네이버 (Naver)';
+        if (host.includes('google.com') || host.includes('google.co.kr')) return '구글 (Google)';
+        if (host.includes('daum.net') || host.includes('kakao.com')) return '다음 / 카카오';
+        if (host.includes('instagram.com') || host.includes('facebook.com')) return 'SNS (인스타/페북)';
+        if (host.includes('choi114.com')) return '내부 이동';
+        return host.replace('www.', '');
+    } catch(e) {
+        return '직접 접속 / 카카오톡 링크';
+    }
+}
+
 function recordPageView() {
     try {
         const todayStr = new Date().toISOString().split('T')[0];
+        
         let pageData = JSON.parse(localStorage.getItem('analytics_page_views') || '{"total":0,"today":0,"date":""}');
         if (pageData.date !== todayStr) {
             pageData.date = todayStr;
@@ -690,6 +708,24 @@ function recordPageView() {
         pageData.total += 1;
         pageData.today += 1;
         localStorage.setItem('analytics_page_views', JSON.stringify(pageData));
+
+        let dailyHistory = JSON.parse(localStorage.getItem('analytics_daily_history') || '{}');
+        if (!dailyHistory[todayStr]) {
+            dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {} };
+        }
+        dailyHistory[todayStr].count += 1;
+
+        const source = getReferrerSource();
+        if (source !== '내부 이동') {
+            if (!dailyHistory[todayStr].referrers) dailyHistory[todayStr].referrers = {};
+            dailyHistory[todayStr].referrers[source] = (dailyHistory[todayStr].referrers[source] || 0) + 1;
+        }
+
+        const keys = Object.keys(dailyHistory).sort();
+        if (keys.length > 30) {
+            keys.slice(0, keys.length - 30).forEach(k => delete dailyHistory[k]);
+        }
+        localStorage.setItem('analytics_daily_history', JSON.stringify(dailyHistory));
     } catch(e){}
 }
 
@@ -718,6 +754,8 @@ function recordSearchQuery(query) {
 function recordPostView(postId, postTitle) {
     if (!postId) return;
     try {
+        const todayStr = new Date().toISOString().split('T')[0];
+        
         const views = JSON.parse(localStorage.getItem('analytics_post_views') || '{}');
         if (!views[postId]) {
             views[postId] = { id: postId, title: postTitle || '매물 상세', count: 0, lastViewed: Date.now() };
@@ -726,6 +764,15 @@ function recordPostView(postId, postTitle) {
         views[postId].lastViewed = Date.now();
         if (postTitle) views[postId].title = postTitle;
         localStorage.setItem('analytics_post_views', JSON.stringify(views));
+
+        let dailyHistory = JSON.parse(localStorage.getItem('analytics_daily_history') || '{}');
+        if (!dailyHistory[todayStr]) {
+            dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {} };
+        }
+        if (!dailyHistory[todayStr].postViews) dailyHistory[todayStr].postViews = {};
+        
+        dailyHistory[todayStr].postViews[postId] = (dailyHistory[todayStr].postViews[postId] || 0) + 1;
+        localStorage.setItem('analytics_daily_history', JSON.stringify(dailyHistory));
     } catch(e){}
 }
 
@@ -734,6 +781,56 @@ function getAnalyticsSummary() {
         const searchLogs = JSON.parse(localStorage.getItem('analytics_search_logs') || '[]');
         const postViews = JSON.parse(localStorage.getItem('analytics_post_views') || '{}');
         const pageData = JSON.parse(localStorage.getItem('analytics_page_views') || '{"total":0,"today":0}');
+        const dailyHistory = JSON.parse(localStorage.getItem('analytics_daily_history') || '{}');
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        const datesList = [];
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            const ds = d.toISOString().split('T')[0];
+            const entry = dailyHistory[ds] || { date: ds, count: 0, referrers: {}, postViews: {} };
+            if (ds === todayStr) {
+                entry.count = Math.max(entry.count, pageData.today || 0);
+            }
+            datesList.push({
+                date: ds.slice(5),
+                fullDate: ds,
+                count: entry.count,
+                referrers: entry.referrers || {},
+                postViews: entry.postViews || {}
+            });
+        }
+
+        const refCounts = {};
+        let totalRef = 0;
+        Object.values(dailyHistory).forEach(day => {
+            if (day.referrers) {
+                Object.entries(day.referrers).forEach(([src, count]) => {
+                    refCounts[src] = (refCounts[src] || 0) + count;
+                    totalRef += count;
+                });
+            }
+        });
+
+        const topReferrers = Object.entries(refCounts)
+            .map(([source, count]) => ({
+                source,
+                count,
+                pct: totalRef > 0 ? Math.round((count / totalRef) * 100) : 0
+            }))
+            .sort((a, b) => b.count - a.count);
+
+        const todayEntry = dailyHistory[todayStr] || { postViews: {} };
+        const todayPostViewsMap = todayEntry.postViews || {};
+        const todayTopViews = Object.entries(todayPostViewsMap)
+            .map(([id, count]) => ({
+                id,
+                title: postViews[id] ? postViews[id].title : '매물 상세',
+                count
+            }))
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 10);
 
         const qCounts = {};
         let mobileCount = 0;
@@ -758,6 +855,9 @@ function getAnalyticsSummary() {
             searchLogs,
             topQueries,
             topViews,
+            todayTopViews,
+            recent7Days: datesList,
+            topReferrers,
             totalSearches: searchLogs.length,
             mobileCount,
             desktopCount,
@@ -766,7 +866,7 @@ function getAnalyticsSummary() {
             postViewsMap: postViews
         };
     } catch(e) {
-        return { searchLogs: [], topQueries: [], topViews: [], totalSearches: 0, mobileCount: 0, desktopCount: 0, totalPageviews: 0, todayPageviews: 0, postViewsMap: {} };
+        return { searchLogs: [], topQueries: [], topViews: [], todayTopViews: [], recent7Days: [], topReferrers: [], totalSearches: 0, mobileCount: 0, desktopCount: 0, totalPageviews: 0, todayPageviews: 0, postViewsMap: {} };
     }
 }
 
@@ -774,6 +874,7 @@ function clearAnalyticsLogs() {
     localStorage.removeItem('analytics_search_logs');
     localStorage.removeItem('analytics_post_views');
     localStorage.removeItem('analytics_page_views');
+    localStorage.removeItem('analytics_daily_history');
 }
 
 window.recordPageView = recordPageView;

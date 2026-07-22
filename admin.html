@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v47">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v48">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v47">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v48">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
                 010-3548-4000
@@ -212,7 +212,30 @@
                 </div>
             </div>
 
-            <!-- Two-Column Grid: Top Search Queries & Top Viewed Listings -->
+            <!-- Two-Column Grid Row 1: Daily Visitor Trend & Referrer Traffic Sources -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+                <!-- Daily Visitor Trend Card (Recent 7 Days) -->
+                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                    <h3 class="font-bold text-lg text-ink mb-md flex items-center gap-xs">
+                        <span class="material-symbols-outlined text-primary">calendar_month</span> 최근 7일간 일자별 방문자 추이
+                    </h3>
+                    <div id="daily-visitors-chart" class="space-y-sm">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Referrer Traffic Sources Card -->
+                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                    <h3 class="font-bold text-lg text-ink mb-md flex items-center gap-xs">
+                        <span class="material-symbols-outlined text-primary">alt_route</span> 손님들의 유입 경로 TOP (어느 사이트에서 들어왔나?)
+                    </h3>
+                    <div id="top-referrers-list" class="space-y-sm">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two-Column Grid Row 2: Top Search Queries & Top Viewed Listings -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
                 <!-- Top 10 Search Queries Card -->
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
@@ -224,11 +247,17 @@
                     </div>
                 </div>
 
-                <!-- Top 10 Viewed Listings Card -->
+                <!-- Top 10 Viewed Listings Card with Period Toggle -->
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
-                    <h3 class="font-bold text-lg text-ink mb-md flex items-center gap-xs">
-                        <span class="material-symbols-outlined text-primary">visibility</span> 가장 많이 본 인기 매물 TOP 10
-                    </h3>
+                    <div class="flex justify-between items-center mb-md flex-wrap gap-xs">
+                        <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
+                            <span class="material-symbols-outlined text-primary">visibility</span> 인기 매물 TOP 10
+                        </h3>
+                        <div class="flex bg-surface-container rounded-lg p-0.5 text-xs font-semibold">
+                            <button id="view-period-today" class="px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer">오늘</button>
+                            <button id="view-period-all" class="px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer">전체 누적</button>
+                        </div>
+                    </div>
                     <div id="top-views-list" class="space-y-sm">
                         <!-- Populated by JS -->
                     </div>
@@ -293,10 +322,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v47">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v48">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v47">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v48">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
     </nav>
     <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
@@ -305,7 +334,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v47"></script>
+<script src="db.js?v=20260715_v48"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -344,6 +373,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                     clearAnalyticsLogs();
                     renderAnalyticsView();
                 }
+            });
+        }
+
+        // View Period Toggle Handlers
+        const periodTodayBtn = document.getElementById('view-period-today');
+        const periodAllBtn = document.getElementById('view-period-all');
+        if (periodTodayBtn && periodAllBtn) {
+            periodTodayBtn.addEventListener('click', () => {
+                currentViewPeriod = 'today';
+                periodTodayBtn.className = 'px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer';
+                periodAllBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
+                const summary = getAnalyticsSummary();
+                renderTopViewsList(summary);
+            });
+            periodAllBtn.addEventListener('click', () => {
+                currentViewPeriod = 'all';
+                periodAllBtn.className = 'px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer';
+                periodTodayBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
+                const summary = getAnalyticsSummary();
+                renderTopViewsList(summary);
             });
         }
         
@@ -399,10 +448,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+let currentViewPeriod = 'today';
+
 async function renderAnalyticsView() {
     const summary = getAnalyticsSummary();
     
-    // KPI
+    // KPI Cards
     document.getElementById('stat-today-views').textContent = (summary.todayPageviews || 0) + '명';
     document.getElementById('stat-total-views').textContent = (summary.totalPageviews || 0) + '회';
     document.getElementById('stat-total-searches').textContent = summary.totalSearches + '회';
@@ -410,7 +461,66 @@ async function renderAnalyticsView() {
     const mobPct = Math.round((summary.mobileCount / totalDev) * 100);
     document.getElementById('stat-mobile-pct').textContent = (summary.totalSearches > 0 ? mobPct : 0) + '%';
 
-    // Top Queries List
+    // 1. Daily Visitor Trend (Recent 7 Days Chart)
+    const dailyChartContainer = document.getElementById('daily-visitors-chart');
+    if (dailyChartContainer && summary.recent7Days) {
+        const maxDaily = Math.max(...summary.recent7Days.map(d => d.count), 1);
+        dailyChartContainer.innerHTML = summary.recent7Days.map(d => {
+            const pct = Math.round((d.count / maxDaily) * 100);
+            const isToday = d.fullDate === new Date().toISOString().split('T')[0];
+            const dateLabel = isToday ? `${d.date} (오늘)` : d.date;
+            const barColor = isToday ? 'bg-primary' : 'bg-blue-mid/70';
+            return `
+                <div class="flex flex-col gap-1 text-sm border-b border-hairline/50 pb-xs">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-semibold ${isToday ? 'text-primary font-bold' : 'text-muted'}">${dateLabel}</span>
+                        <span class="font-bold text-ink">${d.count}명</span>
+                    </div>
+                    <div class="w-full bg-surface-container rounded-full h-2 overflow-hidden flex items-center">
+                        <div class="${barColor} h-full rounded-full transition-all duration-500" style="width: ${Math.max(pct, 4)}%"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // 2. Referrer Traffic Sources Card
+    const refContainer = document.getElementById('top-referrers-list');
+    if (refContainer) {
+        if (!summary.topReferrers || summary.topReferrers.length === 0) {
+            refContainer.innerHTML = '<div class="text-center py-md text-muted text-sm">아직 수집된 외부 유입 데이터가 없습니다. (직접 접속 / 네이버 / 구글 등 손님 유입 시 자동 집계)</div>';
+        } else {
+            const maxRef = summary.topReferrers[0].count || 1;
+            refContainer.innerHTML = summary.topReferrers.map((r, idx) => {
+                let iconName = 'language';
+                let iconColor = 'text-slate-500';
+                if (r.source.includes('네이버')) { iconName = 'search'; iconColor = 'text-emerald-600'; }
+                else if (r.source.includes('구글')) { iconName = 'travel_explore'; iconColor = 'text-blue-600'; }
+                else if (r.source.includes('카카오') || r.source.includes('다음')) { iconName = 'chat_bubble'; iconColor = 'text-amber-600'; }
+                else if (r.source.includes('직접')) { iconName = 'touch_app'; iconColor = 'text-primary'; }
+
+                return `
+                    <div class="flex flex-col gap-1 text-sm border-b border-hairline/50 pb-xs">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-xs">
+                                <span class="material-symbols-outlined text-[18px] ${iconColor}">${iconName}</span>
+                                <span class="font-bold text-ink">${r.source}</span>
+                            </div>
+                            <div class="flex items-center gap-xs">
+                                <span class="text-xs text-muted font-medium">(${r.pct}%)</span>
+                                <span class="text-xs font-bold text-primary">${r.count}회</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-primary h-full rounded-full transition-all duration-500" style="width: ${r.pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+
+    // 3. Top Search Queries List
     const qContainer = document.getElementById('top-queries-list');
     if (!summary.topQueries || summary.topQueries.length === 0) {
         qContainer.innerHTML = '<div class="text-center py-md text-muted text-sm">아직 수집된 검색어가 없습니다. (손님이 검색창 이용 시 자동 누적)</div>';
@@ -436,13 +546,22 @@ async function renderAnalyticsView() {
         }).join('');
     }
 
-    // Top Views List
+    // 4. Top Views List (Filtered by Today vs Cumulative)
+    renderTopViewsList(summary);
+}
+
+function renderTopViewsList(summary) {
     const vContainer = document.getElementById('top-views-list');
-    if (!summary.topViews || summary.topViews.length === 0) {
-        vContainer.innerHTML = '<div class="text-center py-md text-muted text-sm">아직 수집된 매물 조회 기록이 없습니다.</div>';
+    if (!vContainer) return;
+
+    const viewsData = currentViewPeriod === 'today' ? summary.todayTopViews : summary.topViews;
+
+    if (!viewsData || viewsData.length === 0) {
+        const emptyMsg = currentViewPeriod === 'today' ? '오늘 수집된 매물 조회 기록이 없습니다.' : '아직 수집된 매물 조회 기록이 없습니다.';
+        vContainer.innerHTML = `<div class="text-center py-md text-muted text-sm">${emptyMsg}</div>`;
     } else {
-        const maxView = summary.topViews[0].count || 1;
-        vContainer.innerHTML = summary.topViews.map((v, idx) => {
+        const maxView = viewsData[0].count || 1;
+        vContainer.innerHTML = viewsData.map((v, idx) => {
             const badgeClass = idx === 0 ? 'bg-amber-500 text-white' : idx === 1 ? 'bg-slate-400 text-white' : idx === 2 ? 'bg-amber-700 text-white' : 'bg-surface-container text-muted';
             const pct = Math.round((v.count / maxView) * 100);
             return `
@@ -458,23 +577,6 @@ async function renderAnalyticsView() {
                         <div class="bg-blue-mid h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
                     </div>
                 </div>
-            `;
-        }).join('');
-    }
-
-    // Recent Activity Log
-    const lTbody = document.getElementById('logs-tbody');
-    if (!summary.searchLogs || summary.searchLogs.length === 0) {
-        lTbody.innerHTML = '<tr><td colspan="3" class="text-center py-md text-muted text-xs">수집된 실시간 검색 로그가 없습니다.</td></tr>';
-    } else {
-        lTbody.innerHTML = summary.searchLogs.slice(0, 20).map(log => {
-            const devBadge = log.device === 'mobile' ? '<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[11px] font-semibold">📱 모바일</span>' : '<span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px] font-semibold">💻 PC</span>';
-            return `
-                <tr class="hover:bg-surface-container-low transition-colors text-ink text-xs">
-                    <td class="px-md py-2.5 text-muted">${log.date}</td>
-                    <td class="px-md py-2.5 text-center">${devBadge}</td>
-                    <td class="px-md py-2.5 font-bold text-ink">${log.query}</td>
-                </tr>
             `;
         }).join('');
     }
