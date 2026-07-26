@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v48");
+console.log("Antigravity db.js version: 20260715_v49");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v48";
+const APP_VERSION = "20260715_v49";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -738,13 +738,15 @@ function recordSearchQuery(query) {
     const cleanQ = query.trim();
     if (cleanQ.length < 2) return;
     try {
+        const todayStr = new Date().toISOString().split('T')[0];
         const logs = JSON.parse(localStorage.getItem('analytics_search_logs') || '[]');
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         logs.unshift({
             query: cleanQ,
             device: isMobile ? 'mobile' : 'desktop',
             timestamp: Date.now(),
-            date: new Date().toLocaleString('ko-KR')
+            date: new Date().toLocaleString('ko-KR'),
+            dateKey: todayStr
         });
         if (logs.length > 500) logs.pop();
         localStorage.setItem('analytics_search_logs', JSON.stringify(logs));
@@ -802,26 +804,46 @@ function getAnalyticsSummary() {
             });
         }
 
-        const refCounts = {};
-        let totalRef = 0;
+        // Helper: Format referrer list for a given referrers map
+        const calcReferrers = (refMap) => {
+            let total = 0;
+            Object.values(refMap).forEach(c => total += c);
+            return Object.entries(refMap)
+                .map(([source, count]) => ({
+                    source,
+                    count,
+                    pct: total > 0 ? Math.round((count / total) * 100) : 0
+                }))
+                .sort((a, b) => b.count - a.count);
+        };
+
+        // All Referrers
+        const allRefMap = {};
         Object.values(dailyHistory).forEach(day => {
             if (day.referrers) {
                 Object.entries(day.referrers).forEach(([src, count]) => {
-                    refCounts[src] = (refCounts[src] || 0) + count;
-                    totalRef += count;
+                    allRefMap[src] = (allRefMap[src] || 0) + count;
                 });
             }
         });
+        const topReferrersAll = calcReferrers(allRefMap);
 
-        const topReferrers = Object.entries(refCounts)
-            .map(([source, count]) => ({
-                source,
-                count,
-                pct: totalRef > 0 ? Math.round((count / totalRef) * 100) : 0
-            }))
-            .sort((a, b) => b.count - a.count);
+        // Today Referrers
+        const todayEntry = dailyHistory[todayStr] || { referrers: {}, postViews: {} };
+        const topReferrersToday = calcReferrers(todayEntry.referrers || {});
 
-        const todayEntry = dailyHistory[todayStr] || { postViews: {} };
+        // Recent 7 Days Referrers
+        const ref7Map = {};
+        datesList.forEach(d => {
+            if (d.referrers) {
+                Object.entries(d.referrers).forEach(([src, count]) => {
+                    ref7Map[src] = (ref7Map[src] || 0) + count;
+                });
+            }
+        });
+        const topReferrers7Days = calcReferrers(ref7Map);
+
+        // Today Top Views
         const todayPostViewsMap = todayEntry.postViews || {};
         const todayTopViews = Object.entries(todayPostViewsMap)
             .map(([id, count]) => ({
@@ -857,7 +879,10 @@ function getAnalyticsSummary() {
             topViews,
             todayTopViews,
             recent7Days: datesList,
-            topReferrers,
+            topReferrers: topReferrersAll,
+            topReferrersToday,
+            topReferrers7Days,
+            dailyHistory,
             totalSearches: searchLogs.length,
             mobileCount,
             desktopCount,
@@ -866,7 +891,7 @@ function getAnalyticsSummary() {
             postViewsMap: postViews
         };
     } catch(e) {
-        return { searchLogs: [], topQueries: [], topViews: [], todayTopViews: [], recent7Days: [], topReferrers: [], totalSearches: 0, mobileCount: 0, desktopCount: 0, totalPageviews: 0, todayPageviews: 0, postViewsMap: {} };
+        return { searchLogs: [], topQueries: [], topViews: [], todayTopViews: [], recent7Days: [], topReferrers: [], topReferrersToday: [], topReferrers7Days: [], dailyHistory: {}, totalSearches: 0, mobileCount: 0, desktopCount: 0, totalPageviews: 0, todayPageviews: 0, postViewsMap: {} };
     }
 }
 
