@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
         try {
@@ -167,14 +170,35 @@
             overscroll-behavior-y: contain;
             -webkit-overflow-scrolling: touch;
         }
-        @media (max-w: 767px) {
-            #list-panel, #map-panel {
-                position: absolute !important;
-                top: 0;
-                left: 0;
-                width: 100% !important;
-                height: 100% !important;
-            }
+        /* Marker Cluster Custom Styling & Hardware Acceleration */
+        .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+            background-color: rgba(0, 56, 145, 0.2) !important;
+            border-radius: 50% !important;
+        }
+        .marker-cluster div {
+            width: 38px !important;
+            height: 38px !important;
+            margin-left: 4px !important;
+            margin-top: 4px !important;
+            text-align: center !important;
+            border-radius: 50% !important;
+            background-color: #003891 !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 13px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border: 2px solid #ffffff !important;
+            box-shadow: 0 4px 14px rgba(0, 56, 145, 0.4) !important;
+            transition: transform 0.2s ease !important;
+        }
+        .marker-cluster:hover div {
+            transform: scale(1.1) !important;
+        }
+        .leaflet-zoom-animated, .leaflet-tile-container {
+            will-change: transform;
+            transform: translateZ(0);
         }
     </style>
 </head>
@@ -187,10 +211,10 @@
 <div class="hidden md:flex gap-lg items-center font-nav text-nav">
     <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
     <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-    <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v49">매물리스트</a>
+    <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v50">매물리스트</a>
     <a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
     <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-    <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v49">부동산 소식</a>
+    <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v50">부동산 소식</a>
     <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 </div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
@@ -258,10 +282,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v49">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v50">매물리스트</a>
       <a class="text-primary hover:text-primary py-sm border-b border-hairline/50 font-bold" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v49">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v50">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
     </nav>
     <a class="bg-primary-container text-white px-md py-sm rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors flex items-center justify-center gap-sm mt-auto" href="tel:010-3548-4000">
@@ -292,7 +316,7 @@
 </div>
 
 <!-- Load Database and Page Logic -->
-<script src="db.js?v=20260715_v49"></script>
+<script src="db.js?v=20260715_v50"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Setup Mobile Menu Drawer
@@ -356,15 +380,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         listPanel.classList.add('flex');
     });
 
-    // 3. Initialize Leaflet Map
+    // 3. Initialize Leaflet Map with Canvas Hardware Acceleration
     const editorMap = L.map('map', {
         zoomControl: true,
-        scrollWheelZoom: true
+        scrollWheelZoom: true,
+        preferCanvas: true
     }).setView([35.8714, 128.6014], 13); // Default Daegu Center
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(editorMap);
+
+    // Initialize Leaflet MarkerCluster Group for 60fps smooth mobile performance
+    const markersClusterGroup = L.markerClusterGroup({
+        disableClusteringAtZoom: 16,
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: false,
+        maxClusterRadius: 45,
+        chunkedLoading: true
+    });
+    editorMap.addLayer(markersClusterGroup);
 
     // Beautiful premium custom divIcon
     const customMarkerHtml = `
@@ -635,8 +670,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 1. Update List Count
         document.getElementById('list-count').innerText = listings.length;
         
-        // 2. Clear previous markers from Leaflet map
-        markersMap.forEach(m => editorMap.removeLayer(m));
+        // 2. Clear previous markers from Leaflet map and MarkerCluster Group
+        markersClusterGroup.clearLayers();
         markersMap.clear();
         
         // 3. Render list panel cards
@@ -694,7 +729,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             container.appendChild(card);
             
             // 4. Create Leaflet Marker with Custom Label popup
-            const marker = L.marker(item.coordinates, { icon: customIcon }).addTo(editorMap);
+            const marker = L.marker(item.coordinates, { icon: customIcon });
             
             const popupHtml = `
                 <div class="flex flex-col overflow-hidden bg-surface-container-lowest">
@@ -719,6 +754,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 closeButton: true
             });
             
+            markersClusterGroup.addLayer(marker);
             markersMap.set(item.id, marker);
         });
     }
@@ -726,8 +762,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     function centerAndPopup(item) {
         const marker = markersMap.get(item.id);
         if (marker) {
-            editorMap.flyTo(item.coordinates, 16);
-            marker.openPopup();
+            markersClusterGroup.zoomToShowLayer(marker, () => {
+                editorMap.flyTo(item.coordinates, 16, { duration: 0.8 });
+                setTimeout(() => {
+                    marker.openPopup();
+                }, 250);
+            });
         }
     }
 

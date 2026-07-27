@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v49");
+console.log("Antigravity db.js version: 20260715_v50");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v49";
+const APP_VERSION = "20260715_v50";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -902,11 +902,139 @@ function clearAnalyticsLogs() {
     localStorage.removeItem('analytics_daily_history');
 }
 
+// Multi-Device Analytics Sync Helpers
+async function syncAnalyticsWithRemote() {
+    try {
+        const config = await loadConfig();
+        let remoteData = null;
+
+        try {
+            const res = await fetch('data/analytics.json?t=' + Date.now());
+            if (res.ok) {
+                remoteData = await res.json();
+            }
+        } catch(e) {}
+
+        if (!remoteData) return;
+
+        let localPageData = JSON.parse(localStorage.getItem('analytics_page_views') || '{"total":0,"today":0}');
+        let localDaily = JSON.parse(localStorage.getItem('analytics_daily_history') || '{}');
+        let localLogs = JSON.parse(localStorage.getItem('analytics_search_logs') || '[]');
+        let localViews = JSON.parse(localStorage.getItem('analytics_post_views') || '{}');
+
+        localPageData.total = Math.max(localPageData.total || 0, remoteData.totalPageviews || 0);
+
+        if (remoteData.dailyHistory) {
+            Object.entries(remoteData.dailyHistory).forEach(([date, dayObj]) => {
+                if (!localDaily[date]) {
+                    localDaily[date] = dayObj;
+                } else {
+                    localDaily[date].count = Math.max(localDaily[date].count || 0, dayObj.count || 0);
+                    if (dayObj.referrers) {
+                        if (!localDaily[date].referrers) localDaily[date].referrers = {};
+                        Object.entries(dayObj.referrers).forEach(([src, cnt]) => {
+                            localDaily[date].referrers[src] = Math.max(localDaily[date].referrers[src] || 0, cnt);
+                        });
+                    }
+                    if (dayObj.postViews) {
+                        if (!localDaily[date].postViews) localDaily[date].postViews = {};
+                        Object.entries(dayObj.postViews).forEach(([id, cnt]) => {
+                            localDaily[date].postViews[id] = Math.max(localDaily[date].postViews[id] || 0, cnt);
+                        });
+                    }
+                }
+            });
+        }
+
+        if (Array.isArray(remoteData.searchLogs)) {
+            const existingKeys = new Set(localLogs.map(l => (l.timestamp || 0) + '_' + l.query));
+            remoteData.searchLogs.forEach(rl => {
+                const key = (rl.timestamp || 0) + '_' + rl.query;
+                if (!existingKeys.has(key)) {
+                    localLogs.push(rl);
+                    existingKeys.add(key);
+                }
+            });
+            localLogs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        }
+
+        if (remoteData.postViews) {
+            Object.entries(remoteData.postViews).forEach(([id, pvObj]) => {
+                if (!localViews[id]) {
+                    localViews[id] = pvObj;
+                } else {
+                    localViews[id].count = Math.max(localViews[id].count || 0, pvObj.count || 0);
+                    if (pvObj.title) localViews[id].title = pvObj.title;
+                }
+            });
+        }
+
+        localStorage.setItem('analytics_page_views', JSON.stringify(localPageData));
+        localStorage.setItem('analytics_daily_history', JSON.stringify(localDaily));
+        localStorage.setItem('analytics_search_logs', JSON.stringify(localLogs));
+        localStorage.setItem('analytics_post_views', JSON.stringify(localViews));
+
+        if (isAdmin() && config.github_token && config.github_owner && config.github_repo) {
+            pushAnalyticsToGithub(config, {
+                totalPageviews: localPageData.total,
+                todayPageviews: localPageData.today,
+                dailyHistory: localDaily,
+                searchLogs: localLogs.slice(0, 100),
+                postViews: localViews
+            });
+        }
+    } catch(e) {}
+}
+
+async function pushAnalyticsToGithub(config, analyticsObj) {
+    try {
+        const path = 'data/analytics.json';
+        const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${path}`;
+        const headers = {
+            'Accept': 'application/vnd.github.v3+json',
+            'Authorization': `token ${config.github_token}`
+        };
+        const getRes = await fetch(url, { headers });
+        let sha = null;
+        if (getRes.ok) {
+            const data = await getRes.json();
+            sha = data.sha;
+        }
+
+        const jsonStr = JSON.stringify(analyticsObj, null, 2);
+        const utf8Bytes = new TextEncoder().encode(jsonStr);
+        let binary = '';
+        for (let i = 0; i < utf8Bytes.length; i++) {
+            binary += String.fromCharCode(utf8Bytes[i]);
+        }
+        const contentBase64 = btoa(binary);
+
+        const body = {
+            message: 'stat: sync multi-device analytics data',
+            content: contentBase64
+        };
+        if (sha) body.sha = sha;
+
+        await fetch(url, {
+            method: 'PUT',
+            headers: {
+                ...headers,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+    } catch(e) {}
+}
+
+// Trigger background sync
+try { syncAnalyticsWithRemote(); } catch(e) {}
+
 window.recordPageView = recordPageView;
 window.recordSearchQuery = recordSearchQuery;
 window.recordPostView = recordPostView;
 window.getAnalyticsSummary = getAnalyticsSummary;
 window.clearAnalyticsLogs = clearAnalyticsLogs;
+window.syncAnalyticsWithRemote = syncAnalyticsWithRemote;
 
 window.loadConfig = loadConfig;
 window.isAdmin = isAdmin;
