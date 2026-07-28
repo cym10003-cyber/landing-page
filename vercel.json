@@ -20,17 +20,13 @@
     }
   ],
   "redirects": [
-    { "source": "/news", "destination": "/property-news?v=20260715_v52", "permanent": false },
-    { "source": "/news.html", "destination": "/property-news?v=20260715_v52", "permanent": false }
+    { "source": "/news", "destination": "/property-news?v=20260715_v53", "permanent": false },
+    { "source": "/news.html", "destination": "/property-news?v=20260715_v53", "permanent": false }
   ],
-  "rewrites": [
-    { "source": "/news-detail", "destination": "/api/news-detail" },
-    { "source": "/news-detail.html", "destination": "/api/news-detail" },
-    { "source": "/templates/news-detail", "destination": "/api/news-detail" },
-    { "source": "/templates/news-detail.html", "destination": "/api/news-detail" },
-    { "source": "/rss", "destination": "/api/rss" },
-    { "source": "/rss.xml", "destination": "/api/rss" },
-    { "source": "/sitemap", "destination": "/api/sitemap" },
-    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
+  "routes": [
+    { "src": "^/news-detail(?:\\.html)?(?:\\?.*)?$", "dest": "/api/news-detail" },
+    { "src": "^/templates/news-detail(?:\\.html)?(?:\\?.*)?$", "dest": "/api/news-detail" },
+    { "src": "^/rss(?:\\.xml)?$", "dest": "/api/rss" },
+    { "src": "^/sitemap(?:\\.xml)?$", "dest": "/api/sitemap" }
   ]
 }
