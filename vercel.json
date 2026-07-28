@@ -20,8 +20,8 @@
     }
   ],
   "redirects": [
-    { "source": "/news", "destination": "/property-news?v=20260715_v57", "permanent": false },
-    { "source": "/news.html", "destination": "/property-news?v=20260715_v57", "permanent": false }
+    { "source": "/news", "destination": "/property-news?v=20260715_v58", "permanent": false },
+    { "source": "/news.html", "destination": "/property-news?v=20260715_v58", "permanent": false }
   ],
   "rewrites": [
     { "source": "/news-detail", "destination": "/api/news-detail" },
