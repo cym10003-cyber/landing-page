@@ -184,14 +184,14 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
 
 export default function handler(req, res) {
   const { id } = req.query;
-  const htmlPath = path.join(process.cwd(), 'templates', 'news-detail.html');
+  const htmlPath = path.join(process.cwd(), 'templates', 'news-detail-template.html');
   const postsPath = path.join(process.cwd(), 'data', 'posts.json');
 
   let html = '';
   try {
     html = fs.readFileSync(htmlPath, 'utf8');
   } catch (e) {
-    return res.status(500).send('Error reading templates/news-detail.html template');
+    return res.status(500).send('Error reading templates/news-detail-template.html template');
   }
 
   // If there is an ID, find the post
