@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 161,
-  "todayPageviews": 35,
+  "totalPageviews": 170,
+  "todayPageviews": 9,
   "dailyHistory": {
     "2026-07-22": {
       "date": "2026-07-22",
@@ -60,12 +60,15 @@
     },
     "2026-07-28": {
       "date": "2026-07-28",
-      "count": 5,
+      "count": 14,
       "referrers": {
-        "네이버 (Naver)": 4,
-        "직접 접속 / 카카오톡 링크": 1
+        "네이버 (Naver)": 7,
+        "직접 접속 / 카카오톡 링크": 1,
+        "구글 (Google)": 1
       },
-      "postViews": {}
+      "postViews": {
+        "1785139895554": 2
+      }
     }
   },
   "searchLogs": [],
@@ -127,8 +130,8 @@
     "1785139895554": {
       "id": "1785139895554",
       "title": "대구 동구 불로동 주차 19대로 주차최고 무권리 시설완비 사무실 상가임대 매물번호:1671",
-      "count": 1,
-      "lastViewed": 1785139903210
+      "count": 3,
+      "lastViewed": 1785201012063
     }
   }
 }
