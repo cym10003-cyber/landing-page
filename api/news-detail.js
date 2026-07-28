@@ -219,46 +219,50 @@ export default function handler(req, res) {
           // Inject JSON-LD Schema Markup into <head>
           html = html.replace('</head>', `${jsonLdScript}</head>`);
 
-          // Replace meta and title tags
+          // Replace meta and title tags dynamically for OpenGraph crawlers
           html = html
             .replace(
-              /<title>부동산 뉴스 &amp; 소식 상세 - 최가네부동산공인중개사사무소<\/title>/,
+              /<title>.*?<\/title>/i,
               `<title>${titleEscaped}</title>`
             )
             .replace(
-              /<meta name="description" content="최가네부동산의 대구 상가, 사무실 임대 및 분양 소식 상세 페이지입니다."\s*\/?>/,
+              /<meta name="description" content="[^"]*"\s*\/?>/i,
               `<meta name="description" content="${descEscaped}" />`
             )
             .replace(
-              /<meta property="og:title" content="부동산 뉴스 &amp; 소식 상세 - 최가네부동산공인중개사사무소"\s*\/?>/,
+              /<meta property="og:title" content="[^"]*"\s*\/?>/i,
               `<meta property="og:title" content="${titleEscaped}" />`
             )
             .replace(
-              /<meta property="og:description" content="최가네부동산의 대구 전 지역 상업용 매물 상세 정보 및 최신 소식을 확인해 보세요."\s*\/?>/,
+              /<meta property="og:description" content="[^"]*"\s*\/?>/i,
               `<meta property="og:description" content="${descEscaped}" />`
             )
             .replace(
-              /<meta property="og:image" content="https:\/\/choi114.com\/og_home.jpg"\s*\/?>/,
+              /<meta property="og:image" content="[^"]*"\s*\/?>/i,
               `<meta property="og:image" content="${imageEscaped}" />`
             )
             .replace(
-              /<meta property="og:url" content="https:\/\/choi114.com\/news-detail"\s*\/?>/,
+              /<meta property="og:url" content="[^"]*"\s*\/?>/i,
               `<meta property="og:url" content="${urlEscaped}" />`
             )
             .replace(
-              /<link rel="canonical" href="https:\/\/choi114.com\/news-detail"\s*\/?>/,
+              /<link rel="image_src" href="[^"]*"\s*\/?>/i,
+              `<link rel="image_src" href="${imageEscaped}" />`
+            )
+            .replace(
+              /<link rel="canonical" href="[^"]*"\s*\/?>/i,
               `<link rel="canonical" href="${urlEscaped}" />`
             )
             .replace(
-              /<meta name="twitter:title" content="부동산 뉴스 &amp; 소식 상세 - 최가네부동산공인중개사사무소"\s*\/?>/,
+              /<meta name="twitter:title" content="[^"]*"\s*\/?>/i,
               `<meta name="twitter:title" content="${titleEscaped}" />`
             )
             .replace(
-              /<meta name="twitter:description" content="최가네부동산의 최신 소식을 확인해 보세요."\s*\/?>/,
+              /<meta name="twitter:description" content="[^"]*"\s*\/?>/i,
               `<meta name="twitter:description" content="${descEscaped}" />`
             )
             .replace(
-              /<meta name="twitter:image" content="https:\/\/choi114.com\/og_home.jpg"\s*\/?>/,
+              /<meta name="twitter:image" content="[^"]*"\s*\/?>/i,
               `<meta name="twitter:image" content="${imageEscaped}" />`
             );
 
