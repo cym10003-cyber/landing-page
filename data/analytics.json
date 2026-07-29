@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 197,
-  "todayPageviews": 6,
+  "totalPageviews": 201,
+  "todayPageviews": 10,
   "dailyHistory": {
     "2026-07-22": {
       "date": "2026-07-22",
@@ -78,9 +78,10 @@
     },
     "2026-07-29": {
       "date": "2026-07-29",
-      "count": 6,
+      "count": 10,
       "referrers": {
-        "네이버 (Naver)": 2
+        "네이버 (Naver)": 3,
+        "구글 (Google)": 1
       },
       "postViews": {}
     }
