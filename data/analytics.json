@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 203,
-  "todayPageviews": 12,
+  "totalPageviews": 204,
+  "todayPageviews": 13,
   "dailyHistory": {
     "2026-07-22": {
       "date": "2026-07-22",
@@ -78,12 +78,14 @@
     },
     "2026-07-29": {
       "date": "2026-07-29",
-      "count": 12,
+      "count": 13,
       "referrers": {
         "네이버 (Naver)": 3,
         "구글 (Google)": 1
       },
-      "postViews": {}
+      "postViews": {
+        "1785305506237": 1
+      }
     }
   },
   "searchLogs": [],
@@ -177,6 +179,12 @@
       "title": "대구 중구 남산동 달구벌대로 무권리 대형사무실 임대 송림빌딩 매물번호:1605",
       "count": 1,
       "lastViewed": 1785281530623
+    },
+    "1785305506237": {
+      "id": "1785305506237",
+      "title": "대구 북구 칠성동2가 무권리 인테리어 완비 사무실 스튜디오 상가 임대 매물번호:1679",
+      "count": 1,
+      "lastViewed": 1785305513416
     }
   }
 }
