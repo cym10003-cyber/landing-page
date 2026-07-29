@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v58");
+console.log("Antigravity db.js version: 20260715_v59");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v58";
+const APP_VERSION = "20260715_v59";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -805,32 +805,55 @@ function getAnalyticsSummary() {
         }
 
         // Helper: Format referrer list for a given referrers map
-        const calcReferrers = (refMap) => {
-            let total = 0;
-            Object.values(refMap).forEach(c => total += c);
-            return Object.entries(refMap)
+        const calcReferrers = (refMap, targetTotal = 0) => {
+            const mapCopy = { ...refMap };
+            let currentSum = 0;
+            Object.values(mapCopy).forEach(c => currentSum += (c || 0));
+
+            if (targetTotal > currentSum) {
+                const diff = targetTotal - currentSum;
+                const directKey = '직접 접속 / 카카오톡 링크';
+                mapCopy[directKey] = (mapCopy[directKey] || 0) + diff;
+                currentSum = targetTotal;
+            }
+
+            return Object.entries(mapCopy)
+                .filter(([_, count]) => count > 0)
                 .map(([source, count]) => ({
                     source,
                     count,
-                    pct: total > 0 ? Math.round((count / total) * 100) : 0
+                    pct: currentSum > 0 ? Math.round((count / currentSum) * 100) : 0
                 }))
                 .sort((a, b) => b.count - a.count);
         };
 
+        // Calculate total 7 days visits
+        let total7DaysVisits = 0;
+        datesList.forEach(d => { total7DaysVisits += (d.count || 0); });
+
+        // Calculate all time total visits
+        let totalAllVisits = pageData.total || 0;
+        Object.values(dailyHistory).forEach(day => {
+            totalAllVisits = Math.max(totalAllVisits, day.count || 0);
+        });
+
         // All Referrers
         const allRefMap = {};
+        let allVisitsSum = 0;
         Object.values(dailyHistory).forEach(day => {
+            allVisitsSum += (day.count || 0);
             if (day.referrers) {
                 Object.entries(day.referrers).forEach(([src, count]) => {
                     allRefMap[src] = (allRefMap[src] || 0) + count;
                 });
             }
         });
-        const topReferrersAll = calcReferrers(allRefMap);
+        const topReferrersAll = calcReferrers(allRefMap, Math.max(pageData.total || 0, allVisitsSum));
 
         // Today Referrers
-        const todayEntry = dailyHistory[todayStr] || { referrers: {}, postViews: {} };
-        const topReferrersToday = calcReferrers(todayEntry.referrers || {});
+        const todayEntry = dailyHistory[todayStr] || { count: pageData.today || 0, referrers: {}, postViews: {} };
+        const todayVisitCount = Math.max(pageData.today || 0, todayEntry.count || 0);
+        const topReferrersToday = calcReferrers(todayEntry.referrers || {}, todayVisitCount);
 
         // Recent 7 Days Referrers
         const ref7Map = {};
@@ -841,7 +864,7 @@ function getAnalyticsSummary() {
                 });
             }
         });
-        const topReferrers7Days = calcReferrers(ref7Map);
+        const topReferrers7Days = calcReferrers(ref7Map, total7DaysVisits);
 
         // Today Top Views
         const todayPostViewsMap = todayEntry.postViews || {};
