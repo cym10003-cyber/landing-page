@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 208,
-  "todayPageviews": 17,
+  "totalPageviews": 212,
+  "todayPageviews": 21,
   "dailyHistory": {
     "2026-07-22": {
       "date": "2026-07-22",
@@ -78,13 +78,13 @@
     },
     "2026-07-29": {
       "date": "2026-07-29",
-      "count": 17,
+      "count": 21,
       "referrers": {
-        "네이버 (Naver)": 3,
+        "네이버 (Naver)": 4,
         "구글 (Google)": 1
       },
       "postViews": {
-        "1785305506237": 2
+        "1785305506237": 3
       }
     }
   },
@@ -183,8 +183,8 @@
     "1785305506237": {
       "id": "1785305506237",
       "title": "대구 북구 칠성동2가 무권리 인테리어 완비 사무실 스튜디오 상가 임대 매물번호:1679",
-      "count": 2,
-      "lastViewed": 1785306060218
+      "count": 3,
+      "lastViewed": 1785306636775
     }
   }
 }
