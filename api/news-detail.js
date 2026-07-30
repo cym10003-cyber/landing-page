@@ -47,9 +47,35 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   if (sale) priceParts.push(`매매가 ${formatPriceVal(sale)}`);
   const priceStr = priceParts.join(' / ');
 
-  // 4. Extract Area
-  const mArea = content.match(/(?:전용면적|공급면적)\s*:\s*([^\n]+)/);
-  const area = mArea ? mArea[1].trim() : '';
+  // 4. Extract Area & Floor
+  const mArea = content.match(/(?:전용면적|공급면적|면적|평수)\s*:\s*([^\n]+)/i);
+  let areaStr = '';
+  if (mArea) {
+    const rawA = mArea[1].trim();
+    const pMatch = rawA.match(/([0-9.]+\s*평)/);
+    if (pMatch) areaStr = pMatch[1].replace(/\s+/g, '');
+    else areaStr = rawA.split('/')[0].trim();
+  } else {
+    const pInContent = (title + ' ' + content).match(/([0-9.]+\s*평)/);
+    if (pInContent) areaStr = pInContent[1].replace(/\s+/g, '');
+  }
+
+  const mFloor = content.match(/(?:해당층|층수|층)\s*:\s*([^\n]+)/i);
+  let floorStr = '';
+  if (mFloor) {
+    const rawF = mFloor[1].trim();
+    const fMatch = rawF.match(/((?:지하\s*)?[0-9]+층)/);
+    if (fMatch) floorStr = fMatch[1].replace(/\s+/g, '');
+    else floorStr = rawF.split('/')[0].trim();
+  } else {
+    const fInContent = (title + ' ' + content).match(/((?:지하\s*)?[0-9]+층)/);
+    if (fInContent) floorStr = fInContent[1].replace(/\s+/g, '');
+  }
+
+  const specParts = [];
+  if (floorStr) specParts.push(floorStr);
+  if (areaStr) specParts.push(areaStr);
+  const specStr = specParts.join(' · ');
 
   // 5. Type & Trade
   let pType = '상가/사무실';
@@ -96,14 +122,20 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   const uniqueKws = [...new Set(kwList)];
   const targetKw = uniqueKws.join(' ');
 
-  // Clean Professional High-Ranking Title Format: [키워드] | [지역] [매물종류] (가격) - 최가네부동산 010-3548-4000
+  // Clean Professional High-Ranking Title Format: [키워드] | [지역] [매물종류] (층수·평수 / 가격) - 최가네부동산 010-3548-4000
   let metaTitle = `${targetKw} | ${cleanLoc} ${fullType}`;
-  if (priceStr) metaTitle += ` (${priceStr})`;
+  const detailParts = [];
+  if (specStr) detailParts.push(specStr);
+  if (priceStr) detailParts.push(priceStr);
+
+  if (detailParts.length > 0) {
+    metaTitle += ` (${detailParts.join(' / ')})`;
+  }
   metaTitle += ' - 최가네부동산 010-3548-4000';
 
   // Clean Professional Description Format
   const descParts = [`${targetKw}`, `${cleanLoc} ${fullType}`];
-  if (area) descParts.push(`면적: ${area}`);
+  if (specStr) descParts.push(specStr);
   if (priceStr) descParts.push(`가격: ${priceStr}`);
 
   const mFeat = [...content.matchAll(/(?:🔎|O|▶)\s*([^\n]+)/g)].map(m => m[1].trim());
