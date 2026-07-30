@@ -47,7 +47,7 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   if (sale) priceParts.push(`매매가 ${formatPriceVal(sale)}`);
   const priceStr = priceParts.join(' / ');
 
-  // 4. Extract Area & Floor
+  // 4. Extract Area & Floor with Smart Pyeong Band Generator
   const mArea = content.match(/(?:전용면적|공급면적|면적|평수)\s*:\s*([^\n]+)/i);
   let areaStr = '';
   if (mArea) {
@@ -58,6 +58,31 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   } else {
     const pInContent = (title + ' ' + content).match(/([0-9.]+\s*평)/);
     if (pInContent) areaStr = pInContent[1].replace(/\s+/g, '');
+  }
+
+  let pyeongNum = 0;
+  let pyeongBandStr = '';
+  let upperBandStr = '';
+  let fullAreaDisplay = areaStr;
+
+  if (areaStr) {
+    const numMatch = areaStr.match(/([0-9.]+)/);
+    if (numMatch) {
+      pyeongNum = Math.round(parseFloat(numMatch[1]));
+      if (pyeongNum >= 10) {
+        const decade = Math.floor(pyeongNum / 10) * 10;
+        pyeongBandStr = `${decade}평대`;
+
+        // If e.g. 48평, 58평, 28평 (remainder >= 7), also include round-up decade (50평대, 60평대, 30평대)
+        if (pyeongNum % 10 >= 7) {
+          upperBandStr = `${decade + 10}평대`;
+        }
+
+        if (pyeongNum % 10 !== 0) {
+          fullAreaDisplay = `${areaStr}(${pyeongBandStr})`;
+        }
+      }
+    }
   }
 
   const mFloor = content.match(/(?:해당층|층수|층)\s*:\s*([^\n]+)/i);
@@ -74,7 +99,7 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
 
   const specParts = [];
   if (floorStr) specParts.push(floorStr);
-  if (areaStr) specParts.push(areaStr);
+  if (fullAreaDisplay) specParts.push(fullAreaDisplay);
   const specStr = specParts.join(' · ');
 
   // 5. Type & Trade
@@ -106,6 +131,15 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   const kwList = [];
   if (dongStr) kwList.push(`${dongStr}${mainCategory}${trade}`);
   if (guStr) kwList.push(`${guStr}${mainCategory}${trade}`);
+
+  if (pyeongBandStr) {
+    if (dongStr) kwList.push(`${dongStr}${pyeongBandStr}`);
+    if (guStr) kwList.push(`${guStr}${pyeongBandStr}`);
+  }
+  if (upperBandStr) {
+    if (dongStr) kwList.push(`${dongStr}${upperBandStr}`);
+    if (guStr) kwList.push(`${guStr}${upperBandStr}`);
+  }
 
   if (trade === '임대') {
     kwList.push('대구상가임대');
