@@ -96,20 +96,20 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   const uniqueKws = [...new Set(kwList)];
   const targetKw = uniqueKws.join(' ');
 
-  // Format Title: [타깃키워드] | [지역] [매물종류] - [가격] | 최가네부동산
-  let metaTitle = `${targetKw} | ${cleanLoc} ${fullType}`;
-  if (priceStr) metaTitle += ` - ${priceStr}`;
-  metaTitle += ' | 최가네부동산';
+  // High CTR Title Format: [100% 실매물] [키워드] | [지역] [매물종류] (가격) - 최가네부동산 010-3548-4000
+  let metaTitle = `[100% 실매물] ${targetKw} | ${cleanLoc} ${fullType}`;
+  if (priceStr) metaTitle += ` (${priceStr})`;
+  metaTitle += ' - 최가네부동산 010-3548-4000';
 
-  // Format Description
-  const descParts = [`${targetKw}`, `${cleanLoc} ${fullType}`];
+  // High CTR Description Format
+  const descParts = [`🔥100% 실매물`, `${targetKw}`, `${cleanLoc} ${fullType}`];
   if (area) descParts.push(`면적: ${area}`);
   if (priceStr) descParts.push(`가격: ${priceStr}`);
 
   const mFeat = [...content.matchAll(/(?:🔎|O|▶)\s*([^\n]+)/g)].map(m => m[1].trim());
   if (mFeat.length > 0) descParts.push(mFeat.slice(0, 2).join(', '));
 
-  const metaDesc = descParts.join(' | ') + ' | 최가네부동산공인중개사사무소 (대표소장 최이명 010-3548-4000)';
+  const metaDesc = descParts.join(' | ') + ' | 대구 상가·사무실 위치기반 추천! ☎010-3548-4000 (대표소장 최이명)';
 
   // RealEstateListing JSON-LD Schema Markup
   const dateStr = post.id ? new Date(Number(post.id)).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
