@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v82">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v83">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v82">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v83">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -299,6 +299,41 @@
                         </tbody>
                     </table>
                 </div>
+            <!-- Tab 3: Customer Lead Requests Inbox (손님 매물 의뢰 접수함) -->
+            <div id="tab-leads-content" class="hidden flex flex-col gap-lg">
+                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                    <div class="flex justify-between items-center mb-md flex-wrap gap-sm">
+                        <div>
+                            <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
+                                <span class="material-symbols-outlined text-primary">mark_email_unread</span> 손님 매물 의뢰 접수함 목록
+                            </h3>
+                            <p class="text-xs text-muted mt-1">홈페이지를 통해 손님이 직접 접수한 매물 구함/내놓음 문의 내역입니다.</p>
+                        </div>
+                        <button onclick="clearClientLeads()" class="bg-error-container hover:bg-error/20 text-error text-xs px-3 py-1.5 rounded font-semibold transition-all flex items-center gap-xs cursor-pointer">
+                            <span class="material-symbols-outlined text-[14px]">delete</span> 접수함 초기화
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-ink border-collapse">
+                            <thead class="bg-surface-container text-muted border-b border-hairline font-semibold text-xs uppercase">
+                                <tr>
+                                    <th class="px-md py-3 w-36">구분</th>
+                                    <th class="px-md py-3 w-28">성함 / 상호</th>
+                                    <th class="px-md py-3 w-36">연락처</th>
+                                    <th class="px-md py-3 w-28">희망업종</th>
+                                    <th class="px-md py-3">희망지역 / 평수</th>
+                                    <th class="px-md py-3 w-32">예산 / 임대료</th>
+                                    <th class="px-md py-3">상담 요청 메모</th>
+                                    <th class="px-md py-3 w-36">접수일시</th>
+                                    <th class="px-md py-3 w-28 text-center">작업</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leads-tbody" class="divide-y divide-hairline">
+                                <tr><td colspan="9" class="text-center py-8 text-muted">접수된 매물 의뢰가 없습니다.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -334,10 +369,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v82">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v83">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v82">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v83">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -348,7 +383,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v82"></script>
+<script src="db.js?v=20260715_v83"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -360,25 +395,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Tab Switching Handlers
         const tabPostsBtn = document.getElementById('tab-posts-btn');
         const tabAnalyticsBtn = document.getElementById('tab-analytics-btn');
+        const tabLeadsBtn = document.getElementById('tab-leads-btn');
+
         const tabPostsContent = document.getElementById('tab-posts-content');
         const tabAnalyticsContent = document.getElementById('tab-analytics-content');
+        const tabLeadsContent = document.getElementById('tab-leads-content');
 
-        if (tabPostsBtn && tabAnalyticsBtn && tabPostsContent && tabAnalyticsContent) {
-            tabPostsBtn.addEventListener('click', () => {
-                tabPostsBtn.className = 'pb-sm font-bold border-b-2 border-primary text-primary flex items-center gap-xs cursor-pointer text-sm md:text-base';
-                tabAnalyticsBtn.className = 'pb-sm font-semibold text-muted hover:text-ink flex items-center gap-xs cursor-pointer text-sm md:text-base';
-                tabPostsContent.classList.remove('hidden');
-                tabAnalyticsContent.classList.add('hidden');
-            });
+        const activeTabClass = 'pb-sm font-bold border-b-2 border-primary text-primary flex items-center gap-xs cursor-pointer text-sm md:text-base whitespace-nowrap';
+        const inactiveTabClass = 'pb-sm font-semibold text-muted hover:text-ink flex items-center gap-xs cursor-pointer text-sm md:text-base whitespace-nowrap';
 
-            tabAnalyticsBtn.addEventListener('click', () => {
-                tabAnalyticsBtn.className = 'pb-sm font-bold border-b-2 border-primary text-primary flex items-center gap-xs cursor-pointer text-sm md:text-base';
-                tabPostsBtn.className = 'pb-sm font-semibold text-muted hover:text-ink flex items-center gap-xs cursor-pointer text-sm md:text-base';
-                tabAnalyticsContent.classList.remove('hidden');
-                tabPostsContent.classList.add('hidden');
-                renderAnalyticsView();
-            });
+        function showTab(target) {
+            if (tabPostsBtn) tabPostsBtn.className = target === 'posts' ? activeTabClass : inactiveTabClass;
+            if (tabAnalyticsBtn) tabAnalyticsBtn.className = target === 'analytics' ? activeTabClass : inactiveTabClass;
+            if (tabLeadsBtn) tabLeadsBtn.className = target === 'leads' ? activeTabClass : inactiveTabClass;
+
+            if (tabPostsContent) tabPostsContent.classList.toggle('hidden', target !== 'posts');
+            if (tabAnalyticsContent) tabAnalyticsContent.classList.toggle('hidden', target !== 'analytics');
+            if (tabLeadsContent) tabLeadsContent.classList.toggle('hidden', target !== 'leads');
+
+            if (target === 'analytics') renderAnalyticsView();
+            if (target === 'leads') renderClientLeadsTab();
         }
+
+        if (tabPostsBtn) tabPostsBtn.addEventListener('click', () => showTab('posts'));
+        if (tabAnalyticsBtn) tabAnalyticsBtn.addEventListener('click', () => showTab('analytics'));
+        if (tabLeadsBtn) tabLeadsBtn.addEventListener('click', () => showTab('leads'));
 
         const clearLogsBtn = document.getElementById('clear-logs-btn');
         if (clearLogsBtn) {
@@ -736,22 +777,6 @@ async function handleDelete(id) {
     }
 }
 
-        const tabLeadsBtn = document.getElementById('tab-leads-btn');
-        const tabLeadsContent = document.getElementById('tab-leads-content');
-
-        if (tabLeadsBtn) {
-            tabLeadsBtn.addEventListener('click', () => {
-                tabPostsBtn.className = 'pb-sm font-semibold text-muted hover:text-ink flex items-center gap-xs cursor-pointer text-sm md:text-base whitespace-nowrap';
-                tabAnalyticsBtn.className = 'pb-sm font-semibold text-muted hover:text-ink flex items-center gap-xs cursor-pointer text-sm md:text-base whitespace-nowrap';
-                tabLeadsBtn.className = 'pb-sm font-bold border-b-2 border-primary text-primary flex items-center gap-xs cursor-pointer text-sm md:text-base whitespace-nowrap';
-
-                tabPostsContent.classList.add('hidden');
-                tabAnalyticsContent.classList.add('hidden');
-                tabLeadsContent.classList.remove('hidden');
-                renderClientLeadsTab();
-            });
-        }
-
         function renderClientLeadsTab() {
             try {
                 const leads = JSON.parse(localStorage.getItem('analytics_client_leads') || '[]');
@@ -761,7 +786,7 @@ async function handleDelete(id) {
 
                 if (!tbody) return;
                 if (leads.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" class="text-center py-8 text-muted">접수된 매물 의뢰가 없습니다.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="9" class="text-center py-8 text-muted">접수된 매물 의뢰가 없습니다.</td></tr>';
                     return;
                 }
 
@@ -770,24 +795,37 @@ async function handleDelete(id) {
                         <td class="px-md py-3 font-semibold ${l.type === 'seller' ? 'text-purple-600' : 'text-blue-600'}">
                             ${l.type === 'seller' ? '🏢 건물주 매물내놓기' : '🔍 손님 매물구함'}
                         </td>
-                        <td class="px-md py-3 font-bold">${l.name || '-'}</td>
-                        <td class="px-md py-3 font-mono">${l.phone || '-'}</td>
-                        <td class="px-md py-3">${l.category || '-'}</td>
+                        <td class="px-md py-3 font-bold text-ink">${l.name || '-'}</td>
+                        <td class="px-md py-3 font-mono font-bold text-primary">${l.phone || '-'}</td>
+                        <td class="px-md py-3 font-medium">${l.category || '-'}</td>
                         <td class="px-md py-3">${l.location || '-'} ${l.pyeong ? '(' + l.pyeong + ')' : ''}</td>
-                        <td class="px-md py-3">${l.budget || '-'}</td>
-                        <td class="px-md py-3 text-xs text-muted">${l.date || '-'}</td>
-                        <td class="px-md py-3 text-center">
-                            <a href="tel:${l.phone}" class="inline-flex items-center gap-1 px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-bold transition">
+                        <td class="px-md py-3 font-medium text-emerald-700">${l.budget || '-'}</td>
+                        <td class="px-md py-3 text-xs text-slate-700 max-w-xs truncate" title="${l.notes || ''}">${l.notes || '-'}</td>
+                        <td class="px-md py-3 text-xs text-muted whitespace-nowrap">${l.date || '-'}</td>
+                        <td class="px-md py-3 text-center flex items-center justify-center gap-1">
+                            <a href="tel:${l.phone}" class="inline-flex items-center gap-1 px-2.5 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-bold transition shadow-xs">
                                 <span class="material-symbols-outlined text-[14px]">call</span> 전화
                             </a>
+                            <button onclick="deleteSingleLead(${l.id})" class="inline-flex items-center p-1 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded text-xs font-bold transition cursor-pointer" title="삭제">
+                                <span class="material-symbols-outlined text-[16px]">delete</span>
+                            </button>
                         </td>
                     </tr>
                 `).join('');
             } catch(e) {}
         }
 
+        window.deleteSingleLead = function(id) {
+            if (confirm('해당 손님 의뢰 건을 삭제하시겠습니까?')) {
+                let leads = JSON.parse(localStorage.getItem('analytics_client_leads') || '[]');
+                leads = leads.filter(l => l.id !== id);
+                localStorage.setItem('analytics_client_leads', JSON.stringify(leads));
+                renderClientLeadsTab();
+            }
+        };
+
         window.clearClientLeads = function() {
-            if (confirm('접수된 손님 의뢰 목록을 비우시겠습니까?')) {
+            if (confirm('접수된 손님 의뢰 목록을 모두 비우시겠습니까?')) {
                 localStorage.removeItem('analytics_client_leads');
                 renderClientLeadsTab();
             }
