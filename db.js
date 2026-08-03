@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v63");
+console.log("Antigravity db.js version: 20260715_v64");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v63";
+const APP_VERSION = "20260715_v64";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1069,3 +1069,377 @@ window.renderMarkdown = renderMarkdown;
 window.markdownToText = markdownToText;
 window.uploadImageFile = uploadImageFile;
 window.uploadVideoFile = uploadVideoFile;
+
+
+// =============================================================
+// NEW FEATURES: Calculator, Lead Form, Mobile Bottom Bar
+// =============================================================
+
+function showFeeCalculator() {
+    let modal = document.getElementById('fee-calculator-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'fee-calculator-modal';
+        modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn';
+        modal.innerHTML = `
+        <div class="bg-white dark:bg-[#0d1b3e] text-slate-800 dark:text-slate-100 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-[#003891] text-white px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-amber-400">calculate</span>
+                    <h3 class="text-lg font-bold">상가·사무실 중개보수 & 임대료 계산기</h3>
+                </div>
+                <button onclick="closeFeeCalculator()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
+            </div>
+            
+            <div class="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#07102b] text-sm font-medium">
+                <button id="calc-tab-1" onclick="switchCalcTab(1)" class="flex-1 py-3 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold">중개보수(복비)</button>
+                <button id="calc-tab-2" onclick="switchCalcTab(2)" class="flex-1 py-3 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">평당 임대료</button>
+                <button id="calc-tab-3" onclick="switchCalcTab(3)" class="flex-1 py-3 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">전월세 전환율</button>
+            </div>
+
+            <div class="p-6 overflow-y-auto space-y-4 text-sm">
+                <!-- Tab 1: Brokerage Fee -->
+                <div id="calc-panel-1" class="space-y-4">
+                    <div>
+                        <label class="block font-medium mb-1">거래 종류</label>
+                        <select id="calc-trade-type" onchange="runFeeCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                            <option value="rent">임대차 (월세 / 전세)</option>
+                            <option value="sale">매매</option>
+                        </select>
+                    </div>
+                    <div id="calc-deposit-group">
+                        <label class="block font-medium mb-1">보증금 (만원)</label>
+                        <input type="number" id="calc-deposit" placeholder="예: 5000" oninput="runFeeCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
+                    <div id="calc-rent-group">
+                        <label class="block font-medium mb-1">월세 (만원)</label>
+                        <input type="number" id="calc-rent" placeholder="예: 300" oninput="runFeeCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
+                    <div id="calc-price-group" class="hidden">
+                        <label class="block font-medium mb-1">매매가 (만원)</label>
+                        <input type="number" id="calc-price" placeholder="예: 50000" oninput="runFeeCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-100 dark:bg-[#07102b] border border-slate-200 dark:border-slate-700 space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-slate-500 dark:text-slate-400">환산 거래금액:</span>
+                            <span id="res-calc-trade-val" class="font-semibold">0 만원</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500 dark:text-slate-400">법정 상한 요율:</span>
+                            <span class="font-semibold">0.9% 이내 협의</span>
+                        </div>
+                        <div class="flex justify-between border-t border-slate-200 dark:border-slate-700 pt-2 text-base font-bold text-[#003891] dark:text-blue-400">
+                            <span>법정 상한 중개보수:</span>
+                            <span id="res-calc-fee">0 원 (VAT별도)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Rent per Pyeong -->
+                <div id="calc-panel-2" class="hidden space-y-4">
+                    <div>
+                        <label class="block font-medium mb-1">전용면적 (평)</label>
+                        <input type="number" id="calc-pyeong" placeholder="예: 50" oninput="runPyeongCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
+                    <div>
+                        <label class="block font-medium mb-1">월세 (만원)</label>
+                        <input type="number" id="calc-pyeong-rent" placeholder="예: 300" oninput="runPyeongCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-100 dark:bg-[#07102b] border border-slate-200 dark:border-slate-700 space-y-2">
+                        <div class="flex justify-between border-t border-slate-200 dark:border-slate-700 pt-2 text-base font-bold text-[#003891] dark:text-blue-400">
+                            <span>평당 월세:</span>
+                            <span id="res-pyeong-rent">0 만원 / 평</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Conversion Rate -->
+                <div id="calc-panel-3" class="hidden space-y-4">
+                    <div>
+                        <label class="block font-medium mb-1">보증금 감액/증액 금액 (만원)</label>
+                        <input type="number" id="calc-conv-deposit" placeholder="예: 1000" oninput="runConvCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
+                    <div>
+                        <label class="block font-medium mb-1">적용 연 전환율 (%)</label>
+                        <input type="number" id="calc-conv-rate" value="6.0" step="0.5" oninput="runConvCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-100 dark:bg-[#07102b] border border-slate-200 dark:border-slate-700 space-y-2">
+                        <div class="flex justify-between border-t border-slate-200 dark:border-slate-700 pt-2 text-base font-bold text-[#003891] dark:text-blue-400">
+                            <span>예상 월세 변동액:</span>
+                            <span id="res-conv-rent">월 0 만원 변동</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-50 dark:bg-[#07102b] border-t border-slate-200 dark:border-slate-700 text-center">
+                <a href="tel:010-3548-4000" class="inline-flex items-center gap-2 px-6 py-2.5 bg-[#003891] hover:bg-blue-800 text-white rounded-xl font-bold shadow-md transition">
+                    <span class="material-symbols-outlined text-amber-300">call</span>
+                    <span>정확한 수수료 및 조건 협의 (010-3548-4000)</span>
+                </a>
+            </div>
+        </div>`;
+        document.body.appendChild(modal);
+    }
+    modal.classList.remove('hidden');
+}
+
+function closeFeeCalculator() {
+    const modal = document.getElementById('fee-calculator-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function switchCalcTab(idx) {
+    for (let i = 1; i <= 3; i++) {
+        const btn = document.getElementById('calc-tab-' + i);
+        const panel = document.getElementById('calc-panel-' + i);
+        if (i === idx) {
+            btn.className = 'flex-1 py-3 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold';
+            panel.classList.remove('hidden');
+        } else {
+            btn.className = 'flex-1 py-3 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200';
+            panel.classList.add('hidden');
+        }
+    }
+}
+
+function runFeeCalc() {
+    const type = document.getElementById('calc-trade-type').value;
+    const depGrp = document.getElementById('calc-deposit-group');
+    const rentGrp = document.getElementById('calc-rent-group');
+    const priceGrp = document.getElementById('calc-price-group');
+
+    if (type === 'sale') {
+        depGrp.classList.add('hidden');
+        rentGrp.classList.add('hidden');
+        priceGrp.classList.remove('hidden');
+
+        const price = parseFloat(document.getElementById('calc-price').value) || 0;
+        const fee = price * 10000 * 0.009;
+        document.getElementById('res-calc-trade-val').textContent = price.toLocaleString() + ' 만원';
+        document.getElementById('res-calc-fee').textContent = Math.round(fee).toLocaleString() + ' 원 (VAT별도)';
+    } else {
+        depGrp.classList.remove('hidden');
+        rentGrp.classList.remove('hidden');
+        priceGrp.classList.add('hidden');
+
+        const dep = parseFloat(document.getElementById('calc-deposit').value) || 0;
+        const rent = parseFloat(document.getElementById('calc-rent').value) || 0;
+
+        let tradeVal = dep + (rent * 100);
+        if (tradeVal < 5000 && rent > 0) {
+            tradeVal = dep + (rent * 70);
+        }
+        const fee = tradeVal * 10000 * 0.009;
+
+        document.getElementById('res-calc-trade-val').textContent = Math.round(tradeVal).toLocaleString() + ' 만원';
+        document.getElementById('res-calc-fee').textContent = Math.round(fee).toLocaleString() + ' 원 (VAT별도)';
+    }
+}
+
+function runPyeongCalc() {
+    const pyeong = parseFloat(document.getElementById('calc-pyeong').value) || 0;
+    const rent = parseFloat(document.getElementById('calc-pyeong-rent').value) || 0;
+    if (pyeong > 0 && rent > 0) {
+        const perPyeong = (rent / pyeong).toFixed(1);
+        document.getElementById('res-pyeong-rent').textContent = `평당 ${perPyeong} 만원`;
+    } else {
+        document.getElementById('res-pyeong-rent').textContent = '0 만원 / 평';
+    }
+}
+
+function runConvCalc() {
+    const dep = parseFloat(document.getElementById('calc-conv-deposit').value) || 0;
+    const rate = parseFloat(document.getElementById('calc-conv-rate').value) || 6.0;
+    if (dep > 0 && rate > 0) {
+        const rentDelta = Math.round((dep * (rate / 100)) / 12);
+        document.getElementById('res-conv-rent').textContent = `월 약 ${rentDelta} 만원 변동`;
+    } else {
+        document.getElementById('res-conv-rent').textContent = '월 0 만원 변동';
+    }
+}
+
+function showLeadForm(type = 'buyer') {
+    let modal = document.getElementById('client-lead-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'client-lead-modal';
+        modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn';
+        modal.innerHTML = `
+        <div class="bg-white dark:bg-[#0d1b3e] text-slate-800 dark:text-slate-100 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-[#003891] text-white px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-amber-400">edit_note</span>
+                    <h3 class="text-lg font-bold">30초 간편 매물 의뢰 / 내놓기</h3>
+                </div>
+                <button onclick="closeLeadForm()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
+            </div>
+
+            <div class="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#07102b] text-sm font-medium">
+                <button id="lead-tab-buyer" onclick="switchLeadTab('buyer')" class="flex-1 py-3 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold">🔍 매물 구해요 (손님)</button>
+                <button id="lead-tab-seller" onclick="switchLeadTab('seller')" class="flex-1 py-3 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">🏢 매물 내놓습니다 (건물주)</button>
+            </div>
+
+            <form id="lead-submit-form" onsubmit="submitClientLead(event)" class="p-6 overflow-y-auto space-y-4 text-sm">
+                <input type="hidden" id="lead-type" value="buyer">
+                <div>
+                    <label class="block font-medium mb-1">성함 / 상호 <span class="text-red-500">*</span></label>
+                    <input type="text" id="lead-name" required placeholder="예: 홍길동 (또는 최가네치과)" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">연락처 <span class="text-red-500">*</span></label>
+                    <input type="tel" id="lead-phone" required placeholder="010-0000-0000" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">희망 업종 / 매물 종류</label>
+                    <select id="lead-category" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                        <option value="상가">상가 (일반음식점/카페/의류 등)</option>
+                        <option value="사무실">사무실 / 사옥</option>
+                        <option value="병의원">병의원 (치과/한의원/내과 등)</option>
+                        <option value="학원">학원 / 교습소 / 독서실</option>
+                        <option value="공장/창고">공장 / 창고</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium mb-1" id="lead-location-label">희망 지역 / 희망 위치</label>
+                    <input type="text" id="lead-location" placeholder="예: 수성구 범어동 또는 달구벌대로변" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-medium mb-1">희망 평수</label>
+                        <input type="text" id="lead-pyeong" placeholder="예: 50평대" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
+                    <div>
+                        <label class="block font-medium mb-1">예산 / 임대조건</label>
+                        <input type="text" id="lead-budget" placeholder="예: 보증금 5천/월 300" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">세부 요청사항</label>
+                    <textarea id="lead-notes" rows="3" placeholder="기타 원하시는 조건을 편하게 남겨주세요." class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]"></textarea>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full py-3 bg-[#003891] hover:bg-blue-800 text-white rounded-xl font-bold shadow-md transition">
+                        신속 매물 접수하기
+                    </button>
+                </div>
+            </form>
+        </div>`;
+        document.body.appendChild(modal);
+    }
+    switchLeadTab(type);
+    modal.classList.remove('hidden');
+}
+
+function closeLeadForm() {
+    const modal = document.getElementById('client-lead-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function switchLeadTab(type) {
+    const hiddenInput = document.getElementById('lead-type');
+    const tabBuyer = document.getElementById('lead-tab-buyer');
+    const tabSeller = document.getElementById('lead-tab-seller');
+    const locLabel = document.getElementById('lead-location-label');
+
+    if (type === 'seller') {
+        hiddenInput.value = 'seller';
+        tabSeller.className = 'flex-1 py-3 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold';
+        tabBuyer.className = 'flex-1 py-3 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200';
+        if (locLabel) locLabel.textContent = '매물 소재지 (건물 주소)';
+    } else {
+        hiddenInput.value = 'buyer';
+        tabBuyer.className = 'flex-1 py-3 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold';
+        tabSeller.className = 'flex-1 py-3 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200';
+        if (locLabel) locLabel.textContent = '희망 지역 / 희망 위치';
+    }
+}
+
+async function submitClientLead(e) {
+    e.preventDefault();
+    const type = document.getElementById('lead-type').value;
+    const name = document.getElementById('lead-name').value.trim();
+    const phone = document.getElementById('lead-phone').value.trim();
+    const category = document.getElementById('lead-category').value;
+    const location = document.getElementById('lead-location').value.trim();
+    const pyeong = document.getElementById('lead-pyeong').value.trim();
+    const budget = document.getElementById('lead-budget').value.trim();
+    const notes = document.getElementById('lead-notes').value.trim();
+
+    if (!name || !phone) return;
+
+    const leadObj = {
+        id: Date.now(),
+        type,
+        name,
+        phone,
+        category,
+        location,
+        pyeong,
+        budget,
+        notes,
+        date: new Date().toLocaleString('ko-KR')
+    };
+
+    try {
+        const leads = JSON.parse(localStorage.getItem('analytics_client_leads') || '[]');
+        leads.unshift(leadObj);
+        localStorage.setItem('analytics_client_leads', JSON.stringify(leads));
+
+        const config = await loadConfig();
+        if (config.github_token && config.github_owner && config.github_repo) {
+            syncAnalyticsWithRemote();
+        }
+    } catch(err) {}
+
+    closeLeadForm();
+    alert(`[접수 완료] ${name}님, 정상 접수되었습니다!\n대표소장 최이명(010-3548-4000)이 확인 후 신속하게 연락드리겠습니다.`);
+}
+
+function initMobileBottomBar() {
+    if (window.location.pathname.includes('admin.html')) return;
+    if (document.getElementById('mobile-bottom-bar')) return;
+
+    const bar = document.createElement('div');
+    bar.id = 'mobile-bottom-bar';
+    bar.className = 'lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07102b]/95 backdrop-blur border-t border-[#1d3870] px-2 py-2 flex items-center justify-around text-white shadow-2xl pb-safe';
+    bar.innerHTML = `
+        <a href="tel:010-3548-4000" class="flex flex-col items-center justify-center text-xs text-amber-400 hover:text-amber-300 font-bold px-2 py-1">
+            <span class="material-symbols-outlined text-xl">call</span>
+            <span>전화 상담</span>
+        </a>
+        <button onclick="showLeadForm('buyer')" class="flex flex-col items-center justify-center text-xs text-blue-300 hover:text-white font-medium px-2 py-1">
+            <span class="material-symbols-outlined text-xl">edit_note</span>
+            <span>매물 의뢰</span>
+        </button>
+        <button onclick="showFeeCalculator()" class="flex flex-col items-center justify-center text-xs text-slate-300 hover:text-white font-medium px-2 py-1">
+            <span class="material-symbols-outlined text-xl">calculate</span>
+            <span>복비 계산기</span>
+        </button>
+        <a href="map.html" class="flex flex-col items-center justify-center text-xs text-slate-300 hover:text-white font-medium px-2 py-1">
+            <span class="material-symbols-outlined text-xl">map</span>
+            <span>매물 지도</span>
+        </a>
+    `;
+    document.body.appendChild(bar);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileBottomBar);
+} else {
+    initMobileBottomBar();
+}
+
+window.showFeeCalculator = showFeeCalculator;
+window.closeFeeCalculator = closeFeeCalculator;
+window.switchCalcTab = switchCalcTab;
+window.runFeeCalc = runFeeCalc;
+window.runPyeongCalc = runPyeongCalc;
+window.runConvCalc = runConvCalc;
+window.showLeadForm = showLeadForm;
+window.closeLeadForm = closeLeadForm;
+window.switchLeadTab = switchLeadTab;
+window.submitClientLead = submitClientLead;
+window.initMobileBottomBar = initMobileBottomBar;
