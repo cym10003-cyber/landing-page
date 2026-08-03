@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v64");
+console.log("Antigravity db.js version: 20260715_v65");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v64";
+const APP_VERSION = "20260715_v65";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1387,6 +1387,12 @@ async function submitClientLead(e) {
         const leads = JSON.parse(localStorage.getItem('analytics_client_leads') || '[]');
         leads.unshift(leadObj);
         localStorage.setItem('analytics_client_leads', JSON.stringify(leads));
+
+        fetch('/api/send-lead-notification', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(leadObj)
+        }).catch(() => {});
 
         const config = await loadConfig();
         if (config.github_token && config.github_owner && config.github_repo) {
