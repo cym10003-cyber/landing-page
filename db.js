@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v67");
+console.log("Antigravity db.js version: 20260715_v68");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v67";
+const APP_VERSION = "20260715_v68";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1075,116 +1075,7 @@ window.uploadVideoFile = uploadVideoFile;
 // NEW FEATURES: Calculator, Lead Form, Mobile Bottom Bar
 // =============================================================
 
-function showFeeCalculator() {
-    let modal = document.getElementById('fee-calculator-modal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'fee-calculator-modal';
-        modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn';
-        modal.innerHTML = `
-        <div class="bg-white dark:bg-[#0d1b3e] text-slate-800 dark:text-slate-100 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="bg-[#003891] text-white px-6 py-4 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-amber-400">calculate</span>
-                    <h3 class="text-lg font-bold">상가·사무실 중개보수 & 임대료 계산기</h3>
-                </div>
-                <button onclick="closeFeeCalculator()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
-            </div>
-            
-            <div class="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#07102b] text-sm font-medium">
-                <button id="calc-tab-1" onclick="switchCalcTab(1)" class="flex-1 py-3 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold">중개보수(복비)</button>
-                <button id="calc-tab-2" onclick="switchCalcTab(2)" class="flex-1 py-3 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">평당 임대료</button>
-                <button id="calc-tab-3" onclick="switchCalcTab(3)" class="flex-1 py-3 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">전월세 전환율</button>
-            </div>
-
-            <div class="p-6 overflow-y-auto space-y-4 text-sm">
-                <!-- Tab 1: Brokerage Fee -->
-                <div id="calc-panel-1" class="space-y-4">
-                    <div>
-                        <label class="block font-medium mb-1">거래 종류</label>
-                        <select id="calc-trade-type" onchange="runFeeCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
-                            <option value="rent">임대차 (월세 / 전세)</option>
-                            <option value="sale">매매</option>
-                        </select>
-                    </div>
-                    <div id="calc-deposit-group">
-                        <label class="block font-medium mb-1">보증금 (만원)</label>
-                        <input type="number" id="calc-deposit" placeholder="예: 5000" oninput="runFeeCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
-                    </div>
-                    <div id="calc-rent-group">
-                        <label class="block font-medium mb-1">월세 (만원)</label>
-                        <input type="number" id="calc-rent" placeholder="예: 300" oninput="runFeeCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
-                    </div>
-                    <div id="calc-price-group" class="hidden">
-                        <label class="block font-medium mb-1">매매가 (만원)</label>
-                        <input type="number" id="calc-price" placeholder="예: 50000" oninput="runFeeCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
-                    </div>
-
-                    <div class="p-4 rounded-xl bg-slate-100 dark:bg-[#07102b] border border-slate-200 dark:border-slate-700 space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-slate-500 dark:text-slate-400">환산 거래금액:</span>
-                            <span id="res-calc-trade-val" class="font-semibold">0 만원</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-slate-500 dark:text-slate-400">법정 상한 요율:</span>
-                            <span class="font-semibold">0.9% 이내 협의</span>
-                        </div>
-                        <div class="flex justify-between border-t border-slate-200 dark:border-slate-700 pt-2 text-base font-bold text-[#003891] dark:text-blue-400">
-                            <span>법정 상한 중개보수:</span>
-                            <span id="res-calc-fee">0 원 (VAT별도)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tab 2: Rent per Pyeong -->
-                <div id="calc-panel-2" class="hidden space-y-4">
-                    <div>
-                        <label class="block font-medium mb-1">전용면적 (평)</label>
-                        <input type="number" id="calc-pyeong" placeholder="예: 50" oninput="runPyeongCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
-                    </div>
-                    <div>
-                        <label class="block font-medium mb-1">월세 (만원)</label>
-                        <input type="number" id="calc-pyeong-rent" placeholder="예: 300" oninput="runPyeongCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
-                    </div>
-                    <div class="p-4 rounded-xl bg-slate-100 dark:bg-[#07102b] border border-slate-200 dark:border-slate-700 space-y-2">
-                        <div class="flex justify-between border-t border-slate-200 dark:border-slate-700 pt-2 text-base font-bold text-[#003891] dark:text-blue-400">
-                            <span>평당 월세:</span>
-                            <span id="res-pyeong-rent">0 만원 / 평</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tab 3: Conversion Rate -->
-                <div id="calc-panel-3" class="hidden space-y-4">
-                    <div>
-                        <label class="block font-medium mb-1">보증금 감액/증액 금액 (만원)</label>
-                        <input type="number" id="calc-conv-deposit" placeholder="예: 1000" oninput="runConvCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
-                    </div>
-                    <div>
-                        <label class="block font-medium mb-1">적용 연 전환율 (%)</label>
-                        <input type="number" id="calc-conv-rate" value="6.0" step="0.5" oninput="runConvCalc()" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
-                    </div>
-                    <div class="p-4 rounded-xl bg-slate-100 dark:bg-[#07102b] border border-slate-200 dark:border-slate-700 space-y-2">
-                        <div class="flex justify-between border-t border-slate-200 dark:border-slate-700 pt-2 text-base font-bold text-[#003891] dark:text-blue-400">
-                            <span>예상 월세 변동액:</span>
-                            <span id="res-conv-rent">월 0 만원 변동</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-4 bg-slate-50 dark:bg-[#07102b] border-t border-slate-200 dark:border-slate-700 text-center">
-                <a href="tel:010-3548-4000" class="inline-flex items-center gap-2 px-6 py-2.5 bg-[#003891] hover:bg-blue-800 text-white rounded-xl font-bold shadow-md transition">
-                    <span class="material-symbols-outlined text-amber-300">call</span>
-                    <span>정확한 수수료 및 조건 협의 (010-3548-4000)</span>
-                </a>
-            </div>
-        </div>`;
-        document.body.appendChild(modal);
-    }
-    modal.classList.remove('hidden');
-}
-
+function showFeeCalculator() {}
 function closeFeeCalculator() {
     const modal = document.getElementById('fee-calculator-modal');
     if (modal) modal.classList.add('hidden');
@@ -1420,10 +1311,7 @@ function initMobileBottomBar() {
             <span class="material-symbols-outlined text-xl">edit_note</span>
             <span>매물 의뢰</span>
         </button>
-        <button onclick="showFeeCalculator()" class="flex flex-col items-center justify-center text-xs text-slate-300 hover:text-white font-medium px-2 py-1">
-            <span class="material-symbols-outlined text-xl">calculate</span>
-            <span>복비 계산기</span>
-        </button>
+
         <a href="map.html" class="flex flex-col items-center justify-center text-xs text-slate-300 hover:text-white font-medium px-2 py-1">
             <span class="material-symbols-outlined text-xl">map</span>
             <span>매물 지도</span>
