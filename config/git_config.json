@@ -3,5 +3,7 @@
   "github_owner": "cym10003-cyber",
   "github_repo": "landing-page",
   "data_file_path": "data/posts.json",
-  "admin_password": "choi!!@@"
+  "admin_password": "choi!!@@",
+  "telegram_bot_token": "8889300074:AAGyvpcKMC5LxdgHYE8GwKMNRV5ovLbSSrY",
+  "telegram_chat_id": "8970218844"
 }

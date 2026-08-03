@@ -28,11 +28,22 @@ module.exports = async (req, res) => {
       `📞 바로 전화걸기: ${phone || '-'}\n` +
       `🌐 대시보드: https://www.choi114.com/admin.html`;
 
-    const botToken = process.env.TELEGRAM_BOT_TOKEN || '';
-    const chatId = process.env.TELEGRAM_CHAT_ID || '';
+    let botToken = process.env.TELEGRAM_BOT_TOKEN || '8889300074:AAGyvpcKMC5LxdgHYE8GwKMNRV5ovLbSSrY';
+    let chatId = process.env.TELEGRAM_CHAT_ID || '8970218844';
+
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const cfgPath = path.join(process.cwd(), 'config', 'git_config.json');
+      if (fs.existsSync(cfgPath)) {
+        const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+        if (cfg.telegram_bot_token) botToken = cfg.telegram_bot_token;
+        if (cfg.telegram_chat_id) chatId = cfg.telegram_chat_id;
+      }
+    } catch(e) {}
 
     if (botToken && chatId) {
-      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -40,6 +51,8 @@ module.exports = async (req, res) => {
           text: text
         })
       });
+      const tgData = await tgRes.json();
+      return res.status(200).json({ success: true, telegram: tgData });
     }
 
     return res.status(200).json({ success: true, message: 'Notification processed successfully' });
