@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v74");
+console.log("Antigravity db.js version: 20260715_v75");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v74";
+const APP_VERSION = "20260715_v75";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1301,7 +1301,7 @@ function initMobileBottomBar() {
 
     const bar = document.createElement('div');
     bar.id = 'mobile-bottom-bar';
-    bar.className = 'lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07102b]/95 backdrop-blur border-t border-[#1d3870] px-2 py-2 flex items-center justify-around text-white shadow-2xl pb-safe';
+    bar.className = 'lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07102b]/95 backdrop-blur border-t border-[#1d3870] px-2 py-2 flex items-center justify-around text-white shadow-2xl pb-safe no-print';
     bar.innerHTML = `
         <a href="tel:010-3548-4000" class="flex flex-col items-center justify-center text-xs text-amber-400 hover:text-amber-300 font-bold px-2 py-1">
             <span class="material-symbols-outlined text-xl">call</span>
