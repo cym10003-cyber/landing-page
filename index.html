@@ -115,10 +115,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v78">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?category=매물리스트&v=20260715_v79">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v78">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
+<a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="property-news.html?v=20260715_v79">부동산 소식</a><a class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -248,14 +248,41 @@
 <h2 class="font-section-h2 text-section-h2 mb-[24px] text-ink">실시간 업데이트 추천 매물</h2>
 <p class="font-body text-body text-muted">현장 확인과 꼼꼼한 상권 분석을 마친 확실한 부동산 매물만 소개합니다.</p>
 </div>
-<a class="hidden md:flex text-primary-container font-button text-button hover:text-blue-deep items-center gap-xs font-bold" href="property-news.html?category=매물리스트&v=20260715_v78">
+<a class="hidden md:flex text-primary-container font-button text-button hover:text-blue-deep items-center gap-xs font-bold" href="property-news.html?category=매물리스트&v=20260715_v79">
                     전체 매물 보기 <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
 </a>
+</div>
+<!-- Quick Filter Badges Section -->
+<div class="mb-lg bg-surface-container-low p-md rounded-xl border border-hairline flex flex-col gap-2">
+    <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-200">
+        <span class="material-symbols-outlined text-amber-500 text-[18px]">bolt</span>
+        <span>조건별 1초 쾌속 필터 :</span>
+    </div>
+    <div class="flex flex-wrap gap-2 items-center">
+        <button onclick="quickFilterKeyword('병의원')" class="bg-white dark:bg-slate-800 hover:bg-blue-50 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-700 px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1 shadow-xs cursor-pointer">
+            🏥 병의원
+        </button>
+        <button onclick="quickFilterKeyword('학원')" class="bg-white dark:bg-slate-800 hover:bg-indigo-50 text-indigo-800 dark:text-indigo-200 border border-indigo-200 dark:border-indigo-700 px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1 shadow-xs cursor-pointer">
+            📚 학원
+        </button>
+        <button onclick="quickFilterKeyword('50평대')" class="bg-white dark:bg-slate-800 hover:bg-amber-50 text-amber-900 dark:text-amber-200 border border-amber-200 dark:border-amber-700 px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1 shadow-xs cursor-pointer">
+            🏢 50평~100평
+        </button>
+        <button onclick="quickFilterKeyword('1층')" class="bg-white dark:bg-slate-800 hover:bg-emerald-50 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-700 px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1 shadow-xs cursor-pointer">
+            ☕ 1층 상가
+        </button>
+        <button onclick="quickFilterKeyword('달구벌대로')" class="bg-white dark:bg-slate-800 hover:bg-purple-50 text-purple-800 dark:text-purple-200 border border-purple-200 dark:border-purple-700 px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1 shadow-xs cursor-pointer">
+            🚉 달구벌대로
+        </button>
+        <button onclick="quickFilterKeyword('무권리')" class="bg-white dark:bg-slate-800 hover:bg-rose-50 text-rose-800 dark:text-rose-200 border border-rose-200 dark:border-rose-700 px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1 shadow-xs cursor-pointer">
+            ✨ 무권리
+        </button>
+    </div>
 </div>
 <div id="board-preview" class="grid grid-cols-1 md:grid-cols-3 gap-lg">
 </div>
 <div class="md:hidden mt-lg">
-<a class="w-full bg-surface-container-low text-primary-container font-button text-button px-lg py-md rounded border border-hairline hover:bg-surface transition-colors flex items-center justify-center gap-xs font-bold" href="property-news.html?category=매물리스트&v=20260715_v78">
+<a class="w-full bg-surface-container-low text-primary-container font-button text-button px-lg py-md rounded border border-hairline hover:bg-surface transition-colors flex items-center justify-center gap-xs font-bold" href="property-news.html?category=매물리스트&v=20260715_v79">
                     전체 매물 보기 <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
 </a>
 </div>
@@ -384,10 +411,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v78">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v79">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v78">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v79">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -398,7 +425,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v78"></script>
+<script src="db.js?v=20260715_v79"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const fallbackImages = [
@@ -540,7 +567,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 <script>
 function filterByQuickTag(tag) {
-    window.location.href = 'property-news.html?search=' + encodeURIComponent(tag) + '&v=20260715_v78';
+    window.location.href = 'property-news.html?search=' + encodeURIComponent(tag) + '&v=20260715_v79';
 }
 </script>
 </body></html>
