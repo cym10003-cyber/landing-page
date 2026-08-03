@@ -271,6 +271,7 @@ export default function handler(req, res) {
           const protocol = req.headers['x-forwarded-proto'] || 'https';
           const baseUrl = `${protocol}://${host}`;
 
+          const pid = post.id;
           const { metaTitle, metaDesc, ogImage, postUrl, schemaJsonLd } = parsePostMeta(post, baseUrl);
 
           // Compile escaped values
@@ -282,8 +283,9 @@ export default function handler(req, res) {
           // JSON-LD Script tag string
           const jsonLdScript = `\n<script type="application/ld+json" id="schema-jsonld">\n${JSON.stringify(schemaJsonLd, null, 2)}\n</script>\n`;
 
-          // Inject JSON-LD Schema Markup into <head>
-          html = html.replace('</head>', `${jsonLdScript}</head>`);
+          // Inject initial post object script tag string into <head> for 0ms instant client rendering
+          const initialPostScript = `\n<script>\nwindow.__INITIAL_POST__ = ${JSON.stringify(post)};\n</script>\n`;
+          html = html.replace('</head>', `${jsonLdScript}${initialPostScript}</head>`);
 
           // Replace meta and title tags dynamically for OpenGraph crawlers
           html = html
@@ -332,11 +334,27 @@ export default function handler(req, res) {
               `<meta name="twitter:image" content="${imageEscaped}" />`
             );
 
-          // Parse content into pre-rendered images HTML and clean text HTML (prevents raw markdown link flashing)
+          // Pre-render Title, Category, and Date in HTML to eliminate 0ms loading text delay
+          html = html
+            .replace(
+              '<span id="post-category" class="bg-dark-chip text-white px-2.5 py-1 rounded text-xs font-semibold">로딩 중</span>',
+              `<span id="post-category" class="bg-dark-chip text-white px-2.5 py-1 rounded text-xs font-semibold">${post.category || '일반'}</span>`
+            )
+            .replace(
+              '<h1 id="post-title" class="font-display-hero-mobile md:font-subsection-h3 text-2xl md:text-3xl text-ink font-bold leading-snug">로딩 중...</h1>',
+              `<h1 id="post-title" class="font-display-hero-mobile md:font-subsection-h3 text-2xl md:text-3xl text-ink font-bold leading-snug">${post.title}</h1>`
+            )
+            .replace(
+              '<span id="post-date" class="hidden"></span>',
+              `<span id="post-date" class="text-xs text-slate-500 font-medium">${post.date || ''}</span>`
+            );
+
+          // Parse content into pre-rendered images HTML and clean text HTML
           const lines = (post.content || '').split('\n');
           const preImages = [];
           const preText = [];
 
+          let imgIndex = 0;
           for (let line of lines) {
             const trimmed = line.trim();
             if (!trimmed) continue;
@@ -344,7 +362,9 @@ export default function handler(req, res) {
             const mImg = trimmed.match(/!\[.*?\]\((.*?)\)/);
             if (mImg) {
               const imgUrl = mImg[1];
-              preImages.push(`<img src="${imgUrl}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" loading="lazy" alt="매물 사진" />`);
+              const loadingAttr = imgIndex === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
+              preImages.push(`<img src="${imgUrl}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" ${loadingAttr} alt="매물 사진" />`);
+              imgIndex++;
             } else {
               let cleanText = trimmed
                 .replace(/!\[.*?\]\(.*?\)/g, '')
@@ -368,7 +388,9 @@ export default function handler(req, res) {
           }
 
           html = html.replace('id="map-link" href="map.html"', `id="map-link" href="map.html?id=${pid}"`);
-          html = html.replace('내용을 불러오는 중입니다...', preTextHtml);
+          if (preTextHtml) {
+            html = html.replace('내용을 불러오는 중입니다...', preTextHtml);
+          }
         }
       }
     } catch (err) {
