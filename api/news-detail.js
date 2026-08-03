@@ -337,7 +337,7 @@ export default function handler(req, res) {
           // Pre-render Title, Category, and Date in HTML to eliminate 0ms loading text delay
           html = html
             .replace(
-              '<span id="post-category" class="bg-dark-chip text-white px-2.5 py-1 rounded text-xs font-semibold">로딩 중</span>',
+              '<span id="post-category" class="bg-dark-chip text-white px-2.5 py-1 rounded text-xs font-semibold">매물리스트</span>',
               `<span id="post-category" class="bg-dark-chip text-white px-2.5 py-1 rounded text-xs font-semibold">${post.category || '일반'}</span>`
             )
             .replace(
@@ -345,7 +345,7 @@ export default function handler(req, res) {
               `<h1 id="post-title" class="font-display-hero-mobile md:font-subsection-h3 text-2xl md:text-3xl text-ink font-bold leading-snug">${post.title}</h1>`
             )
             .replace(
-              '<span id="post-date" class="hidden"></span>',
+              '<span id="post-date" class="text-xs text-slate-500 font-medium"></span>',
               `<span id="post-date" class="text-xs text-slate-500 font-medium">${post.date || ''}</span>`
             );
 
