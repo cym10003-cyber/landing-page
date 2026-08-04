@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v88");
+console.log("Antigravity db.js version: 20260715_v89");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v88";
+const APP_VERSION = "20260715_v89";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -140,6 +140,7 @@ async function savePost(postData) {
       posts[idx].content = postData.content;
       posts[idx].address = postData.address;
       posts[idx].coordinates = postData.coordinates;
+      if (postData.isPrivate !== undefined) posts[idx].isPrivate = postData.isPrivate === true;
       posts[idx].date = postData.date || posts[idx].date || new Date().toLocaleDateString('ko-KR').replace(/\.$/, "");
       updatedPost = posts[idx];
     } else {
@@ -159,6 +160,7 @@ async function savePost(postData) {
       content: postData.content,
       address: postData.address,
       coordinates: postData.coordinates,
+      isPrivate: postData.isPrivate === true,
       date: dateStr
     };
     posts.unshift(updatedPost);
@@ -297,6 +299,60 @@ async function deletePost(id) {
     }
   }
   return true;
+}
+
+async function togglePostPrivate(id) {
+  const config = await loadConfig();
+  const posts = await getPosts();
+  const idx = posts.findIndex(p => String(p.id) === String(id));
+  if (idx === -1) throw new Error("Post not found");
+
+  posts[idx].isPrivate = !posts[idx].isPrivate;
+  const isNowPrivate = posts[idx].isPrivate;
+
+  const postsStr = JSON.stringify(posts, null, 2);
+  localStorage.setItem('posts_cache', postsStr);
+  _cachedPosts = posts;
+
+  const hasGit = config.github_token && config.github_owner && config.github_repo;
+  if (hasGit) {
+    const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}`;
+    const headers = {
+      'Accept': 'application/vnd.github.v3+json',
+      'Authorization': `token ${config.github_token}`
+    };
+
+    let sha = null;
+    try {
+      const getUrl = `${url}?t=${Date.now()}`;
+      const getRes = await fetch(getUrl, { headers });
+      if (getRes.ok) {
+        const getData = await getRes.json();
+        sha = getData.sha;
+      }
+    } catch (_e) {}
+
+    const base64Content = btoa(unescape(encodeURIComponent(postsStr)));
+    const body = {
+      message: `feat: toggle private status for post ${id} to ${isNowPrivate}`,
+      content: base64Content,
+      branch: 'main'
+    };
+    if (sha) body.sha = sha;
+
+    try {
+      await fetch(url, {
+        method: 'PUT',
+        headers: {
+          ...headers,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+    } catch (_e) {}
+  }
+
+  return isNowPrivate;
 }
 
 function renderMarkdown(src) {
@@ -1346,7 +1402,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v88`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v89`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
