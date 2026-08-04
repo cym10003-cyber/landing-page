@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v90");
+console.log("Antigravity db.js version: 20260715_v91");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v90";
+const APP_VERSION = "20260715_v91";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -322,34 +322,54 @@ async function togglePostPrivate(id) {
       'Authorization': `token ${config.github_token}`
     };
 
-    let sha = null;
-    try {
-      const getUrl = `${url}?t=${Date.now()}`;
-      const getRes = await fetch(getUrl, { headers });
-      if (getRes.ok) {
-        const getData = await getRes.json();
-        sha = getData.sha;
+    let lastErr = null;
+    let savedToGit = false;
+
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        const getUrl = `${url}?t=${Date.now()}`;
+        let sha = null;
+        const getRes = await fetch(getUrl, { headers });
+        if (getRes.ok) {
+          const getData = await getRes.json();
+          if (!Array.isArray(getData) && getData.sha) {
+            sha = getData.sha;
+          }
+        }
+
+        const base64Content = btoa(unescape(encodeURIComponent(postsStr)));
+        const body = {
+          message: `feat: toggle private status for post ${id} to ${isNowPrivate}`,
+          content: base64Content,
+          branch: 'main'
+        };
+        if (sha) body.sha = sha;
+
+        const putRes = await fetch(url, {
+          method: 'PUT',
+          headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        if (putRes.ok) {
+          savedToGit = true;
+          break;
+        } else {
+          const errText = await putRes.text();
+          lastErr = new Error(`GitHub API Status ${putRes.status}: ${errText}`);
+        }
+      } catch (err) {
+        lastErr = err;
       }
-    } catch (_e) {}
+      await new Promise(r => setTimeout(r, 800));
+    }
 
-    const base64Content = btoa(unescape(encodeURIComponent(postsStr)));
-    const body = {
-      message: `feat: toggle private status for post ${id} to ${isNowPrivate}`,
-      content: base64Content,
-      branch: 'main'
-    };
-    if (sha) body.sha = sha;
-
-    try {
-      await fetch(url, {
-        method: 'PUT',
-        headers: {
-          ...headers,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-    } catch (_e) {}
+    if (!savedToGit && lastErr) {
+      console.error("Failed to update GitHub posts.json:", lastErr);
+    }
   }
 
   return isNowPrivate;
@@ -1402,7 +1422,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v90`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v91`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
