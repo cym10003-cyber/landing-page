@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v97");
+console.log("Antigravity db.js version: 20260715_v98");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v97";
+const APP_VERSION = "20260715_v98";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1355,20 +1355,15 @@ async function submitClientLead(e) {
         leads.unshift(leadObj);
         localStorage.setItem('analytics_client_leads', JSON.stringify(leads));
 
-        fetch('/api/send-lead-notification', {
+        fetch('/api/submit-lead', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(leadObj)
         }).catch(() => {});
-
-        const config = await loadConfig();
-        if (config.github_token && config.github_owner && config.github_repo) {
-            syncAnalyticsWithRemote();
-        }
     } catch(err) {}
 
     closeLeadForm();
-    alert(`[접수 완료] ${name}님, 정상 접수되었습니다!\n대표소장 최이명(010-3548-4000)이 확인 후 신속하게 연락드리겠습니다.`);
+    alert(`[접수 완료] ${name}님, 정상 접수되었습니다!\n대표소장 최이명(010 - 3548 - 4000)이 확인 후 신속하게 연락드리겠습니다.`);
 }
 
 function initMobileBottomBar() {
@@ -1422,7 +1417,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v97`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v98`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
