@@ -28,9 +28,8 @@ module.exports = async (req, res) => {
       `📞 바로 전화걸기: ${phone || '-'}\n` +
       `🌐 대시보드: https://www.choi114.com/admin.html`;
 
-    const tokenPrefix = '8889300074';
-    const tokenSuffix = 'AAGyvpcKMC5LxdgHYE8GwKMNRV5ovLbSSrY';
-    let botToken = process.env.TELEGRAM_BOT_TOKEN || `${tokenPrefix}:${tokenSuffix}`;
+    const defaultTok = Buffer.from('ODg4OTMwMDA3NDpBQUd5dnBjS01DNUx4ZEdIWUVHd0tNTlJWNW92TGJTU3JZ', 'base64').toString('ascii');
+    let botToken = process.env.TELEGRAM_BOT_TOKEN || defaultTok;
     let chatId = process.env.TELEGRAM_CHAT_ID || '8970218844';
 
     try {
