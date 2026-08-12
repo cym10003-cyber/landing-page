@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v98");
+console.log("Antigravity db.js version: 20260715_v99");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v98";
+const APP_VERSION = "20260715_v99";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1287,6 +1287,21 @@ function showLeadForm(type = 'buyer') {
                     <textarea id="lead-notes" rows="2" placeholder="기타 원하시는 조건을 편하게 남겨주세요." class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]"></textarea>
                 </div>
 
+                <div class="bg-slate-50 dark:bg-slate-800/80 p-3 rounded-lg border border-slate-200 dark:border-slate-700 text-xs space-y-1.5 mt-2">
+                    <div class="flex items-start gap-2">
+                        <input type="checkbox" id="lead-privacy-agree" class="mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" checked>
+                        <label for="lead-privacy-agree" class="font-bold text-slate-800 dark:text-slate-200 cursor-pointer leading-tight">
+                            개인정보 수집 및 이용에 동의합니다 <span class="text-red-500">(필수)</span>
+                        </label>
+                    </div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-normal pl-6">
+                        • <b>수집 목적</b>: 매물 상담, 의뢰 접수 및 중개 서비스 제공<br>
+                        • <b>수집 항목</b>: 성함/상호, 연락처, 위치, 평수, 예산, 요청사항<br>
+                        • <b>보유 기간</b>: 의뢰 처리 완료 후 3년 (상법/공인중개사법 기준)<br>
+                        <button type="button" onclick="openPrivacyModal()" class="text-blue-600 dark:text-blue-400 underline font-medium mt-0.5 inline-block">개인정보 처리방침 전문 보기</button>
+                    </div>
+                </div>
+
                 <div class="pt-1.5">
                     <button type="submit" class="w-full py-2.5 sm:py-3 bg-[#003891] hover:bg-blue-800 text-white rounded-xl font-bold text-sm sm:text-base shadow-md transition flex items-center justify-center gap-1.5">
                         <span class="material-symbols-outlined text-[18px]">send</span> 신속 매물 접수하기
@@ -1334,6 +1349,13 @@ async function submitClientLead(e) {
     const pyeong = document.getElementById('lead-pyeong').value.trim();
     const budget = document.getElementById('lead-budget').value.trim();
     const notes = document.getElementById('lead-notes').value.trim();
+
+    const agreeCheck = document.getElementById('lead-privacy-agree');
+    if (agreeCheck && !agreeCheck.checked) {
+        alert('개인정보 수집 및 이용에 동의해 주세요.');
+        agreeCheck.focus();
+        return;
+    }
 
     if (!name || !phone) return;
 
@@ -1415,10 +1437,108 @@ function quickFilterKeyword(keyword) {
             const searchBtn = document.getElementById('search-button');
             if (searchBtn) searchBtn.click();
             else if (typeof filterPosts === 'function') filterPosts();
-        }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v98`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v99`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
 window.initMobileBottomBar = initMobileBottomBar;
+
+function openPrivacyModal() {
+    let modal = document.getElementById('privacy-policy-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'privacy-policy-modal';
+        modal.className = 'fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300';
+        modal.innerHTML = `
+        <div class="bg-white dark:bg-[#0b1739] text-slate-900 dark:text-slate-100 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden animate-fade-in">
+            <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-[#142654]">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">gavel</span>
+                    <h3 class="text-base sm:text-lg font-bold">개인정보 처리방침</h3>
+                </div>
+                <button onclick="closePrivacyModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg transition-colors cursor-pointer">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
+            <div class="p-5 sm:p-6 overflow-y-auto space-y-5 text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                <div class="bg-blue-50 dark:bg-blue-950/40 p-3.5 rounded-xl border border-blue-100 dark:border-blue-900 text-blue-900 dark:text-blue-200 font-medium">
+                    최가네부동산공인중개사사무소는 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-1.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-4 bg-blue-600 rounded-full inline-block"></span> 1. 개인정보의 수집 및 이용 목적
+                    </h4>
+                    <p>사무소는 다음의 목적을 위하여 최소한의 개인정보를 수집 및 처리합니다. 수집된 개인정보는 지정된 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 법률에 따라 사전 동의를 받겠습니다.</p>
+                    <ul class="list-disc pl-5 mt-1 space-y-0.5 text-slate-600 dark:text-slate-400">
+                        <li><b>부동산 매물 상담 및 의뢰 접수</b>: 매물 내놓기/구하기 상담, 매물 현장 안내, 중개 계약 체결 및 계약 이행 관련 연락</li>
+                        <li><b>서비스 개선 및 통계</b>: 웹사이트 서비스 이용 통계 분석 및 매물 정보 품질 향상</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-1.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-4 bg-blue-600 rounded-full inline-block"></span> 2. 수집하는 개인정보 항목 및 수집 방법
+                    </h4>
+                    <ul class="list-disc pl-5 space-y-0.5 text-slate-600 dark:text-slate-400">
+                        <li><b>직접 수집 항목</b>: 성명(상호명), 연락처(전화번호), 매물/희망 위치, 희망 평수, 예산/임대조건, 세부 요청사항</li>
+                        <li><b>자동 수집 항목</b>: 서비스 이용 기록, 접속 디바이스 유형(모바일/PC), 접속 시각, 검색 키워드 로그</li>
+                        <li><b>수집 방법</b>: 홈페이지 온라인 매물 접수 폼, 전화 및 방문 상담</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-1.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-4 bg-blue-600 rounded-full inline-block"></span> 3. 개인정보의 보유 및 이용 기간
+                    </h4>
+                    <p>원칙적으로 개인정보의 수집 및 이용 목적이 달성되면 해당 정보를 지체 없이 파기합니다. 단, 관계 법령의 규정에 의하여 보존할 필요가 있는 경우 다음과 같이 보존합니다.</p>
+                    <ul class="list-disc pl-5 mt-1 space-y-0.5 text-slate-600 dark:text-slate-400">
+                        <li><b>매물 의뢰 및 상담 내역</b>: 의뢰 처리 완료 후 <b>3년</b> (공인중개사법 및 상법 기준)</li>
+                        <li><b>부동산 거래 계약 관련 기록</b>: <b>5년</b> (공인중개사법 제26조 시행령)</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-1.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-4 bg-blue-600 rounded-full inline-block"></span> 4. 개인정보의 파기절차 및 파기방법
+                    </h4>
+                    <p>보유기간이 경과하거나 처리목적이 달성된 개인정보는 전자적 복구가 불가능한 기술적 방법을 사용하여 지체 없이 파기합니다.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-1.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-4 bg-blue-600 rounded-full inline-block"></span> 5. 정보주체의 권리·의무 및 행사방법
+                    </h4>
+                    <p>정보주체는 언제든지 본인의 개인정보 열람, 정정, 삭제, 처리정지 요구 등의 권리를 행사할 수 있으며, 사무소 대표전화(010 - 3548 - 4000)를 통해 요청 시 지체 없이 조치하겠습니다.</p>
+                </div>
+
+                <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-xl space-y-1 text-slate-700 dark:text-slate-300">
+                    <h4 class="font-bold text-sm text-slate-900 dark:text-white mb-1">6. 개인정보 보호책임자 안내</h4>
+                    <p>• <b>상호명</b>: 최가네부동산공인중개사사무소</p>
+                    <p>• <b>대표소장</b>: 최이명 (공인중개사)</p>
+                    <p>• <b>연락처</b>: 010 - 3548 - 4000 / 053-746-7114</p>
+                    <p>• <b>소재지</b>: 대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구)</p>
+                    <p>• <b>이메일</b>: cym10003@gmail.com</p>
+                    <p>• <b>등록번호</b>: 제27260-2024-00085호</p>
+                </div>
+            </div>
+            <div class="p-4 bg-slate-50 dark:bg-[#142654] border-t border-slate-200 dark:border-slate-700 flex justify-end">
+                <button onclick="closePrivacyModal()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-md transition-colors cursor-pointer">
+                    확인 및 닫기
+                </button>
+            </div>
+        </div>`;
+        document.body.appendChild(modal);
+    }
+    modal.classList.remove('hidden');
+}
+
+function closePrivacyModal() {
+    const modal = document.getElementById('privacy-policy-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+window.openPrivacyModal = openPrivacyModal;
+window.closePrivacyModal = closePrivacyModal;
+
