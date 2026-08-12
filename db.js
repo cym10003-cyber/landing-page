@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v99");
+console.log("Antigravity db.js version: 20260715_v100");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v99";
+const APP_VERSION = "20260715_v100";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1232,7 +1232,7 @@ function showLeadForm(type = 'buyer') {
     if (!modal) {
         modal = document.createElement('div');
         modal.id = 'client-lead-modal';
-        modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm animate-fadeIn';
+        modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm animate-fadeIn';
         modal.innerHTML = `
         <div class="bg-white dark:bg-[#0d1b3e] text-slate-800 dark:text-slate-100 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[95vh]">
             <div class="bg-[#003891] text-white px-4 py-2.5 sm:px-6 sm:py-3 flex items-center justify-between">
@@ -1240,12 +1240,12 @@ function showLeadForm(type = 'buyer') {
                     <span class="material-symbols-outlined text-amber-400 text-[20px]">edit_note</span>
                     <h3 class="text-base sm:text-lg font-bold">30초 간편 매물 의뢰 / 내놓기</h3>
                 </div>
-                <button onclick="closeLeadForm()" class="text-white/80 hover:text-white text-xl font-bold p-1">&times;</button>
+                <button onclick="closeLeadForm()" class="text-white/80 hover:text-white text-xl font-bold p-1 cursor-pointer">&times;</button>
             </div>
 
             <div class="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#07102b] text-xs sm:text-sm font-medium">
-                <button id="lead-tab-buyer" onclick="switchLeadTab('buyer')" class="flex-1 py-2 sm:py-2.5 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold">🔍 매물 구해요 (손님)</button>
-                <button id="lead-tab-seller" onclick="switchLeadTab('seller')" class="flex-1 py-2 sm:py-2.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">🏢 매물 내놓습니다 (건물주)</button>
+                <button id="lead-tab-buyer" type="button" onclick="switchLeadTab('buyer')" class="flex-1 py-2 sm:py-2.5 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer">🔍 매물 구해요 (손님)</button>
+                <button id="lead-tab-seller" type="button" onclick="switchLeadTab('seller')" class="flex-1 py-2 sm:py-2.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer">🏢 매물 내놓습니다 (건물주)</button>
             </div>
 
             <form id="lead-submit-form" onsubmit="submitClientLead(event)" class="p-3.5 sm:p-5 overflow-y-auto space-y-2 sm:space-y-3 text-xs sm:text-sm">
@@ -1298,12 +1298,12 @@ function showLeadForm(type = 'buyer') {
                         • <b>수집 목적</b>: 매물 상담, 의뢰 접수 및 중개 서비스 제공<br>
                         • <b>수집 항목</b>: 성함/상호, 연락처, 위치, 평수, 예산, 요청사항<br>
                         • <b>보유 기간</b>: 의뢰 처리 완료 후 3년 (상법/공인중개사법 기준)<br>
-                        <button type="button" onclick="openPrivacyModal()" class="text-blue-600 dark:text-blue-400 underline font-medium mt-0.5 inline-block">개인정보 처리방침 전문 보기</button>
+                        <button type="button" onclick="openPrivacyModal()" class="text-blue-600 dark:text-blue-400 underline font-medium mt-0.5 inline-block cursor-pointer">개인정보 처리방침 전문 보기</button>
                     </div>
                 </div>
 
                 <div class="pt-1.5">
-                    <button type="submit" class="w-full py-2.5 sm:py-3 bg-[#003891] hover:bg-blue-800 text-white rounded-xl font-bold text-sm sm:text-base shadow-md transition flex items-center justify-center gap-1.5">
+                    <button type="submit" class="w-full py-2.5 sm:py-3 bg-[#003891] hover:bg-blue-800 text-white rounded-xl font-bold text-sm sm:text-base shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer">
                         <span class="material-symbols-outlined text-[18px]">send</span> 신속 매물 접수하기
                     </button>
                 </div>
@@ -1313,11 +1313,15 @@ function showLeadForm(type = 'buyer') {
     }
     switchLeadTab(type);
     modal.classList.remove('hidden');
+    modal.style.display = 'flex';
 }
 
 function closeLeadForm() {
     const modal = document.getElementById('client-lead-modal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+    }
 }
 
 function switchLeadTab(type) {
@@ -1438,7 +1442,7 @@ function quickFilterKeyword(keyword) {
             if (searchBtn) searchBtn.click();
             else if (typeof filterPosts === 'function') filterPosts();
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v99`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v100`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
