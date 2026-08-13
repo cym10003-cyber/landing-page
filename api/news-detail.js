@@ -165,7 +165,7 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   if (detailParts.length > 0) {
     metaTitle += ` (${detailParts.join(' / ')})`;
   }
-  metaTitle += ' - 최가네부동산 010 - 3548 - 4000';
+  metaTitle += ' - 최가네부동산';
 
   // Clean Professional Description Format
   const descParts = [`${targetKw}`, `${cleanLoc} ${fullType}`];
@@ -175,7 +175,7 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   const mFeat = [...content.matchAll(/(?:🔎|O|▶)\s*([^\n]+)/g)].map(m => m[1].trim());
   if (mFeat.length > 0) descParts.push(mFeat.slice(0, 2).join(', '));
 
-  const metaDesc = descParts.join(' | ') + ' | 대구 상가·사무실 위치기반 전문! ☎ 010 - 3548 - 4000 (대표소장 최이명)';
+  const metaDesc = descParts.join(' | ') + ' | 대구 상가·사무실 위치기반 전문! (대표소장 최이명)';
 
   // RealEstateListing JSON-LD Schema Markup
   const dateStr = post.id ? new Date(Number(post.id)).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
