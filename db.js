@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v112");
+console.log("Antigravity db.js version: 20260715_v113");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v112";
+const APP_VERSION = "20260715_v113";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1504,7 +1504,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v112`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v113`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
@@ -1548,7 +1548,7 @@ function openPrivacyModal() {
                         <span class="w-1.5 h-4 bg-blue-600 rounded-full inline-block"></span> 2. 수집하는 개인정보 항목 및 수집 방법
                     </h4>
                     <ul class="list-disc pl-5 space-y-0.5 text-slate-600 dark:text-slate-400">
-                        <li><b>직접 수집 항목</b>: 성명(상호명), 연락처(전화번호), 매물/희망 위치, 희망 평수, 예산/임대조건, 세부 요청사항</li>
+                        <li><b>직접 수집 항목</b>: 성명(상호명), 연락처(전화번호), 매물 종류, 희망 업종, 매물/희망 위치, 층수, 희망 평수, 예산/임대조건, 세부 요청사항</li>
                         <li><b>자동 수집 항목</b>: 서비스 이용 기록, 접속 디바이스 유형(모바일/PC), 접속 시각, 검색 키워드 로그</li>
                         <li><b>수집 방법</b>: 홈페이지 온라인 매물 접수 폼, 전화 및 방문 상담</li>
                     </ul>
