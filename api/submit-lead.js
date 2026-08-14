@@ -12,22 +12,42 @@ export default async function handler(req, res) {
   const path = 'data/leads.json';
   const token = (process.env.GITHUB_TOKEN || '').trim();
 
-  // GET: Fetch all leads from data/leads.json on GitHub
+  // GET: Fetch all leads from GitHub REST API (real-time zero CDN caching)
   if (req.method === 'GET') {
     try {
-      const ghRes = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${path}?t=${Date.now()}`);
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+      const headers = {
+        'Accept': 'application/vnd.github.v3+json'
+      };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const ghRes = await fetch(`${url}?t=${Date.now()}`, { headers });
       if (ghRes.ok) {
-        const leads = await ghRes.json();
+        const data = await ghRes.json();
+        if (data && data.content) {
+          const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
+          const leads = JSON.parse(contentStr);
+          return res.status(200).json(Array.isArray(leads) ? leads : []);
+        }
+      }
+    } catch(e) {}
+
+    // Fallback to raw GitHub
+    try {
+      const rawRes = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${path}?t=${Date.now()}`);
+      if (rawRes.ok) {
+        const leads = await rawRes.json();
         return res.status(200).json(Array.isArray(leads) ? leads : []);
       }
     } catch(e) {}
+
     return res.status(200).json([]);
   }
 
   // POST: Submit a new lead
   if (req.method === 'POST') {
     try {
-      const { type, name, phone, category, location, pyeong, budget, notes } = req.body || {};
+      const { type, name, phone, category, location, floor, pyeong, budget, notes } = req.body || {};
       if (!name || !phone) {
         return res.status(400).json({ error: 'Name and phone required' });
       }
@@ -39,6 +59,7 @@ export default async function handler(req, res) {
         phone: String(phone).trim(),
         category: String(category || ''),
         location: String(location || ''),
+        floor: String(floor || '전체층'),
         pyeong: String(pyeong || ''),
         budget: String(budget || ''),
         notes: String(notes || ''),
@@ -80,7 +101,7 @@ export default async function handler(req, res) {
           const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
           const headers = {
             'Accept': 'application/vnd.github.v3+json',
-            'Authorization': `token ${token}`
+            'Authorization': `Bearer ${token}`
           };
 
           const getRes = await fetch(url, { headers });
@@ -133,7 +154,7 @@ export default async function handler(req, res) {
       const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
       const headers = {
         'Accept': 'application/vnd.github.v3+json',
-        'Authorization': `token ${token}`
+        'Authorization': `Bearer ${token}`
       };
 
       const getRes = await fetch(url, { headers });
@@ -141,7 +162,10 @@ export default async function handler(req, res) {
       const data = await getRes.json();
       const sha = data.sha;
       const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
-      let leadsList = JSON.parse(contentStr) || [];
+      let leadsList = [];
+      try {
+        leadsList = JSON.parse(contentStr) || [];
+      } catch(e) {}
 
       if (id) {
         leadsList = leadsList.filter(l => String(l.id) !== String(id));
@@ -152,7 +176,7 @@ export default async function handler(req, res) {
       const jsonStr = JSON.stringify(leadsList, null, 2);
       const contentBase64 = Buffer.from(jsonStr, 'utf8').toString('base64');
 
-      await fetch(url, {
+      const delRes = await fetch(url, {
         method: 'PUT',
         headers: { ...headers, 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -162,7 +186,12 @@ export default async function handler(req, res) {
         })
       });
 
-      return res.status(200).json({ success: true, leads: leadsList });
+      if (delRes.ok) {
+        return res.status(200).json({ success: true, leads: leadsList });
+      } else {
+        const errData = await delRes.json();
+        return res.status(500).json({ error: errData.message || 'Failed to update GitHub' });
+      }
     } catch(e) {
       return res.status(500).json({ error: e.message });
     }
