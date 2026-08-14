@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v108");
+console.log("Antigravity db.js version: 20260715_v109");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v108";
+const APP_VERSION = "20260715_v109";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1273,6 +1273,27 @@ function showLeadForm(type = 'buyer') {
                     <label class="block font-bold mb-0.5" id="lead-location-label">희망 지역 / 희망 위치</label>
                     <input type="text" id="lead-location" placeholder="예: 수성구 범어동 또는 달구벌대로변" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                 </div>
+                <div>
+                    <label class="block font-bold mb-1" id="lead-floor-label">희망 층수 (중복 선택 가능)</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 dark:bg-[#142654] p-2 sm:p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 text-xs">
+                        <label class="flex items-center gap-1.5 cursor-pointer font-medium">
+                            <input type="checkbox" name="lead-floor" value="전체층" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
+                            <span>전체층</span>
+                        </label>
+                        <label class="flex items-center gap-1.5 cursor-pointer font-medium">
+                            <input type="checkbox" name="lead-floor" value="1층" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
+                            <span>1층</span>
+                        </label>
+                        <label class="flex items-center gap-1.5 cursor-pointer font-medium">
+                            <input type="checkbox" name="lead-floor" value="지상층(1층제외)" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
+                            <span>지상층(1층제외)</span>
+                        </label>
+                        <label class="flex items-center gap-1.5 cursor-pointer font-medium">
+                            <input type="checkbox" name="lead-floor" value="지하층" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
+                            <span>지하층</span>
+                        </label>
+                    </div>
+                </div>
                 <div class="grid grid-cols-2 gap-2 sm:gap-3">
                     <div>
                         <label class="block font-bold mb-0.5" id="lead-pyeong-label">희망 평수</label>
@@ -1297,7 +1318,7 @@ function showLeadForm(type = 'buyer') {
                     </div>
                     <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-normal pl-6">
                         • <b>수집 목적</b>: 매물 상담, 의뢰 접수 및 중개 서비스 제공<br>
-                        • <b>수집 항목</b>: 성함/상호, 연락처, 위치, 평수, 예산, 요청사항<br>
+                        • <b>수집 항목</b>: 성함/상호, 연락처, 위치, 층수, 평수, 예산, 요청사항<br>
                         • <b>보유 기간</b>: 의뢰 처리 완료 후 3년 (상법/공인중개사법 기준)<br>
                         <button type="button" onclick="openPrivacyModal()" class="text-blue-600 dark:text-blue-400 underline font-medium mt-0.5 inline-block cursor-pointer">개인정보 처리방침 전문 보기</button>
                     </div>
@@ -1325,12 +1346,24 @@ function closeLeadForm() {
     }
 }
 
+function handleFloorClick(chk) {
+    if (chk.value === '전체층' && chk.checked) {
+        document.querySelectorAll('input[name="lead-floor"]').forEach(c => {
+            if (c.value !== '전체층') c.checked = false;
+        });
+    } else if (chk.value !== '전체층' && chk.checked) {
+        const allChk = document.querySelector('input[name="lead-floor"][value="전체층"]');
+        if (allChk) allChk.checked = false;
+    }
+}
+
 function switchLeadTab(type) {
     const hiddenInput = document.getElementById('lead-type');
     const tabBuyer = document.getElementById('lead-tab-buyer');
     const tabSeller = document.getElementById('lead-tab-seller');
     const catLabel = document.getElementById('lead-category-label');
     const locLabel = document.getElementById('lead-location-label');
+    const floorLabel = document.getElementById('lead-floor-label');
     const pyeongLabel = document.getElementById('lead-pyeong-label');
     const budgetLabel = document.getElementById('lead-budget-label');
 
@@ -1340,6 +1373,7 @@ function switchLeadTab(type) {
         tabBuyer.className = 'flex-1 py-2 sm:py-2.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer';
         if (catLabel) catLabel.textContent = '매물 종류';
         if (locLabel) locLabel.textContent = '매물 소재지 (건물 주소)';
+        if (floorLabel) floorLabel.textContent = '층수 (중복 선택 가능)';
         if (pyeongLabel) pyeongLabel.textContent = '평수';
         if (budgetLabel) budgetLabel.textContent = '임대·매매조건 / 권리금 등';
     } else {
@@ -1348,6 +1382,7 @@ function switchLeadTab(type) {
         tabSeller.className = 'flex-1 py-2 sm:py-2.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer';
         if (catLabel) catLabel.textContent = '희망 업종 / 매물 종류';
         if (locLabel) locLabel.textContent = '희망 지역 / 희망 위치';
+        if (floorLabel) floorLabel.textContent = '희망 층수 (중복 선택 가능)';
         if (pyeongLabel) pyeongLabel.textContent = '희망 평수';
         if (budgetLabel) budgetLabel.textContent = '예산 / 임대조건';
     }
@@ -1360,6 +1395,10 @@ async function submitClientLead(e) {
     const phone = document.getElementById('lead-phone').value.trim();
     const category = document.getElementById('lead-category').value;
     const location = document.getElementById('lead-location').value.trim();
+    
+    const selectedFloors = Array.from(document.querySelectorAll('input[name="lead-floor"]:checked')).map(c => c.value);
+    const floor = selectedFloors.length > 0 ? selectedFloors.join(', ') : '전체층';
+
     const pyeong = document.getElementById('lead-pyeong').value.trim();
     const budget = document.getElementById('lead-budget').value.trim();
     const notes = document.getElementById('lead-notes').value.trim();
@@ -1380,6 +1419,7 @@ async function submitClientLead(e) {
         phone,
         category,
         location,
+        floor,
         pyeong,
         budget,
         notes,
@@ -1453,7 +1493,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v108`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v109`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;

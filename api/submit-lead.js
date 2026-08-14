@@ -47,16 +47,17 @@ export default async function handler(req, res) {
 
       // Send Telegram Notification
       try {
-        const leadTypeStr = leadObj.type === 'seller' ? '🏢 [건물주] 매물 내놓습니다' : '🔍 [손님] 매물 구합니다';
+        const leadTypeStr = leadObj.type === 'seller' ? '🏢 [건물주/임차인] 매물 내놓습니다' : '🔍 [손님] 매물 구합니다';
         const text = `🔔 [최가네부동산] 실시간 매물 의뢰 접수!\n\n` +
           `• 구분: ${leadTypeStr}\n` +
           `• 성함/상호: ${leadObj.name}\n` +
           `• 연락처: ${leadObj.phone}\n` +
-          `• 업종/종류: ${leadObj.category}\n` +
-          `• 희망위치: ${leadObj.location}\n` +
+          `• 매물종류/업종: ${leadObj.category}\n` +
+          `• 위치/소재지: ${leadObj.location}\n` +
+          `• 층수: ${leadObj.floor || '전체층'}\n` +
           `• 평수: ${leadObj.pyeong}\n` +
-          `• 예산: ${leadObj.budget}\n` +
-          `• 요청사항: ${leadObj.notes}\n\n` +
+          `• 조건/권리금: ${leadObj.budget}\n` +
+          `• 요청사항: ${leadObj.notes || '-'}\n\n` +
           `📞 바로 전화걸기: ${leadObj.phone}\n` +
           `🌐 대시보드: https://www.choi114.com/admin.html`;
 
