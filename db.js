@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v110");
+console.log("Antigravity db.js version: 20260715_v111");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v110";
+const APP_VERSION = "20260715_v111";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1234,102 +1234,101 @@ function showLeadForm(type = 'buyer') {
         modal.id = 'client-lead-modal';
         modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm animate-fadeIn';
         modal.innerHTML = `
-        <div class="bg-white dark:bg-[#0d1b3e] text-slate-800 dark:text-slate-100 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[95vh]">
-            <div class="bg-[#003891] text-white px-4 py-2.5 sm:px-6 sm:py-3 flex items-center justify-between">
+        <div class="bg-white dark:bg-[#0d1b3e] text-slate-800 dark:text-slate-100 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[96vh]">
+            <div class="bg-[#003891] text-white px-3.5 py-2 sm:px-5 sm:py-2.5 flex items-center justify-between">
                 <div class="flex items-center gap-1.5">
-                    <span class="material-symbols-outlined text-amber-400 text-[20px]">edit_note</span>
-                    <h3 class="text-base sm:text-lg font-bold">30초 간편 매물 의뢰 / 내놓기</h3>
+                    <span class="material-symbols-outlined text-amber-400 text-[18px]">edit_note</span>
+                    <h3 class="text-sm sm:text-base font-bold">30초 간편 매물 의뢰 / 내놓기</h3>
                 </div>
-                <button onclick="closeLeadForm()" class="text-white/80 hover:text-white text-xl font-bold p-1 cursor-pointer">&times;</button>
+                <button onclick="closeLeadForm()" class="text-white/80 hover:text-white text-lg font-bold px-1 cursor-pointer">&times;</button>
             </div>
 
-            <div class="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#07102b] text-xs sm:text-sm font-medium">
-                <button id="lead-tab-buyer" type="button" onclick="switchLeadTab('buyer')" class="flex-1 py-2 sm:py-2.5 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer">🔍 매물 구해요 (손님)</button>
-                <button id="lead-tab-seller" type="button" onclick="switchLeadTab('seller')" class="flex-1 py-2 sm:py-2.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer">🏢 매물 내놓습니다 (건물주/임차인)</button>
+            <div class="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#07102b] text-xs font-medium">
+                <button id="lead-tab-buyer" type="button" onclick="switchLeadTab('buyer')" class="flex-1 py-1.5 sm:py-2 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer">🔍 매물 구해요 (손님)</button>
+                <button id="lead-tab-seller" type="button" onclick="switchLeadTab('seller')" class="flex-1 py-1.5 sm:py-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer">🏢 매물 내놓습니다 (건물주/임차인)</button>
             </div>
 
-            <form id="lead-submit-form" onsubmit="submitClientLead(event)" class="p-3.5 sm:p-5 overflow-y-auto space-y-2 sm:space-y-3 text-xs sm:text-sm">
+            <form id="lead-submit-form" onsubmit="submitClientLead(event)" class="p-2.5 sm:p-4 overflow-y-auto space-y-1.5 sm:space-y-2 text-xs">
                 <input type="hidden" id="lead-type" value="buyer">
-                <div>
-                    <label class="block font-bold mb-0.5">성함 / 상호 <span class="text-red-500">*</span></label>
-                    <input type="text" id="lead-name" required placeholder="예: 홍길동 (또는 최가네치과)" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold mb-0.5">성함 / 상호 <span class="text-red-500">*</span></label>
+                        <input type="text" id="lead-name" required placeholder="예: 홍길동 (최가네치과)" class="w-full p-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-0.5">연락처 <span class="text-red-500">*</span></label>
+                        <input type="tel" id="lead-phone" required placeholder="010-0000-0000" class="w-full p-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
                 </div>
-                <div>
-                    <label class="block font-bold mb-0.5">연락처 <span class="text-red-500">*</span></label>
-                    <input type="tel" id="lead-phone" required placeholder="010-0000-0000" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
-                </div>
-                <div>
-                    <label class="block font-bold mb-0.5" id="lead-category-label">매물 종류</label>
-                    <select id="lead-category" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
-                        <option value="상가">상가</option>
-                        <option value="건물">건물</option>
-                        <option value="사무실">사무실</option>
-                        <option value="공장">공장</option>
-                        <option value="창고">창고</option>
-                        <option value="토지">토지</option>
-                    </select>
-                </div>
-                <div id="lead-industry-container">
-                    <label class="block font-bold mb-0.5" id="lead-industry-label">희망 업종</label>
-                    <input type="text" id="lead-industry" placeholder="예: 학원, 병의원, 식당, 사무실 등" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold mb-0.5" id="lead-category-label">매물 종류</label>
+                        <select id="lead-category" class="w-full p-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                            <option value="상가">상가</option>
+                            <option value="건물">건물</option>
+                            <option value="사무실">사무실</option>
+                            <option value="공장">공장</option>
+                            <option value="창고">창고</option>
+                            <option value="토지">토지</option>
+                        </select>
+                    </div>
+                    <div id="lead-industry-container">
+                        <label class="block font-bold mb-0.5" id="lead-industry-label">희망 업종</label>
+                        <input type="text" id="lead-industry" placeholder="예: 학원, 병의원, 식당 등" class="w-full p-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    </div>
                 </div>
                 <div>
                     <label class="block font-bold mb-0.5" id="lead-location-label">희망 지역 / 희망 위치</label>
-                    <input type="text" id="lead-location" placeholder="예: 수성구 범어동 또는 달구벌대로변" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    <input type="text" id="lead-location" placeholder="예: 수성구 범어동 또는 달구벌대로변" class="w-full p-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                 </div>
                 <div>
-                    <label class="block font-bold mb-1" id="lead-floor-label">희망 층수 (중복 선택 가능)</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 dark:bg-[#142654] p-2 sm:p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 text-xs">
-                        <label class="flex items-center gap-1.5 cursor-pointer font-medium">
-                            <input type="checkbox" name="lead-floor" value="전체층" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
+                    <label class="block font-bold mb-0.5" id="lead-floor-label">희망 층수 (중복 선택 가능)</label>
+                    <div class="grid grid-cols-4 gap-1 sm:gap-2 bg-slate-50 dark:bg-[#142654] p-1.5 rounded-lg border border-slate-300 dark:border-slate-600 text-[11px] sm:text-xs">
+                        <label class="flex items-center gap-1 cursor-pointer font-medium whitespace-nowrap">
+                            <input type="checkbox" name="lead-floor" value="전체층" class="w-3.5 h-3.5 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
                             <span>전체층</span>
                         </label>
-                        <label class="flex items-center gap-1.5 cursor-pointer font-medium">
-                            <input type="checkbox" name="lead-floor" value="1층" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
+                        <label class="flex items-center gap-1 cursor-pointer font-medium whitespace-nowrap">
+                            <input type="checkbox" name="lead-floor" value="1층" class="w-3.5 h-3.5 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
                             <span>1층</span>
                         </label>
-                        <label class="flex items-center gap-1.5 cursor-pointer font-medium">
-                            <input type="checkbox" name="lead-floor" value="지상층(1층제외)" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
-                            <span>지상층(1층제외)</span>
+                        <label class="flex items-center gap-1 cursor-pointer font-medium whitespace-nowrap">
+                            <input type="checkbox" name="lead-floor" value="지상층(1층제외)" class="w-3.5 h-3.5 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
+                            <span>지상층</span>
                         </label>
-                        <label class="flex items-center gap-1.5 cursor-pointer font-medium">
-                            <input type="checkbox" name="lead-floor" value="지하층" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
+                        <label class="flex items-center gap-1 cursor-pointer font-medium whitespace-nowrap">
+                            <input type="checkbox" name="lead-floor" value="지하층" class="w-3.5 h-3.5 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="handleFloorClick(this)">
                             <span>지하층</span>
                         </label>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2 sm:gap-3">
+                <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block font-bold mb-0.5" id="lead-pyeong-label">희망 평수</label>
-                        <input type="text" id="lead-pyeong" placeholder="예: 50평대" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                        <input type="text" id="lead-pyeong" placeholder="예: 50평대" class="w-full p-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                     </div>
                     <div>
                         <label class="block font-bold mb-0.5" id="lead-budget-label">예산 / 임대조건</label>
-                        <input type="text" id="lead-budget" placeholder="예: 보증금 5천/월 300" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                        <input type="text" id="lead-budget" placeholder="예: 보증금 5천/월 300" class="w-full p-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                     </div>
                 </div>
                 <div>
                     <label class="block font-bold mb-0.5">세부 요청사항</label>
-                    <textarea id="lead-notes" rows="2" placeholder="기타 원하시는 조건을 편하게 남겨주세요." class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]"></textarea>
+                    <textarea id="lead-notes" rows="1" placeholder="기타 원하시는 조건을 편하게 남겨주세요." class="w-full p-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]"></textarea>
                 </div>
 
-                <div class="bg-slate-50 dark:bg-slate-800/80 p-3 rounded-lg border border-slate-200 dark:border-slate-700 text-xs space-y-1.5 mt-2">
-                    <div class="flex items-start gap-2">
-                        <input type="checkbox" id="lead-privacy-agree" class="mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" checked>
+                <div class="bg-slate-50 dark:bg-slate-800/80 p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-[11px] space-y-1">
+                    <div class="flex items-center gap-1.5">
+                        <input type="checkbox" id="lead-privacy-agree" class="w-3.5 h-3.5 rounded text-blue-600 focus:ring-blue-500 cursor-pointer" checked>
                         <label for="lead-privacy-agree" class="font-bold text-slate-800 dark:text-slate-200 cursor-pointer leading-tight">
-                            개인정보 수집 및 이용에 동의합니다 <span class="text-red-500">(필수)</span>
+                            개인정보 수집 및 이용 동의 <span class="text-red-500">(필수)</span>
                         </label>
-                    </div>
-                    <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-normal pl-6">
-                        • <b>수집 목적</b>: 매물 상담, 의뢰 접수 및 중개 서비스 제공<br>
-                        • <b>수집 항목</b>: 성함/상호, 연락처, 매물종류, 희망업종, 위치, 층수, 평수, 예산, 요청사항<br>
-                        • <b>보유 기간</b>: 의뢰 처리 완료 후 3년 (상법/공인중개사법 기준)<br>
-                        <button type="button" onclick="openPrivacyModal()" class="text-blue-600 dark:text-blue-400 underline font-medium mt-0.5 inline-block cursor-pointer">개인정보 처리방침 전문 보기</button>
+                        <button type="button" onclick="openPrivacyModal()" class="text-blue-600 dark:text-blue-400 underline font-medium ml-auto cursor-pointer">전문보기</button>
                     </div>
                 </div>
 
-                <div class="pt-1.5">
-                    <button type="submit" class="w-full py-2.5 sm:py-3 bg-[#003891] hover:bg-blue-800 text-white rounded-xl font-bold text-sm sm:text-base shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <div class="pt-1">
+                    <button type="submit" class="w-full py-2.5 bg-[#003891] hover:bg-blue-800 text-white rounded-xl font-bold text-sm sm:text-base shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer">
                         <span class="material-symbols-outlined text-[18px]">send</span> 신속 매물 접수하기
                     </button>
                 </div>
@@ -1505,7 +1504,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v110`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v111`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
