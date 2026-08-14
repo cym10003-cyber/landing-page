@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v115");
+console.log("Antigravity db.js version: 20260715_v116");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v115";
+const APP_VERSION = "20260715_v116";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -817,15 +817,23 @@ function recordSearchQuery(query) {
         const todayStr = new Date().toISOString().split('T')[0];
         const logs = JSON.parse(localStorage.getItem('analytics_search_logs') || '[]');
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        logs.unshift({
+        const logObj = {
             query: cleanQ,
             device: isMobile ? 'mobile' : 'desktop',
             timestamp: Date.now(),
             date: new Date().toLocaleString('ko-KR'),
             dateKey: todayStr
-        });
+        };
+        logs.unshift(logObj);
         if (logs.length > 500) logs.pop();
         localStorage.setItem('analytics_search_logs', JSON.stringify(logs));
+
+        // Sync search log to server for real-time cross-device analytics
+        fetch('/api/analytics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(logObj)
+        }).catch(() => {});
     } catch(e){}
 }
 
@@ -999,6 +1007,7 @@ function clearAnalyticsLogs() {
     localStorage.removeItem('analytics_post_views');
     localStorage.removeItem('analytics_page_views');
     localStorage.removeItem('analytics_daily_history');
+    fetch('/api/analytics', { method: 'DELETE' }).catch(() => {});
 }
 
 // Multi-Device Analytics Sync Helpers
@@ -1505,7 +1514,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v115`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v116`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
