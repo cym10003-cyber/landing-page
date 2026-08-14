@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed flex items-center"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v116">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v117">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v116">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v117">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -316,19 +316,25 @@
                         <span class="material-symbols-outlined text-[14px]">delete</span> 접수함 초기화
                     </button>
                 </div>
-                <div class="overflow-x-auto">
+                <!-- Mobile Card View (md:hidden) -->
+                <div id="leads-mobile-container" class="block md:hidden space-y-3 p-3">
+                    <div class="text-center py-8 text-muted text-sm bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">접수된 매물 의뢰가 없습니다.</div>
+                </div>
+
+                <!-- Desktop Table View (hidden md:block) -->
+                <div class="hidden md:block overflow-x-auto">
                     <table class="w-full text-left text-sm text-ink border-collapse">
                         <thead class="bg-surface-container text-muted border-b border-hairline font-semibold text-xs uppercase">
                             <tr>
-                                <th class="px-md py-3 w-36">구분</th>
-                                <th class="px-md py-3 w-28">성함 / 상호</th>
-                                <th class="px-md py-3 w-36">연락처</th>
-                                <th class="px-md py-3 w-28">매물종류/업종</th>
-                                <th class="px-md py-3">위치 / 층수 / 평수</th>
-                                <th class="px-md py-3 w-32">예산 / 임대료</th>
-                                <th class="px-md py-3">상담 요청 메모</th>
-                                <th class="px-md py-3 w-36">접수일시</th>
-                                <th class="px-md py-3 w-28 text-center">작업</th>
+                                <th class="px-md py-3 whitespace-nowrap">구분</th>
+                                <th class="px-md py-3 whitespace-nowrap">성함 / 상호</th>
+                                <th class="px-md py-3 whitespace-nowrap">연락처</th>
+                                <th class="px-md py-3 whitespace-nowrap">매물종류/업종</th>
+                                <th class="px-md py-3 whitespace-nowrap">위치 / 층수 / 평수</th>
+                                <th class="px-md py-3 whitespace-nowrap">예산 / 임대료</th>
+                                <th class="px-md py-3 whitespace-nowrap">상담 요청 메모</th>
+                                <th class="px-md py-3 whitespace-nowrap">접수일시</th>
+                                <th class="px-md py-3 text-center whitespace-nowrap">작업</th>
                             </tr>
                         </thead>
                         <tbody id="leads-tbody" class="divide-y divide-hairline">
@@ -371,10 +377,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v116">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v117">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v116">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v117">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -385,7 +391,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v116"></script>
+<script src="db.js?v=20260715_v117"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -856,37 +862,93 @@ async function handleDelete(id) {
                 localStorage.setItem('analytics_client_leads', JSON.stringify(mergedLeads));
 
                 const tbody = document.getElementById('leads-tbody');
+                const mobileContainer = document.getElementById('leads-mobile-container');
                 const badge = document.getElementById('leads-count-badge');
                 if (badge) badge.textContent = mergedLeads.length;
 
-                if (!tbody) return;
-                if (mergedLeads.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="9" class="text-center py-8 text-muted">접수된 매물 의뢰가 없습니다.</td></tr>';
-                    return;
+                // Render Mobile Cards View
+                if (mobileContainer) {
+                    if (mergedLeads.length === 0) {
+                        mobileContainer.innerHTML = '<div class="text-center py-8 text-muted text-sm bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">접수된 매물 의뢰가 없습니다.</div>';
+                    } else {
+                        mobileContainer.innerHTML = mergedLeads.map(l => `
+                            <div class="bg-white dark:bg-slate-800 p-3.5 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2.5">
+                                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-2">
+                                    <span class="px-2.5 py-1 rounded-full text-xs font-extrabold ${l.type === 'seller' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}">
+                                        ${l.type === 'seller' ? '🏢 건물주/임차인 매물내놓기' : '🔍 손님 매물구함'}
+                                    </span>
+                                    <span class="text-[11px] text-slate-400 font-mono">${l.date || '-'}</span>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <span class="text-base font-extrabold text-slate-900 dark:text-white">${l.name || '-'}</span>
+                                    </div>
+                                    <a href="tel:${l.phone}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-extrabold transition shadow-sm">
+                                        <span class="material-symbols-outlined text-[16px]">call</span> ${l.phone || '-'}
+                                    </a>
+                                </div>
+
+                                <div class="grid grid-cols-1 gap-1.5 text-xs bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-700/60">
+                                    <div>
+                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• 매물종류/업종:</span>
+                                        <span class="font-extrabold text-slate-800 dark:text-slate-200 ml-1">${l.category || '-'}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• 위치/층수/평수:</span>
+                                        <span class="font-extrabold text-slate-800 dark:text-slate-200 ml-1">${l.location || '-'} <span class="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/40 px-1 py-0.5 rounded">${l.floor || '전체층'}</span> ${l.pyeong ? '(' + l.pyeong + ')' : ''}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• 예산/임대료:</span>
+                                        <span class="font-extrabold text-emerald-600 dark:text-emerald-400 ml-1">${l.budget || '-'}</span>
+                                    </div>
+                                    ${l.notes ? `
+                                    <div>
+                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• 요청 메모:</span>
+                                        <span class="font-bold text-slate-700 dark:text-slate-300 ml-1">${l.notes}</span>
+                                    </div>
+                                    ` : ''}
+                                </div>
+
+                                <div class="flex justify-end pt-1">
+                                    <button onclick="deleteSingleLead(${l.id})" class="inline-flex items-center gap-1 px-3 py-1.5 text-xs text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-400 rounded-lg font-bold transition cursor-pointer">
+                                        <span class="material-symbols-outlined text-[15px]">delete</span> 삭제
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
                 }
 
-                tbody.innerHTML = mergedLeads.map(l => `
-                    <tr class="hover:bg-surface-container-low transition">
-                        <td class="px-md py-3 font-semibold ${l.type === 'seller' ? 'text-purple-600' : 'text-blue-600'}">
-                            ${l.type === 'seller' ? '🏢 건물주/임차인 매물내놓기' : '🔍 손님 매물구함'}
-                        </td>
-                        <td class="px-md py-3 font-bold text-ink">${l.name || '-'}</td>
-                        <td class="px-md py-3 font-mono font-bold text-primary">${l.phone || '-'}</td>
-                        <td class="px-md py-3 font-medium">${l.category || '-'}</td>
-                        <td class="px-md py-3">${l.location || '-'} <span class="text-xs text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/40 px-1.5 py-0.5 rounded font-semibold">${l.floor || '전체층'}</span> ${l.pyeong ? '(' + l.pyeong + ')' : ''}</td>
-                        <td class="px-md py-3 font-medium text-emerald-700">${l.budget || '-'}</td>
-                        <td class="px-md py-3 text-xs text-slate-700 max-w-xs truncate" title="${l.notes || ''}">${l.notes || '-'}</td>
-                        <td class="px-md py-3 text-xs text-muted whitespace-nowrap">${l.date || '-'}</td>
-                        <td class="px-md py-3 text-center flex items-center justify-center gap-1">
-                            <a href="tel:${l.phone}" class="inline-flex items-center gap-1 px-2.5 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-bold transition shadow-xs">
-                                <span class="material-symbols-outlined text-[14px]">call</span> 전화
-                            </a>
-                            <button onclick="deleteSingleLead(${l.id})" class="inline-flex items-center p-1 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded text-xs font-bold transition cursor-pointer" title="삭제">
-                                <span class="material-symbols-outlined text-[16px]">delete</span>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
+                // Render Desktop Table View
+                if (tbody) {
+                    if (mergedLeads.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="9" class="text-center py-8 text-muted">접수된 매물 의뢰가 없습니다.</td></tr>';
+                    } else {
+                        tbody.innerHTML = mergedLeads.map(l => `
+                            <tr class="hover:bg-surface-container-low transition">
+                                <td class="px-md py-3 font-semibold whitespace-nowrap ${l.type === 'seller' ? 'text-purple-600' : 'text-blue-600'}">
+                                    ${l.type === 'seller' ? '🏢 건물주/임차인 매물내놓기' : '🔍 손님 매물구함'}
+                                </td>
+                                <td class="px-md py-3 font-bold text-ink whitespace-nowrap">${l.name || '-'}</td>
+                                <td class="px-md py-3 font-mono font-bold text-primary whitespace-nowrap">${l.phone || '-'}</td>
+                                <td class="px-md py-3 font-medium whitespace-nowrap">${l.category || '-'}</td>
+                                <td class="px-md py-3 whitespace-nowrap">${l.location || '-'} <span class="text-xs text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/40 px-1.5 py-0.5 rounded font-semibold">${l.floor || '전체층'}</span> ${l.pyeong ? '(' + l.pyeong + ')' : ''}</td>
+                                <td class="px-md py-3 font-medium text-emerald-700 whitespace-nowrap">${l.budget || '-'}</td>
+                                <td class="px-md py-3 text-xs text-slate-700 max-w-xs truncate" title="${l.notes || ''}">${l.notes || '-'}</td>
+                                <td class="px-md py-3 text-xs text-muted whitespace-nowrap">${l.date || '-'}</td>
+                                <td class="px-md py-3 text-center flex items-center justify-center gap-1 whitespace-nowrap">
+                                    <a href="tel:${l.phone}" class="inline-flex items-center gap-1 px-2.5 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-bold transition shadow-xs">
+                                        <span class="material-symbols-outlined text-[14px]">call</span> 전화
+                                    </a>
+                                    <button onclick="deleteSingleLead(${l.id})" class="inline-flex items-center p-1 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded text-xs font-bold transition cursor-pointer" title="삭제">
+                                        <span class="material-symbols-outlined text-[16px]">delete</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('');
+                    }
+                }
             } catch(e) {}
         }
 
