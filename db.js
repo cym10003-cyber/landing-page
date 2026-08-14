@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v109");
+console.log("Antigravity db.js version: 20260715_v110");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v109";
+const APP_VERSION = "20260715_v110";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1259,7 +1259,7 @@ function showLeadForm(type = 'buyer') {
                     <input type="tel" id="lead-phone" required placeholder="010-0000-0000" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                 </div>
                 <div>
-                    <label class="block font-bold mb-0.5" id="lead-category-label">희망 업종 / 매물 종류</label>
+                    <label class="block font-bold mb-0.5" id="lead-category-label">매물 종류</label>
                     <select id="lead-category" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                         <option value="상가">상가</option>
                         <option value="건물">건물</option>
@@ -1268,6 +1268,10 @@ function showLeadForm(type = 'buyer') {
                         <option value="창고">창고</option>
                         <option value="토지">토지</option>
                     </select>
+                </div>
+                <div id="lead-industry-container">
+                    <label class="block font-bold mb-0.5" id="lead-industry-label">희망 업종</label>
+                    <input type="text" id="lead-industry" placeholder="예: 학원, 병의원, 식당, 사무실 등" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                 </div>
                 <div>
                     <label class="block font-bold mb-0.5" id="lead-location-label">희망 지역 / 희망 위치</label>
@@ -1318,7 +1322,7 @@ function showLeadForm(type = 'buyer') {
                     </div>
                     <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-normal pl-6">
                         • <b>수집 목적</b>: 매물 상담, 의뢰 접수 및 중개 서비스 제공<br>
-                        • <b>수집 항목</b>: 성함/상호, 연락처, 위치, 층수, 평수, 예산, 요청사항<br>
+                        • <b>수집 항목</b>: 성함/상호, 연락처, 매물종류, 희망업종, 위치, 층수, 평수, 예산, 요청사항<br>
                         • <b>보유 기간</b>: 의뢰 처리 완료 후 3년 (상법/공인중개사법 기준)<br>
                         <button type="button" onclick="openPrivacyModal()" class="text-blue-600 dark:text-blue-400 underline font-medium mt-0.5 inline-block cursor-pointer">개인정보 처리방침 전문 보기</button>
                     </div>
@@ -1362,6 +1366,7 @@ function switchLeadTab(type) {
     const tabBuyer = document.getElementById('lead-tab-buyer');
     const tabSeller = document.getElementById('lead-tab-seller');
     const catLabel = document.getElementById('lead-category-label');
+    const indContainer = document.getElementById('lead-industry-container');
     const locLabel = document.getElementById('lead-location-label');
     const floorLabel = document.getElementById('lead-floor-label');
     const pyeongLabel = document.getElementById('lead-pyeong-label');
@@ -1372,6 +1377,7 @@ function switchLeadTab(type) {
         tabSeller.className = 'flex-1 py-2 sm:py-2.5 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer';
         tabBuyer.className = 'flex-1 py-2 sm:py-2.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer';
         if (catLabel) catLabel.textContent = '매물 종류';
+        if (indContainer) indContainer.style.display = 'none';
         if (locLabel) locLabel.textContent = '매물 소재지 (건물 주소)';
         if (floorLabel) floorLabel.textContent = '층수 (중복 선택 가능)';
         if (pyeongLabel) pyeongLabel.textContent = '평수';
@@ -1380,7 +1386,8 @@ function switchLeadTab(type) {
         hiddenInput.value = 'buyer';
         tabBuyer.className = 'flex-1 py-2 sm:py-2.5 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer';
         tabSeller.className = 'flex-1 py-2 sm:py-2.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer';
-        if (catLabel) catLabel.textContent = '희망 업종 / 매물 종류';
+        if (catLabel) catLabel.textContent = '매물 종류';
+        if (indContainer) indContainer.style.display = 'block';
         if (locLabel) locLabel.textContent = '희망 지역 / 희망 위치';
         if (floorLabel) floorLabel.textContent = '희망 층수 (중복 선택 가능)';
         if (pyeongLabel) pyeongLabel.textContent = '희망 평수';
@@ -1394,6 +1401,10 @@ async function submitClientLead(e) {
     const name = document.getElementById('lead-name').value.trim();
     const phone = document.getElementById('lead-phone').value.trim();
     const category = document.getElementById('lead-category').value;
+    const industryInput = document.getElementById('lead-industry');
+    const industry = (industryInput && type === 'buyer') ? industryInput.value.trim() : '';
+    const categoryDisplay = industry ? `${category} (희망업종: ${industry})` : category;
+
     const location = document.getElementById('lead-location').value.trim();
     
     const selectedFloors = Array.from(document.querySelectorAll('input[name="lead-floor"]:checked')).map(c => c.value);
@@ -1417,7 +1428,8 @@ async function submitClientLead(e) {
         type,
         name,
         phone,
-        category,
+        category: categoryDisplay,
+        industry,
         location,
         floor,
         pyeong,
@@ -1493,7 +1505,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v109`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v110`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
