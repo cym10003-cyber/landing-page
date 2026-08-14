@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v107");
+console.log("Antigravity db.js version: 20260715_v108");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v107";
+const APP_VERSION = "20260715_v108";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1245,7 +1245,7 @@ function showLeadForm(type = 'buyer') {
 
             <div class="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#07102b] text-xs sm:text-sm font-medium">
                 <button id="lead-tab-buyer" type="button" onclick="switchLeadTab('buyer')" class="flex-1 py-2 sm:py-2.5 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer">🔍 매물 구해요 (손님)</button>
-                <button id="lead-tab-seller" type="button" onclick="switchLeadTab('seller')" class="flex-1 py-2 sm:py-2.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer">🏢 매물 내놓습니다 (건물주)</button>
+                <button id="lead-tab-seller" type="button" onclick="switchLeadTab('seller')" class="flex-1 py-2 sm:py-2.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer">🏢 매물 내놓습니다 (건물주/임차인)</button>
             </div>
 
             <form id="lead-submit-form" onsubmit="submitClientLead(event)" class="p-3.5 sm:p-5 overflow-y-auto space-y-2 sm:space-y-3 text-xs sm:text-sm">
@@ -1259,13 +1259,14 @@ function showLeadForm(type = 'buyer') {
                     <input type="tel" id="lead-phone" required placeholder="010-0000-0000" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                 </div>
                 <div>
-                    <label class="block font-bold mb-0.5">희망 업종 / 매물 종류</label>
+                    <label class="block font-bold mb-0.5" id="lead-category-label">희망 업종 / 매물 종류</label>
                     <select id="lead-category" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
-                        <option value="상가">상가 (일반음식점/카페/의류 등)</option>
-                        <option value="사무실">사무실 / 사옥</option>
-                        <option value="병의원">병의원 (치과/한의원/내과 등)</option>
-                        <option value="학원">학원 / 교습소 / 독서실</option>
-                        <option value="공장/창고">공장 / 창고</option>
+                        <option value="상가">상가</option>
+                        <option value="건물">건물</option>
+                        <option value="사무실">사무실</option>
+                        <option value="공장">공장</option>
+                        <option value="창고">창고</option>
+                        <option value="토지">토지</option>
                     </select>
                 </div>
                 <div>
@@ -1274,11 +1275,11 @@ function showLeadForm(type = 'buyer') {
                 </div>
                 <div class="grid grid-cols-2 gap-2 sm:gap-3">
                     <div>
-                        <label class="block font-bold mb-0.5">희망 평수</label>
+                        <label class="block font-bold mb-0.5" id="lead-pyeong-label">희망 평수</label>
                         <input type="text" id="lead-pyeong" placeholder="예: 50평대" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                     </div>
                     <div>
-                        <label class="block font-bold mb-0.5">예산 / 임대조건</label>
+                        <label class="block font-bold mb-0.5" id="lead-budget-label">예산 / 임대조건</label>
                         <input type="text" id="lead-budget" placeholder="예: 보증금 5천/월 300" class="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                     </div>
                 </div>
@@ -1328,18 +1329,27 @@ function switchLeadTab(type) {
     const hiddenInput = document.getElementById('lead-type');
     const tabBuyer = document.getElementById('lead-tab-buyer');
     const tabSeller = document.getElementById('lead-tab-seller');
+    const catLabel = document.getElementById('lead-category-label');
     const locLabel = document.getElementById('lead-location-label');
+    const pyeongLabel = document.getElementById('lead-pyeong-label');
+    const budgetLabel = document.getElementById('lead-budget-label');
 
     if (type === 'seller') {
         hiddenInput.value = 'seller';
-        tabSeller.className = 'flex-1 py-3 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold';
-        tabBuyer.className = 'flex-1 py-3 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200';
+        tabSeller.className = 'flex-1 py-2 sm:py-2.5 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer';
+        tabBuyer.className = 'flex-1 py-2 sm:py-2.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer';
+        if (catLabel) catLabel.textContent = '매물 종류';
         if (locLabel) locLabel.textContent = '매물 소재지 (건물 주소)';
+        if (pyeongLabel) pyeongLabel.textContent = '평수';
+        if (budgetLabel) budgetLabel.textContent = '임대·매매조건 / 권리금 등';
     } else {
         hiddenInput.value = 'buyer';
-        tabBuyer.className = 'flex-1 py-3 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold';
-        tabSeller.className = 'flex-1 py-3 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200';
+        tabBuyer.className = 'flex-1 py-2 sm:py-2.5 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer';
+        tabSeller.className = 'flex-1 py-2 sm:py-2.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer';
+        if (catLabel) catLabel.textContent = '희망 업종 / 매물 종류';
         if (locLabel) locLabel.textContent = '희망 지역 / 희망 위치';
+        if (pyeongLabel) pyeongLabel.textContent = '희망 평수';
+        if (budgetLabel) budgetLabel.textContent = '예산 / 임대조건';
     }
 }
 
@@ -1443,7 +1453,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v107`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v108`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
