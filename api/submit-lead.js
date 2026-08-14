@@ -60,7 +60,7 @@ export default async function handler(req, res) {
           `📞 바로 전화걸기: ${leadObj.phone}\n` +
           `🌐 대시보드: https://www.choi114.com/admin.html`;
 
-        const defaultTok = Buffer.from('ODg4OTMwMDA3NDpBQUd5dnBjS01DNUx4ZEdIWUVHd0tNTlJWNW92TGJTU3JZ', 'base64').toString('ascii');
+        const defaultTok = Buffer.from('ODk3MjMzMzI4MzpBQUV2Y1FTZ25Cd1dDV1plMllWZDFzV1VfTGR1UWdyLVZfaw==', 'base64').toString('ascii');
         const botToken = process.env.TELEGRAM_BOT_TOKEN || defaultTok;
         const chatId = process.env.TELEGRAM_CHAT_ID || '8970218844';
 
