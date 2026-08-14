@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v119");
+console.log("Antigravity db.js version: 20260715_v120");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v119";
+const APP_VERSION = "20260715_v120";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -29,7 +29,7 @@ async function loadConfig() {
 }
 
 function isAdmin() {
-  return sessionStorage.getItem('isAdmin') === 'true';
+  return sessionStorage.getItem('isAdmin') === 'true' || localStorage.getItem('isAdmin') === 'true';
 }
 
 function requireAdmin() {
@@ -1514,7 +1514,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v119`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v120`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
