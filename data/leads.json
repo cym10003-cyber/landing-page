@@ -1,5 +1,18 @@
 [
   {
+    "id": 1787015060207,
+    "type": "buyer",
+    "name": "최이명",
+    "phone": "01097555858",
+    "category": "상가",
+    "location": "",
+    "floor": "전체층",
+    "pyeong": "",
+    "budget": "",
+    "notes": "",
+    "date": "2026. 8. 18. 오전 10:04:20"
+  },
+  {
     "id": 1787015024541,
     "type": "seller",
     "name": "최이명",
