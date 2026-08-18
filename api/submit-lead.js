@@ -66,9 +66,83 @@ export default async function handler(req, res) {
         date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
       };
 
-      // Send Telegram Notification
+      // Send Email Notification to cym10003@naver.com & Telegram Notification
       try {
-        const leadTypeStr = leadObj.type === 'seller' ? '🏢 [건물주/임차인] 매물 내놓습니다' : '🔍 [손님] 매물 구합니다';
+        const targetEmail = process.env.ADMIN_NOTIFY_EMAIL || 'cym10003@naver.com';
+        const leadTypeStr = leadObj.type === 'seller' ? '🏢 [건물주/임차인] 매물내놓기' : '🔍 [손님] 매물구함';
+        const emailSubject = `🔔 [최가네부동산] 새 ${leadObj.type === 'seller' ? '매물내놓기' : '매물구함'} 접수! (${leadObj.name || '고객'}님)`;
+        
+        const htmlBody = `
+          <div style="font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; max-width: 580px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff;">
+            <div style="text-align: center; padding-bottom: 16px; border-bottom: 2px solid #2563eb;">
+              <h2 style="color: #1e3a8a; margin: 0; font-size: 20px;">🔔 [최가네부동산] 실시간 매물 의뢰 접수</h2>
+              <p style="color: #64748b; font-size: 13px; margin-top: 4px;">홈페이지를 통해 손님이 새로 접수한 매물 의뢰 내역입니다.</p>
+            </div>
+            
+            <table style="width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px;">
+              <tr style="background-color: #f8fafc;">
+                <td style="padding: 12px; font-weight: bold; width: 32%; border-bottom: 1px solid #e2e8f0; color: #475569;">의뢰 구분</td>
+                <td style="padding: 12px; font-weight: bold; color: ${leadObj.type === 'seller' ? '#7c3aed' : '#2563eb'}; border-bottom: 1px solid #e2e8f0;">${leadTypeStr}</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">성함 / 상호</td>
+                <td style="padding: 12px; font-weight: bold; font-size: 16px; color: #0f172a; border-bottom: 1px solid #e2e8f0;">${leadObj.name || '-'}</td>
+              </tr>
+              <tr style="background-color: #f8fafc;">
+                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">연락처</td>
+                <td style="padding: 12px; font-weight: bold; font-size: 16px; border-bottom: 1px solid #e2e8f0;">
+                  <a href="tel:${leadObj.phone}" style="color: #2563eb; text-decoration: none;">📞 ${leadObj.phone || '-'}</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">매물종류 / 업종</td>
+                <td style="padding: 12px; font-weight: bold; color: #0f172a; border-bottom: 1px solid #e2e8f0;">${leadObj.category || '-'}</td>
+              </tr>
+              <tr style="background-color: #f8fafc;">
+                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">위치 / 층수 / 평수</td>
+                <td style="padding: 12px; color: #0f172a; border-bottom: 1px solid #e2e8f0;">${leadObj.location || '-'} (${leadObj.floor || '전체층'}, ${leadObj.pyeong || '-'})</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">예산 / 조건 / 권리금</td>
+                <td style="padding: 12px; font-weight: bold; color: #059669; border-bottom: 1px solid #e2e8f0;">${leadObj.budget || '-'}</td>
+              </tr>
+              <tr style="background-color: #fffbeb;">
+                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #92400e;">상담 요청 메모</td>
+                <td style="padding: 12px; color: #1e293b; border-bottom: 1px solid #e2e8f0; white-space: pre-wrap;">${leadObj.notes || '-'}</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px; font-weight: bold; color: #475569;">접수 일시</td>
+                <td style="padding: 12px; color: #64748b; font-size: 13px;">${leadObj.date || new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}</td>
+              </tr>
+            </table>
+
+            <div style="margin-top: 24px; text-align: center;">
+              <a href="https://www.choi114.com/admin.html" style="display: inline-block; background-color: #2563eb; color: #ffffff; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 14px;">
+                💻 관리자 대시보드 바로가기
+              </a>
+            </div>
+          </div>
+        `;
+
+        // Send via Resend API if key is present
+        const resendApiKey = process.env.RESEND_API_KEY;
+        if (resendApiKey) {
+          await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${resendApiKey}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              from: '최가네부동산 <onboarding@resend.dev>',
+              to: [targetEmail],
+              subject: emailSubject,
+              html: htmlBody
+            })
+          }).catch(() => {});
+        }
+
+        // Also Telegram Notification (if token is available)
         const text = `🔔 [최가네부동산] 실시간 매물 의뢰 접수!\n\n` +
           `• 구분: ${leadTypeStr}\n` +
           `• 성함/상호: ${leadObj.name}\n` +
@@ -82,8 +156,7 @@ export default async function handler(req, res) {
           `📞 바로 전화걸기: ${leadObj.phone}\n` +
           `🌐 대시보드: https://www.choi114.com/admin.html`;
 
-        const defaultTok = Buffer.from('ODk3MjMzMzI4MzpBQUV2Y1FTZ25Cd1dDV1plMllWZDFzV1VfTGR1UWdyLVZfaw==', 'base64').toString('ascii');
-        const botToken = process.env.TELEGRAM_BOT_TOKEN || defaultTok;
+        const botToken = process.env.TELEGRAM_BOT_TOKEN;
         const chatId = process.env.TELEGRAM_CHAT_ID || '8970218844';
 
         if (botToken && chatId) {
