@@ -124,6 +124,30 @@ export default async function handler(req, res) {
           </div>
         `;
 
+        // Send via FormSubmit directly to cym10003@naver.com
+        await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+            'Referer': 'https://www.choi114.com/'
+          },
+          body: JSON.stringify({
+            "_subject": emailSubject,
+            "의뢰구분": leadTypeStr,
+            "성함_상호": leadObj.name || '-',
+            "연락처": leadObj.phone || '-',
+            "매물종류_업종": leadObj.category || '-',
+            "위치_층수_평수": `${leadObj.location || '-'} (${leadObj.floor || '전체층'}, ${leadObj.pyeong || '-'})`,
+            "예산_조건_권리금": leadObj.budget || '-',
+            "상담요청메모": leadObj.notes || '-',
+            "접수일시": leadObj.date || new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+            "_template": "table",
+            "_captcha": "false"
+          })
+        }).catch(() => {});
+
         // Send via Resend API if key is present
         const resendApiKey = process.env.RESEND_API_KEY;
         if (resendApiKey) {
