@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v124");
+console.log("Antigravity db.js version: 20260715_v125");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v124";
+const APP_VERSION = "20260715_v125";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1451,6 +1451,32 @@ async function submitClientLead(e) {
         leads.unshift(leadObj);
         localStorage.setItem('analytics_client_leads', JSON.stringify(leads));
 
+        const leadTypeStr = type === 'seller' ? '🏢 [건물주/임차인] 매물내놓기' : '🔍 [손님] 매물구함';
+        const emailSubject = `🔔 [최가네부동산] 새 ${type === 'seller' ? '매물내놓기' : '매물구함'} 접수! (${name}님)`;
+
+        // 1. Direct FormSubmit Email dispatch to cym10003@naver.com
+        fetch('https://formsubmit.co/ajax/cym10003@naver.com', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                "_subject": emailSubject,
+                "의뢰구분": leadTypeStr,
+                "성함_상호": name,
+                "연락처": phone,
+                "매물종류_업종": categoryDisplay,
+                "위치_층수_평수": `${location || '-'} (${floor || '전체층'}, ${pyeong || '-'})`,
+                "예산_조건_권리금": budget || '-',
+                "상담요청메모": notes || '-',
+                "접수일시": leadObj.date,
+                "_template": "table",
+                "_captcha": "false"
+            })
+        }).catch(() => {});
+
+        // 2. Vercel Backend Serverless Lead dispatch
         fetch('/api/submit-lead', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1514,7 +1540,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v124`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v125`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
