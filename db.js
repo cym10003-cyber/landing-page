@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v143");
+console.log("Antigravity db.js version: 20260715_v144");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v143";
+const APP_VERSION = "20260715_v144";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -404,7 +404,28 @@ function renderMarkdown(src) {
       .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
       .trim();
 
-    return `<div class="html-post-container overflow-x-auto text-ink leading-relaxed space-y-2">${styleBlocks}\n${cleanHtml}</div>`;
+    const mobileFixStyle = `<style>
+@media (max-width: 640px) {
+  .blog-container { border-radius: 12px !important; margin: 0 auto !important; border: none !important; box-shadow: none !important; }
+  .content-body { padding: 16px 10px !important; }
+  .header-banner { padding: 24px 16px !important; }
+  .main-title { font-size: 20px !important; }
+  .highlight-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .highlight-card { padding: 12px 10px !important; }
+  .highlight-card .value { font-size: 17px !important; }
+  .info-table { display: block !important; width: 100% !important; }
+  .info-table tbody { display: block !important; width: 100% !important; }
+  .info-table tr { display: flex !important; flex-wrap: wrap !important; border-bottom: 1px solid #e2e8f0 !important; padding: 8px 4px !important; }
+  .info-table th, .info-table td { display: block !important; box-sizing: border-box !important; border: none !important; padding: 4px 6px !important; word-break: keep-all !important; line-height: 1.5 !important; }
+  .info-table th { width: 32% !important; background: transparent !important; color: #475569 !important; font-weight: 700 !important; font-size: 13px !important; }
+  .info-table td { width: 68% !important; color: #0f172a !important; font-size: 13.5px !important; }
+  .info-table td[colspan="3"] { width: 68% !important; }
+  .broker-card { padding: 16px !important; }
+  .cta-box { padding: 20px 14px !important; }
+}
+</style>`;
+
+    return `<div class="html-post-container overflow-x-auto text-ink leading-relaxed space-y-2">${mobileFixStyle}\n${styleBlocks}\n${cleanHtml}</div>`;
   }
 
   let html = convertedSrc
@@ -1566,7 +1587,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v143`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v144`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
