@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v125");
+console.log("Antigravity db.js version: 20260715_v126");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v125";
+const APP_VERSION = "20260715_v126";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -380,6 +380,23 @@ function renderMarkdown(src) {
   
   // Convert GitHub raw URLs to high-speed jsDelivr CDN URLs for ultra-fast asset loading
   let convertedSrc = src.replace(/raw\.githubusercontent\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)\/main\//g, 'cdn.jsdelivr.net/gh/$1/$2@main/');
+
+  // If the text contains native HTML tags or uploaded HTML document markup, render HTML directly!
+  const isHtml = /<\/?(div|p|span|table|tr|td|th|tbody|thead|style|img|iframe|h[1-6]|ul|ol|li|br|b|i|strong|em|u|a|section|article|header|footer|font|button|form|input|label)[\s>\/]/i.test(convertedSrc);
+
+  if (isHtml) {
+    let cleanHtml = convertedSrc;
+    if (/<body[\s\S]*?>([\s\S]*?)<\/body>/i.test(cleanHtml)) {
+      const match = cleanHtml.match(/<body[\s\S]*?>([\s\S]*?)<\/body>/i);
+      if (match) cleanHtml = match[1];
+    }
+    cleanHtml = cleanHtml
+      .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
+      .replace(/<\/?html[\s\S]*?>/gi, '')
+      .replace(/<head[\s\S]*?>[\s\S]*?<\/head>/gi, '');
+
+    return `<div class="html-post-container overflow-x-auto text-ink leading-relaxed space-y-2">${cleanHtml}</div>`;
+  }
 
   let html = convertedSrc
     .replace(/&/g, '&amp;')
@@ -1540,7 +1557,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v125`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v126`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;

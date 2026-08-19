@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed flex items-center"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v125">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v126">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v125">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
+<a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v126">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -170,13 +170,17 @@
             <div>
                 <div class="flex justify-between items-center mb-xs">
                     <label for="content" class="block text-sm font-semibold text-ink">본문 내용 (마크다운 지원)</label>
-                    <div class="flex items-center gap-md">
+                    <div class="flex items-center gap-md flex-wrap">
                         <input type="file" id="image-upload" accept="image/*" class="hidden" multiple>
+                        <input type="file" id="html-file-upload" accept=".html,.htm,.txt" class="hidden">
                         <button type="button" id="upload-btn" class="text-xs text-primary hover:text-blue-mid font-semibold flex items-center gap-xs bg-transparent border-0 cursor-pointer">
                             <span class="material-symbols-outlined text-[16px]">image</span> 사진 첨부
                         </button>
                         <button type="button" id="video-btn" class="text-xs text-primary hover:text-blue-mid font-semibold flex items-center gap-xs bg-transparent border-0 cursor-pointer">
                             <span class="material-symbols-outlined text-[16px]">movie</span> 동영상 첨부
+                        </button>
+                        <button type="button" id="html-upload-btn" class="text-xs text-purple-800 hover:text-purple-950 font-bold flex items-center gap-xs bg-purple-100 hover:bg-purple-200 px-2.5 py-1 rounded-lg border border-purple-300 cursor-pointer transition shadow-xs">
+                            <span class="material-symbols-outlined text-[16px]">code</span> HTML 파일 업로드
                         </button>
                         <span class="text-muted text-[11px] hidden" id="upload-spinner">업로드 중...</span>
                         <a href="templates/post-template.md" target="_blank" class="text-xs text-primary-container hover:underline flex items-center gap-xs">
@@ -272,6 +276,17 @@
                 <div id="attached-images-section" class="hidden mt-sm p-sm bg-surface-container rounded-lg border border-hairline">
                     <span class="block text-[11px] font-semibold text-muted mb-xs">본문 첨부 사진 목록 ( X 버튼 클릭 시 본문에서 해당 사진 삭제 )</span>
                     <div id="attached-images-preview" class="flex flex-wrap gap-sm"></div>
+                </div>
+
+                <!-- HTML Live Preview Section -->
+                <div id="html-preview-section" class="hidden mt-sm p-3.5 bg-purple-50/70 dark:bg-slate-900 rounded-xl border border-purple-200 shadow-sm space-y-2">
+                    <div class="flex items-center justify-between border-b border-purple-200/80 pb-2">
+                        <span class="text-xs font-bold text-purple-900 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px] text-purple-700">preview</span> 업로드된 HTML 본문 실시간 미리보기
+                        </span>
+                        <span class="text-[11px] text-purple-700 font-mono" id="html-file-name"></span>
+                    </div>
+                    <div id="html-preview-body" class="p-3 bg-white dark:bg-slate-950 rounded-lg border border-purple-100 overflow-x-auto text-sm leading-relaxed max-h-96 overflow-y-auto"></div>
                 </div>
             </div>
             <div id="error-msg" class="hidden text-error text-sm font-medium"></div>
@@ -390,10 +405,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v125">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v126">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v125">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v126">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -404,7 +419,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v125"></script>
+<script src="db.js?v=20260715_v126"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     requireAdmin();
@@ -798,6 +813,63 @@ document.addEventListener('DOMContentLoaded', async () => {
                 imageUpload.value = '';
             }
         };
+    }
+
+    // HTML File Upload & Real-time Live Preview Logic
+    const htmlUploadBtn = document.getElementById('html-upload-btn');
+    const htmlFileInput = document.getElementById('html-file-upload');
+    const htmlPreviewSection = document.getElementById('html-preview-section');
+    const htmlPreviewBody = document.getElementById('html-preview-body');
+    const htmlFileName = document.getElementById('html-file-name');
+    const contentTextarea = document.getElementById('content');
+
+    if (htmlUploadBtn && htmlFileInput) {
+        htmlUploadBtn.onclick = () => htmlFileInput.click();
+        
+        htmlFileInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                let fileText = evt.target.result || '';
+                
+                // Extract body content if whole HTML document was uploaded
+                if (/<body[\s\S]*?>([\s\S]*?)<\/body>/i.test(fileText)) {
+                    const match = fileText.match(/<body[\s\S]*?>([\s\S]*?)<\/body>/i);
+                    if (match) fileText = match[1];
+                }
+                
+                // Clean standalone doctype, html, head tags
+                fileText = fileText
+                    .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
+                    .replace(/<\/?html[\s\S]*?>/gi, '')
+                    .replace(/<head[\s\S]*?>[\s\S]*?<\/head>/gi, '')
+                    .trim();
+
+                if (contentTextarea) {
+                    contentTextarea.value = fileText;
+                    contentTextarea.dispatchEvent(new Event('input'));
+                }
+
+                if (htmlPreviewSection && htmlPreviewBody) {
+                    htmlPreviewBody.innerHTML = renderMarkdown(fileText);
+                    if (htmlFileName) htmlFileName.textContent = `📄 ${file.name}`;
+                    htmlPreviewSection.classList.remove('hidden');
+                }
+
+                alert(`📄 [HTML 파일 적용 완료]\n'${file.name}' 파일의 HTML 디자인 및 본문 내용이 게시글에 성공적으로 적용되었습니다!`);
+            };
+            reader.readAsText(file, 'utf-8');
+        };
+    }
+
+    if (contentTextarea) {
+        contentTextarea.addEventListener('input', () => {
+            if (htmlPreviewSection && !htmlPreviewSection.classList.contains('hidden')) {
+                if (htmlPreviewBody) htmlPreviewBody.innerHTML = renderMarkdown(contentTextarea.value);
+            }
+        });
     }
 
     // Video Attachment Logic (Modal and YouTube/File upload)
