@@ -859,19 +859,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 const contentTextarea = document.getElementById('content');
                 if (contentTextarea) {
-                    contentTextarea.value = fileText;
-                    contentTextarea.dispatchEvent(new Event('input'));
+                    const existingText = contentTextarea.value || '';
+                    if (existingText.trim().length > 0) {
+                        insertAtCursor('\n\n' + fileText + '\n\n');
+                    } else {
+                        contentTextarea.value = fileText;
+                        contentTextarea.dispatchEvent(new Event('input'));
+                    }
                 }
 
                 if (htmlPreviewSection && htmlPreviewBody) {
-                    htmlPreviewBody.innerHTML = renderMarkdown(fileText);
+                    htmlPreviewBody.innerHTML = renderMarkdown(contentTextarea ? contentTextarea.value : fileText);
                     if (htmlFileName) htmlFileName.textContent = `📄 ${file.name}`;
                     htmlPreviewSection.classList.remove('hidden');
                 }
 
-                alert(`📄 [HTML 파일 적용 완료]\n'${file.name}' 파일의 HTML 디자인 및 내용이 게시글 본문에 성공적으로 적용되었습니다!`);
+                if (typeof updateAttachedImagesPreview === 'function') {
+                    updateAttachedImagesPreview();
+                }
+
+                alert(`📄 [HTML 파일 본문 첨부 완료]\n'${file.name}' 파일의 HTML 디자인 및 내용이 게시글 본문에 성공적으로 추가되었습니다!\n(기존 사진과 동영상 링크도 그대로 유지됩니다)`);
             };
             reader.readAsText(file, 'utf-8');
+            htmlFileInput.value = '';
         };
     }
 
