@@ -826,6 +826,55 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
     }
 
+    // HTML File Upload Logic
+    const htmlUploadBtn = document.getElementById('html-upload-btn');
+    const htmlFileInput = document.getElementById('html-file-upload');
+    const htmlPreviewSection = document.getElementById('html-preview-section');
+    const htmlPreviewBody = document.getElementById('html-preview-body');
+    const htmlFileName = document.getElementById('html-file-name');
+
+    if (htmlUploadBtn && htmlFileInput) {
+        htmlUploadBtn.onclick = () => htmlFileInput.click();
+        
+        htmlFileInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                let fileText = evt.target.result || '';
+                
+                // Extract body content if whole HTML document was uploaded
+                if (/<body[\s\S]*?>([\s\S]*?)<\/body>/i.test(fileText)) {
+                    const match = fileText.match(/<body[\s\S]*?>([\s\S]*?)<\/body>/i);
+                    if (match) fileText = match[1];
+                }
+                
+                // Clean standalone doctype, html, head tags
+                fileText = fileText
+                    .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
+                    .replace(/<\/?html[\s\S]*?>/gi, '')
+                    .replace(/<head[\s\S]*?>[\s\S]*?<\/head>/gi, '')
+                    .trim();
+
+                const contentTextarea = document.getElementById('content');
+                if (contentTextarea) {
+                    contentTextarea.value = fileText;
+                    contentTextarea.dispatchEvent(new Event('input'));
+                }
+
+                if (htmlPreviewSection && htmlPreviewBody) {
+                    htmlPreviewBody.innerHTML = renderMarkdown(fileText);
+                    if (htmlFileName) htmlFileName.textContent = `📄 ${file.name}`;
+                    htmlPreviewSection.classList.remove('hidden');
+                }
+
+                alert(`📄 [HTML 파일 적용 완료]\n'${file.name}' 파일의 HTML 디자인 및 내용이 게시글 본문에 성공적으로 적용되었습니다!`);
+            };
+            reader.readAsText(file, 'utf-8');
+        };
+    }
+
     // Video Attachment Logic (Modal and YouTube/File upload)
     const videoBtn = document.getElementById('video-btn');
     const videoModal = document.getElementById('video-modal');
