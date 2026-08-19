@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v144");
+console.log("Antigravity db.js version: 20260715_v145");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v144";
+const APP_VERSION = "20260715_v145";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -421,7 +421,11 @@ function renderMarkdown(src) {
   .info-table td { width: 68% !important; color: #0f172a !important; font-size: 13.5px !important; }
   .info-table td[colspan="3"] { width: 68% !important; }
   .broker-card { padding: 16px !important; }
+  .broker-list li { display: flex !important; align-items: flex-start !important; margin-bottom: 8px !important; }
+  .broker-list li strong { width: 72px !important; min-width: 72px !important; flex-shrink: 0 !important; }
+  .broker-list li span, .broker-list li a { word-break: keep-all !important; flex: 1 !important; }
   .cta-box { padding: 20px 14px !important; }
+  .cta-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; font-size: 14px !important; padding: 12px 14px !important; width: 100% !important; white-space: nowrap !important; box-sizing: border-box !important; }
 }
 </style>`;
 
@@ -1587,7 +1591,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v144`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v145`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
