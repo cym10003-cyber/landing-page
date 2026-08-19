@@ -842,20 +842,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const reader = new FileReader();
             reader.onload = (evt) => {
-                let fileText = evt.target.result || '';
+                let rawText = evt.target.result || '';
+                
+                // Extract all <style> blocks (from <head> or anywhere)
+                let styleBlocks = '';
+                const styleMatches = rawText.match(/<style[\s\S]*?>[\s\S]*?<\/style>/gi);
+                if (styleMatches) {
+                    styleBlocks = styleMatches.join('\n');
+                }
                 
                 // Extract body content if whole HTML document was uploaded
-                if (/<body[\s\S]*?>([\s\S]*?)<\/body>/i.test(fileText)) {
-                    const match = fileText.match(/<body[\s\S]*?>([\s\S]*?)<\/body>/i);
-                    if (match) fileText = match[1];
+                let bodyContent = rawText;
+                if (/<body[\s\S]*?>([\s\S]*?)<\/body>/i.test(rawText)) {
+                    const match = rawText.match(/<body[\s\S]*?>([\s\S]*?)<\/body>/i);
+                    if (match) bodyContent = match[1];
                 }
                 
                 // Clean standalone doctype, html, head tags
-                fileText = fileText
+                bodyContent = bodyContent
                     .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
                     .replace(/<\/?html[\s\S]*?>/gi, '')
                     .replace(/<head[\s\S]*?>[\s\S]*?<\/head>/gi, '')
+                    .replace(/<\/?body[\s\S]*?>/gi, '')
+                    .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
                     .trim();
+
+                // Combine style blocks with body content so design is 100% preserved
+                const fileText = (styleBlocks ? styleBlocks + '\n' : '') + bodyContent;
 
                 const contentTextarea = document.getElementById('content');
                 if (contentTextarea) {

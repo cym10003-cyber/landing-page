@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v136");
+console.log("Antigravity db.js version: 20260715_v137");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v136";
+const APP_VERSION = "20260715_v137";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -386,6 +386,12 @@ function renderMarkdown(src) {
 
   if (isHtml) {
     let cleanHtml = convertedSrc;
+    let styleBlocks = '';
+    const styleMatches = cleanHtml.match(/<style[\s\S]*?>[\s\S]*?<\/style>/gi);
+    if (styleMatches) {
+      styleBlocks = styleMatches.join('\n');
+    }
+
     if (/<body[\s\S]*?>([\s\S]*?)<\/body>/i.test(cleanHtml)) {
       const match = cleanHtml.match(/<body[\s\S]*?>([\s\S]*?)<\/body>/i);
       if (match) cleanHtml = match[1];
@@ -393,9 +399,12 @@ function renderMarkdown(src) {
     cleanHtml = cleanHtml
       .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
       .replace(/<\/?html[\s\S]*?>/gi, '')
-      .replace(/<head[\s\S]*?>[\s\S]*?<\/head>/gi, '');
+      .replace(/<head[\s\S]*?>[\s\S]*?<\/head>/gi, '')
+      .replace(/<\/?body[\s\S]*?>/gi, '')
+      .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
+      .trim();
 
-    return `<div class="html-post-container overflow-x-auto text-ink leading-relaxed space-y-2">${cleanHtml}</div>`;
+    return `<div class="html-post-container overflow-x-auto text-ink leading-relaxed space-y-2">${styleBlocks}\n${cleanHtml}</div>`;
   }
 
   let html = convertedSrc
@@ -1557,7 +1566,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v136`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v137`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
