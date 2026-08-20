@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v149");
+console.log("Antigravity db.js version: 20260715_v150");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v149";
+const APP_VERSION = "20260715_v150";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -876,6 +876,13 @@ function recordPageView() {
             keys.slice(0, keys.length - 30).forEach(k => delete dailyHistory[k]);
         }
         localStorage.setItem('analytics_daily_history', JSON.stringify(dailyHistory));
+
+        // Sync pageview to server for unified cross-device analytics
+        fetch('/api/analytics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'pageview', referrer: source })
+        }).catch(() => {});
     } catch(e){}
 }
 
@@ -933,6 +940,13 @@ function recordPostView(postId, postTitle) {
         
         dailyHistory[todayStr].postViews[postId] = (dailyHistory[todayStr].postViews[postId] || 0) + 1;
         localStorage.setItem('analytics_daily_history', JSON.stringify(dailyHistory));
+
+        // Sync postview to server for unified cross-device analytics
+        fetch('/api/analytics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'postview', postId, postTitle })
+        }).catch(() => {});
     } catch(e){}
 }
 
@@ -1614,7 +1628,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v149`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v150`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
