@@ -1,5 +1,11 @@
 [
   {
+    "query": "주차",
+    "device": "desktop",
+    "timestamp": 1787190949838,
+    "date": "2026. 8. 20. 오전 10:55:49"
+  },
+  {
     "query": "사무실",
     "device": "desktop",
     "timestamp": 1787190941822,
