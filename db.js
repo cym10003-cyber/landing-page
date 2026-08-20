@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v150");
+console.log("Antigravity db.js version: 20260715_v151");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v150";
+const APP_VERSION = "20260715_v151";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -406,6 +406,11 @@ function renderMarkdown(src) {
       .replace(/<\/?body[\s\S]*?>/gi, '')
       .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
       .trim();
+
+    // Convert Markdown image syntax ![alt](url) to HTML <img> tags in HTML mode
+    cleanHtml = cleanHtml.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, url) => {
+      return `<img src="${url}" alt="${alt || '매물 이미지'}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" loading="lazy">`;
+    });
 
     // Format any raw unformatted plain text outside HTML tags into clean <p> blocks
     const lastTagIdx = cleanHtml.lastIndexOf('>');
@@ -1628,7 +1633,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v150`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v151`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
