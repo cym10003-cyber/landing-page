@@ -1,5 +1,11 @@
 [
   {
+    "query": "사무실",
+    "device": "desktop",
+    "timestamp": 1787190941822,
+    "date": "2026. 8. 20. 오전 10:55:41"
+  },
+  {
     "query": "세무사",
     "device": "desktop",
     "timestamp": 1787190938942,
