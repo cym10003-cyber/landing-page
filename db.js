@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v147");
+console.log("Antigravity db.js version: 20260715_v148");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v147";
+const APP_VERSION = "20260715_v148";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -406,6 +406,22 @@ function renderMarkdown(src) {
       .replace(/<\/?body[\s\S]*?>/gi, '')
       .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
       .trim();
+
+    // Format any raw unformatted plain text outside HTML tags into clean <p> blocks
+    const lastTagIdx = cleanHtml.lastIndexOf('>');
+    if (lastTagIdx !== -1 && lastTagIdx < cleanHtml.length - 1) {
+      const htmlPart = cleanHtml.substring(0, lastTagIdx + 1);
+      const rawTextPart = cleanHtml.substring(lastTagIdx + 1).trim();
+      if (rawTextPart) {
+        const formattedLines = rawTextPart.split('\n').map(line => {
+          const t = line.trim();
+          if (!t) return '';
+          if (t.startsWith('<') || t.startsWith('!')) return t;
+          return `<p style="margin-bottom: 12px; line-height: 1.6;">${t}</p>`;
+        }).filter(Boolean).join('\n');
+        cleanHtml = htmlPart + '\n\n' + formattedLines;
+      }
+    }
 
     const mobileFixStyle = `<style>
 .html-post-container .container { max-width: 100% !important; padding: 0 !important; }
@@ -1598,7 +1614,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v147`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v148`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
