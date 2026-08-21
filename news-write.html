@@ -268,8 +268,14 @@
                             <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="스마일">😊</button>
                             <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="체크">✅</button>
                             <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="확인">🔎</button>
-                        </div>
                     </div>
+                    
+                    <div class="w-px h-4 bg-hairline mx-xs"></div>
+
+                    <!-- Remove HTML Brochure Template Button -->
+                    <button type="button" id="remove-html-template-btn" class="flex items-center gap-xs px-2 py-1 rounded text-red-600 hover:bg-red-50 text-xs font-bold bg-transparent border border-red-200 cursor-pointer transition-colors" title="게시글에서 HTML 전단지 서식을 삭제하고 사진과 일반 텍스트만 남깁니다.">
+                        <span class="material-symbols-outlined text-[16px] text-red-600">delete_sweep</span> HTML 전단지 양식 삭제
+                    </button>
                 </div>
                 <textarea id="content" required rows="12" class="block w-full border-hairline rounded-b-lg rounded-t-none border-t-0 py-2.5 focus:ring-primary focus:border-primary text-sm font-mono bg-surface-container-low" placeholder="마크다운(Markdown) 문법을 사용해 본문을 작성할 수 있습니다.&#10;예:&#10;# 큰 제목&#10;## 소제목&#10;- 리스트 아이템&#10;**굵은 글씨** 등"></textarea>
                 <!-- Attached Images Preview -->
@@ -771,6 +777,47 @@ document.addEventListener('DOMContentLoaded', async () => {
             };
             reader.onerror = () => resolve(file);
             reader.readAsDataURL(file);
+        });
+    }
+
+    // Remove HTML Brochure Template Handler
+    const removeHtmlBtn = document.getElementById('remove-html-template-btn');
+    if (removeHtmlBtn) {
+        removeHtmlBtn.addEventListener('click', function() {
+            const contentEl = document.getElementById('content');
+            let content = contentEl.value || '';
+            if (!content.includes('<') && !content.includes('style') && !content.includes('blog-container')) {
+                alert('이 글에는 삭제할 HTML 전단지 양식이 없습니다.');
+                return;
+            }
+
+            if (!confirm('이 게시글에서 HTML 전단지 틀(스타일 및 서식)을 완전히 삭제하고, 첨부 사진과 내용 텍스트만 남기시겠습니까?')) {
+                return;
+            }
+
+            const imageMatches = content.match(/!\[.*?\]\((.*?)\)/g) || [];
+            
+            let cleanText = content
+                .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
+                .replace(/<[^>]+>/g, '\n')
+                .split('\n')
+                .map(l => l.trim())
+                .filter(l => l.length > 0 && !l.startsWith('!') && !l.includes('http://') && !l.includes('https://'))
+                .join('\n\n');
+
+            let finalContent = '';
+            if (imageMatches.length > 0) {
+                finalContent += imageMatches.join('\n\n') + '\n\n';
+            }
+            finalContent += cleanText;
+
+            contentEl.value = finalContent.trim();
+            contentEl.dispatchEvent(new Event('input'));
+
+            const htmlSection = document.getElementById('html-preview-section');
+            if (htmlSection) htmlSection.classList.add('hidden');
+
+            alert('HTML 전단지 양식이 깨끗하게 삭제되었습니다!\n아래 [저장 완료] 버튼을 누르시면 최종 적용됩니다.');
         });
     }
 
