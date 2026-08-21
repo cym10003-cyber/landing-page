@@ -350,6 +350,8 @@ export default function handler(req, res) {
             );
 
           // Parse content into pre-rendered images HTML and clean text HTML
+          const isHtmlPost = /<\/?(div|p|span|table|tr|td|th|tbody|thead|style|img|iframe|h[1-6]|ul|ol|li|br|b|i|strong|em|u|a|section|article|header|footer)[\s>\/]/i.test(post.content || '');
+
           const lines = (post.content || '').split('\n');
           const preImages = [];
           const preText = [];
@@ -365,7 +367,7 @@ export default function handler(req, res) {
               const loadingAttr = imgIndex === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
               preImages.push(`<img src="${imgUrl}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" ${loadingAttr} alt="매물 사진" />`);
               imgIndex++;
-            } else {
+            } else if (!isHtmlPost) {
               let cleanText = trimmed
                 .replace(/!\[.*?\]\(.*?\)/g, '')
                 .replace(/\[(.*?)\]\(.*?\)/g, '$1')
