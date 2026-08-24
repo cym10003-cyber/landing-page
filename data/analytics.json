@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 946,
-  "todayPageviews": 64,
+  "totalPageviews": 947,
+  "todayPageviews": 65,
   "dailyHistory": {
     "2026-07-22": {
       "date": "2026-07-22",
@@ -586,10 +586,10 @@
     },
     "2026-08-24": {
       "date": "2026-08-24",
-      "count": 64,
+      "count": 65,
       "referrers": {
         "네이버 (Naver)": 33,
-        "내부 이동": 13,
+        "내부 이동": 14,
         "직접 접속 / 카카오톡 링크": 16,
         "landing-page-amber-one-25.vercel.app": 2
       },
