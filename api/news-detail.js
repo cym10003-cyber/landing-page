@@ -248,8 +248,10 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
   return { metaTitle, metaDesc, ogImage, postUrl, schemaJsonLd };
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const { id } = req.query;
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+
   const htmlPath = path.join(process.cwd(), 'templates', 'news-detail-template.html');
   const postsPath = path.join(process.cwd(), 'data', 'posts.json');
 
@@ -263,9 +265,39 @@ export default function handler(req, res) {
   // If there is an ID, find the post
   if (id) {
     try {
-      if (fs.existsSync(postsPath)) {
-        const posts = JSON.parse(fs.readFileSync(postsPath, 'utf8'));
-        const post = posts.find(p => p.id.toString() === id.toString());
+      let posts = null;
+
+      // Try fetching fresh posts from GitHub first
+      try {
+        const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/landing-page/main/data/posts.json?t=${Date.now()}`, {
+          headers: { 'User-Agent': 'Vercel-Serverless-Function' }
+        });
+        if (ghRes.ok) {
+          posts = await ghRes.json();
+        }
+      } catch (ghErr) {
+        console.warn('GitHub raw fetch failed, using local posts.json fallback:', ghErr);
+      }
+
+      if (!posts && fs.existsSync(postsPath)) {
+        posts = JSON.parse(fs.readFileSync(postsPath, 'utf8'));
+      }
+
+      if (posts && Array.isArray(posts)) {
+        let post = posts.find(p => p.id.toString() === id.toString());
+        if (!post) {
+          const cleanId = String(id).replace(/[^0-9]/g, '');
+          if (cleanId) {
+            post = posts.find(p => {
+              const pidStr = String(p.id);
+              const titleStr = p.title || '';
+              const contentStr = p.content || '';
+              return pidStr === cleanId || pidStr.includes(cleanId) ||
+                     titleStr.includes(`매물번호:${cleanId}`) || titleStr.includes(`매물번호 : ${cleanId}`) ||
+                     contentStr.includes(`매물번호:${cleanId}`) || contentStr.includes(`매물번호 : ${cleanId}`);
+            });
+          }
+        }
         if (post) {
           const host = req.headers.host || 'choi114.com';
           const protocol = req.headers['x-forwarded-proto'] || 'https';
