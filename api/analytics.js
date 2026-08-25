@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   const analyticsPath = 'data/analytics.json';
   const token = (process.env.GITHUB_TOKEN || '').trim();
 
-  // GET: Fetch search logs or full analytics summary from GitHub API
+  // GET: Fetch search logs or full analytics summary from GitHub API (with local file fallback)
   if (req.method === 'GET') {
     const type = req.query?.type || 'search';
     const targetPath = type === 'analytics' ? analyticsPath : searchLogsPath;
@@ -30,6 +30,15 @@ export default async function handler(req, res) {
           const parsed = JSON.parse(contentStr);
           return res.status(200).json(parsed);
         }
+      }
+    } catch(e) {}
+
+    // Fallback to local filesystem if GitHub API fetch fails or token is missing
+    try {
+      const localFilePath = path.join(process.cwd(), targetPath);
+      if (fs.existsSync(localFilePath)) {
+        const fileContent = fs.readFileSync(localFilePath, 'utf8');
+        return res.status(200).json(JSON.parse(fileContent));
       }
     } catch(e) {}
 

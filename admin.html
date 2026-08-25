@@ -600,15 +600,13 @@ async function renderAnalyticsView() {
         const res = await fetch('/api/analytics?type=analytics&t=' + Date.now());
         if (res.ok) {
             remoteAnalytics = await res.json();
-            if (remoteAnalytics && remoteAnalytics.todayDate) {
+            if (remoteAnalytics && remoteAnalytics.todayDate && remoteAnalytics.dailyHistory && Object.keys(remoteAnalytics.dailyHistory).length > 0) {
                 localStorage.setItem('analytics_page_views', JSON.stringify({
                     total: remoteAnalytics.totalPageviews || 0,
                     today: remoteAnalytics.todayPageviews || 0,
                     date: remoteAnalytics.todayDate
                 }));
-                if (remoteAnalytics.dailyHistory) {
-                    localStorage.setItem('analytics_daily_history', JSON.stringify(remoteAnalytics.dailyHistory));
-                }
+                localStorage.setItem('analytics_daily_history', JSON.stringify(remoteAnalytics.dailyHistory));
             }
         }
     } catch(e) {}
