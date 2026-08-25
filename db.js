@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v158");
+console.log("Antigravity db.js version: 20260715_v159");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v158";
+const APP_VERSION = "20260715_v159";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -133,7 +133,21 @@ async function savePost(postData) {
   let updatedPost = null;
 
   if (postData.id) {
-    const idx = posts.findIndex(p => String(p.id) === String(postData.id));
+    let idx = posts.findIndex(p => String(p.id) === String(postData.id));
+    if (idx === -1) {
+      const cleanId = String(postData.id).replace(/[^0-9]/g, '');
+      if (cleanId) {
+        idx = posts.findIndex(p => {
+          const pidStr = String(p.id);
+          const titleStr = p.title || '';
+          const contentStr = p.content || '';
+          return pidStr === cleanId || pidStr.includes(cleanId) ||
+                 titleStr.includes(`매물번호:${cleanId}`) || titleStr.includes(`매물번호 : ${cleanId}`) ||
+                 contentStr.includes(`매물번호:${cleanId}`) || contentStr.includes(`매물번호 : ${cleanId}`);
+        });
+      }
+    }
+
     if (idx !== -1) {
       posts[idx].title = postData.title;
       posts[idx].category = postData.category;
@@ -1633,7 +1647,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v158`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v159`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;

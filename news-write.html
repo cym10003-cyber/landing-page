@@ -1116,14 +1116,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 coordinates: chosenCoords,
                 isPrivate
             };
-            if (postId) {
-                payload.id = postId;
+            if (actualPostId || postId) {
+                payload.id = actualPostId || postId;
                 payload.date = postDate;
             }
 
             const saved = await savePost(payload);
+            // Force clear local posts cache to immediately show updated post content
+            localStorage.removeItem('posts_cache');
             alert(postId ? "수정되었습니다." : "등록되었습니다.");
-            window.location.href = `news-detail.html?id=${saved.id}`;
+            window.location.href = `news-detail.html?id=${saved.id}&t=${Date.now()}`;
         } catch (err) {
             console.error(err);
             errDiv.innerText = "저장 실패: " + err.message;
