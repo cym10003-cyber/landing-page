@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v163");
+console.log("Antigravity db.js version: 20260715_v164");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v163";
+const APP_VERSION = "20260715_v164";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -865,9 +865,22 @@ function getReferrerSource() {
     }
 }
 
+function getKSTDateStr(offsetDays = 0) {
+    try {
+        const d = new Date();
+        if (offsetDays !== 0) {
+            d.setDate(d.getDate() + offsetDays);
+        }
+        return d.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' });
+    } catch(e) {
+        const d = new Date(Date.now() + (9 * 3600 * 1000) + (offsetDays * 86400 * 1000));
+        return d.toISOString().split('T')[0];
+    }
+}
+
 function recordPageView() {
     try {
-        const todayStr = new Date().toISOString().split('T')[0];
+        const todayStr = getKSTDateStr();
         
         let pageData = JSON.parse(localStorage.getItem('analytics_page_views') || '{"total":0,"today":0,"date":""}');
         if (pageData.date !== todayStr) {
@@ -998,18 +1011,15 @@ function getAnalyticsSummary(remoteData = null) {
 
         const datesList = [];
         for (let i = 6; i >= 0; i--) {
-            const d = new Date();
-            const kstD = new Date(d.getTime() + (9 * 60 * 60 * 1000));
-            kstD.setDate(kstD.getDate() - i);
-            const ds = kstD.toISOString().split('T')[0];
+            const ds = getKSTDateStr(-i);
             const entry = dailyHistory[ds] || { date: ds, count: 0, referrers: {}, postViews: {} };
             if (ds === todayStr) {
-                entry.count = pageData.today || 0;
+                entry.count = Math.max(entry.count || 0, pageData.today || 0);
             }
             datesList.push({
                 date: ds.slice(5),
                 fullDate: ds,
-                count: entry.count,
+                count: entry.count || 0,
                 referrers: entry.referrers || {},
                 postViews: entry.postViews || {}
             });
