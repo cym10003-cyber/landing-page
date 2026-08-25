@@ -595,10 +595,28 @@ let currentViewPeriod = 'all';
 let currentRefPeriod = 'all';
 
 async function renderAnalyticsView() {
+    let remoteAnalytics = null;
     try {
-        const res = await fetch('/api/analytics?t=' + Date.now());
+        const res = await fetch('/api/analytics?type=analytics&t=' + Date.now());
         if (res.ok) {
-            const remoteLogs = await res.json();
+            remoteAnalytics = await res.json();
+            if (remoteAnalytics && remoteAnalytics.todayDate) {
+                localStorage.setItem('analytics_page_views', JSON.stringify({
+                    total: remoteAnalytics.totalPageviews || 0,
+                    today: remoteAnalytics.todayPageviews || 0,
+                    date: remoteAnalytics.todayDate
+                }));
+                if (remoteAnalytics.dailyHistory) {
+                    localStorage.setItem('analytics_daily_history', JSON.stringify(remoteAnalytics.dailyHistory));
+                }
+            }
+        }
+    } catch(e) {}
+
+    try {
+        const sRes = await fetch('/api/analytics?type=search&t=' + Date.now());
+        if (sRes.ok) {
+            const remoteLogs = await sRes.json();
             if (Array.isArray(remoteLogs) && remoteLogs.length > 0) {
                 const localLogs = JSON.parse(localStorage.getItem('analytics_search_logs') || '[]');
                 const logsMap = new Map();
@@ -611,7 +629,7 @@ async function renderAnalyticsView() {
         }
     } catch(e) {}
 
-    const summary = getAnalyticsSummary();
+    const summary = getAnalyticsSummary(remoteAnalytics);
     
     // KPI Cards
     document.getElementById('stat-today-views').textContent = (summary.todayPageviews || 0) + '명';

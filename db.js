@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v160");
+console.log("Antigravity db.js version: 20260715_v162");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v160";
+const APP_VERSION = "20260715_v162";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -969,22 +969,42 @@ function recordPostView(postId, postTitle) {
     } catch(e){}
 }
 
-function getAnalyticsSummary() {
+function getAnalyticsSummary(remoteData = null) {
     try {
         const searchLogs = JSON.parse(localStorage.getItem('analytics_search_logs') || '[]');
         const postViews = JSON.parse(localStorage.getItem('analytics_post_views') || '{}');
-        const pageData = JSON.parse(localStorage.getItem('analytics_page_views') || '{"total":0,"today":0}');
-        const dailyHistory = JSON.parse(localStorage.getItem('analytics_daily_history') || '{}');
+        
+        let pageData = JSON.parse(localStorage.getItem('analytics_page_views') || '{"total":0,"today":0,"date":""}');
+        let dailyHistory = JSON.parse(localStorage.getItem('analytics_daily_history') || '{}');
 
-        const todayStr = new Date().toISOString().split('T')[0];
+        if (remoteData && typeof remoteData === 'object') {
+            if (remoteData.todayDate) {
+                pageData.date = remoteData.todayDate;
+                pageData.today = remoteData.todayPageviews || 0;
+            }
+            if (remoteData.totalPageviews) {
+                pageData.total = remoteData.totalPageviews;
+            }
+            if (remoteData.dailyHistory && typeof remoteData.dailyHistory === 'object') {
+                dailyHistory = remoteData.dailyHistory;
+            }
+        }
+
+        const todayStr = getKSTDateStr();
+        if (pageData.date !== todayStr) {
+            pageData.date = todayStr;
+            pageData.today = (remoteData && remoteData.todayDate === todayStr) ? (remoteData.todayPageviews || 0) : 0;
+        }
+
         const datesList = [];
         for (let i = 6; i >= 0; i--) {
             const d = new Date();
-            d.setDate(d.getDate() - i);
-            const ds = d.toISOString().split('T')[0];
+            const kstD = new Date(d.getTime() + (9 * 60 * 60 * 1000));
+            kstD.setDate(kstD.getDate() - i);
+            const ds = kstD.toISOString().split('T')[0];
             const entry = dailyHistory[ds] || { date: ds, count: 0, referrers: {}, postViews: {} };
             if (ds === todayStr) {
-                entry.count = Math.max(entry.count, pageData.today || 0);
+                entry.count = pageData.today || 0;
             }
             datesList.push({
                 date: ds.slice(5),
