@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 1262,
-  "todayPageviews": 70,
+  "totalPageviews": 1263,
+  "todayPageviews": 1,
   "dailyHistory": {
     "2026-07-22": {
       "date": "2026-07-22",
@@ -1048,6 +1048,14 @@
         "1783644572667": 1,
         "1783908062068": 1
       }
+    },
+    "2026-08-29": {
+      "date": "2026-08-29",
+      "count": 1,
+      "referrers": {
+        "네이버 (Naver)": 1
+      },
+      "postViews": {}
     }
   },
   "searchLogs": [
@@ -1608,5 +1616,5 @@
       "lastViewed": 1787699029619
     }
   },
-  "todayDate": "2026-08-28"
+  "todayDate": "2026-08-29"
 }
