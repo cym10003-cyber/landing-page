@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ko"><head><script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script><script defer src="/_vercel/insights/script.js"></script><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>소식 작성/수정 - 관리자 전용 - 최가네부동산공인중개사사무소</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+<!DOCTYPE html><html lang="ko"><head><script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script><script defer src="/_vercel/insights/script.js"></script><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>소식 작성/수정 - 관리자 전용 - 최가네부동산공인중개사사무소</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -155,10 +155,13 @@
             </div>
             <div>
                 <label for="address" class="block text-sm font-semibold text-ink mb-xs">매물 대략적 위치/주소 (선택)</label>
-                <div class="flex gap-sm mb-xs">
-                    <input type="text" id="address" class="block w-full border-hairline rounded-lg py-2.5 focus:ring-primary focus:border-primary text-sm bg-surface-container-low" placeholder="예: 대구광역시 달서구 장기동 555 또는 아래 지도에서 직접 클릭하여 핀을 찍어주세요.">
-                    <button type="button" id="search-address-btn" class="bg-primary-container text-white font-button text-xs px-md rounded-lg hover:bg-blue-mid shrink-0 flex items-center gap-xs cursor-pointer border-0">
+                <div class="flex gap-xs mb-xs flex-wrap sm:flex-nowrap">
+                    <input type="text" id="address" class="block w-full border-hairline rounded-lg py-2.5 focus:ring-primary focus:border-primary text-sm bg-surface-container-low" placeholder="예: 대구광역시 달서구 대곡동 또는 장기동 555">
+                    <button type="button" id="search-address-btn" class="bg-primary-container text-white font-button text-xs px-md rounded-lg hover:bg-blue-mid shrink-0 flex items-center gap-xs cursor-pointer border-0 py-2">
                         <span class="material-symbols-outlined text-[16px]">search</span> 주소 검색
+                    </button>
+                    <button type="button" id="kakao-postcode-btn" class="bg-amber-600 text-white font-button text-xs px-md rounded-lg hover:bg-amber-700 shrink-0 flex items-center gap-xs cursor-pointer border-0 py-2">
+                        <span class="material-symbols-outlined text-[16px]">location_on</span> 주소 팝업
                     </button>
                 </div>
                 <div id="editor-map" class="w-full h-64 rounded-lg bg-surface-container border border-hairline relative z-10 mb-xs"></div>
@@ -639,34 +642,138 @@ document.addEventListener('DOMContentLoaded', async () => {
         reverseGeocode(lat, lng);
     });
 
+    const daeguDongMap = {
+        // 달서구
+        '대곡동': [35.8078, 128.5284], '대곡': [35.8078, 128.5284], '상인동': [35.8192, 128.5361], '진천동': [35.8142, 128.5218], '월성동': [35.8290, 128.5320],
+        '유천동': [35.8130, 128.5130], '도원동': [35.8040, 128.5410], '송현동': [35.8340, 128.5470], '성당동': [35.8440, 128.5520],
+        '감삼동': [35.8540, 128.5410], '본리동': [35.8430, 128.5350], '본동': [35.8350, 128.5380], '장기동': [35.8510, 128.5260],
+        '용산동': [35.8560, 128.5240], '이곡동': [35.8540, 128.5100], '신당동': [35.8540, 128.4900], '호산동': [35.8470, 128.4840],
+        '파호동': [35.8500, 128.4770], '호림동': [35.8380, 128.4840], '갈산동': [35.8420, 128.5020], '죽전동': [35.8520, 128.5330],
+        '달서구': [35.8298, 128.5326],
+
+        // 수성구
+        '두산동': [35.8322, 128.6225], '범어동': [35.8589, 128.6320], '만촌동': [35.8640, 128.6470], '황금동': [35.8470, 128.6280],
+        '수성동': [35.8580, 128.6140], '중동': [35.8430, 128.6100], '상동': [35.8370, 128.6120], '파동': [35.8200, 128.6120],
+        '지산동': [35.8260, 128.6340], '범물동': [35.8200, 128.6440], '시지동': [35.8410, 128.7050], '신매동': [35.8400, 128.7060],
+        '사월동': [35.8380, 128.7180], '욱수동': [35.8320, 128.7050], '매호동': [35.8470, 128.7060], '노변동': [35.8360, 128.6970],
+        '연호동': [35.8520, 128.6830], '수성구': [35.8589, 128.6320],
+
+        // 중구
+        '동성로': [35.8690, 128.5950], '삼덕동': [35.8640, 128.6010], '봉산동': [35.8620, 128.5970], '대봉동': [35.8550, 128.6010],
+        '남산동': [35.8590, 128.5860], '덕산동': [35.8660, 128.5940], '계산동': [35.8660, 128.5880], '동산동': [35.8690, 128.5840],
+        '동인동': [35.8730, 128.6040], '교동': [35.8730, 128.5970], '북성로': [35.8750, 128.5900], '중구': [35.8690, 128.5950],
+
+        // 동구
+        '신천동': [35.8730, 128.6250], '효목동': [35.8780, 128.6470], '신암동': [35.8850, 128.6180], '방촌동': [35.8810, 128.6670],
+        '검사동': [35.8890, 128.6530], '지저동': [35.8940, 128.6360], '불로동': [35.9100, 128.6310], '봉무동': [35.9220, 128.6340],
+        '지묘동': [35.9390, 128.6240], '율하동': [35.8670, 128.6830], '용계동': [35.8710, 128.6670], '신서동': [35.8750, 128.7250],
+        '동구': [35.8850, 128.6250],
+
+        // 남구
+        '봉덕동': [35.8450, 128.5990], '대명동': [35.8400, 128.5800], '이천동': [35.8520, 128.5950], '남구': [35.8400, 128.5800],
+
+        // 북구
+        '칠곡': [35.9300, 128.5500], '침산동': [35.8900, 128.5920], '산격동': [35.8980, 128.6100], '복현동': [35.8970, 128.6220],
+        '검단동': [35.9120, 128.6220], '대현동': [35.8860, 128.6100], '칠성동': [35.8820, 128.5960], '노원동': [35.8900, 128.5770],
+        '태전동': [35.9250, 128.5430], '구암동': [35.9370, 128.5600], '관음동': [35.9450, 128.5520], '읍내동': [35.9480, 128.5600],
+        '동천동': [35.9450, 128.5670], '국우동': [35.9550, 128.5700], '동변동': [35.9200, 128.5900], '서변동': [35.9220, 128.5800],
+        '연경동': [35.9450, 128.6050], '북구': [35.8900, 128.5920],
+
+        // 서구
+        '내당동': [35.8580, 128.5650], '비산동': [35.8750, 128.5680], '평리동': [35.8670, 128.5550], '중리동': [35.8600, 128.5400],
+        '이현동': [35.8700, 128.5350], '원대동': [35.8850, 128.5700], '서구': [35.8670, 128.5550],
+
+        // 달성군 & 군위군
+        '다사읍': [35.8620, 128.4600], '화원읍': [35.8000, 128.5000], '옥포읍': [35.7750, 128.4750], '논공읍': [35.7400, 128.4500],
+        '현풍읍': [35.6950, 128.4450], '유가읍': [35.6900, 128.4650], '구지면': [35.6500, 128.4000], '가창면': [35.7800, 128.6300],
+        '달성군': [35.7750, 128.4750], '대구': [35.8589, 128.6320]
+    };
+
+    async function geocodeAddress(addr) {
+        if (!addr) return null;
+        const clean = addr.trim();
+
+        // 1. Try Nominatim with countrycodes=kr
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&countrycodes=kr&q=${encodeURIComponent(clean)}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+                }
+            }
+        } catch (e) {}
+
+        // 2. Try cleaned query Nominatim (removing "대구광역시")
+        try {
+            const cleanQuery = clean.replace('대구광역시', '대구').replace('대구직할시', '대구').trim();
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&countrycodes=kr&q=${encodeURIComponent(cleanQuery)}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+                }
+            }
+        } catch (e) {}
+
+        // 3. Try Daegu Dong/District Pre-calculated Coordinates Map Lookup
+        for (let [dongName, coords] of Object.entries(daeguDongMap)) {
+            if (clean.includes(dongName)) {
+                return coords;
+            }
+        }
+
+        return null;
+    }
+
+    function applyLocationToEditor(coords, addressText) {
+        chosenCoords = coords;
+        if (editorMarker) {
+            editorMarker.setLatLng(chosenCoords);
+        } else {
+            editorMarker = L.marker(chosenCoords, { draggable: true }).addTo(editorMap);
+            setupMarkerDrag(editorMarker);
+        }
+        editorMap.setView(chosenCoords, 15);
+        document.getElementById('addr-suggestion-container').classList.add('hidden');
+        if (addressText) {
+            document.getElementById('address').value = addressText;
+        }
+    }
+
     // Handle address search click
     document.getElementById('search-address-btn').onclick = async () => {
         const addr = document.getElementById('address').value.trim();
         if (!addr) return;
-        try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr)}`);
-            if (res.ok) {
-                const data = await res.json();
-                if (data && data.length > 0) {
-                    const lat = parseFloat(data[0].lat);
-                    const lon = parseFloat(data[0].lon);
-                    chosenCoords = [lat, lon];
-                    if (editorMarker) {
-                        editorMarker.setLatLng(chosenCoords);
-                    } else {
-                        editorMarker = L.marker(chosenCoords, { draggable: true }).addTo(editorMap);
-                        setupMarkerDrag(editorMarker);
-                    }
-                    editorMap.setView(chosenCoords, 15);
-                    document.getElementById('addr-suggestion-container').classList.add('hidden');
-                } else {
-                    alert("주소를 찾을 수 없습니다. 지도에서 직접 클릭해 주세요.");
-                }
-            }
-        } catch (err) {
-            console.error("Geocoding failed:", err);
+        
+        const coords = await geocodeAddress(addr);
+        if (coords) {
+            applyLocationToEditor(coords);
+        } else {
+            alert("주소를 찾을 수 없습니다. 지도에서 직접 원하는 위치를 클릭해 주세요.");
         }
     };
+
+    // Handle Kakao Postcode Popup click
+    const kakaoPostcodeBtn = document.getElementById('kakao-postcode-btn');
+    if (kakaoPostcodeBtn) {
+        kakaoPostcodeBtn.onclick = () => {
+            if (window.daum && window.daum.Postcode) {
+                new daum.Postcode({
+                    oncomplete: async function(data) {
+                        const fullAddr = data.roadAddress || data.jibunAddress || data.address;
+                        document.getElementById('address').value = fullAddr;
+                        const coords = await geocodeAddress(fullAddr);
+                        if (coords) {
+                            applyLocationToEditor(coords, fullAddr);
+                        }
+                    }
+                }).open();
+            } else {
+                alert("카카오 주소 팝업 서비스를 로딩 중입니다. 잠시 후 다시 시도해 주세요.");
+            }
+        };
+    }
 
     const params = new URLSearchParams(window.location.search);
     const postId = params.get('id');
