@@ -1677,7 +1677,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v160`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v165`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
