@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v170");
+console.log("Antigravity db.js version: 20260715_v171");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v170";
+const APP_VERSION = "20260715_v171";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -38,6 +38,20 @@ function requireAdmin() {
   }
 }
 
+function base64ToUtf8(b64Str) {
+  try {
+    const cleanB64 = b64Str.replace(/[\r\n\s]/g, '');
+    const binary = atob(cleanB64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return new TextDecoder('utf-8').decode(bytes);
+  } catch (e) {
+    return null;
+  }
+}
+
 async function getPosts() {
   const config = await loadConfig();
   const hasGit = config.github_token && config.github_owner && config.github_repo;
@@ -48,74 +62,78 @@ async function getPosts() {
     if (cached) cachedPosts = JSON.parse(cached);
   } catch(e) {}
 
+  let remotePosts = null;
+
+  // Tier 1: Try fetching raw JSON directly from GitHub main branch with cache buster
   if (hasGit) {
     try {
-      const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}`;
-      const getUrl = `${url}?t=${Date.now()}`;
-      
-      const headers = {
-        'Accept': 'application/vnd.github.v3+json'
-      };
-      if (config.github_token) {
-        headers['Authorization'] = `token ${config.github_token}`;
-      }
-      let res = await fetch(getUrl, { headers });
-      
-      if (res.ok) {
-        const data = await res.json();
-        const binaryString = atob(data.content.replace(/\n/g, ''));
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
+      const rawUrl = `https://raw.githubusercontent.com/${config.github_owner}/${config.github_repo}/main/${config.data_file_path}?t=${Date.now()}&r=${Math.random()}`;
+      const rawRes = await fetch(rawUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
         }
-        const content = new TextDecoder('utf-8').decode(bytes);
-        const remotePosts = JSON.parse(content);
-
-        // Merge any locally saved post created in the last 10 minutes that GitHub API hasn't propagated yet
-        if (Array.isArray(cachedPosts) && cachedPosts.length > 0) {
-          const remoteIds = new Set(remotePosts.map(p => String(p.id)));
-          const now = Date.now();
-          for (let cp of cachedPosts) {
-            if (cp && cp.id && !remoteIds.has(String(cp.id))) {
-              const postAge = now - Number(cp.id);
-              if (!isNaN(postAge) && postAge < 600000) {
-                remotePosts.unshift(cp);
-              }
-            }
-          }
-        }
-
-        localStorage.setItem('posts_cache', JSON.stringify(remotePosts));
-        _cachedPosts = remotePosts;
-        return remotePosts;
+      });
+      if (rawRes.ok) {
+        remotePosts = await rawRes.json();
       }
     } catch (e) {
-      console.error("Failed to fetch posts from GitHub:", e);
+      console.warn("Raw GitHub fetch failed, trying REST API:", e);
+    }
+
+    // Tier 2: Try GitHub REST API if raw fetch failed
+    if (!remotePosts && config.github_token) {
+      try {
+        const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}?t=${Date.now()}`;
+        const headers = {
+          'Accept': 'application/vnd.github.v3+json',
+          'Authorization': `token ${config.github_token}`
+        };
+        const res = await fetch(url, { headers });
+        if (res.ok) {
+          const data = await res.json();
+          const decodedStr = base64ToUtf8(data.content);
+          if (decodedStr) {
+            remotePosts = JSON.parse(decodedStr);
+          }
+        }
+      } catch (e) {
+        console.warn("GitHub REST API fetch failed:", e);
+      }
     }
   }
 
-  try {
-    const res = await fetch(config.data_file_path + '?t=' + Date.now());
-    if (res.ok) {
-      const localFilePosts = await res.json();
-      if (Array.isArray(cachedPosts) && cachedPosts.length > 0) {
-        const localIds = new Set(localFilePosts.map(p => String(p.id)));
-        const now = Date.now();
-        for (let cp of cachedPosts) {
-          if (cp && cp.id && !localIds.has(String(cp.id))) {
-            const postAge = now - Number(cp.id);
-            if (!isNaN(postAge) && postAge < 600000) {
-              localFilePosts.unshift(cp);
-            }
+  // Tier 3: Local file fallback
+  if (!remotePosts) {
+    try {
+      const res = await fetch(config.data_file_path + '?t=' + Date.now());
+      if (res.ok) {
+        remotePosts = await res.json();
+      }
+    } catch (e) {}
+  }
+
+  if (remotePosts && Array.isArray(remotePosts)) {
+    // Merge any locally saved post created in the last 10 minutes that GitHub API hasn't propagated yet
+    if (Array.isArray(cachedPosts) && cachedPosts.length > 0) {
+      const remoteIds = new Set(remotePosts.map(p => String(p.id)));
+      const now = Date.now();
+      for (let cp of cachedPosts) {
+        if (cp && cp.id && !remoteIds.has(String(cp.id))) {
+          const postAge = now - Number(cp.id);
+          if (!isNaN(postAge) && postAge < 600000) {
+            remotePosts.unshift(cp);
           }
         }
       }
-      localStorage.setItem('posts_cache', JSON.stringify(localFilePosts));
-      _cachedPosts = localFilePosts;
-      return localFilePosts;
     }
-  } catch (e) {
-    console.error("Failed to fetch local posts.json:", e);
+
+    try {
+      localStorage.setItem('posts_cache', JSON.stringify(remotePosts));
+    } catch(e) {}
+    _cachedPosts = remotePosts;
+    return remotePosts;
   }
 
   if (cachedPosts.length > 0) {
@@ -1694,7 +1712,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v170`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v171`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
