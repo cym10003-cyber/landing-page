@@ -269,8 +269,12 @@ export default async function handler(req, res) {
 
       // Try fetching fresh posts from GitHub first
       try {
-        const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/landing-page/main/data/posts.json?t=${Date.now()}`, {
-          headers: { 'User-Agent': 'Vercel-Serverless-Function' }
+        const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/landing-page/main/data/posts.json?t=${Date.now()}&r=${Math.random()}`, {
+          headers: {
+            'User-Agent': 'Vercel-Serverless-Function',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache'
+          }
         });
         if (ghRes.ok) {
           posts = await ghRes.json();
