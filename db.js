@@ -127,6 +127,20 @@ async function getPosts() {
   return [];
 }
 
+function utf8ToBase64(str) {
+  try {
+    const bytes = new TextEncoder().encode(str);
+    let binary = '';
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i += 8192) {
+      binary += String.fromCharCode.apply(null, bytes.subarray(i, Math.min(i + 8192, len)));
+    }
+    return btoa(binary);
+  } catch(e) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+}
+
 async function savePost(postData) {
   const config = await loadConfig();
   const posts = await getPosts();
@@ -209,7 +223,7 @@ async function savePost(postData) {
         }
 
         // Step 2: PUT updated posts.json
-        const base64Content = btoa(unescape(encodeURIComponent(postsStr)));
+        const base64Content = utf8ToBase64(postsStr);
         const bodyObj = {
           message: postData.id ? `feat: update post ${postData.id}` : `feat: add new post`,
           content: base64Content,
@@ -291,7 +305,7 @@ async function deletePost(id) {
     }
 
     if (sha) {
-      const base64Content = btoa(unescape(encodeURIComponent(postsStr)));
+      const base64Content = utf8ToBase64(postsStr);
       const body = {
         message: `feat: delete post ${id}`,
         content: base64Content,
