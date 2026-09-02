@@ -1,5 +1,11 @@
 [
   {
+    "query": "1400",
+    "device": "mobile",
+    "timestamp": 1788336238532,
+    "date": "2026. 9. 2. 오후 5:03:58"
+  },
+  {
     "query": "1651",
     "device": "desktop",
     "timestamp": 1788333537905,
