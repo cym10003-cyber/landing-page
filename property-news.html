@@ -3,7 +3,7 @@
         window.location.replace("https://choi114.com" + window.location.pathname + window.location.search);
     }
     // Force browser to load fresh property-news.html page if version mismatch
-    const currentVersion = '20260715_v171';
+    const currentVersion = '20260715_v172';
     const params = new URLSearchParams(window.location.search);
     if (params.get('v') !== currentVersion) {
         params.set('v', currentVersion);
@@ -186,10 +186,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed flex items-center"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-<a id="nav-maemul" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v171">매물리스트</a>
+<a id="nav-maemul" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v172">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v171">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a>
+<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v172">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -287,18 +287,20 @@
 <div id="news-content-area" class="col-span-12 md:col-span-9 flex flex-col gap-lg">
 <div class="flex flex-col sm:flex-row gap-md justify-between items-center bg-surface-container-lowest p-md rounded-xl border border-hairline shadow-sm">
     <div class="flex flex-col gap-xs w-full max-w-xl">
-        <div class="flex flex-row gap-sm items-center w-full">
+        <div class="flex flex-row gap-xs sm:gap-sm items-center w-full">
             <div class="relative flex-1">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span class="material-symbols-outlined text-muted text-[20px]">search</span>
+                    <span class="material-symbols-outlined text-primary text-[20px] font-bold">search</span>
                 </div>
-                <input type="text" id="search-input" class="focus:ring-primary focus:border-primary block w-full pl-10 pr-12 text-sm border-hairline rounded-lg py-2.5 bg-surface-container-low" placeholder="동 이름, 매물번호, 업종, 키워드로 검색...">
-                <button id="search-button" class="absolute inset-y-0 right-0 pr-4 flex items-center text-primary dark:text-primary-bright hover:text-blue-mid border-0 bg-transparent cursor-pointer font-bold text-sm z-10">
+                <input type="text" id="search-input" class="focus:ring-2 focus:ring-primary focus:border-primary block w-full pl-9 pr-20 text-sm border-2 border-primary/40 rounded-xl py-2.5 bg-white dark:bg-slate-800 text-ink dark:text-white font-medium shadow-inner placeholder:text-muted" placeholder="동 이름(범어동), 매물번호(1651), 업종, 키워드로 검색...">
+                <!-- 선명하고 눈에 띄는 파란색 검색 버튼 -->
+                <button id="search-button" class="absolute inset-y-1 right-1 px-3.5 flex items-center gap-1 bg-primary hover:bg-blue-mid text-white rounded-lg cursor-pointer font-extrabold text-sm z-10 border-0 shadow-md active:scale-95 transition-all">
+                    <span class="material-symbols-outlined text-[16px]">search</span>
                     검색
                 </button>
             </div>
-            <!-- 지도보기 (PC/모바일 공통) -->
-            <a href="map.html" class="flex items-center justify-center gap-xs bg-primary text-white px-md py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-mid transition-all shadow-sm whitespace-nowrap">
+            <!-- 지도보기 (서브 스타일 보조 버튼) -->
+            <a href="map.html" class="flex items-center justify-center gap-xs bg-soft-blue text-primary border border-primary/20 px-3.5 py-2.5 rounded-xl text-sm font-bold hover:bg-primary hover:text-white transition-all shadow-xs whitespace-nowrap">
                 <span class="material-symbols-outlined text-[18px]">map</span>
                 지도보기
             </a>
@@ -393,10 +395,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a id="mobile-nav-maemul" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v171">매물리스트</a>
+      <a id="mobile-nav-maemul" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v172">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a id="mobile-nav-news" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v171">부동산 소식</a>
+      <a id="mobile-nav-news" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v172">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -407,7 +409,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v171"></script>
+<script src="db.js?v=20260715_v172"></script>
 <script>
 let allPosts = [];
 let selectedCategory = 'ALL';
