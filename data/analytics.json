@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 1682,
-  "todayPageviews": 39,
+  "totalPageviews": 1683,
+  "todayPageviews": 40,
   "dailyHistory": {
     "2026-07-27": {
       "date": "2026-07-27",
@@ -1397,9 +1397,9 @@
     },
     "2026-09-02": {
       "date": "2026-09-02",
-      "count": 60,
+      "count": 61,
       "referrers": {
-        "내부 이동": 34,
+        "내부 이동": 35,
         "네이버 (Naver)": 17,
         "직접 접속 / 카카오톡 링크": 4,
         "chatgpt.com": 1,
