@@ -1,5 +1,18 @@
 [
   {
+    "id": 1788589737186,
+    "type": "buyer",
+    "name": "최이명",
+    "phone": "010-9755-5858",
+    "category": "상가",
+    "location": "",
+    "floor": "전체층",
+    "pyeong": "",
+    "budget": "",
+    "notes": "",
+    "date": "2026. 9. 5. 오후 3:28:57"
+  },
+  {
     "id": 1788069549020,
     "type": "seller",
     "name": "박효정",
