@@ -1,5 +1,11 @@
 [
   {
+    "query": "남산동",
+    "device": "mobile",
+    "timestamp": 1788679182095,
+    "date": "2026. 9. 6. 오후 4:19:42"
+  },
+  {
     "query": "송림",
     "device": "desktop",
     "timestamp": 1788504736408,
