@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 2064,
-  "todayPageviews": 55,
+  "totalPageviews": 2065,
+  "todayPageviews": 56,
   "dailyHistory": {
     "2026-07-27": {
       "date": "2026-07-27",
@@ -1919,7 +1919,7 @@
     },
     "2026-09-07": {
       "date": "2026-09-07",
-      "count": 55,
+      "count": 56,
       "referrers": {
         "직접 접속 / 카카오톡 링크": 7,
         "내부 이동": 21,
@@ -1935,7 +1935,8 @@
         "landing-page-rj41wnedy-choi-real.vercel.app": 1,
         "landing-page-8agv7e8am-choi-real.vercel.app": 1,
         "landing-page-nlppeq3ma-choi-real.vercel.app": 1,
-        "landing-page-2mamx342s-choi-real.vercel.app": 1
+        "landing-page-2mamx342s-choi-real.vercel.app": 1,
+        "landing-page-r6isq87ep-choi-real.vercel.app": 1
       },
       "postViews": {
         "1785137681579": 1,
