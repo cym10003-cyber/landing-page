@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 2081,
-  "todayPageviews": 72,
+  "totalPageviews": 2082,
+  "todayPageviews": 73,
   "dailyHistory": {
     "2026-07-27": {
       "date": "2026-07-27",
@@ -1919,11 +1919,11 @@
     },
     "2026-09-07": {
       "date": "2026-09-07",
-      "count": 72,
+      "count": 73,
       "referrers": {
         "직접 접속 / 카카오톡 링크": 7,
         "내부 이동": 23,
-        "네이버 (Naver)": 14,
+        "네이버 (Naver)": 15,
         "구글 (Google)": 3,
         "landing-page-avnqdit6j-choi-real.vercel.app": 1,
         "landing-page-duj1ff9iq-choi-real.vercel.app": 1,
