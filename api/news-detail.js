@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 function parsePostMeta(post, baseUrl = 'https://choi114.com') {
-  const content = post.content || '';
+  const content = (post.content || '').replace(/<style[\s\S]*?<\/style>/gi, '');
   const title = post.title || '';
   const address = post.address || '';
   const coords = post.coordinates || [35.8589, 128.632];
