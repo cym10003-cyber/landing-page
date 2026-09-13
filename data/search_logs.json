@@ -1,5 +1,11 @@
 [
   {
+    "query": "대명동",
+    "device": "mobile",
+    "timestamp": 1789303621696,
+    "date": "2026. 9. 13. 오후 9:47:01"
+  },
+  {
     "query": "반월당",
     "device": "desktop",
     "timestamp": 1789259318379,
