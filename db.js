@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v183");
+console.log("Antigravity db.js version: 20260715_v184");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v183";
+const APP_VERSION = "20260715_v184";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -116,16 +116,39 @@ async function getPosts() {
   }
 
   if (remotePosts && Array.isArray(remotePosts)) {
-    // Merge any locally saved post created in the last 10 minutes that GitHub API hasn't propagated yet
-    if (Array.isArray(cachedPosts) && cachedPosts.length > 0) {
-      const remoteIds = new Set(remotePosts.map(p => String(p.id)));
-      const now = Date.now();
+    // Merge any locally saved or edited post from the last 30 minutes that GitHub CDN hasn't propagated yet
+    let latestSaved = null;
+    try {
+      const ls = localStorage.getItem('latest_saved_post');
+      if (ls) latestSaved = JSON.parse(ls);
+    } catch(e) {}
+
+    const now = Date.now();
+    const cachedMap = new Map();
+
+    if (Array.isArray(cachedPosts)) {
       for (let cp of cachedPosts) {
-        if (cp && cp.id && !remoteIds.has(String(cp.id))) {
-          const postAge = now - Number(cp.id);
-          if (!isNaN(postAge) && postAge < 600000) {
-            remotePosts.unshift(cp);
-          }
+        if (cp && cp.id) cachedMap.set(String(cp.id), cp);
+      }
+    }
+    if (latestSaved && latestSaved.id) {
+      cachedMap.set(String(latestSaved.id), latestSaved);
+    }
+
+    for (let [cpId, cp] of cachedMap.entries()) {
+      const idx = remotePosts.findIndex(rp => String(rp.id) === cpId);
+      if (idx !== -1) {
+        // If locally edited within last 30 min or matches latestSaved, merge local edits onto remote object
+        if (latestSaved && String(latestSaved.id) === cpId) {
+          remotePosts[idx] = { ...remotePosts[idx], ...latestSaved };
+        } else if (cp.updatedAt && (now - cp.updatedAt < 1800000)) {
+          remotePosts[idx] = { ...remotePosts[idx], ...cp };
+        }
+      } else {
+        // Brand new post created locally in last 30 min
+        const postAge = now - Number(cp.id);
+        if (!isNaN(postAge) && postAge < 1800000) {
+          remotePosts.unshift(cp);
         }
       }
     }
@@ -189,6 +212,7 @@ async function savePost(postData) {
       posts[idx].coordinates = postData.coordinates;
       if (postData.isPrivate !== undefined) posts[idx].isPrivate = postData.isPrivate === true;
       posts[idx].date = postData.date || posts[idx].date || new Date().toLocaleDateString('ko-KR').replace(/\.$/, "");
+      posts[idx].updatedAt = Date.now();
       updatedPost = posts[idx];
     } else {
       throw new Error("Post not found");
@@ -1713,7 +1737,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v183`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v184`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
