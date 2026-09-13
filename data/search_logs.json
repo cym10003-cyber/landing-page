@@ -2,6 +2,12 @@
   {
     "query": "대명동",
     "device": "mobile",
+    "timestamp": 1789303629582,
+    "date": "2026. 9. 13. 오후 9:47:09"
+  },
+  {
+    "query": "대명동",
+    "device": "mobile",
     "timestamp": 1789303621696,
     "date": "2026. 9. 13. 오후 9:47:01"
   },
