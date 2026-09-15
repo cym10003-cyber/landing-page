@@ -1,5 +1,11 @@
 [
   {
+    "query": "대천동",
+    "device": "mobile",
+    "timestamp": 1789440225055,
+    "date": "2026. 9. 15. 오전 11:43:45"
+  },
+  {
     "query": "진천동",
     "device": "mobile",
     "timestamp": 1789440160841,
