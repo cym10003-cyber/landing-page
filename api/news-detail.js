@@ -267,20 +267,38 @@ export default async function handler(req, res) {
     try {
       let posts = null;
 
-      // Try fetching fresh posts from GitHub first
+      // Tier 1: Try GitHub REST API for real-time un-cached content
+      const token = (process.env.GITHUB_TOKEN || '').trim();
       try {
-        const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/landing-page/main/data/posts.json?t=${Date.now()}&r=${Math.random()}`, {
-          headers: {
-            'User-Agent': 'Vercel-Serverless-Function',
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache'
+        const ghApiUrl = `https://api.github.com/repos/cym10003-cyber/landing-page/contents/data/posts.json?t=${Date.now()}`;
+        const headers = { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Vercel-Serverless-Function' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        const apiRes = await fetch(ghApiUrl, { headers, cache: 'no-store' });
+        if (apiRes.ok) {
+          const apiData = await apiRes.json();
+          if (apiData && apiData.content) {
+            const contentStr = Buffer.from(apiData.content, 'base64').toString('utf8');
+            posts = JSON.parse(contentStr);
           }
-        });
-        if (ghRes.ok) {
-          posts = await ghRes.json();
         }
-      } catch (ghErr) {
-        console.warn('GitHub raw fetch failed, using local posts.json fallback:', ghErr);
+      } catch (e) {}
+
+      // Tier 2: Try fetching raw posts from GitHub
+      if (!posts) {
+        try {
+          const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/landing-page/main/data/posts.json?t=${Date.now()}&r=${Math.random()}`, {
+            headers: {
+              'User-Agent': 'Vercel-Serverless-Function',
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache'
+            }
+          });
+          if (ghRes.ok) {
+            posts = await ghRes.json();
+          }
+        } catch (ghErr) {
+          console.warn('GitHub raw fetch failed, using local posts.json fallback:', ghErr);
+        }
       }
 
       if (!posts && fs.existsSync(postsPath)) {
