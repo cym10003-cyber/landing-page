@@ -1,5 +1,11 @@
 [
   {
+    "query": "스튜디오",
+    "device": "mobile",
+    "timestamp": 1790045567042,
+    "date": "2026. 9. 22. 오전 11:52:47"
+  },
+  {
     "query": "대명동",
     "device": "desktop",
     "timestamp": 1789860347257,
