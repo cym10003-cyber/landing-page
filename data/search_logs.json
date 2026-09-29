@@ -1,5 +1,11 @@
 [
   {
+    "query": "두류동",
+    "device": "mobile",
+    "timestamp": 1790686187023,
+    "date": "2026. 9. 29. 오후 9:49:47"
+  },
+  {
     "query": "중구",
     "device": "desktop",
     "timestamp": 1790660120622,
