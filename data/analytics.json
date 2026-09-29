@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 3600,
-  "todayPageviews": 24,
+  "totalPageviews": 3601,
+  "todayPageviews": 25,
   "dailyHistory": {
     "2026-08-31": {
       "date": "2026-08-31",
@@ -2574,11 +2574,11 @@
     },
     "2026-09-29": {
       "date": "2026-09-29",
-      "count": 42,
+      "count": 43,
       "referrers": {
         "직접 접속 / 카카오톡 링크": 10,
         "네이버 (Naver)": 16,
-        "내부 이동": 13,
+        "내부 이동": 14,
         "perplexity.ai": 1
       },
       "postViews": {
