@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 4030,
-  "todayPageviews": 0,
+  "totalPageviews": 4031,
+  "todayPageviews": 1,
   "dailyHistory": {
     "2026-08-31": {
       "date": "2026-08-31",
@@ -4333,8 +4333,10 @@
     },
     "2026-10-05": {
       "date": "2026-10-05",
-      "count": 0,
-      "referrers": {},
+      "count": 1,
+      "referrers": {
+        "내부 이동": 1
+      },
       "postViews": {
         "1783912874250": 1,
         "1788243017699": 1,
