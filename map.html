@@ -203,6 +203,31 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        /* 모바일 Leaflet 줌 컨트롤(+- 버튼) 위치 조정 및 스크롤 고정 */
+        @media (max-width: 767px) {
+            .leaflet-top.leaflet-left {
+                top: 56px !important;
+                left: 10px !important;
+            }
+            .leaflet-control-zoom {
+                margin: 0 !important;
+                border: 1px solid rgba(0, 0, 0, 0.15) !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+                border-radius: 10px !important;
+                overflow: hidden !important;
+            }
+            .leaflet-control-zoom a {
+                touch-action: manipulation !important;
+            }
+        }
+        #map-panel {
+            overflow: hidden !important;
+            overscroll-behavior: none !important;
+        }
+        #map {
+            overflow: hidden !important;
+            overscroll-behavior: none !important;
+        }
     </style>
 </head>
 <body class="bg-surface text-ink font-body antialiased flex flex-col h-screen h-[100dvh] overflow-hidden">
@@ -214,10 +239,10 @@
 <div class="hidden md:flex gap-lg items-center font-nav text-nav">
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v193">매물리스트</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v194">매물리스트</a>
     <a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v193">부동산 소식</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v194">부동산 소식</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button>
 </div>
@@ -276,13 +301,24 @@
     </div>
     
     <!-- Map Panel -->
-    <div id="map-panel" class="flex-grow h-full relative z-10">
-        <!-- Floating Mobile Smart Filter Bar -->
-        <div id="mobile-filter-bar" class="md:hidden absolute top-2.5 left-2.5 right-24 z-[1000] flex items-center overflow-x-auto no-scrollbar gap-1.5 py-1.5 px-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-lg border border-hairline/80"></div>
+    <div id="map-panel" class="flex-grow h-full relative z-10 overflow-hidden">
+        <!-- Floating Mobile Smart Filter Bar Wrapper -->
+        <div class="md:hidden absolute top-2.5 left-2.5 right-24 z-[1000]">
+            <div id="mobile-filter-bar" class="w-full flex items-center overflow-x-auto no-scrollbar gap-1.5 py-1.5 px-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-lg border border-hairline/80"></div>
+            <!-- Swipe hint gradient on right edge -->
+            <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-7 bg-gradient-to-l from-white dark:from-slate-900 to-transparent rounded-r-2xl flex items-center justify-end pr-1 text-primary/70">
+                <span class="material-symbols-outlined text-[16px] animate-pulse">chevron_right</span>
+            </div>
+        </div>
         <!-- Floating Mobile List Toggle Button -->
         <button id="mobile-to-list-btn" class="md:hidden absolute top-2.5 right-2.5 z-[1000] bg-surface-container-lowest text-ink shadow-lg border border-hairline px-3 py-2 rounded-2xl font-bold text-xs flex items-center gap-1 cursor-pointer shrink-0">
             <span class="material-symbols-outlined text-primary text-[16px]">format_list_bulleted</span> 목록
         </button>
+        <!-- Floating Swipe Hint Tooltip -->
+        <div id="swipe-hint-badge" class="md:hidden absolute top-[58px] left-[52px] z-[999] bg-slate-900/90 backdrop-blur-sm text-white text-[11px] font-semibold px-2.5 py-1 rounded-full shadow-lg flex items-center gap-1 pointer-events-none transition-all duration-500">
+            <span class="material-symbols-outlined text-[13px] text-amber-300">swipe</span>
+            <span>좌우로 밀어서 <strong>역세권·주차</strong> 필터 선택</span>
+        </div>
         <div id="map" class="w-full h-full"></div>
     </div>
 </div>
@@ -299,10 +335,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v193">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v194">매물리스트</a>
       <a class="text-primary hover:text-primary py-sm border-b border-hairline/50 font-bold" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v193">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v194">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -335,7 +371,7 @@
 </div>
 
 <!-- Load Database and Page Logic -->
-<script src="db.js?v=20260715_v193"></script>
+<script src="db.js?v=20260715_v194"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Setup Mobile Menu Drawer
@@ -419,6 +455,45 @@ document.addEventListener('DOMContentLoaded', async () => {
         chunkedLoading: true
     });
     editorMap.addLayer(markersClusterGroup);
+
+    // Mobile zoom scroll lock & filter swipe hint logic
+    const lockMobileScroll = () => {
+        window.scrollTo(0, 0);
+        const mapPanelEl = document.getElementById('map-panel');
+        if (mapPanelEl) mapPanelEl.scrollTop = 0;
+    };
+    editorMap.on('zoomend moveend resize zoomstart movestart', lockMobileScroll);
+    window.addEventListener('scroll', lockMobileScroll, { passive: true });
+
+    setTimeout(() => {
+        const zoomBtns = document.querySelectorAll('.leaflet-control-zoom a');
+        zoomBtns.forEach(btn => {
+            btn.addEventListener('click', lockMobileScroll, { passive: true });
+            btn.addEventListener('touchend', lockMobileScroll, { passive: true });
+        });
+    }, 300);
+
+    const mobileFilterBar = document.getElementById('mobile-filter-bar');
+    const swipeHint = document.getElementById('swipe-hint-badge');
+    if (mobileFilterBar) {
+        setTimeout(() => {
+            mobileFilterBar.scrollBy({ left: 45, behavior: 'smooth' });
+            setTimeout(() => {
+                mobileFilterBar.scrollBy({ left: -45, behavior: 'smooth' });
+            }, 600);
+        }, 800);
+
+        const dismissHint = () => {
+            if (swipeHint) {
+                swipeHint.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => swipeHint.remove(), 500);
+            }
+        };
+
+        mobileFilterBar.addEventListener('scroll', dismissHint, { once: true });
+        mobileFilterBar.addEventListener('touchstart', dismissHint, { once: true });
+        setTimeout(dismissHint, 4500);
+    }
 
     // Beautiful premium custom divIcon
     const customMarkerHtml = `
