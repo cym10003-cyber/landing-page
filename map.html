@@ -239,10 +239,10 @@
 <div class="hidden md:flex gap-lg items-center font-nav text-nav">
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v196">매물리스트</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v197">매물리스트</a>
     <a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v196">부동산 소식</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v197">부동산 소식</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button>
 </div>
@@ -335,10 +335,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v196">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v197">매물리스트</a>
       <a class="text-primary hover:text-primary py-sm border-b border-hairline/50 font-bold" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v196">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v197">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -371,7 +371,7 @@
 </div>
 
 <!-- Load Database and Page Logic -->
-<script src="db.js?v=20260715_v196"></script>
+<script src="db.js?v=20260715_v197"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Setup Mobile Menu Drawer
@@ -538,12 +538,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         const item = allProperties.find(l => String(l.id) === String(id));
         if (!item) return;
         const postUrl = `https://www.choi114.com/news-detail?id=${item.id}`;
+
+        const content = ((item.original && item.original.content) || '').normalize('NFC');
+        const mCommon = content.match(/공용\s*관리비\s*:\s*([^\n<]+)/i);
+        const mIndiv = content.match(/개별\s*관리비\s*:\s*([^\n<]+)/i);
+        const mGen = content.match(/(?:^|[^\w가-힣])관리비\s*:\s*([^\n<]+)/i);
+        let commonFeeStr = mCommon ? mCommon[1].trim() : (mGen ? mGen[1].trim() : '');
+        let indivFeeStr = mIndiv ? mIndiv[1].trim() : '';
+        if (commonFeeStr) commonFeeStr = commonFeeStr.replace(/\(.*?\)/g, '').trim() || commonFeeStr;
+        if (!indivFeeStr) indivFeeStr = '개별정산';
+
+        let conditionBlock = `💰 조건: ${item.price || '가격 협의'}`;
+        if (commonFeeStr || indivFeeStr) {
+            conditionBlock += `\n   • 공용관리비: ${commonFeeStr || '없음'}\n   • 개별관리비: ${indivFeeStr || '개별정산'}`;
+        }
+
         const inquiryText = 
 `[최가네부동산 매물 상담 문의]
 안녕하세요 소장님! 매물지도 보고 아래 매물 문의드립니다.
 
 🏠 매물명: ${item.title}
-💰 조건: ${item.price || '가격 협의'}
+${conditionBlock}
 📐 면적: ${item.area || '면적 협의'}
 📍 위치: ${item.address || ''}
 🔗 매물 링크: ${postUrl}
