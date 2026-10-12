@@ -257,10 +257,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed flex items-center"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-<a id="nav-maemul" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v194">매물리스트</a>
+<a id="nav-maemul" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v195">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v194">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
+<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v195">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -273,18 +273,24 @@
 </nav>
 <main class="max-w-4xl mx-auto px-lg py-[80px]">
     <div class="flex flex-wrap sm:flex-nowrap justify-between items-center gap-2 mb-md no-print">
-        <a id="back-link" href="property-news.html?v=20260715_v194" class="inline-flex items-center gap-1 text-primary font-bold text-xs sm:text-sm hover:underline whitespace-nowrap py-1.5">
+        <a id="back-link" href="property-news.html?v=20260715_v195" class="inline-flex items-center gap-1 text-primary font-bold text-xs sm:text-sm hover:underline whitespace-nowrap py-1.5">
             <span class="material-symbols-outlined text-[18px]">arrow_back</span> 매물리스트로
         </a>
-        <div class="flex items-center gap-1.5 whitespace-nowrap">
+        <div class="flex items-center gap-1.5 whitespace-nowrap flex-wrap sm:flex-nowrap">
+            <button id="kakao-briefing-btn" type="button" onclick="copyKakaoBriefing()" title="카카오톡 전송용 매물 브리핑 1초 복사" class="inline-flex items-center justify-center gap-1 bg-[#fee500] hover:bg-[#fdd835] text-[#3c1e1e] px-2.5 sm:px-3 py-2 rounded-lg font-bold text-xs sm:text-sm shadow-xs transition-all h-9 whitespace-nowrap cursor-pointer active:scale-95">
+                <span class="material-symbols-outlined text-[16px]">content_copy</span> 카톡 브리핑 복사
+            </button>
+            <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" title="최이명 소장 카카오톡 1:1 상담 바로연결" class="inline-flex items-center justify-center gap-1 bg-[#fee500] hover:bg-[#fdd835] text-[#3c1e1e] px-2.5 sm:px-3 py-2 rounded-lg font-black text-xs sm:text-sm shadow-xs transition-all h-9 whitespace-nowrap cursor-pointer active:scale-95">
+                <span class="material-symbols-outlined text-[16px]">chat</span> 카톡 1:1 상담
+            </a>
             <a id="map-link" href="map.html" class="inline-flex items-center justify-center gap-1 bg-[#003891] hover:bg-blue-800 text-white px-2.5 sm:px-3.5 py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm transition-all h-9 whitespace-nowrap">
                 <span class="material-symbols-outlined text-[16px]">map</span> 지도보기
             </a>
-            <button id="share-btn" class="inline-flex items-center justify-center gap-1 bg-surface-container-high hover:bg-surface-dim text-ink px-2.5 sm:px-3.5 py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm transition-all h-9 whitespace-nowrap">
-                <span class="material-symbols-outlined text-[16px]">share</span> 공유하기
+            <button id="share-btn" class="inline-flex items-center justify-center gap-1 bg-surface-container-high hover:bg-surface-dim text-ink px-2.5 sm:px-3.5 py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm transition-all h-9 whitespace-nowrap cursor-pointer">
+                <span class="material-symbols-outlined text-[16px]">share</span> 공유
             </button>
-            <button id="print-btn" onclick="window.print()" class="inline-flex items-center justify-center gap-1 bg-[#003891] hover:bg-blue-800 text-white px-2.5 sm:px-3.5 py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm transition-all h-9 whitespace-nowrap">
-                <span class="material-symbols-outlined text-[16px]">print</span> 인쇄/PDF저장
+            <button id="print-btn" onclick="window.print()" class="inline-flex items-center justify-center gap-1 bg-surface-container-high hover:bg-surface-dim text-ink px-2.5 sm:px-3.5 py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm transition-all h-9 whitespace-nowrap cursor-pointer">
+                <span class="material-symbols-outlined text-[16px]">print</span> 인쇄/PDF
             </button>
         </div>
     </div>
@@ -341,12 +347,38 @@
             내용을 불러오는 중입니다...
         </div>
 
+        <!-- Kakao 1:1 Consultation & Call Dual Banner -->
+        <div class="mt-xl p-lg md:p-xl rounded-2xl bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-100/60 dark:from-slate-800 dark:to-slate-850 border-2 border-amber-300 dark:border-amber-700/60 shadow-md flex flex-col md:flex-row items-center justify-between gap-md no-print">
+            <div class="flex flex-col gap-1 text-center md:text-left w-full md:w-auto">
+                <div class="flex items-center justify-center md:justify-start gap-1.5 mb-0.5">
+                    <span class="text-[11px] font-black bg-[#fee500] text-[#3c1e1e] px-2.5 py-0.5 rounded-full shadow-xs">⚡ 실시간 빠른 응대</span>
+                    <span class="text-xs font-bold text-amber-900 dark:text-amber-300">부담 없는 1:1 맞춤 상담</span>
+                </div>
+                <h3 class="font-extrabold text-ink text-base sm:text-xl leading-tight">이 매물에 대해 더 궁금한 점이 있으신가요?</h3>
+                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-0.5">보증금/월세 협의, 권리금 현황, 현장 임장 예약까지 편하게 물어보세요.</p>
+            </div>
+            <div class="flex flex-row flex-wrap sm:flex-nowrap gap-2 w-full md:w-auto shrink-0 justify-center">
+                <button type="button" onclick="copyKakaoBriefing()" class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 bg-white dark:bg-slate-700 hover:bg-slate-50 text-ink border border-slate-300 dark:border-slate-600 px-4 py-3 rounded-xl font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[18px] text-amber-600">content_copy</span>
+                    <span>브리핑 복사</span>
+                </button>
+                <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 bg-[#fee500] hover:bg-[#fdd835] text-[#3c1e1e] px-5 py-3 rounded-xl font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95">
+                    <span class="material-symbols-outlined text-[20px]">chat</span>
+                    <span>카톡 1:1 상담</span>
+                </a>
+                <a href="tel:010-3548-4000" class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 bg-[#003891] hover:bg-blue-800 text-white px-5 py-3 rounded-xl font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95">
+                    <span class="material-symbols-outlined text-[20px]">call</span>
+                    <span>전화 문의</span>
+                </a>
+            </div>
+        </div>
+
         <!-- Representative Business Card Section (Printed at bottom) -->
         <div id="print-business-card" class="mt-xl pt-lg border-t-2 border-[#003891] flex flex-col items-center justify-center text-center">
             <div class="text-xs text-slate-500 font-bold mb-2 tracking-wider uppercase flex items-center gap-1">
                 <span class="material-symbols-outlined text-[#003891] text-[16px]">badge</span> 최가네부동산 대표소장 명함
             </div>
-            <img src="choi_card.jpg?v=20260715_v194" alt="최가네부동산 최이명 대표소장 명함" class="max-w-md w-full rounded-2xl shadow-lg border border-slate-200" />
+            <img src="choi_card.jpg?v=20260715_v195" alt="최가네부동산 최이명 대표소장 명함" class="max-w-md w-full rounded-2xl shadow-lg border border-slate-200" />
         </div>
     </article>
 </main>
@@ -385,26 +417,26 @@
         </div>
     </div>
 </footer>
-<div class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-hairline flex justify-around items-center py-2 z-50 md:hidden shadow-lg">
-  <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">home</span>
+<div class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-hairline flex items-center justify-between py-2 px-3 z-50 md:hidden shadow-lg gap-1.5 no-print">
+  <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-10 h-11 shrink-0">
+    <span class="material-symbols-outlined text-[20px]">home</span>
     <span class="text-[10px] font-medium">홈</span>
   </a>
-  <a href="about.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">info</span>
-    <span class="text-[10px] font-medium">소개</span>
+  <a href="map.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-10 h-11 shrink-0">
+    <span class="material-symbols-outlined text-[20px]">map</span>
+    <span class="text-[10px] font-medium">지도</span>
   </a>
-  <a href="map.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">map</span>
-    <span class="text-[10px] font-medium">매물지도</span>
-  </a>
-  <button id="mobile-share-btn" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12 border-0 bg-transparent cursor-pointer">
-    <span class="material-symbols-outlined text-2xl">share</span>
-    <span class="text-[10px] font-medium">공유</span>
+  <button type="button" onclick="copyKakaoBriefing()" title="카카오톡 브리핑 복사" class="flex flex-col items-center justify-center text-amber-700 hover:text-amber-800 w-11 h-11 border-0 bg-transparent cursor-pointer shrink-0">
+    <span class="material-symbols-outlined text-[20px] text-amber-600">content_copy</span>
+    <span class="text-[10px] font-bold text-amber-700">브리핑</span>
   </button>
-  <a href="tel:010-3548-4000" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">call</span>
-    <span class="text-[10px] font-medium">전화</span>
+  <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-1 bg-[#fee500] hover:bg-[#fdd835] text-[#3c1e1e] py-2.5 px-2 rounded-xl shadow-xs font-black text-xs active:scale-95 whitespace-nowrap">
+    <span class="material-symbols-outlined text-[17px]">chat</span>
+    <span>카톡상담</span>
+  </a>
+  <a href="tel:010-3548-4000" class="flex-1 flex items-center justify-center gap-1 bg-[#003891] hover:bg-blue-800 text-white py-2.5 px-2 rounded-xl shadow-xs font-black text-xs active:scale-95 whitespace-nowrap">
+    <span class="material-symbols-outlined text-[17px]">call</span>
+    <span>전화문의</span>
   </a>
 </div>
 
@@ -420,10 +452,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v194">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v195">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v194">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v195">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -434,8 +466,257 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v194"></script>
+<script src="db.js?v=20260715_v195"></script>
 <script>
+let currentLoadedPost = null;
+
+// Daegu Subway Stations (Line 1, 2, 3)
+const DAEGU_SUBWAY_STATIONS = [
+    // Line 1
+    { name: "설화명곡역", lat: 35.7997, lng: 128.4981 },
+    { name: "화원역", lat: 35.8052, lng: 128.5029 },
+    { name: "대곡역", lat: 35.8117, lng: 128.5147 },
+    { name: "진천역", lat: 35.8143, lng: 128.5244 },
+    { name: "월배역", lat: 35.8166, lng: 128.5330 },
+    { name: "상인역", lat: 35.8197, lng: 128.5385 },
+    { name: "월촌역", lat: 35.8277, lng: 128.5446 },
+    { name: "송현역", lat: 35.8335, lng: 128.5513 },
+    { name: "서부정류장역", lat: 35.8378, lng: 128.5574 },
+    { name: "대명역", lat: 35.8427, lng: 128.5670 },
+    { name: "안지랑역", lat: 35.8454, lng: 128.5772 },
+    { name: "현충로역", lat: 35.8494, lng: 128.5841 },
+    { name: "영대병원역", lat: 35.8526, lng: 128.5902 },
+    { name: "교대역", lat: 35.8560, lng: 128.5925 },
+    { name: "명덕역", lat: 35.8576, lng: 128.5902 },
+    { name: "반월당역", lat: 35.8654, lng: 128.5936 },
+    { name: "중앙로역", lat: 35.8714, lng: 128.5941 },
+    { name: "대구역", lat: 35.8770, lng: 128.5960 },
+    { name: "칠성시장역", lat: 35.8763, lng: 128.6074 },
+    { name: "신천역", lat: 35.8711, lng: 128.6186 },
+    { name: "동대구역", lat: 35.8797, lng: 128.6284 },
+    { name: "동구청역", lat: 35.8863, lng: 128.6360 },
+    { name: "아양교역", lat: 35.8906, lng: 128.6479 },
+    { name: "동촌역", lat: 35.8901, lng: 128.6601 },
+    { name: "해안역", lat: 35.8900, lng: 128.6738 },
+    { name: "방촌역", lat: 35.8872, lng: 128.6874 },
+    { name: "용계역", lat: 35.8756, lng: 128.6946 },
+    { name: "율하역", lat: 35.8672, lng: 128.6957 },
+    { name: "신기역", lat: 35.8703, lng: 128.7061 },
+    { name: "반야월역", lat: 35.8693, lng: 128.7188 },
+    { name: "각산역", lat: 35.8690, lng: 128.7297 },
+    { name: "안심역", lat: 35.8670, lng: 128.7410 },
+    // Line 2
+    { name: "문양역", lat: 35.8617, lng: 128.4610 },
+    { name: "다사역", lat: 35.8579, lng: 128.4651 },
+    { name: "대실역", lat: 35.8532, lng: 128.4647 },
+    { name: "강창역", lat: 35.8475, lng: 128.4891 },
+    { name: "계명대역", lat: 35.8534, lng: 128.4975 },
+    { name: "성서산업단지역", lat: 35.8526, lng: 128.5085 },
+    { name: "이곡역", lat: 35.8524, lng: 128.5188 },
+    { name: "용산역", lat: 35.8528, lng: 128.5289 },
+    { name: "죽전역", lat: 35.8497, lng: 128.5367 },
+    { name: "감삼역", lat: 35.8535, lng: 128.5447 },
+    { name: "두류역", lat: 35.8572, lng: 128.5543 },
+    { name: "내당역", lat: 35.8574, lng: 128.5639 },
+    { name: "반고개역", lat: 35.8613, lng: 128.5724 },
+    { name: "청라언덕역", lat: 35.8648, lng: 128.5833 },
+    { name: "경대병원역", lat: 35.8623, lng: 128.6046 },
+    { name: "대구은행역", lat: 35.8595, lng: 128.6163 },
+    { name: "범어역", lat: 35.8590, lng: 128.6253 },
+    { name: "수성구청역", lat: 35.8587, lng: 128.6323 },
+    { name: "만촌역", lat: 35.8533, lng: 128.6469 },
+    { name: "담티역", lat: 35.8493, lng: 128.6596 },
+    { name: "연호역", lat: 35.8436, lng: 128.6705 },
+    { name: "대공원역", lat: 35.8427, lng: 128.6811 },
+    { name: "고산역", lat: 35.8415, lng: 128.6961 },
+    { name: "신매역", lat: 35.8411, lng: 128.7099 },
+    { name: "사월역", lat: 35.8398, lng: 128.7201 },
+    { name: "정평역", lat: 35.8306, lng: 128.7297 },
+    { name: "임당역", lat: 35.8291, lng: 128.7431 },
+    { name: "영남대역", lat: 35.8360, lng: 128.7533 },
+    // Line 3
+    { name: "칠곡경대병원역", lat: 35.9567, lng: 128.5644 },
+    { name: "학정역", lat: 35.9497, lng: 128.5630 },
+    { name: "팔거역", lat: 35.9416, lng: 128.5583 },
+    { name: "동천역", lat: 35.9358, lng: 128.5574 },
+    { name: "칠곡운암역", lat: 35.9288, lng: 128.5533 },
+    { name: "구암역", lat: 35.9216, lng: 128.5516 },
+    { name: "태전역", lat: 35.9127, lng: 128.5455 },
+    { name: "매천역", lat: 35.9044, lng: 128.5416 },
+    { name: "매천시장역", lat: 35.8988, lng: 128.5461 },
+    { name: "팔달역", lat: 35.8916, lng: 128.5477 },
+    { name: "공단역", lat: 35.8894, lng: 128.5550 },
+    { name: "만평역", lat: 35.8897, lng: 128.5622 },
+    { name: "팔달시장역", lat: 35.8858, lng: 128.5683 },
+    { name: "원대역", lat: 35.8827, lng: 128.5727 },
+    { name: "북구청역", lat: 35.8858, lng: 128.5833 },
+    { name: "달성공원역", lat: 35.8758, lng: 128.5833 },
+    { name: "서문시장역", lat: 35.8697, lng: 128.5816 },
+    { name: "남산역", lat: 35.8588, lng: 128.5847 },
+    { name: "건들바위역", lat: 35.8566, lng: 128.5994 },
+    { name: "대봉교역", lat: 35.8538, lng: 128.6094 },
+    { name: "수성시장역", lat: 35.8519, lng: 128.6186 },
+    { name: "수성구민운동장역", lat: 35.8488, lng: 128.6252 },
+    { name: "어린이세상역", lat: 35.8438, lng: 128.6277 },
+    { name: "황금역", lat: 35.8366, lng: 128.6269 },
+    { name: "수성못역", lat: 35.8277, lng: 128.6272 },
+    { name: "지산역", lat: 35.8219, lng: 128.6316 },
+    { name: "범물역", lat: 35.8177, lng: 128.6388 },
+    { name: "용지역", lat: 35.8144, lng: 128.6472 }
+];
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371000;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+
+function findNearestStation(lat, lon) {
+    if (!lat || !lon) return null;
+    let minD = Infinity;
+    let nearest = null;
+    for (let s of DAEGU_SUBWAY_STATIONS) {
+        const d = calculateDistance(lat, lon, s.lat, s.lng);
+        if (d < minD) {
+            minD = d;
+            nearest = s;
+        }
+    }
+    if (!nearest) return null;
+    const walkMin = Math.max(1, Math.round(minD / 75));
+    return {
+        name: nearest.name,
+        distance: minD,
+        walkMin: walkMin
+    };
+}
+
+window.copyKakaoBriefing = async function() {
+    if (!currentLoadedPost) {
+        showToast('⚠️ 매물 정보를 불러오는 중입니다. 잠시 후 다시 시도해 주세요.');
+        return;
+    }
+    const post = currentLoadedPost;
+    const content = (post.content || '').normalize('NFC');
+    const title = (post.title || '').normalize('NFC');
+
+    // 1. Price
+    const mDep = content.match(/보증금\s*:\s*([^\n<]+)/);
+    const mRent = content.match(/월세\s*:\s*([^\n<]+)/);
+    const mSale = content.match(/매매가\s*:\s*([^\n<]+)/);
+    let priceStr = '';
+    if (mSale) {
+        priceStr = `매매 ${mSale[1].trim()}`;
+    } else if (mDep || mRent) {
+        const dVal = mDep ? mDep[1].trim() : '-';
+        const rVal = mRent ? mRent[1].trim() : '-';
+        priceStr = `보증금 ${dVal} / 월세 ${rVal}`;
+    } else {
+        priceStr = '가격 협의';
+    }
+
+    // 2. Area
+    const mArea = content.match(/(?:전용면적|공급면적|면적|평수)\s*:\s*([^\n<]+)/i);
+    let areaStr = mArea ? mArea[1].trim() : '';
+    if (!areaStr) {
+        const pMatch = (title + ' ' + content).match(/([0-9.]+\s*평)/);
+        if (pMatch) areaStr = pMatch[1].trim();
+    }
+    if (!areaStr) areaStr = '면적 정보 협의';
+
+    // 3. Floor
+    const mFloor = content.match(/해당\s*층수?\s*:\s*([^\n<]+)/i);
+    let floorStr = mFloor ? mFloor[1].trim() : '';
+    if (!floorStr) {
+        const fMatch = (title + ' ' + content).match(/((?:지하\s*)?[0-9]+층)/);
+        if (fMatch) floorStr = fMatch[1].trim();
+    }
+    if (!floorStr) floorStr = '층수 정보 협의';
+
+    // 4. Parking
+    const mParking = content.match(/주차\s*:\s*([^\n<]+)/i);
+    let parkingStr = mParking ? mParking[1].trim() : '';
+    if (!parkingStr) {
+        if (/고정주차|고정 주차/.test(content)) parkingStr = '고정 주차 가능';
+        else if (/자주식/.test(content)) parkingStr = '자주식 주차 가능';
+        else if (/주차편리|주차 편리/.test(content)) parkingStr = '주차 편리';
+        else parkingStr = '인근 주차 협의';
+    }
+
+    // 5. Nearest Station / Location
+    let stationStr = '';
+    if (post.coordinates && post.coordinates.length === 2) {
+        const nearest = findNearestStation(post.coordinates[0], post.coordinates[1]);
+        if (nearest && nearest.distance <= 700) {
+            stationStr = `🚇 ${nearest.name} 도보 ${nearest.walkMin}분 (${nearest.distance}m)`;
+        }
+    }
+    if (!stationStr) {
+        const locMatch = content.match(/위치\s*:\s*([^\n<]+)/);
+        if (locMatch) stationStr = locMatch[1].trim();
+        else if (post.address) stationStr = post.address;
+        else stationStr = '대구 주요 역세권 상권';
+    }
+
+    // 6. Highlights
+    const highlightLines = [];
+    const featureIdx = content.indexOf('매물특징');
+    if (featureIdx !== -1) {
+        const after = content.substring(featureIdx);
+        const lines = after.split('\n');
+        for (let l of lines) {
+            const clean = l.replace(/<[^>]*>/g, '').replace(/^[#*\-•>⭐▶🔎\s]+/, '').trim();
+            if (clean && !clean.includes('매물정보') && !clean.includes('중개') && !clean.includes('특징') && clean.length > 3) {
+                highlightLines.push('• ' + clean);
+                if (highlightLines.length >= 3) break;
+            }
+        }
+    }
+    if (highlightLines.length === 0) {
+        if (content.includes('무권리')) highlightLines.push('• 권리금 없는 무권리 상가');
+        if (floorStr.includes('1층')) highlightLines.push('• 접근성 및 가시성 뛰어난 1층');
+        highlightLines.push('• 즉시 입주 및 용도 협의 가능');
+    }
+
+    const postUrl = `https://www.choi114.com/news-detail?id=${post.id}`;
+
+    const briefingText = 
+`[최가네부동산 추천 매물 브리핑]
+🏠 매물명: ${title}
+💰 조건: ${priceStr}
+📐 면적: ${areaStr}
+🏢 층수: ${floorStr}
+🚗 주차: ${parkingStr}
+🚇 교통: ${stationStr}
+
+⭐ 핵심 포인트:
+${highlightLines.join('\n')}
+
+🔗 상세 사진 및 정보 확인:
+${postUrl}
+
+📞 상담/문의: 최가네부동산 최이명 대표소장
+📱 전화: 010-3548-4000
+💬 카톡 1:1 상담: https://open.kakao.com/o/smt2j0Ri`;
+
+    try {
+        await navigator.clipboard.writeText(briefingText);
+        showToast('📋 카톡 전송용 브리핑이 복사되었습니다! 카톡에 붙여넣기(Ctrl+V)하세요.');
+    } catch(err) {
+        const textarea = document.createElement('textarea');
+        textarea.value = briefingText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showToast('📋 카톡 전송용 브리핑이 복사되었습니다! 카톡에 붙여넣기(Ctrl+V)하세요.');
+    }
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const postId = params.get('id');
@@ -547,7 +828,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <span class="material-symbols-outlined text-5xl text-muted mb-md">lock</span>
                     <h3 class="font-bold text-ink text-lg mb-xs">🔒 비공개 처리된 매물글입니다.</h3>
                     <p class="text-muted text-sm mb-lg">현재 이 매물글은 관리자에 의해 비공개(임시보관) 상태로 전환되어 있습니다.</p>
-                    <a href="property-news.html?category=매물리스트&v=20260715_v194" class="inline-flex items-center gap-xs bg-primary-container text-white px-md py-sm rounded-lg font-bold text-sm hover:bg-blue-mid transition-colors">
+                    <a href="property-news.html?category=매물리스트&v=20260715_v195" class="inline-flex items-center gap-xs bg-primary-container text-white px-md py-sm rounded-lg font-bold text-sm hover:bg-blue-mid transition-colors">
                         <span class="material-symbols-outlined text-[16px]">arrow_back</span> 매물리스트로 돌아가기
                     </a>
                 </div>
@@ -555,6 +836,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        currentLoadedPost = post;
         document.title = `${post.title} - 최가네부동산공인중개사사무소`;
         document.getElementById('post-title').innerText = post.title;
         document.getElementById('post-category').innerText = post.category || '일반';
@@ -567,7 +849,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (post.category === '매물리스트') {
             if (backLink) {
-                backLink.href = 'property-news.html?category=매물리스트&v=20260715_v194';
+                backLink.href = 'property-news.html?category=매물리스트&v=20260715_v195';
                 backLink.innerHTML = `<span class="material-symbols-outlined">arrow_back</span> 매물리스트로`;
             }
             if (mapLink) {
@@ -580,7 +862,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } else {
             if (backLink) {
-                backLink.href = 'property-news.html?v=20260715_v194';
+                backLink.href = 'property-news.html?v=20260715_v195';
                 backLink.innerHTML = `<span class="material-symbols-outlined">arrow_back</span> 부동산 소식으로`;
             }
             if (mapLink) {
