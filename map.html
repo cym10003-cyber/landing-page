@@ -196,9 +196,12 @@
         .marker-cluster:hover div {
             transform: scale(1.1) !important;
         }
-        .leaflet-zoom-animated, .leaflet-tile-container {
-            will-change: transform;
-            transform: translateZ(0);
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
@@ -211,10 +214,10 @@
 <div class="hidden md:flex gap-lg items-center font-nav text-nav">
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v190">매물리스트</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v191">매물리스트</a>
     <a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v190">부동산 소식</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v191">부동산 소식</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button>
 </div>
@@ -249,7 +252,17 @@
                 <span class="bg-surface-container px-1.5 py-0.5 rounded text-[10px]">매물번호 (5201)</span>
                 <span class="bg-surface-container px-1.5 py-0.5 rounded text-[10px]">업종 (식당, 사무실)</span>
             </div>
-            <div class="flex justify-between items-center text-xs text-muted">
+            <!-- Desktop Smart Filters -->
+            <div class="pt-1.5 flex flex-col gap-1.5 border-t border-hairline/60">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-extrabold text-primary dark:text-primary-bright flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[13px]">tune</span> 원클릭 스마트 필터
+                    </span>
+                    <button id="filter-reset-btn" class="text-[10px] text-muted hover:text-primary underline cursor-pointer border-0 bg-transparent hidden">초기화</button>
+                </div>
+                <div id="desktop-filter-chips" class="flex flex-wrap gap-1"></div>
+            </div>
+            <div class="flex justify-between items-center text-xs text-muted pt-0.5">
                 <span>총 <strong id="list-count" class="text-primary font-bold">0</strong>개의 매물 등록됨</span>
                 <button id="mobile-to-map-btn" class="md:hidden bg-primary text-white px-3 py-1.5 rounded font-semibold text-xs flex items-center gap-xs border-0 cursor-pointer">
                     <span class="material-symbols-outlined text-[14px]">map</span> 지도 보기
@@ -264,9 +277,11 @@
     
     <!-- Map Panel -->
     <div id="map-panel" class="flex-grow h-full relative z-10">
+        <!-- Floating Mobile Smart Filter Bar -->
+        <div id="mobile-filter-bar" class="md:hidden absolute top-2.5 left-2.5 right-24 z-[1000] flex items-center overflow-x-auto no-scrollbar gap-1.5 py-1.5 px-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-lg border border-hairline/80"></div>
         <!-- Floating Mobile List Toggle Button -->
-        <button id="mobile-to-list-btn" class="md:hidden absolute top-[40px] right-4 z-[2000] bg-surface-container-lowest text-ink shadow-strong-elevated border border-hairline px-4 py-2.5 rounded-full font-semibold text-sm flex items-center gap-xs cursor-pointer">
-            <span class="material-symbols-outlined text-primary text-[18px]">format_list_bulleted</span> 목록 보기
+        <button id="mobile-to-list-btn" class="md:hidden absolute top-2.5 right-2.5 z-[1000] bg-surface-container-lowest text-ink shadow-lg border border-hairline px-3 py-2 rounded-2xl font-bold text-xs flex items-center gap-1 cursor-pointer shrink-0">
+            <span class="material-symbols-outlined text-primary text-[16px]">format_list_bulleted</span> 목록
         </button>
         <div id="map" class="w-full h-full"></div>
     </div>
@@ -284,10 +299,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v190">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v191">매물리스트</a>
       <a class="text-primary hover:text-primary py-sm border-b border-hairline/50 font-bold" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v190">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v191">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -320,7 +335,7 @@
 </div>
 
 <!-- Load Database and Page Logic -->
-<script src="db.js?v=20260715_v190"></script>
+<script src="db.js?v=20260715_v191"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Setup Mobile Menu Drawer
@@ -422,6 +437,132 @@ document.addEventListener('DOMContentLoaded', async () => {
     let allProperties = [];
     let activeProperties = [];
     let markersMap = new Map(); // Keep track of Leaflet markers by post id
+    let currentFilterId = 'all';
+
+    // Daegu Subway Stations (Line 1, 2, 3)
+    const DAEGU_SUBWAY_STATIONS = [
+        // Line 1
+        { name: "설화명곡역", lat: 35.7997, lng: 128.4981 },
+        { name: "화원역", lat: 35.8052, lng: 128.5029 },
+        { name: "대곡역", lat: 35.8117, lng: 128.5147 },
+        { name: "진천역", lat: 35.8143, lng: 128.5244 },
+        { name: "월배역", lat: 35.8166, lng: 128.5330 },
+        { name: "상인역", lat: 35.8197, lng: 128.5385 },
+        { name: "월촌역", lat: 35.8277, lng: 128.5446 },
+        { name: "송현역", lat: 35.8335, lng: 128.5513 },
+        { name: "서부정류장역", lat: 35.8378, lng: 128.5574 },
+        { name: "대명역", lat: 35.8427, lng: 128.5670 },
+        { name: "안지랑역", lat: 35.8454, lng: 128.5772 },
+        { name: "현충로역", lat: 35.8494, lng: 128.5841 },
+        { name: "영대병원역", lat: 35.8526, lng: 128.5902 },
+        { name: "교대역", lat: 35.8560, lng: 128.5925 },
+        { name: "명덕역", lat: 35.8576, lng: 128.5902 },
+        { name: "반월당역", lat: 35.8654, lng: 128.5936 },
+        { name: "중앙로역", lat: 35.8714, lng: 128.5941 },
+        { name: "대구역", lat: 35.8770, lng: 128.5960 },
+        { name: "칠성시장역", lat: 35.8763, lng: 128.6074 },
+        { name: "신천역", lat: 35.8711, lng: 128.6186 },
+        { name: "동대구역", lat: 35.8797, lng: 128.6284 },
+        { name: "동구청역", lat: 35.8863, lng: 128.6360 },
+        { name: "아양교역", lat: 35.8906, lng: 128.6479 },
+        { name: "동촌역", lat: 35.8901, lng: 128.6601 },
+        { name: "해안역", lat: 35.8900, lng: 128.6738 },
+        { name: "방촌역", lat: 35.8872, lng: 128.6874 },
+        { name: "용계역", lat: 35.8756, lng: 128.6946 },
+        { name: "율하역", lat: 35.8672, lng: 128.6957 },
+        { name: "신기역", lat: 35.8703, lng: 128.7061 },
+        { name: "반야월역", lat: 35.8693, lng: 128.7188 },
+        { name: "각산역", lat: 35.8690, lng: 128.7297 },
+        { name: "안심역", lat: 35.8670, lng: 128.7410 },
+        // Line 2
+        { name: "문양역", lat: 35.8617, lng: 128.4610 },
+        { name: "다사역", lat: 35.8579, lng: 128.4651 },
+        { name: "대실역", lat: 35.8532, lng: 128.4647 },
+        { name: "강창역", lat: 35.8475, lng: 128.4891 },
+        { name: "계명대역", lat: 35.8534, lng: 128.4975 },
+        { name: "성서산업단지역", lat: 35.8526, lng: 128.5085 },
+        { name: "이곡역", lat: 35.8524, lng: 128.5188 },
+        { name: "용산역", lat: 35.8528, lng: 128.5289 },
+        { name: "죽전역", lat: 35.8497, lng: 128.5367 },
+        { name: "감삼역", lat: 35.8535, lng: 128.5447 },
+        { name: "두류역", lat: 35.8572, lng: 128.5543 },
+        { name: "내당역", lat: 35.8574, lng: 128.5639 },
+        { name: "반고개역", lat: 35.8613, lng: 128.5724 },
+        { name: "청라언덕역", lat: 35.8648, lng: 128.5833 },
+        { name: "경대병원역", lat: 35.8623, lng: 128.6046 },
+        { name: "대구은행역", lat: 35.8595, lng: 128.6163 },
+        { name: "범어역", lat: 35.8590, lng: 128.6253 },
+        { name: "수성구청역", lat: 35.8587, lng: 128.6323 },
+        { name: "만촌역", lat: 35.8533, lng: 128.6469 },
+        { name: "담티역", lat: 35.8493, lng: 128.6596 },
+        { name: "연호역", lat: 35.8436, lng: 128.6705 },
+        { name: "대공원역", lat: 35.8427, lng: 128.6811 },
+        { name: "고산역", lat: 35.8415, lng: 128.6961 },
+        { name: "신매역", lat: 35.8411, lng: 128.7099 },
+        { name: "사월역", lat: 35.8398, lng: 128.7201 },
+        { name: "정평역", lat: 35.8306, lng: 128.7297 },
+        { name: "임당역", lat: 35.8291, lng: 128.7431 },
+        { name: "영남대역", lat: 35.8360, lng: 128.7533 },
+        // Line 3
+        { name: "칠곡경대병원역", lat: 35.9567, lng: 128.5644 },
+        { name: "학정역", lat: 35.9497, lng: 128.5630 },
+        { name: "팔거역", lat: 35.9416, lng: 128.5583 },
+        { name: "동천역", lat: 35.9358, lng: 128.5574 },
+        { name: "칠곡운암역", lat: 35.9288, lng: 128.5533 },
+        { name: "구암역", lat: 35.9216, lng: 128.5516 },
+        { name: "태전역", lat: 35.9127, lng: 128.5455 },
+        { name: "매천역", lat: 35.9044, lng: 128.5416 },
+        { name: "매천시장역", lat: 35.8988, lng: 128.5461 },
+        { name: "팔달역", lat: 35.8916, lng: 128.5477 },
+        { name: "공단역", lat: 35.8894, lng: 128.5550 },
+        { name: "만평역", lat: 35.8897, lng: 128.5622 },
+        { name: "팔달시장역", lat: 35.8858, lng: 128.5683 },
+        { name: "원대역", lat: 35.8827, lng: 128.5727 },
+        { name: "북구청역", lat: 35.8858, lng: 128.5833 },
+        { name: "달성공원역", lat: 35.8758, lng: 128.5833 },
+        { name: "서문시장역", lat: 35.8697, lng: 128.5816 },
+        { name: "남산역", lat: 35.8588, lng: 128.5847 },
+        { name: "건들바위역", lat: 35.8566, lng: 128.5994 },
+        { name: "대봉교역", lat: 35.8538, lng: 128.6094 },
+        { name: "수성시장역", lat: 35.8519, lng: 128.6186 },
+        { name: "수성구민운동장역", lat: 35.8488, lng: 128.6252 },
+        { name: "어린이세상역", lat: 35.8438, lng: 128.6277 },
+        { name: "황금역", lat: 35.8366, lng: 128.6269 },
+        { name: "수성못역", lat: 35.8277, lng: 128.6272 },
+        { name: "지산역", lat: 35.8219, lng: 128.6316 },
+        { name: "범물역", lat: 35.8177, lng: 128.6388 },
+        { name: "용지역", lat: 35.8144, lng: 128.6472 }
+    ];
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371000;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+    }
+
+    function findNearestStation(lat, lon) {
+        if (!lat || !lon) return null;
+        let minD = Infinity;
+        let nearest = null;
+        for (let s of DAEGU_SUBWAY_STATIONS) {
+            const d = calculateDistance(lat, lon, s.lat, s.lng);
+            if (d < minD) {
+                minD = d;
+                nearest = s;
+            }
+        }
+        if (!nearest) return null;
+        const walkMin = Math.max(1, Math.round(minD / 75));
+        return {
+            name: nearest.name,
+            distance: minD,
+            walkMin: walkMin
+        };
+    }
 
     // Helper: Geocoding fallback
     async function geocodeAddress(address) {
@@ -622,8 +763,73 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
             
+            const contentStr = (post.content || '').normalize('NFC');
+            const titleStr = (post.title || '').normalize('NFC');
+            const fullText = (titleStr + ' ' + contentStr).toLowerCase();
+
+            // Smart Filter 1: 무권리
+            const isMookwonri = fullText.includes('무권리') || fullText.includes('권리금 없음') || fullText.includes('권리금없음') || fullText.includes('권리금 0');
+
+            // Smart Filter 2: 1층 상가
+            let isFloor1 = false;
+            const floorMatch = contentStr.match(/해당\s*층수?\s*:\s*([^<\n|]+)/i);
+            if (floorMatch && floorMatch[1].includes('1층')) {
+                isFloor1 = true;
+            } else if (titleStr.includes('1층') || /1층\s*(?:상가|점포|사무실)/.test(contentStr)) {
+                isFloor1 = true;
+            }
+
+            // Smart Filter 3: 50평+ 대형
+            let maxPyeong = 0;
+            const titlePyeong = titleStr.match(/([0-9]+(?:\.[0-9]+)?)\s*평/);
+            if (titlePyeong) {
+                maxPyeong = Math.max(maxPyeong, parseFloat(titlePyeong[1]));
+            }
+            const postLines = contentStr.split('\n');
+            for (let line of postLines) {
+                if (line.includes(':')) {
+                    const parts = line.split(':');
+                    const rawKey = parts[0].replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]/g, '').trim();
+                    const val = parts.slice(1).join(':').trim();
+                    if (['전용면적', '공급면적', '면적', '전용'].includes(rawKey)) {
+                        const pm = val.match(/([0-9]+(?:\.[0-9]+)?)\s*평/);
+                        if (pm) maxPyeong = Math.max(maxPyeong, parseFloat(pm[1]));
+                        const m2 = val.match(/([0-9]+(?:\.[0-9]+)?)\s*(?:㎡|m2)/);
+                        if (m2) maxPyeong = Math.max(maxPyeong, parseFloat(m2[1]) / 3.30578);
+                    }
+                }
+            }
+            const isLarge50 = maxPyeong >= 50;
+
+            // Smart Filter 4: 주차편리 (대장 5대 이상 OR 본문 편의 강조)
+            let isParkingConvenient = false;
+            const parkingLine = contentStr.match(/주차\s*:\s*([^\n<]+)/i);
+            if (parkingLine) {
+                const pCars = parkingLine[1].match(/(\d+)\s*대/g);
+                if (pCars) {
+                    for (let pc of pCars) {
+                        const num = parseInt(pc);
+                        if (num >= 5) isParkingConvenient = true;
+                    }
+                }
+            }
+            const parkingKeywords = ['주차편리', '주차 편리', '고정주차', '고정 주차', '자주식', '전용주차', '전용 주차', '주차 매우', '주차공간 넉넉', '주차 용이', '주차용이', '주차 넉넉', '주차 공간 넉넉'];
+            if (parkingKeywords.some(kw => fullText.includes(kw))) {
+                isParkingConvenient = true;
+            }
+
+            // Smart Filter 5: 매매만
+            const isSale = titleStr.includes('매매') || (post.category && post.category.includes('매매')) || fullText.includes('거래형태 : 매매') || fullText.includes('거래형태: 매매') || fullText.includes('매매가') || fullText.includes('매매 금액');
+
+            // Smart Filter 6: 역세권 (대구 1, 2, 3호선 역 600m 이내)
+            let nearestStation = null;
+            let isNearStation = false;
             let coords = post.coordinates;
             if (coords && coords.length === 2) {
+                nearestStation = findNearestStation(coords[0], coords[1]);
+                if ((nearestStation && nearestStation.distance <= 600) || fullText.includes('역세권')) {
+                    isNearStation = true;
+                }
                 processed.push({
                     id: post.id,
                     title: post.title,
@@ -634,7 +840,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     parking: parsedDetails.parking,
                     image: firstImage,
                     description: cleanDesc,
-                    original: post
+                    original: post,
+                    isMookwonri: isMookwonri,
+                    isFloor1: isFloor1,
+                    isLarge50: isLarge50,
+                    isParkingConvenient: isParkingConvenient,
+                    isSale: isSale,
+                    nearestStation: nearestStation,
+                    isNearStation: isNearStation
                 });
             }
         }
@@ -658,19 +871,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (Array.isArray(parsed) && parsed.length > 0) {
                 allProperties = processPostsToProperties(parsed);
                 if (allProperties.length > 0) {
-                    activeProperties = allProperties;
-                    renderListAndMarkers(allProperties);
+                    renderFilterChips();
+                    applyFilters();
                     
                     const urlParams = new URLSearchParams(window.location.search);
                     const searchId = urlParams.get('id');
                     if (searchId) {
                         const target = allProperties.find(p => String(p.id) === String(searchId));
                         if (target) {
-                            if (window.innerWidth < 768) {
-                                listPanel.classList.add('hidden');
-                                detailDrawer.classList.remove('translate-y-full');
-                            }
-                            openPropertyDetail(target);
+                            setTimeout(() => { window.handleCardClick(target.id); }, 250);
                         }
                     }
                 }
@@ -682,19 +891,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const rawPosts = await getPosts();
         allProperties = processPostsToProperties(rawPosts);
-        activeProperties = allProperties;
-        renderListAndMarkers(allProperties);
+        renderFilterChips();
+        applyFilters();
 
         const urlParams = new URLSearchParams(window.location.search);
         const searchId = urlParams.get('id');
         if (searchId) {
             const target = allProperties.find(p => String(p.id) === String(searchId));
             if (target) {
-                if (window.innerWidth < 768) {
-                    listPanel.classList.add('hidden');
-                    detailDrawer.classList.remove('translate-y-full');
-                }
-                openPropertyDetail(target);
+                setTimeout(() => { window.handleCardClick(target.id); }, 250);
             }
         }
     } catch(e) {
@@ -752,9 +957,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <p class="text-[10px] text-muted truncate">${item.address}</p>
                             ${item.description ? `<p class="text-[11px] text-ink/70 line-clamp-2 leading-relaxed mt-0.5">${item.description}</p>` : ''}
                         </div>
-                        <div class="flex flex-wrap gap-xs shrink-0 mt-xs">
+                        <div class="flex flex-wrap gap-xs shrink-0 mt-xs items-center">
                             <span class="bg-primary-container/10 text-primary-container px-2 py-0.5 rounded text-[10px] font-bold">${item.price}</span>
                             ${item.area && item.area !== '면적 정보 없음' ? `<span class="bg-dark-chip text-white px-2 py-0.5 rounded text-[10px] font-semibold">${item.area}</span>` : ''}
+                            ${item.nearestStation && item.nearestStation.distance <= 600 ? `<span class="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 px-1.5 py-0.5 rounded text-[10px] font-bold">🚇 ${item.nearestStation.name} 도보 ${item.nearestStation.walkMin}분</span>` : ''}
+                            ${item.isFloor1 ? `<span class="bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 px-1.5 py-0.5 rounded text-[10px] font-bold">1층</span>` : ''}
+                            ${item.isMookwonri ? `<span class="bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200/80 px-1.5 py-0.5 rounded text-[10px] font-bold">무권리</span>` : ''}
                         </div>
                     </div>
                 </div>
@@ -777,6 +985,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <div class="flex items-center gap-1.5 flex-wrap">
                                 <span class="bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/80 px-2 py-0.5 rounded text-[11px] font-extrabold">${item.price}</span>
                                 ${hasArea ? `<span class="bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 px-2 py-0.5 rounded text-[11px] font-extrabold">📐 ${item.area}</span>` : ''}
+                                ${item.nearestStation && item.nearestStation.distance <= 600 ? `<span class="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 px-2 py-0.5 rounded text-[11px] font-extrabold">🚇 ${item.nearestStation.name} (${item.nearestStation.distance}m·${item.nearestStation.walkMin}분)</span>` : ''}
                             </div>
                             <h4 class="font-bold text-ink text-xs sm:text-sm leading-tight mt-0.5 line-clamp-2">${item.title}</h4>
                             <p class="text-[11px] text-muted leading-tight truncate">${item.address}</p>
@@ -807,49 +1016,160 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // 5. Search filtering logic
+    // 5. Smart Filters & Search Logic
     const searchInput = document.getElementById('search-input');
     const searchBtn = document.getElementById('search-button');
+    const filterResetBtn = document.getElementById('filter-reset-btn');
+
+    function renderFilterChips() {
+        const desktopContainer = document.getElementById('desktop-filter-chips');
+        const mobileContainer = document.getElementById('mobile-filter-bar');
+        if (!desktopContainer || !mobileContainer) return;
+
+        const counts = {
+            all: allProperties.length,
+            mookwonri: allProperties.filter(p => p.isMookwonri).length,
+            floor1: allProperties.filter(p => p.isFloor1).length,
+            large50: allProperties.filter(p => p.isLarge50).length,
+            parking: allProperties.filter(p => p.isParkingConvenient).length,
+            station: allProperties.filter(p => p.isNearStation).length,
+            sale: allProperties.filter(p => p.isSale).length
+        };
+
+        const filters = [
+            { id: 'all', label: '전체보기', emoji: '👀', count: counts.all },
+            { id: 'mookwonri', label: '무권리', emoji: '🔥', count: counts.mookwonri },
+            { id: 'floor1', label: '1층 상가', emoji: '🏪', count: counts.floor1 },
+            { id: 'large50', label: '50평+ 대형', emoji: '🏢', count: counts.large50 },
+            { id: 'parking', label: '주차편리', emoji: '🚗', count: counts.parking },
+            { id: 'station', label: '역세권(600m)', emoji: '🚇', count: counts.station },
+            { id: 'sale', label: '매매만', emoji: '💰', count: counts.sale }
+        ];
+
+        desktopContainer.innerHTML = filters.map(f => {
+            const isActive = f.id === currentFilterId;
+            return `
+                <button type="button" data-filter="${f.id}" onclick="setSmartFilter('${f.id}')" class="filter-chip px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border ${isActive ? 'bg-primary text-white border-primary shadow-xs' : 'bg-surface-container/80 text-ink/80 hover:bg-surface-container hover:text-ink border-hairline/60'}">
+                    <span>${f.emoji}</span>
+                    <span>${f.label}</span>
+                    <span class="text-[10px] opacity-75 font-normal">(${f.count})</span>
+                </button>
+            `;
+        }).join('');
+
+        mobileContainer.innerHTML = filters.map(f => {
+            const isActive = f.id === currentFilterId;
+            return `
+                <button type="button" data-filter="${f.id}" onclick="setSmartFilter('${f.id}')" class="mobile-filter-chip shrink-0 whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border ${isActive ? 'bg-primary text-white border-primary shadow-xs' : 'bg-surface-container/80 text-ink/80 hover:bg-surface-container border-hairline/60'}">
+                    <span>${f.emoji}</span>
+                    <span>${f.label}</span>
+                    <span class="text-[10px] opacity-75 font-normal">(${f.count})</span>
+                </button>
+            `;
+        }).join('');
+    }
+
+    function updateFilterChipUI() {
+        document.querySelectorAll('#desktop-filter-chips .filter-chip').forEach(btn => {
+            const id = btn.getAttribute('data-filter');
+            if (id === currentFilterId) {
+                btn.className = 'filter-chip px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border bg-primary text-white border-primary shadow-xs';
+            } else {
+                btn.className = 'filter-chip px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border bg-surface-container/80 text-ink/80 hover:bg-surface-container hover:text-ink border-hairline/60';
+            }
+        });
+        document.querySelectorAll('#mobile-filter-bar .mobile-filter-chip').forEach(btn => {
+            const id = btn.getAttribute('data-filter');
+            if (id === currentFilterId) {
+                btn.className = 'mobile-filter-chip shrink-0 whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border bg-primary text-white border-primary shadow-xs';
+            } else {
+                btn.className = 'mobile-filter-chip shrink-0 whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border bg-surface-container/80 text-ink/80 hover:bg-surface-container border-hairline/60';
+            }
+        });
+        if (filterResetBtn) {
+            if (currentFilterId === 'all') {
+                filterResetBtn.classList.add('hidden');
+            } else {
+                filterResetBtn.classList.remove('hidden');
+            }
+        }
+    }
+
+    window.setSmartFilter = function(filterId) {
+        if (currentFilterId === filterId && filterId !== 'all') {
+            currentFilterId = 'all';
+        } else {
+            currentFilterId = filterId;
+        }
+        applyFilters();
+    };
+
+    if (filterResetBtn) {
+        filterResetBtn.addEventListener('click', () => {
+            window.setSmartFilter('all');
+        });
+    }
+
+    function applyFilters() {
+        const query = (searchInput ? searchInput.value : '').normalize('NFC').toLowerCase().trim();
+        
+        let filtered = allProperties;
+
+        // 1. Smart filter
+        if (currentFilterId !== 'all') {
+            filtered = filtered.filter(p => {
+                switch(currentFilterId) {
+                    case 'mookwonri': return p.isMookwonri;
+                    case 'floor1': return p.isFloor1;
+                    case 'large50': return p.isLarge50;
+                    case 'parking': return p.isParkingConvenient;
+                    case 'station': return p.isNearStation;
+                    case 'sale': return p.isSale;
+                    default: return true;
+                }
+            });
+        }
+
+        // 2. Keyword query search
+        if (query) {
+            filtered = filtered.filter(p => {
+                const isPureDigits = /^\d+$/.test(query);
+                if (isPureDigits) {
+                    const regexPropNum = new RegExp('매물번호\\s*:\\s*' + query + '(?!\\d)');
+                    const cleanContentNoImg = (p.original.content || '').normalize('NFC').replace(/!\[.*?\]\(.*?\)/g, '');
+                    const matchesExactNo = regexPropNum.test(p.title || '') || regexPropNum.test(cleanContentNoImg);
+                    if (matchesExactNo) {
+                        return true;
+                    }
+                }
+
+                const keywords = query.split(/\s+/).filter(k => k.length > 0);
+                let searchableContent = (p.original.content || '').normalize('NFC');
+                searchableContent = searchableContent.replace(/!\[.*?\]\(.*?\)/g, '');
+                searchableContent = searchableContent.replace(/✨.*?✨/g, '');
+                searchableContent = searchableContent.replace(/😊.*?010-3548-4000/g, '');
+                searchableContent = searchableContent.replace(/📢.*?📢/g, '');
+
+                const matchHist = searchableContent.match(/(?:🏬\s*)?주요\s*중개\s*이력/);
+                if (matchHist) {
+                    searchableContent = searchableContent.slice(0, matchHist.index);
+                }
+                const searchTarget = ((p.title || '') + ' ' + (p.address || '') + ' ' + (p.price || '') + ' ' + searchableContent).normalize('NFC').toLowerCase();
+                return keywords.every(kw => searchTarget.includes(kw));
+            });
+        }
+
+        activeProperties = filtered;
+        renderListAndMarkers(filtered);
+        updateFilterChipUI();
+    }
 
     const triggerSearch = () => {
         const query = searchInput.value.normalize('NFC').toLowerCase().trim();
         if (query) {
             recordSearchQuery(searchInput.value);
         }
-        if (!query) {
-            activeProperties = allProperties;
-            renderListAndMarkers(allProperties);
-            return;
-        }
-        
-        const filtered = allProperties.filter(p => {
-            const isPureDigits = /^\d+$/.test(query);
-            if (isPureDigits) {
-                const regexPropNum = new RegExp('매물번호\\s*:\\s*' + query + '(?!\\d)');
-                const cleanContentNoImg = (p.original.content || '').normalize('NFC').replace(/!\[.*?\]\(.*?\)/g, '');
-                const matchesExactNo = regexPropNum.test(p.title || '') || regexPropNum.test(cleanContentNoImg);
-                if (matchesExactNo) {
-                    return true;
-                }
-            }
-
-            const keywords = query.split(/\s+/).filter(k => k.length > 0);
-            let searchableContent = (p.original.content || '').normalize('NFC');
-            searchableContent = searchableContent.replace(/!\[.*?\]\(.*?\)/g, '');
-            searchableContent = searchableContent.replace(/✨.*?✨/g, '');
-            searchableContent = searchableContent.replace(/😊.*?010-3548-4000/g, '');
-            searchableContent = searchableContent.replace(/📢.*?📢/g, '');
-
-            const matchHist = searchableContent.match(/(?:🏬\s*)?주요\s*중개\s*이력/);
-            if (matchHist) {
-                searchableContent = searchableContent.slice(0, matchHist.index);
-            }
-            const searchTarget = ((p.title || '') + ' ' + (p.address || '') + ' ' + (p.price || '') + ' ' + searchableContent).normalize('NFC').toLowerCase();
-            return keywords.every(kw => searchTarget.includes(kw));
-        });
-        
-        activeProperties = filtered;
-        renderListAndMarkers(filtered);
+        applyFilters();
     };
 
     if (searchBtn) {
