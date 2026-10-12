@@ -113,7 +113,7 @@ export default async function handler(req, res) {
             method: 'PUT',
             headers: { ...headers, 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              message: `analytics: record ${type}`,
+              message: `analytics: record ${type} [skip vercel]`,
               content: contentBase64,
               ...(sha ? { sha } : {})
             })
@@ -215,7 +215,7 @@ export default async function handler(req, res) {
         method: 'PUT',
         headers: { ...headers, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: 'analytics: clear search logs',
+          message: 'analytics: clear search logs [skip vercel]',
           content: contentBase64,
           sha
         })

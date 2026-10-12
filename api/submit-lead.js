@@ -221,7 +221,7 @@ export default async function handler(req, res) {
           const contentBase64 = Buffer.from(jsonStr, 'utf8').toString('base64');
 
           const body = {
-            message: `feat: new customer lead submission by ${leadObj.name}`,
+            message: `feat: new customer lead submission by ${leadObj.name} [skip vercel]`,
             content: contentBase64
           };
           if (sha) body.sha = sha;
@@ -277,7 +277,7 @@ export default async function handler(req, res) {
         method: 'PUT',
         headers: { ...headers, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: id ? `feat: delete lead ${id}` : 'feat: clear all leads',
+          message: id ? `feat: delete lead ${id} [skip vercel]` : 'feat: clear all leads [skip vercel]',
           content: contentBase64,
           sha
         })
