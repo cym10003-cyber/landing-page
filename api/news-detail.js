@@ -419,7 +419,7 @@ export default async function handler(req, res) {
             if (mImg) {
               const imgUrl = mImg[1];
               const loadingAttr = imgIndex === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
-              preImages.push(`<img src="${imgUrl}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" ${loadingAttr} alt="매물 사진" />`);
+              preImages.push(`<img src="${imgUrl}" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main','raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main');}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" ${loadingAttr} alt="매물 사진" />`);
               imgIndex++;
             } else if (!isHtmlPost) {
               let cleanText = trimmed

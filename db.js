@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v199");
+console.log("Antigravity db.js version: 20260715_v200");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v199";
+const APP_VERSION = "20260715_v200";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -511,7 +511,7 @@ function renderMarkdown(src) {
 
     // Convert Markdown image syntax ![alt](url) to HTML <img> tags in HTML mode
     cleanHtml = cleanHtml.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, url) => {
-      return `<img src="${url}" alt="${alt || '매물 이미지'}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" loading="lazy">`;
+      return `<img src="${url}" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main','raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main');}" alt="${alt || '매물 이미지'}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" loading="lazy">`;
     });
 
     // Format any raw unformatted plain text outside HTML tags into clean <p> blocks
@@ -733,7 +733,7 @@ function renderMarkdown(src) {
       const { altText, url } = imgPlaceholders[parseInt(idx, 10)];
       const cleanUrl = url.trim();
       if (/^(https?:\/\/|data:image\/)/i.test(cleanUrl)) {
-        return `<img src="${cleanUrl}" alt="${altText}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" />`;
+        return `<img src="${cleanUrl}" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main','raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main');}" alt="${altText}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" />`;
       }
       return `![${altText}](${url})`;
     });
@@ -840,6 +840,9 @@ async function uploadImageFile(file) {
             
             if (putRes.ok) {
               const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@main/images/${filename}`;
+              try {
+                fetch(`https://purge.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@main/images/${filename}`).catch(() => {});
+              } catch (e) {}
               return resolve(rawUrl);
             } else {
               const errorMsg = await putRes.text();
@@ -1765,7 +1768,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v199`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v200`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
