@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 4768,
-  "todayPageviews": 63,
+  "totalPageviews": 4769,
+  "todayPageviews": 64,
   "dailyHistory": {
     "2026-08-31": {
       "date": "2026-08-31",
@@ -5229,10 +5229,10 @@
     },
     "2026-10-15": {
       "date": "2026-10-15",
-      "count": 63,
+      "count": 64,
       "referrers": {
         "네이버 (Naver)": 8,
-        "내부 이동": 19,
+        "내부 이동": 20,
         "직접 접속 / 카카오톡 링크": 14,
         "landing-page-qiypbicvj-choi-real.vercel.app": 1,
         "landing-page-h02bshlto-choi-real.vercel.app": 1,
