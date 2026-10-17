@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 4982,
-  "todayPageviews": 0,
+  "totalPageviews": 4983,
+  "todayPageviews": 1,
   "dailyHistory": {
     "2026-08-31": {
       "date": "2026-08-31",
@@ -5547,8 +5547,10 @@
     },
     "2026-10-17": {
       "date": "2026-10-17",
-      "count": 0,
-      "referrers": {},
+      "count": 1,
+      "referrers": {
+        "landing-page-lubzbpxy0-choi-real.vercel.app": 1
+      },
       "postViews": {
         "1784004629080": 1
       }
