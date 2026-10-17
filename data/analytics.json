@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 5002,
-  "todayPageviews": 20,
+  "totalPageviews": 5003,
+  "todayPageviews": 21,
   "dailyHistory": {
     "2026-08-31": {
       "date": "2026-08-31",
@@ -5547,7 +5547,7 @@
     },
     "2026-10-17": {
       "date": "2026-10-17",
-      "count": 20,
+      "count": 21,
       "referrers": {
         "landing-page-lubzbpxy0-choi-real.vercel.app": 1,
         "landing-page-24c2pj3be-choi-real.vercel.app": 1,
@@ -5564,7 +5564,8 @@
         "landing-page-j45y0vahh-choi-real.vercel.app": 1,
         "landing-page-e782jrit4-choi-real.vercel.app": 1,
         "landing-page-1zk8ztkwt-choi-real.vercel.app": 1,
-        "landing-page-5ln9ikmfh-choi-real.vercel.app": 1
+        "landing-page-5ln9ikmfh-choi-real.vercel.app": 1,
+        "landing-page-pd8qjp95z-choi-real.vercel.app": 1
       },
       "postViews": {
         "1784004629080": 1,
