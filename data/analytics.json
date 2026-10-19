@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 5216,
-  "todayPageviews": 2,
+  "totalPageviews": 5217,
+  "todayPageviews": 3,
   "dailyHistory": {
     "2026-08-31": {
       "date": "2026-08-31",
@@ -5794,9 +5794,10 @@
     },
     "2026-10-19": {
       "date": "2026-10-19",
-      "count": 2,
+      "count": 3,
       "referrers": {
-        "내부 이동": 2
+        "내부 이동": 2,
+        "landing-page-h2xuuluq9-choi-real.vercel.app": 1
       },
       "postViews": {}
     }
