@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 5447,
-  "todayPageviews": 52,
+  "totalPageviews": 5448,
+  "todayPageviews": 53,
   "dailyHistory": {
     "2026-08-31": {
       "date": "2026-08-31",
@@ -5899,7 +5899,7 @@
     },
     "2026-10-20": {
       "date": "2026-10-20",
-      "count": 52,
+      "count": 53,
       "referrers": {
         "내부 이동": 9,
         "네이버 (Naver)": 13,
@@ -5927,7 +5927,8 @@
         "landing-page-fa7niglin-choi-real.vercel.app": 1,
         "landing-page-rl45nbe1c-choi-real.vercel.app": 1,
         "landing-page-res1vmfrr-choi-real.vercel.app": 1,
-        "landing-page-od7e9brnr-choi-real.vercel.app": 1
+        "landing-page-od7e9brnr-choi-real.vercel.app": 1,
+        "landing-page-qcc3n7go3-choi-real.vercel.app": 1
       },
       "postViews": {
         "1784000130889": 1,
