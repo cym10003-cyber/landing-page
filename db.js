@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v200");
+console.log("Antigravity db.js version: 20260715_v201");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v200";
+const APP_VERSION = "20260715_v201";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -949,7 +949,8 @@ function getReferrerSource() {
         if (host.includes('google.com') || host.includes('google.co.kr')) return '구글 (Google)';
         if (host.includes('daum.net') || host.includes('kakao.com')) return '다음 / 카카오';
         if (host.includes('instagram.com') || host.includes('facebook.com')) return 'SNS (인스타/페북)';
-        if (host.includes('choi114.com')) return '내부 이동';
+        if (host.includes('chatgpt.com')) return 'ChatGPT (AI 추천 검색)';
+        if (host.includes('choi114.com') || host.endsWith('vercel.app') || host.includes('vercel.app') || host.includes('localhost') || host.includes('127.0.0.1')) return '내부 이동';
         return host.replace('www.', '');
     } catch(e) {
         return '직접 접속 / 카카오톡 링크';
@@ -1118,9 +1119,21 @@ function getAnalyticsSummary(remoteData = null) {
 
         // Helper: Format referrer list for a given referrers map
         const calcReferrers = (refMap, targetTotal = 0) => {
-            const mapCopy = { ...refMap };
+            const mapCopy = {};
             let currentSum = 0;
-            Object.values(mapCopy).forEach(c => currentSum += (c || 0));
+            if (refMap && typeof refMap === 'object') {
+                Object.entries(refMap).forEach(([src, count]) => {
+                    const c = count || 0;
+                    if (c <= 0) return;
+                    if (src === '내부 이동' || src.includes('vercel.app') || src.includes('choi114.com') || src.includes('localhost') || src.includes('127.0.0.1')) {
+                        return;
+                    }
+                    let cleanSrc = src;
+                    if (cleanSrc.includes('chatgpt.com')) cleanSrc = 'ChatGPT (AI 추천 검색)';
+                    mapCopy[cleanSrc] = (mapCopy[cleanSrc] || 0) + c;
+                    currentSum += c;
+                });
+            }
 
             if (targetTotal > currentSum) {
                 const diff = targetTotal - currentSum;
@@ -1258,17 +1271,38 @@ async function syncAnalyticsWithRemote() {
         let localLogs = JSON.parse(localStorage.getItem('analytics_search_logs') || '[]');
         let localViews = JSON.parse(localStorage.getItem('analytics_post_views') || '{}');
 
+        // Scrub any vercel or internal referrers from local storage
+        if (localDaily && typeof localDaily === 'object') {
+            Object.values(localDaily).forEach(day => {
+                if (day && day.referrers) {
+                    Object.keys(day.referrers).forEach(k => {
+                        if (k === '내부 이동' || k.includes('vercel.app') || k.includes('choi114.com') || k.includes('localhost') || k.includes('127.0.0.1')) {
+                            delete day.referrers[k];
+                        }
+                    });
+                }
+            });
+        }
+
         localPageData.total = Math.max(localPageData.total || 0, remoteData.totalPageviews || 0);
 
         if (remoteData.dailyHistory) {
             Object.entries(remoteData.dailyHistory).forEach(([date, dayObj]) => {
                 if (!localDaily[date]) {
-                    localDaily[date] = dayObj;
+                    localDaily[date] = JSON.parse(JSON.stringify(dayObj));
+                    if (localDaily[date].referrers) {
+                        Object.keys(localDaily[date].referrers).forEach(k => {
+                            if (k === '내부 이동' || k.includes('vercel.app') || k.includes('choi114.com') || k.includes('localhost') || k.includes('127.0.0.1')) {
+                                delete localDaily[date].referrers[k];
+                            }
+                        });
+                    }
                 } else {
                     localDaily[date].count = Math.max(localDaily[date].count || 0, dayObj.count || 0);
                     if (dayObj.referrers) {
                         if (!localDaily[date].referrers) localDaily[date].referrers = {};
                         Object.entries(dayObj.referrers).forEach(([src, cnt]) => {
+                            if (src === '내부 이동' || src.includes('vercel.app') || src.includes('choi114.com') || src.includes('localhost') || src.includes('127.0.0.1')) return;
                             localDaily[date].referrers[src] = Math.max(localDaily[date].referrers[src] || 0, cnt);
                         });
                     }
@@ -1768,7 +1802,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v200`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v201`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;

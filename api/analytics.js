@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
@@ -92,8 +95,12 @@ export default async function handler(req, res) {
             analytics.dailyHistory[todayStr].count = (analytics.dailyHistory[todayStr].count || 0) + 1;
 
             const referrer = bodyData.referrer || '직접 접속 / 카카오톡 링크';
-            if (!analytics.dailyHistory[todayStr].referrers) analytics.dailyHistory[todayStr].referrers = {};
-            analytics.dailyHistory[todayStr].referrers[referrer] = (analytics.dailyHistory[todayStr].referrers[referrer] || 0) + 1;
+            if (referrer !== '내부 이동' && !referrer.includes('vercel.app') && !referrer.includes('choi114.com') && !referrer.includes('localhost') && !referrer.includes('127.0.0.1')) {
+              let cleanRef = referrer;
+              if (cleanRef.includes('chatgpt.com')) cleanRef = 'ChatGPT (AI 추천 검색)';
+              if (!analytics.dailyHistory[todayStr].referrers) analytics.dailyHistory[todayStr].referrers = {};
+              analytics.dailyHistory[todayStr].referrers[cleanRef] = (analytics.dailyHistory[todayStr].referrers[cleanRef] || 0) + 1;
+            }
           } else if (type === 'postview' && bodyData.postId) {
             const pid = String(bodyData.postId);
             if (!analytics.dailyHistory[todayStr].postViews) analytics.dailyHistory[todayStr].postViews = {};
