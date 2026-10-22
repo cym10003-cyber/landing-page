@@ -1,4 +1,51 @@
+# Robots.txt for 최가네부동산 (https://www.choi114.com)
+
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /news-write
+Disallow: /news-write.html
+Disallow: /api/
 
-Sitemap: https://choi114.com/sitemap.xml
+# Explicitly allow Major Search Engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
+User-agent: Daum
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# AI Search & Generative Engine Optimization (GEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Sitemaps
+Sitemap: https://www.choi114.com/sitemap.xml
+Sitemap: https://www.choi114.com/rss.xml

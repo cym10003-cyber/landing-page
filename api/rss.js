@@ -29,8 +29,8 @@ export default function handler(req, res) {
   // Get the latest 30 posts
   const latestPosts = posts.slice(0, 30);
 
-  const host = req.headers.host || 'choi114.com';
-  const protocol = req.headers['x-forwarded-proto'] || 'https';
+  const host = 'www.choi114.com';
+  const protocol = 'https';
   const baseUrl = `${protocol}://${host}`;
 
   const rssItems = latestPosts.map(post => {

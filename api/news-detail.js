@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-function parsePostMeta(post, baseUrl = 'https://choi114.com') {
+function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   const content = (post.content || '').replace(/<style[\s\S]*?<\/style>/gi, '');
   const title = post.title || '';
   const address = post.address || '';
@@ -245,7 +245,7 @@ function parsePostMeta(post, baseUrl = 'https://choi114.com') {
     ]
   };
 
-  return { metaTitle, metaDesc, ogImage, postUrl, schemaJsonLd };
+  return { metaTitle, metaDesc, ogImage, postUrl, schemaJsonLd, cleanLoc, coords };
 }
 
 export default async function handler(req, res) {
@@ -321,8 +321,8 @@ export default async function handler(req, res) {
           }
         }
         if (post) {
-          const host = req.headers.host || 'choi114.com';
-          const protocol = req.headers['x-forwarded-proto'] || 'https';
+          const host = 'www.choi114.com';
+          const protocol = 'https';
           const baseUrl = `${protocol}://${host}`;
 
           const pid = post.id;
@@ -339,7 +339,8 @@ export default async function handler(req, res) {
 
           // Inject initial post object script tag string into <head> for 0ms instant client rendering
           const initialPostScript = `\n<script>\nwindow.__INITIAL_POST__ = ${JSON.stringify(post)};\n</script>\n`;
-          html = html.replace('</head>', `${jsonLdScript}${initialPostScript}</head>`);
+          const geoMeta = `\n<meta name="geo.region" content="KR-27" />\n<meta name="geo.placename" content="${cleanLoc}" />\n<meta name="geo.position" content="${coords[0] || 35.8599};${coords[1] || 128.6146}" />\n<meta name="ICBM" content="${coords[0] || 35.8599}, ${coords[1] || 128.6146}" />\n`;
+          html = html.replace('</head>', `${jsonLdScript}${initialPostScript}${geoMeta}</head>`);
 
           // Replace meta and title tags dynamically for OpenGraph crawlers
           html = html
