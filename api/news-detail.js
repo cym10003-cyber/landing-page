@@ -399,10 +399,7 @@ export default async function handler(req, res) {
               '<h1 id="post-title" class="font-display-hero-mobile md:font-subsection-h3 text-2xl md:text-3xl text-ink font-bold leading-snug">로딩 중...</h1>',
               `<h1 id="post-title" class="font-display-hero-mobile md:font-subsection-h3 text-2xl md:text-3xl text-ink font-bold leading-snug">${post.title}</h1>`
             )
-            .replace(
-              '<span id="post-date" class="text-xs text-slate-500 font-medium"></span>',
-              `<span id="post-date" class="text-xs text-slate-500 font-medium">${post.date || ''}</span>`
-            );
+            .replace(/<span id="post-date"[^>]*>.*?<\/span>/i, '<span id="post-date" class="hidden"></span>');
 
           // Parse content into pre-rendered images HTML and clean text HTML
           const isHtmlPost = /<\/?(div|p|span|table|tr|td|th|tbody|thead|style|img|iframe|h[1-6]|ul|ol|li|br|b|i|strong|em|u|a|section|article|header|footer)[\s>\/]/i.test(post.content || '');
