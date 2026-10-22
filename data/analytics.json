@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 5738,
-  "todayPageviews": 5,
+  "totalPageviews": 5739,
+  "todayPageviews": 6,
   "dailyHistory": {
     "2026-08-31": {
       "date": "2026-08-31",
@@ -6121,10 +6121,10 @@
     },
     "2026-10-22": {
       "date": "2026-10-22",
-      "count": 5,
+      "count": 6,
       "referrers": {
         "직접 접속 / 카카오톡 링크": 1,
-        "내부 이동": 3,
+        "내부 이동": 4,
         "landing-page-3wfx0kwic-choi-real.vercel.app": 1
       },
       "postViews": {
