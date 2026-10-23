@@ -1,5 +1,18 @@
 [
   {
+    "id": 1792737753290,
+    "type": "buyer",
+    "name": "최이명",
+    "phone": "010",
+    "category": "상가",
+    "location": "",
+    "floor": "전체층",
+    "pyeong": "",
+    "budget": "",
+    "notes": "",
+    "date": "2026. 10. 23. 오후 3:42:33"
+  },
+  {
     "id": 1790956559623,
     "type": "buyer",
     "name": "김은주",
