@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v210");
+console.log("Antigravity db.js version: 20260715_v211");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v210";
+const APP_VERSION = "20260715_v211";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1805,7 +1805,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v210`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v211`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
@@ -2309,6 +2309,8 @@ window.switchQuickBarTab = switchQuickBarTab;
 
 function renderQuickBarFavorites() {
     const container = document.getElementById('quickbar-modal-content');
+    const footer = document.getElementById('quickbar-fav-footer');
+    if (footer) footer.classList.remove('hidden');
     if (!container) return;
     const favs = getFavoritePosts();
 
@@ -2322,7 +2324,7 @@ function renderQuickBarFavorites() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     매물 사진 우측 상단의 하트(♥)를 누르면 관심 매물에 쏙 담아 한 번에 비교 상담받으실 수 있습니다!
                 </p>
-                <a href="property-news.html?v=20260715_v210" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v211" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -2391,7 +2393,7 @@ function renderQuickBarRecents() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     관심 있는 매물 상세페이지를 방문하시면 이곳에 자동으로 최근 본 목록이 기록됩니다!
                 </p>
-                <a href="property-news.html?v=20260715_v210" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v211" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -2471,6 +2473,8 @@ function clearAllRecents() {
 }
 window.clearAllRecents = clearAllRecents;
 
+let _lastKakaoMsg = '';
+
 function consultFavoritesKakao() {
     const checkedBoxes = Array.from(document.querySelectorAll('input[name="fav-item-check"]:checked'));
     const favs = getFavoritePosts();
@@ -2487,19 +2491,148 @@ function consultFavoritesKakao() {
     });
     msg += `\n위 매물들에 대해 비교 상담 및 방문 안내 부탁드립니다!`;
 
+    _lastKakaoMsg = msg;
+
+    // 1. Copy to clipboard immediately
+    let copySuccess = false;
     try {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(msg);
-            showToast('📋 매물 문의 내용이 복사되었습니다! 카톡창에 바로 붙여넣기하세요.');
+            copySuccess = true;
+        } else {
+            const ta = document.createElement('textarea');
+            ta.value = msg;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            copySuccess = document.execCommand('copy');
+            document.body.removeChild(ta);
         }
     } catch(e) {}
 
-    const kakaoUrl = `https://open.kakao.com/o/smt2j0Ri`;
-    setTimeout(() => {
+    // 2. Open Kakao in new tab
+    const kakaoUrl = 'https://open.kakao.com/o/smt2j0Ri';
+    try {
         window.open(kakaoUrl, '_blank');
-    }, 400);
+    } catch(e) {}
+
+    // 3. Immediately switch modal to persistent, step-by-step guidance screen
+    showKakaoCopyGuideView(selected, msg);
 }
 window.consultFavoritesKakao = consultFavoritesKakao;
+
+function showKakaoCopyGuideView(selected, msg) {
+    const container = document.getElementById('quickbar-modal-content');
+    const footer = document.getElementById('quickbar-fav-footer');
+    if (footer) footer.classList.add('hidden'); // hide default footer while guide is shown
+    if (!container) return;
+
+    // Escape HTML for safe preview
+    const escapedMsg = msg.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    container.innerHTML = `
+        <div class="py-1 px-1 flex flex-col gap-3">
+            <!-- Large Attention Banner -->
+            <div class="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border-2 border-amber-400 dark:border-amber-600 shadow-sm flex items-start gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-[#fee500] text-[#191600] flex items-center justify-center shrink-0 shadow-xs border border-[#d4be00]">
+                    <span class="material-symbols-outlined text-[26px]">content_copy</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-1.5 mb-1">
+                        <span class="bg-[#fee500] text-[#191600] text-[10px] font-black px-2 py-0.5 rounded-full border border-[#d4be00]">복사 완료</span>
+                        <span class="text-xs font-bold text-amber-900 dark:text-amber-200">매물 ${selected.length}건 묶음</span>
+                    </div>
+                    <h4 class="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white leading-snug">
+                        상담 내용이 복사되었습니다! 🎉
+                    </h4>
+                    <p class="text-xs text-slate-700 dark:text-slate-300 mt-1 leading-relaxed">
+                        새로 열린 카카오톡 대화창에서 <b>[붙여넣기]</b>만 하시면 아래 내용이 전송됩니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Visual 2-Step How-To Cards -->
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex flex-col gap-1 shadow-xs">
+                    <span class="font-black text-[#003891] dark:text-blue-300 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">desktop_windows</span> PC 이용 손님
+                    </span>
+                    <span class="text-slate-600 dark:text-slate-300 font-medium leading-tight">
+                        카톡 대화창 클릭 후 키보드에서 <b>Ctrl + V</b> 누르기
+                    </span>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex flex-col gap-1 shadow-xs">
+                    <span class="font-black text-[#003891] dark:text-blue-300 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">smartphone</span> 모바일 손님
+                    </span>
+                    <span class="text-slate-600 dark:text-slate-300 font-medium leading-tight">
+                        채팅 입력창을 1초간 꾹 누른 뒤 <b>[붙여넣기]</b> 터치
+                    </span>
+                </div>
+            </div>
+
+            <!-- Copied Message Preview Box -->
+            <div class="flex flex-col gap-1.5">
+                <div class="flex items-center justify-between text-xs">
+                    <span class="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[15px] text-slate-500">assignment</span>
+                        복사된 상담 문구 미리보기
+                    </span>
+                    <button type="button" onclick="recopyKakaoMessage()" class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5 cursor-pointer">
+                        <span class="material-symbols-outlined text-[14px]">refresh</span> 내용 다시 복사
+                    </button>
+                </div>
+                <div id="kakao-preview-box" class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-mono leading-relaxed whitespace-pre-wrap select-all max-h-36 overflow-y-auto border border-slate-200 dark:border-slate-700">
+${escapedMsg}
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-2 pt-1">
+                <button type="button" onclick="openKakaoDirectly()" class="w-full py-3 px-3 rounded-xl bg-[#fee500] hover:bg-[#fdd835] text-[#191600] font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all cursor-pointer border border-[#d4be00]">
+                    <span class="material-symbols-outlined text-[18px]">chat</span>
+                    <span>카카오톡 대화창 바로가기 (창 다시 열기)</span>
+                </button>
+                <div class="flex gap-2">
+                    <button type="button" onclick="renderQuickBarFavorites()" class="flex-1 py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center justify-center gap-1 transition-all cursor-pointer">
+                        <span class="material-symbols-outlined text-[15px]">arrow_back</span>
+                        <span>목록으로 돌아가기</span>
+                    </button>
+                    <button type="button" onclick="closeQuickBarModal()" class="py-2.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-bold text-xs transition-all cursor-pointer">
+                        확인 및 닫기
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+window.showKakaoCopyGuideView = showKakaoCopyGuideView;
+
+function recopyKakaoMessage() {
+    if (!_lastKakaoMsg) return;
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(_lastKakaoMsg);
+        } else {
+            const ta = document.createElement('textarea');
+            ta.value = _lastKakaoMsg;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+        }
+        showToast('📋 상담 내용이 다시 복사되었습니다! 카톡에 붙여넣기하세요.');
+    } catch(e) {}
+}
+window.recopyKakaoMessage = recopyKakaoMessage;
+
+function openKakaoDirectly() {
+    window.open('https://open.kakao.com/o/smt2j0Ri', '_blank');
+}
+window.openKakaoDirectly = openKakaoDirectly;
 
 // Auto-initialize Quick Bar when DOM is ready
 if (document.readyState === 'loading') {
