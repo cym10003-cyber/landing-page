@@ -3,7 +3,7 @@
         window.location.replace("https://choi114.com" + window.location.pathname + window.location.search);
     }
     // Force browser to load fresh property-news.html page if version mismatch
-    const currentVersion = '20260715_v203';
+    const currentVersion = '20260715_v204';
     const params = new URLSearchParams(window.location.search);
     if (params.get('v') !== currentVersion) {
         params.set('v', currentVersion);
@@ -186,10 +186,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed flex items-center"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-<a id="nav-maemul" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v203">매물리스트</a>
+<a id="nav-maemul" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v204">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v203">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a>
+<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v204">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -374,22 +374,23 @@
 </div>
 </div>
 </footer>
-<div class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-hairline flex justify-around items-center py-2 z-50 md:hidden shadow-lg">
-  <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">home</span>
+<!-- Mobile Bottom Navigation Bar (High Converting Call Bar) -->
+<div class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest/95 backdrop-blur-md border-t border-hairline py-2 px-3 z-50 md:hidden flex items-center gap-2 shadow-strong-elevated">
+  <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-11 h-11 shrink-0">
+    <span class="material-symbols-outlined text-[22px]">home</span>
     <span class="text-[10px] font-medium">홈</span>
   </a>
-  <a href="about.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">info</span>
-    <span class="text-[10px] font-medium">소개</span>
+  <a href="map.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-11 h-11 shrink-0">
+    <span class="material-symbols-outlined text-[22px]">map</span>
+    <span class="text-[10px] font-medium">지도</span>
   </a>
-  <a href="map.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">map</span>
-    <span class="text-[10px] font-medium">매물지도</span>
+  <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-1 bg-[#fee500] hover:bg-[#fdd835] text-[#3c1e1e] py-2.5 px-2 rounded-xl shadow-xs font-black text-xs active:scale-95 whitespace-nowrap">
+    <span class="material-symbols-outlined text-[17px]">chat</span>
+    <span>카톡상담</span>
   </a>
-  <a href="tel:010-3548-4000" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">call</span>
-    <span class="text-[10px] font-medium">전화</span>
+  <a href="tel:010-3548-4000" class="flex-[1.2] flex items-center justify-center gap-1.5 bg-[#003891] hover:bg-blue-800 text-white py-2.5 px-3 rounded-xl shadow-md font-black text-xs active:scale-95 whitespace-nowrap">
+    <span class="material-symbols-outlined text-[18px] text-amber-300">call</span>
+    <span>010-3548-4000</span>
   </a>
 </div>
 
@@ -405,10 +406,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a id="mobile-nav-maemul" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v203">매물리스트</a>
+      <a id="mobile-nav-maemul" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v204">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a id="mobile-nav-news" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v203">부동산 소식</a>
+      <a id="mobile-nav-news" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v204">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -419,7 +420,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v203"></script>
+<script src="db.js?v=20260715_v204"></script>
 <script>
 let allPosts = [];
 let selectedCategory = 'ALL';
@@ -1210,6 +1211,19 @@ function renderList(shouldShuffle = false) {
                         <h2 class="font-subsection-h3 text-lg mb-xs text-ink group-hover:text-primary-container transition-colors line-clamp-2">${post.title}</h2>
                     </div>
                     <p class="font-body text-body text-muted line-clamp-2">${textSummary}</p>
+                    <div class="pt-2 border-t border-hairline flex items-center justify-between gap-2 mt-auto" onclick="event.stopPropagation()">
+                        <span class="text-xs font-bold text-slate-500 flex items-center gap-0.5">
+                            <span class="material-symbols-outlined text-[14px] text-primary">tag</span> 매물번호:${post.id}
+                        </span>
+                        <div class="flex items-center gap-1.5">
+                            <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation(); prepareKakaoConsultationFromList('${post.id}')" class="inline-flex items-center gap-1 bg-[#fee500] text-[#3c1e1e] hover:bg-[#fdd835] text-[11px] font-black px-2.5 py-1.5 rounded-lg shadow-xs transition-all active:scale-95">
+                                <span class="material-symbols-outlined text-[13px]">chat</span> 카톡
+                            </a>
+                            <a href="tel:010-3548-4000" onclick="event.stopPropagation()" class="inline-flex items-center gap-1 bg-[#003891] hover:bg-blue-800 text-white text-[11px] font-black px-2.5 py-1.5 rounded-lg shadow-xs transition-all active:scale-95">
+                                <span class="material-symbols-outlined text-[13px]">call</span> 전화
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </article>
         `;
