@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html class="light" lang="ko">
-<head><script>if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("https://www.choi114.com"+window.location.pathname+window.location.search);}</script><script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script><script defer src="/_vercel/insights/script.js"></script>
+<head><script>
+function getPropertyDisplayNumber(p) {
+    if (!p) return '';
+    const fullText = ((p.title || '') + ' ' + (p.content || '')).normalize('NFC');
+    const m = fullText.match(/매물\s*번호\s*[:：]?\s*([0-9]{3,5})/i);
+    if (m) return m[1];
+    const m2 = fullText.match(/(?:NO|No|no)\.?\s*([0-9]{3,5})/);
+    if (m2) return m2[1];
+    return String(p.id || '').slice(-4);
+}
+if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("https://www.choi114.com"+window.location.pathname+window.location.search);}</script><script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script><script defer src="/_vercel/insights/script.js"></script>
     <meta charset="utf-8"/><meta name="geo.region" content="KR-27" /><meta name="geo.placename" content="대구광역시 수성구" /><meta name="geo.position" content="35.8599;128.6146" /><meta name="ICBM" content="35.8599, 128.6146" />
     <link rel="canonical" href="https://www.choi114.com/map" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -228,6 +238,45 @@
             overflow: hidden !important;
             overscroll-behavior: none !important;
         }
+    
+        /* High-Contrast Leaflet Popup Action Buttons */
+        .leaflet-popup-content a.popup-call-btn {
+            background-color: #003891 !important;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            font-weight: 900 !important;
+            box-shadow: 0 2px 6px rgba(0, 56, 145, 0.4) !important;
+        }
+        .leaflet-popup-content a.popup-call-btn:hover {
+            background-color: #002561 !important;
+            color: #ffffff !important;
+        }
+        .leaflet-popup-content a.popup-call-btn span {
+            color: #ffeb3b !important;
+        }
+        .leaflet-popup-content a.popup-detail-btn {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            font-weight: 800 !important;
+            border: 1px solid #334155 !important;
+        }
+        .leaflet-popup-content a.popup-detail-btn:hover {
+            background-color: #1e293b !important;
+            color: #ffffff !important;
+        }
+        .leaflet-popup-content a.popup-kakao-btn {
+            background-color: #fee500 !important;
+            color: #191600 !important;
+            text-decoration: none !important;
+            font-weight: 900 !important;
+            border: 1px solid #d4be00 !important;
+        }
+        .leaflet-popup-content a.popup-kakao-btn:hover {
+            background-color: #fdd835 !important;
+            color: #191600 !important;
+        }
+
     </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebPage","name":"대구 상가·사무실 매물지도 - 최가네부동산","url":"https://www.choi114.com/map","description":"대구 수성구, 달구벌대로변 상가 및 사무실 매물의 위치를 한눈에 확인하는 위치기반 인터랙티브 매물지도입니다.","hasPart":{"@type":"Map","mapType":"https://schema.org/VenueMap","url":"https://www.choi114.com/map"}}
@@ -241,10 +290,10 @@
 <div class="hidden md:flex gap-lg items-center font-nav text-nav">
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v204">매물리스트</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v205">매물리스트</a>
     <a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v204">부동산 소식</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v205">부동산 소식</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button>
 </div>
@@ -337,10 +386,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v204">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v205">매물리스트</a>
       <a class="text-primary hover:text-primary py-sm border-b border-hairline/50 font-bold" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v204">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v205">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -373,7 +422,7 @@
 </div>
 
 <!-- Load Database and Page Logic -->
-<script src="db.js?v=20260715_v204"></script>
+<script src="db.js?v=20260715_v205"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Setup Mobile Menu Drawer
@@ -1164,16 +1213,19 @@ ${conditionBlock}
                             <p class="text-[11px] text-muted leading-tight truncate">${item.address}</p>
                             ${item.description ? `<div class="text-[11px] text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-2 rounded-lg border border-slate-100 dark:border-slate-700/60 leading-snug line-clamp-2 mt-0.5 font-medium">${item.description}</div>` : ''}
                         </div>
-                        <div class="flex flex-col gap-1.5 mt-1">
-                            <a href="tel:010-3548-4000" class="w-full bg-[#003891] hover:bg-blue-800 text-white font-button text-xs py-2 rounded-lg text-center transition-colors shadow-sm flex items-center justify-center gap-1.5 no-underline font-black active:scale-95">
-                                <span class="material-symbols-outlined text-[16px] text-amber-300">call</span> 010-3548-4000 전화상담
+                                                <div class="flex flex-col gap-2 mt-2">
+                            <a href="tel:010-3548-4000" class="popup-call-btn w-full py-2.5 px-3 rounded-xl text-center shadow-md flex items-center justify-center gap-2 no-underline active:scale-95" style="background:#003891 !important; color:#ffffff !important; text-decoration:none !important;">
+                                <span class="material-symbols-outlined text-[19px]" style="color:#ffeb3b !important;">call</span>
+                                <span style="color:#ffffff !important; font-size:13px; font-weight:900;">010-3548-4000 전화상담</span>
                             </a>
-                            <div class="flex gap-1.5">
-                                <a href="news-detail.html?id=${item.id}" class="popup-detail-btn flex-1 bg-surface-container-high hover:bg-surface-dim text-ink border border-slate-200 dark:border-slate-700 font-button text-xs py-1.5 rounded-lg text-center transition-colors block no-underline font-bold">
-                                    상세보기
+                            <div class="flex gap-2">
+                                <a href="news-detail.html?id=${item.id}" class="popup-detail-btn flex-1 py-2 px-2 rounded-xl text-center no-underline active:scale-95 flex items-center justify-center gap-1 shadow-xs" style="background:#0f172a !important; color:#ffffff !important; font-size:12px; font-weight:800; text-decoration:none !important;">
+                                    <span class="material-symbols-outlined text-[15px]" style="color:#ffffff !important;">visibility</span>
+                                    <span style="color:#ffffff !important;">상세보기</span>
                                 </a>
-                                <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" onclick="prepareKakaoConsultationFromMap('${item.id}')" class="flex-1 bg-[#fee500] hover:bg-[#fdd835] text-[#3c1e1e] font-button text-xs py-1.5 rounded-lg text-center transition-colors shadow-xs flex items-center justify-center gap-1 no-underline font-black">
-                                    <span class="material-symbols-outlined text-[14px]">chat</span> 카톡상담
+                                <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" onclick="prepareKakaoConsultationFromMap('${item.id}')" class="popup-kakao-btn flex-1 py-2 px-2 rounded-xl text-center no-underline active:scale-95 flex items-center justify-center gap-1 shadow-xs" style="background:#fee500 !important; color:#191600 !important; font-size:12px; font-weight:900; text-decoration:none !important;">
+                                    <span class="material-symbols-outlined text-[15px]" style="color:#191600 !important;">chat</span>
+                                    <span style="color:#191600 !important;">카톡상담</span>
                                 </a>
                             </div>
                         </div>

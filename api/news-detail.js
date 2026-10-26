@@ -1,3 +1,13 @@
+function extractPropertyNumber(p) {
+  if (!p) return '';
+  const fullText = ((p.title || '') + ' ' + (p.content || '')).normalize('NFC');
+  const m = fullText.match(/매물\s*번호\s*[:：]?\s*([0-9]{3,5})/i);
+  if (m) return m[1];
+  const m2 = fullText.match(/(?:NO|No|no)\.?\s*([0-9]{3,5})/);
+  if (m2) return m2[1];
+  return String(p.id || '').slice(-4);
+}
+
 import fs from 'fs';
 import path from 'path';
 
@@ -399,7 +409,7 @@ export default async function handler(req, res) {
               '<h1 id="post-title" class="font-display-hero-mobile md:font-subsection-h3 text-2xl md:text-3xl text-ink font-bold leading-snug">로딩 중...</h1>',
               `<h1 id="post-title" class="font-display-hero-mobile md:font-subsection-h3 text-2xl md:text-3xl text-ink font-bold leading-snug">${post.title}</h1>`
             )
-            .replace('<span id="call-guide-pid">1684</span>', `<span id="call-guide-pid">${post.id}</span>`)
+            .replace('<span id="call-guide-pid">1684</span>', `<span id="call-guide-pid">${extractPropertyNumber(post)}</span>`)
             .replace(/<span id="post-date"[^>]*>.*?<\/span>/i, '<span id="post-date" class="hidden"></span>');
 
           // Parse content into pre-rendered images HTML and clean text HTML
