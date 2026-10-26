@@ -290,10 +290,10 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
 <div class="hidden md:flex gap-lg items-center font-nav text-nav">
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v205">매물리스트</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v206">매물리스트</a>
     <a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v205">부동산 소식</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v206">부동산 소식</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button>
 </div>
@@ -386,10 +386,10 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v205">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v206">매물리스트</a>
       <a class="text-primary hover:text-primary py-sm border-b border-hairline/50 font-bold" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v205">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v206">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -422,7 +422,7 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
 </div>
 
 <!-- Load Database and Page Logic -->
-<script src="db.js?v=20260715_v205"></script>
+<script src="db.js?v=20260715_v206"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Setup Mobile Menu Drawer
@@ -1205,6 +1205,7 @@ ${conditionBlock}
                     <div class="p-3 flex flex-col gap-2 min-w-[240px]">
                         <div class="flex flex-col gap-1">
                             <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="bg-blue-900 text-white px-2 py-0.5 rounded text-[11px] font-black shadow-xs">매물번호: ${getPropertyDisplayNumber(item.original || item)}</span>
                                 <span class="bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/80 px-2 py-0.5 rounded text-[11px] font-extrabold">${item.price}</span>
                                 ${hasArea ? `<span class="bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 px-2 py-0.5 rounded text-[11px] font-extrabold">📐 ${item.area}</span>` : ''}
                                 ${item.nearestStation && (item.nearestStation.distance <= 600 || item.nearestStation.fromText) ? `<span class="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 px-2 py-0.5 rounded text-[11px] font-extrabold">🚇 ${item.nearestStation.name} (${item.nearestStation.distance}m·${item.nearestStation.walkMin}분)</span>` : ''}
@@ -1213,19 +1214,19 @@ ${conditionBlock}
                             <p class="text-[11px] text-muted leading-tight truncate">${item.address}</p>
                             ${item.description ? `<div class="text-[11px] text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-2 rounded-lg border border-slate-100 dark:border-slate-700/60 leading-snug line-clamp-2 mt-0.5 font-medium">${item.description}</div>` : ''}
                         </div>
-                                                <div class="flex flex-col gap-2 mt-2">
-                            <a href="tel:010-3548-4000" class="popup-call-btn w-full py-2.5 px-3 rounded-xl text-center shadow-md flex items-center justify-center gap-2 no-underline active:scale-95" style="background:#003891 !important; color:#ffffff !important; text-decoration:none !important;">
+                                                                        <div class="flex flex-col gap-2 mt-2">
+                            <a href="tel:010-3548-4000" class="popup-call-btn w-full py-2.5 px-3 rounded-xl text-center shadow-md flex items-center justify-center gap-2 no-underline active:scale-95" style="background:#003891 !important; color:#ffffff !important; text-decoration:none !important; border:none !important;">
                                 <span class="material-symbols-outlined text-[19px]" style="color:#ffeb3b !important;">call</span>
-                                <span style="color:#ffffff !important; font-size:13px; font-weight:900;">010-3548-4000 전화상담</span>
+                                <span style="color:#ffffff !important; font-size:14px; font-weight:900; letter-spacing:0.5px;">010-3548-4000 전화상담</span>
                             </a>
                             <div class="flex gap-2">
-                                <a href="news-detail.html?id=${item.id}" class="popup-detail-btn flex-1 py-2 px-2 rounded-xl text-center no-underline active:scale-95 flex items-center justify-center gap-1 shadow-xs" style="background:#0f172a !important; color:#ffffff !important; font-size:12px; font-weight:800; text-decoration:none !important;">
-                                    <span class="material-symbols-outlined text-[15px]" style="color:#ffffff !important;">visibility</span>
-                                    <span style="color:#ffffff !important;">상세보기</span>
+                                <a href="news-detail.html?id=${item.id}" class="popup-detail-btn flex-1 py-2 px-2 rounded-xl text-center no-underline active:scale-95 flex items-center justify-center gap-1 shadow-xs" style="background:#0f172a !important; color:#ffffff !important; font-size:12px; font-weight:900; text-decoration:none !important; border:1px solid #334155 !important;">
+                                    <span class="material-symbols-outlined text-[15px]" style="color:#38bdf8 !important;">visibility</span>
+                                    <span style="color:#ffffff !important; font-weight:900;">상세보기</span>
                                 </a>
-                                <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" onclick="prepareKakaoConsultationFromMap('${item.id}')" class="popup-kakao-btn flex-1 py-2 px-2 rounded-xl text-center no-underline active:scale-95 flex items-center justify-center gap-1 shadow-xs" style="background:#fee500 !important; color:#191600 !important; font-size:12px; font-weight:900; text-decoration:none !important;">
+                                <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" onclick="prepareKakaoConsultationFromMap('${item.id}')" class="popup-kakao-btn flex-1 py-2 px-2 rounded-xl text-center no-underline active:scale-95 flex items-center justify-center gap-1 shadow-xs" style="background:#fee500 !important; color:#191600 !important; font-size:12px; font-weight:900; text-decoration:none !important; border:1px solid #d4be00 !important;">
                                     <span class="material-symbols-outlined text-[15px]" style="color:#191600 !important;">chat</span>
-                                    <span style="color:#191600 !important;">카톡상담</span>
+                                    <span style="color:#191600 !important; font-weight:900;">카톡상담</span>
                                 </a>
                             </div>
                         </div>

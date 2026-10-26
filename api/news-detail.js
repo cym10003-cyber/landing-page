@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 function extractPropertyNumber(p) {
   if (!p) return '';
   const fullText = ((p.title || '') + ' ' + (p.content || '')).normalize('NFC');
@@ -8,8 +10,6 @@ function extractPropertyNumber(p) {
   return String(p.id || '').slice(-4);
 }
 
-import fs from 'fs';
-import path from 'path';
 
 function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   const content = (post.content || '').replace(/<style[\s\S]*?<\/style>/gi, '');
