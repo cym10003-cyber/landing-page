@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+
 function extractPropertyNumber(p) {
   if (!p) return '';
   const fullText = ((p.title || '') + ' ' + (p.content || '')).normalize('NFC');
@@ -9,7 +10,6 @@ function extractPropertyNumber(p) {
   if (m2) return m2[1];
   return String(p.id || '').slice(-4);
 }
-
 
 function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   const content = (post.content || '').replace(/<style[\s\S]*?<\/style>/gi, '');
@@ -78,19 +78,14 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   if (areaStr) {
     const numMatch = areaStr.match(/([0-9.]+)/);
     if (numMatch) {
-      pyeongNum = Math.round(parseFloat(numMatch[1]));
-      if (pyeongNum >= 10) {
-        const decade = Math.floor(pyeongNum / 10) * 10;
-        pyeongBandStr = `${decade}평대`;
-
-        // If e.g. 48평, 58평, 28평 (remainder >= 7), also include round-up decade (50평대, 60평대, 30평대)
-        if (pyeongNum % 10 >= 7) {
-          upperBandStr = `${decade + 10}평대`;
-        }
-
-        if (pyeongNum % 10 !== 0) {
-          fullAreaDisplay = `${areaStr}(${pyeongBandStr})`;
-        }
+      pyeongNum = Math.floor(parseFloat(numMatch[1]));
+      const bandFloor = Math.floor(pyeongNum / 10) * 10;
+      if (bandFloor >= 10) {
+        pyeongBandStr = `${bandFloor}평대`;
+        upperBandStr = `${bandFloor}평`;
+      }
+      if (!areaStr.includes('평')) {
+        fullAreaDisplay = `${areaStr} (${pyeongNum}평)`;
       }
     }
   }
@@ -98,35 +93,34 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   const mFloor = content.match(/(?:해당층|층수|층)\s*:\s*([^\n]+)/i);
   let floorStr = '';
   if (mFloor) {
-    const rawF = mFloor[1].trim();
-    const fMatch = rawF.match(/((?:지하\s*)?[0-9]+층)/);
-    if (fMatch) floorStr = fMatch[1].replace(/\s+/g, '');
-    else floorStr = rawF.split('/')[0].trim();
+    floorStr = mFloor[1].trim().split('/')[0].trim();
+    if (!floorStr.includes('층') && /^\d+$/.test(floorStr)) {
+      floorStr += '층';
+    }
   } else {
-    const fInContent = (title + ' ' + content).match(/((?:지하\s*)?[0-9]+층)/);
-    if (fInContent) floorStr = fInContent[1].replace(/\s+/g, '');
+    const fInContent = (title + ' ' + content).match(/([0-9]+층|지하[0-9]+층|B[0-9]+층)/i);
+    if (fInContent) floorStr = fInContent[1];
   }
 
   const specParts = [];
   if (floorStr) specParts.push(floorStr);
   if (fullAreaDisplay) specParts.push(fullAreaDisplay);
-  const specStr = specParts.join(' · ');
+  const specStr = specParts.join(' ');
 
-  // 5. Type & Trade
-  let pType = '상가/사무실';
-  if (/사무실/i.test(title) || /사무실/i.test(content)) pType = '사무실';
-  if (/상가/i.test(title) || /상가/i.test(content)) {
-    pType = (pType !== '사무실') ? '상가' : '상가·사무실';
-  }
-  if (/병의원|병원|의원/i.test(title) || /병의원|병원|의원/i.test(content)) pType = '병의원';
-
+  // 5. Intelligent Category & Keyword Generation
   let trade = '임대';
-  if (/매매/i.test(title) || /매매/i.test(content) || sale) trade = '매매';
-  const fullType = `${pType} ${trade}`;
+  if (/매매/i.test(title) || /매매가/i.test(content) || sale) trade = '매매';
 
-  // 3-Tier Local Keyword extraction: Dong, Gu, Daegu (e.g. "범어동사무실임대 수성구사무실임대 대구사무실임대")
-  const fullLocText = `${cleanLoc} ${title} ${content.slice(0, 150)}`;
-  const mGu = fullLocText.match(/(달서구|수성구|중구|서구|북구|동구|남구|달성군)/);
+  let fullType = '상가 임대';
+  if (/사무실/i.test(title)) fullType = `사무실 ${trade}`;
+  else if (/상가/i.test(title)) fullType = `상가 ${trade}`;
+  else if (/공장/i.test(title)) fullType = `공장 ${trade}`;
+  else if (/병의원|병원|의원/i.test(title)) fullType = `병의원 ${trade}`;
+  else if (/학원/i.test(title)) fullType = `학원 ${trade}`;
+  else if (post.category && post.category !== '매물리스트') fullType = `${post.category} ${trade}`;
+
+  const fullLocText = cleanLoc + ' ' + title + ' ' + content;
+  const mGu = fullLocText.match(/([가-힣]+구)/);
   const mDong = fullLocText.match(/([가-힣]{2,6}(?:동[0-9]*가?|읍|면))/);
   const guStr = mGu ? mGu[1] : '';
   const dongStr = mDong ? mDong[1] : '';
@@ -166,7 +160,7 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   const uniqueKws = [...new Set(kwList)];
   const targetKw = uniqueKws.join(' ');
 
-  // Clean Professional High-Ranking Title Format: [키워드] | [지역] [매물종류] (층수·평수 / 가격) - 최가네부동산 010-3548-4000
+  // Clean Professional High-Ranking Title Format
   let metaTitle = `${targetKw} | ${cleanLoc} ${fullType}`;
   const detailParts = [];
   if (specStr) detailParts.push(specStr);
@@ -209,7 +203,7 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
           'seller': {
             '@type': 'RealEstateAgent',
             'name': '최가네부동산공인중개사사무소',
-            'telephone': '010 - 3548 - 4000',
+            'telephone': '010-3548-4000',
             'image': `${baseUrl}/og_home.jpg`
           }
         },
@@ -224,16 +218,10 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
           },
           'geo': {
             '@type': 'GeoCoordinates',
-            'latitude': coords[0] || 35.8589,
-            'longitude': coords[1] || 128.632
+            'latitude': coords[0] || 35.8599,
+            'longitude': coords[1] || 128.6146
           }
         }
-      },
-      {
-        '@type': 'WebSite',
-        'name': '최가네부동산공인중개사사무소',
-        'alternateName': '최가네부동산',
-        'url': baseUrl
       },
       {
         '@type': 'BreadcrumbList',
@@ -247,8 +235,14 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
           {
             '@type': 'ListItem',
             'position': 2,
-            'name': '매물리스트',
-            'item': `${baseUrl}/property-news?category=매물리스트`
+            'name': post.category || '매물리스트',
+            'item': `${baseUrl}/property-news?category=${encodeURIComponent(post.category || '매물리스트')}`
+          },
+          {
+            '@type': 'ListItem',
+            'position': 3,
+            'name': metaTitle,
+            'item': postUrl
           }
         ]
       }
@@ -259,7 +253,14 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
 }
 
 export default async function handler(req, res) {
-  const { id } = req.query;
+  let id = req.query?.id;
+  if (!id && req.url) {
+    try {
+      const parsedUrl = new URL(req.url, 'https://www.choi114.com');
+      id = parsedUrl.searchParams.get('id');
+    } catch (e) {}
+  }
+
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 
   const htmlPath = path.join(process.cwd(), 'templates', 'news-detail-template.html');
@@ -336,7 +337,7 @@ export default async function handler(req, res) {
           const baseUrl = `${protocol}://${host}`;
 
           const pid = post.id;
-          const { metaTitle, metaDesc, ogImage, postUrl, schemaJsonLd } = parsePostMeta(post, baseUrl);
+          const { metaTitle, metaDesc, ogImage, postUrl, schemaJsonLd, cleanLoc, coords } = parsePostMeta(post, baseUrl);
 
           // Compile escaped values
           const titleEscaped = metaTitle.replace(/"/g, '&quot;');
@@ -400,16 +401,20 @@ export default async function handler(req, res) {
             );
 
           // Pre-render Title, Category, and Date in HTML to eliminate 0ms loading text delay
+          const realPropNo = extractPropertyNumber(post);
           html = html
             .replace(
-              '<span id="post-category" class="bg-dark-chip text-white px-2.5 py-1 rounded text-xs font-semibold">매물리스트</span>',
-              `<span id="post-category" class="bg-dark-chip text-white px-2.5 py-1 rounded text-xs font-semibold">${post.category || '일반'}</span>`
+              /<span id="post-category"[^>]*>.*?<\/span>/i,
+              `<span id="post-category" class="bg-dark-chip text-white px-2.5 py-1 rounded text-xs font-semibold whitespace-nowrap">${post.category || '일반'}</span>`
             )
             .replace(
-              '<h1 id="post-title" class="font-display-hero-mobile md:font-subsection-h3 text-2xl md:text-3xl text-ink font-bold leading-snug">로딩 중...</h1>',
+              /<h1 id="post-title"[^>]*>.*?<\/h1>/i,
               `<h1 id="post-title" class="font-display-hero-mobile md:font-subsection-h3 text-2xl md:text-3xl text-ink font-bold leading-snug">${post.title}</h1>`
             )
-            .replace('<span id="call-guide-pid">1684</span>', `<span id="call-guide-pid">${extractPropertyNumber(post)}</span>`)
+            .replace(
+              /<span id="call-guide-pid"[^>]*>.*?<\/span>/i,
+              `<span id="call-guide-pid">${realPropNo}</span>`
+            )
             .replace(/<span id="post-date"[^>]*>.*?<\/span>/i, '<span id="post-date" class="hidden"></span>');
 
           // Parse content into pre-rendered images HTML and clean text HTML
@@ -424,48 +429,41 @@ export default async function handler(req, res) {
             const trimmed = line.trim();
             if (!trimmed) continue;
 
-            const mImg = trimmed.match(/!\[.*?\]\((.*?)\)/);
-            if (mImg) {
-              const imgUrl = mImg[1];
-              const loadingAttr = imgIndex === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
-              preImages.push(`<img src="${imgUrl}" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main','raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main');}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" ${loadingAttr} alt="매물 사진" />`);
+            const imgMatch = trimmed.match(/!\[(.*?)\]\((.*?)\)/);
+            if (imgMatch) {
+              const alt = imgMatch[1] || `${post.title} 사진 ${imgIndex + 1}`;
+              const src = imgMatch[2];
+              preImages.push(`
+                <div class="mb-4 rounded-xl overflow-hidden shadow-card-soft bg-surface-container border border-hairline">
+                  <img src="${src}" alt="${alt.replace(/"/g, '&quot;')}" class="w-full h-auto object-cover max-h-[600px] mx-auto" loading="lazy" />
+                </div>
+              `);
               imgIndex++;
             } else if (!isHtmlPost) {
-              let cleanText = trimmed
-                .replace(/!\[.*?\]\(.*?\)/g, '')
-                .replace(/\[(.*?)\]\(.*?\)/g, '$1')
-                .replace(/[#*`_-]/g, '')
-                .trim();
-              if (cleanText) {
-                preText.push(`<p style="margin-bottom: 12px; line-height: 1.6;">${cleanText}</p>`);
-              }
+              preText.push(`<p class="mb-3">${line}</p>`);
             }
           }
 
-          const preImagesHtml = preImages.join('\n');
-          const preTextHtml = preText.join('\n');
-
-          if (preImagesHtml) {
+          if (preImages.length > 0) {
             html = html.replace(
               '<div id="post-images" class="text-ink leading-relaxed prose prose-blue max-w-none text-base hidden">',
-              `<div id="post-images" class="text-ink leading-relaxed prose prose-blue max-w-none text-base">${preImagesHtml}`
+              `<div id="post-images" class="text-ink leading-relaxed prose prose-blue max-w-none text-base mb-6">\n${preImages.join('\n')}`
             );
           }
 
-          html = html.replace('id="map-link" href="map.html"', `id="map-link" href="map.html?id=${pid}"`);
-          if (preTextHtml) {
-            html = html.replace('내용을 불러오는 중입니다...', preTextHtml);
+          if (preText.length > 0) {
+            html = html.replace(
+              '<div id="post-text-content" class="text-ink leading-relaxed prose prose-blue max-w-none text-base">\n            내용을 불러오는 중입니다...\n        </div>',
+              `<div id="post-text-content" class="text-ink leading-relaxed prose prose-blue max-w-none text-base">\n${preText.join('\n')}\n        </div>`
+            );
           }
         }
       }
     } catch (err) {
-      console.error('Error rewriting news-detail SEO dynamically:', err);
+      console.error('Error pre-rendering news-detail SSR:', err);
     }
   }
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.setHeader('Cache-Control', 's-maxage=0, max-age=0, must-revalidate, no-store, no-cache');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-  res.status(200).send(html);
+  return res.status(200).send(html);
 }
