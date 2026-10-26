@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v207");
+console.log("Antigravity db.js version: 20260715_v208");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v207";
+const APP_VERSION = "20260715_v208";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1236,7 +1236,10 @@ function getAnalyticsSummary(remoteData = null) {
             desktopCount,
             totalPageviews: pageData.total || 0,
             todayPageviews: pageData.today || 0,
-            postViewsMap: postViews
+            postViewsMap: postViews,
+            likes: (remoteData && remoteData.likes) ? remoteData.likes : {},
+            totalLikes: (remoteData && remoteData.totalLikes) ? remoteData.totalLikes : 0,
+            recentLikes: (remoteData && remoteData.recentLikes) ? remoteData.recentLikes : []
         };
     } catch(e) {
         return { searchLogs: [], topQueries: [], topViews: [], todayTopViews: [], recent7Days: [], topReferrers: [], topReferrersToday: [], topReferrers7Days: [], dailyHistory: {}, totalSearches: 0, mobileCount: 0, desktopCount: 0, totalPageviews: 0, todayPageviews: 0, postViewsMap: {} };
@@ -1802,7 +1805,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v207`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v208`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
@@ -1906,3 +1909,523 @@ function closePrivacyModal() {
 window.openPrivacyModal = openPrivacyModal;
 window.closePrivacyModal = closePrivacyModal;
 
+
+
+// =========================================================================
+// 🌟 최가네부동산 관심 매물 찜(♥) & 최근 본 매물 & 플로팅 퀵바 시스템
+// =========================================================================
+
+function getPropertyDisplayNumber(p) {
+    if (!p) return '';
+    const fullText = ((p.title || '') + ' ' + (p.content || '')).normalize('NFC');
+    const m = fullText.match(/매물\s*번호\s*[:：]?\s*([0-9]{3,5})/i);
+    if (m) return m[1];
+    const m2 = fullText.match(/(?:NO|No|no)\.?\s*([0-9]{3,5})/);
+    if (m2) return m2[1];
+    if (p.id && String(p.id).length >= 4) return String(p.id).slice(-4);
+    return '';
+}
+window.getPropertyDisplayNumber = getPropertyDisplayNumber;
+
+function getFavoritePosts() {
+    try {
+        return JSON.parse(localStorage.getItem('choi_favorite_posts') || '[]');
+    } catch(e) {
+        return [];
+    }
+}
+window.getFavoritePosts = getFavoritePosts;
+
+function isFavoritePost(id) {
+    if (!id) return false;
+    const favs = getFavoritePosts();
+    return favs.some(item => String(item.id) === String(id));
+}
+window.isFavoritePost = isFavoritePost;
+
+function getRecentlyViewedPosts() {
+    try {
+        return JSON.parse(localStorage.getItem('choi_recent_posts') || '[]');
+    } catch(e) {
+        return [];
+    }
+}
+window.getRecentlyViewedPosts = getRecentlyViewedPosts;
+
+function addRecentlyViewedPost(post) {
+    if (!post || !post.id) return;
+    try {
+        let recents = getRecentlyViewedPosts();
+        recents = recents.filter(item => String(item.id) !== String(post.id));
+        const propNo = getPropertyDisplayNumber(post);
+        recents.unshift({
+            id: String(post.id),
+            title: post.title || '매물 상세',
+            category: post.category || '매물',
+            image: (typeof getFirstImage === 'function' ? getFirstImage(post.content) : '') || post.image || '',
+            propNumber: propNo,
+            viewedAt: Date.now()
+        });
+        if (recents.length > 20) recents = recents.slice(0, 20);
+        localStorage.setItem('choi_recent_posts', JSON.stringify(recents));
+        updateQuickBarBadges();
+    } catch(e) {}
+}
+window.addRecentlyViewedPost = addRecentlyViewedPost;
+
+async function toggleFavoritePost(post) {
+    if (!post || !post.id) return false;
+    const pid = String(post.id);
+    let favs = getFavoritePosts();
+    const existingIdx = favs.findIndex(item => String(item.id) === pid);
+    const isNowFav = existingIdx === -1;
+    const propNo = getPropertyDisplayNumber(post);
+
+    if (isNowFav) {
+        favs.unshift({
+            id: pid,
+            title: post.title || '매물 상세',
+            category: post.category || '매물',
+            image: (typeof getFirstImage === 'function' ? getFirstImage(post.content) : '') || post.image || '',
+            propNumber: propNo,
+            addedAt: Date.now()
+        });
+        showToast(`❤️ <b>[매물 ${propNo || pid}]</b> 관심 매물로 등록되었습니다!`);
+    } else {
+        favs.splice(existingIdx, 1);
+        showToast(`🤍 <b>[매물 ${propNo || pid}]</b> 관심 매물에서 제외되었습니다.`);
+    }
+
+    try {
+        localStorage.setItem('choi_favorite_posts', JSON.stringify(favs));
+    } catch(e) {}
+
+    updateFavoriteUI(pid, isNowFav);
+    updateQuickBarBadges();
+
+    // Send analytics event in background
+    try {
+        const isMob = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        fetch('/api/analytics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                type: 'like',
+                postId: pid,
+                action: isNowFav ? 'like' : 'unlike',
+                propNumber: propNo,
+                title: post.title || '',
+                device: isMob ? 'mobile' : 'desktop'
+            })
+        }).catch(() => {});
+    } catch(e) {}
+
+    return isNowFav;
+}
+window.toggleFavoritePost = toggleFavoritePost;
+
+function toggleFavoriteById(id) {
+    if (!id) return;
+    const pid = String(id);
+    let post = null;
+    if (typeof _cachedPosts !== 'undefined' && Array.isArray(_cachedPosts)) {
+        post = _cachedPosts.find(p => String(p.id) === pid);
+    }
+    if (!post) {
+        try {
+            const cache = JSON.parse(localStorage.getItem('posts_cache') || '[]');
+            post = cache.find(p => String(p.id) === pid);
+        } catch(e) {}
+    }
+    if (!post && window._currentPost && String(window._currentPost.id) === pid) {
+        post = window._currentPost;
+    }
+    if (!post) {
+        post = { id: pid, title: '매물 상세' };
+    }
+    toggleFavoritePost(post);
+}
+window.toggleFavoriteById = toggleFavoriteById;
+
+function updateFavoriteUI(pid, isFav) {
+    const btns = document.querySelectorAll(`.fav-btn-${pid}`);
+    btns.forEach(btn => {
+        const icon = btn.querySelector('.material-symbols-outlined') || btn;
+        if (isFav) {
+            btn.classList.add('text-rose-500');
+            btn.classList.remove('text-slate-400');
+            if (icon.tagName === 'SPAN') {
+                icon.innerText = 'favorite';
+                icon.style.fontVariationSettings = "'FILL' 1";
+                icon.style.color = '#f43f5e';
+            }
+        } else {
+            btn.classList.remove('text-rose-500');
+            btn.classList.add('text-slate-400');
+            if (icon.tagName === 'SPAN') {
+                icon.innerText = 'favorite';
+                icon.style.fontVariationSettings = "'FILL' 0";
+                icon.style.color = '';
+            }
+        }
+        btn.classList.add('scale-125');
+        setTimeout(() => btn.classList.remove('scale-125'), 200);
+    });
+
+    const detailFavBtn = document.getElementById('detail-fav-btn');
+    if (detailFavBtn && window._currentDetailPostId && String(window._currentDetailPostId) === String(pid)) {
+        const icon = document.getElementById('detail-fav-icon');
+        const text = document.getElementById('detail-fav-text');
+        if (isFav) {
+            detailFavBtn.className = "inline-flex items-center justify-center gap-1.5 bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border-2 border-rose-400 dark:border-rose-600 px-3 py-2 rounded-xl font-black text-xs sm:text-sm shadow-sm transition-all h-9 whitespace-nowrap cursor-pointer active:scale-95";
+            if (icon) { icon.innerText = 'favorite'; icon.style.fontVariationSettings = "'FILL' 1"; }
+            if (text) text.innerText = '찜 완료 ♥';
+        } else {
+            detailFavBtn.className = "inline-flex items-center justify-center gap-1.5 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:border-rose-300 hover:text-rose-600 px-3 py-2 rounded-xl font-bold text-xs sm:text-sm shadow-xs transition-all h-9 whitespace-nowrap cursor-pointer active:scale-95";
+            if (icon) { icon.innerText = 'favorite'; icon.style.fontVariationSettings = "'FILL' 0"; }
+            if (text) text.innerText = '관심 매물 찜';
+        }
+    }
+}
+window.updateFavoriteUI = updateFavoriteUI;
+
+function updateQuickBarBadges() {
+    const favCount = getFavoritePosts().length;
+    const recCount = getRecentlyViewedPosts().length;
+    
+    const favBadge = document.getElementById('quickbar-fav-count');
+    const recBadge = document.getElementById('quickbar-recent-count');
+    if (favBadge) favBadge.innerText = favCount;
+    if (recBadge) recBadge.innerText = recCount;
+
+    const modalFavCount = document.getElementById('modal-fav-count');
+    const modalRecCount = document.getElementById('modal-recent-count');
+    if (modalFavCount) modalFavCount.innerText = favCount;
+    if (modalRecCount) modalRecCount.innerText = recCount;
+}
+window.updateQuickBarBadges = updateQuickBarBadges;
+
+function showToast(msg) {
+    let toast = document.getElementById('choi-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'choi-toast';
+        toast.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-[99999] bg-slate-900/95 dark:bg-white text-white dark:text-slate-900 px-5 py-3 rounded-full shadow-2xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-4 backdrop-blur-md border border-white/20 dark:border-slate-800';
+        document.body.appendChild(toast);
+    }
+    toast.innerHTML = msg;
+    toast.classList.remove('opacity-0', '-translate-y-4', 'pointer-events-none');
+    toast.classList.add('opacity-100', 'translate-y-0');
+    clearTimeout(window._toastTimeout);
+    window._toastTimeout = setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-4', 'pointer-events-none');
+    }, 2800);
+}
+window.showToast = showToast;
+
+// --- Floating Quick Bar & Drawer Modal Injection ---
+function initFloatingQuickBar() {
+    const path = window.location.pathname.toLowerCase();
+    if (path.includes('admin') || path.includes('news-write')) return;
+    if (document.getElementById('floating-quick-bar')) return;
+
+    // 1. Floating Pill Widget Button
+    const bar = document.createElement('div');
+    bar.id = 'floating-quick-bar';
+    bar.className = 'fixed bottom-20 right-3.5 md:bottom-8 md:right-8 z-40 flex items-center gap-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-3.5 py-2.5 rounded-full shadow-xl border border-slate-200 dark:border-slate-700 hover:scale-105 active:scale-95 transition-all cursor-pointer no-print select-none';
+    bar.innerHTML = `
+        <div onclick="openQuickBarModal('fav')" class="flex items-center gap-1.5 text-xs font-black text-rose-600 dark:text-rose-400 cursor-pointer" title="관심 찜 목록 보기">
+            <span class="material-symbols-outlined text-[19px]" style="font-variation-settings: 'FILL' 1; color:#f43f5e;">favorite</span>
+            <span>찜 <span id="quickbar-fav-count" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-black">0</span></span>
+        </div>
+        <div class="h-3.5 w-px bg-slate-200 dark:bg-slate-700"></div>
+        <div onclick="openQuickBarModal('recent')" class="flex items-center gap-1 text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer" title="최근 본 매물 보기">
+            <span class="material-symbols-outlined text-[19px] text-slate-500">history</span>
+            <span>최근 <span id="quickbar-recent-count" class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span></span>
+        </div>
+    `;
+    document.body.appendChild(bar);
+
+    // 2. Quick Bar Modal Dialog (Bottom-sheet on mobile, Centered dialog on PC)
+    const modal = document.createElement('div');
+    modal.id = 'quickbar-modal';
+    modal.className = 'fixed inset-0 bg-black/60 z-[9999] backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 transition-opacity duration-300 opacity-0 pointer-events-none no-print';
+    modal.onclick = (e) => { if (e.target === modal) closeQuickBarModal(); };
+    modal.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 w-full sm:max-w-lg rounded-t-3xl sm:rounded-2xl max-h-[85vh] sm:max-h-[80vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 transform translate-y-8 sm:translate-y-0 transition-transform duration-300">
+            <!-- Header -->
+            <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-850">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-rose-500 text-[24px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                    <h3 class="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white">관심 & 최근 본 매물</h3>
+                </div>
+                <button onclick="closeQuickBarModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="grid grid-cols-2 border-b border-slate-200 dark:border-slate-800 text-xs sm:text-sm font-bold bg-slate-100 dark:bg-slate-900">
+                <button id="modal-tab-fav-btn" onclick="switchQuickBarTab('fav')" class="py-3 px-2 flex items-center justify-center gap-1.5 border-b-2 border-rose-500 text-rose-600 dark:text-rose-400 bg-white dark:bg-slate-900 cursor-pointer transition-all">
+                    <span class="material-symbols-outlined text-[17px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                    <span>관심 매물 (<span id="modal-fav-count">0</span>)</span>
+                </button>
+                <button id="modal-tab-recent-btn" onclick="switchQuickBarTab('recent')" class="py-3 px-2 flex items-center justify-center gap-1.5 border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer transition-all">
+                    <span class="material-symbols-outlined text-[17px]">history</span>
+                    <span>최근 본 매물 (<span id="modal-recent-count">0</span>)</span>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-3 min-h-[220px]" id="quickbar-modal-content">
+                <!-- Dynamically populated -->
+            </div>
+
+            <!-- Modal Action Footer (for Favorites) -->
+            <div id="quickbar-fav-footer" class="p-3.5 sm:p-4 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row gap-2">
+                <button onclick="consultFavoritesKakao()" class="flex-1 py-3 px-3 rounded-xl bg-[#fee500] hover:bg-[#fdd835] text-[#191600] font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer border border-[#d4be00]">
+                    <span class="material-symbols-outlined text-[18px]">chat</span>
+                    <span>선택한 매물 묶어서 카톡 문의하기</span>
+                </button>
+                <a href="tel:010-3548-4000" class="py-3 px-4 rounded-xl bg-[#003891] hover:bg-blue-800 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all no-underline">
+                    <span class="material-symbols-outlined text-[18px] text-amber-300">call</span>
+                    <span>전화 상담</span>
+                </a>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    updateQuickBarBadges();
+}
+
+let _currentQuickBarTab = 'fav';
+
+function openQuickBarModal(tab = 'fav') {
+    const modal = document.getElementById('quickbar-modal');
+    if (!modal) return;
+    _currentQuickBarTab = tab;
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    modal.classList.add('opacity-100');
+    const dialog = modal.querySelector('.transform');
+    if (dialog) dialog.classList.remove('translate-y-8');
+    switchQuickBarTab(tab);
+}
+window.openQuickBarModal = openQuickBarModal;
+
+function closeQuickBarModal() {
+    const modal = document.getElementById('quickbar-modal');
+    if (!modal) return;
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    modal.classList.remove('opacity-100');
+    const dialog = modal.querySelector('.transform');
+    if (dialog) dialog.classList.add('translate-y-8');
+}
+window.closeQuickBarModal = closeQuickBarModal;
+
+function switchQuickBarTab(tab) {
+    _currentQuickBarTab = tab;
+    const favBtn = document.getElementById('modal-tab-fav-btn');
+    const recBtn = document.getElementById('modal-tab-recent-btn');
+    const footer = document.getElementById('quickbar-fav-footer');
+    updateQuickBarBadges();
+
+    if (tab === 'fav') {
+        if (favBtn) {
+            favBtn.className = "py-3 px-2 flex items-center justify-center gap-1.5 border-b-2 border-rose-500 text-rose-600 dark:text-rose-400 bg-white dark:bg-slate-900 cursor-pointer transition-all";
+        }
+        if (recBtn) {
+            recBtn.className = "py-3 px-2 flex items-center justify-center gap-1.5 border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer transition-all";
+        }
+        if (footer) footer.classList.remove('hidden');
+        renderQuickBarFavorites();
+    } else {
+        if (recBtn) {
+            recBtn.className = "py-3 px-2 flex items-center justify-center gap-1.5 border-b-2 border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900 cursor-pointer transition-all";
+        }
+        if (favBtn) {
+            favBtn.className = "py-3 px-2 flex items-center justify-center gap-1.5 border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer transition-all";
+        }
+        if (footer) footer.classList.add('hidden');
+        renderQuickBarRecents();
+    }
+}
+window.switchQuickBarTab = switchQuickBarTab;
+
+function renderQuickBarFavorites() {
+    const container = document.getElementById('quickbar-modal-content');
+    if (!container) return;
+    const favs = getFavoritePosts();
+
+    if (!favs || favs.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-12 px-4 flex flex-col items-center justify-center gap-3">
+                <div class="w-16 h-16 rounded-full bg-rose-50 dark:bg-rose-950/50 flex items-center justify-center text-rose-500">
+                    <span class="material-symbols-outlined text-[32px]">favorite_border</span>
+                </div>
+                <h4 class="font-bold text-slate-800 dark:text-slate-200 text-base">아직 찜한 관심 매물이 없습니다</h4>
+                <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
+                    매물 사진 우측 상단의 하트(♥)를 누르면 관심 매물에 쏙 담아 한 번에 비교 상담받으실 수 있습니다!
+                </p>
+                <a href="property-news.html?v=20260715_v208" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                    매물리스트 보러가기
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="flex items-center justify-between text-xs text-slate-500 pb-1 border-b border-slate-100 dark:border-slate-800">
+            <label class="flex items-center gap-1.5 font-bold cursor-pointer text-slate-700 dark:text-slate-300">
+                <input type="checkbox" id="fav-select-all" checked onchange="toggleAllFavCheckboxes(this.checked)" class="w-4 h-4 rounded text-rose-600 cursor-pointer">
+                <span>전체 선택 (${favs.length}건)</span>
+            </label>
+            <button onclick="clearAllFavorites()" class="text-slate-400 hover:text-rose-500 transition-colors cursor-pointer text-[11px]">
+                전체 비우기
+            </button>
+        </div>
+        <div class="space-y-2.5">
+            ${favs.map(item => `
+                <div class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/70 hover:border-rose-300 transition-all">
+                    <input type="checkbox" name="fav-item-check" value="${item.id}" checked class="w-4 h-4 rounded text-rose-600 shrink-0 cursor-pointer">
+                    <img src="${item.image || 'https://raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main/hero.png'}" alt="" class="w-16 h-16 rounded-lg object-cover shrink-0 bg-slate-200" onerror="this.src='https://raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main/hero.png'">
+                    <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-[11px] font-black text-[#003891] dark:text-blue-300 bg-blue-50 dark:bg-blue-950 px-1.5 py-0.2 rounded border border-blue-200 dark:border-blue-800">
+                                매물번호: ${item.propNumber || item.id}
+                            </span>
+                        </div>
+                        <a href="news-detail.html?id=${item.id}" onclick="closeQuickBarModal()" class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white hover:text-blue-600 truncate no-underline">
+                            ${item.title}
+                        </a>
+                    </div>
+                    <button type="button" onclick="removeFavoriteItem('${item.id}')" class="text-slate-400 hover:text-rose-500 p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shrink-0 cursor-pointer" title="삭제">
+                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </button>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function renderQuickBarRecents() {
+    const container = document.getElementById('quickbar-modal-content');
+    if (!container) return;
+    const recents = getRecentlyViewedPosts();
+
+    if (!recents || recents.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-12 px-4 flex flex-col items-center justify-center gap-3">
+                <div class="w-16 h-16 rounded-full bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center text-blue-600">
+                    <span class="material-symbols-outlined text-[32px]">history</span>
+                </div>
+                <h4 class="font-bold text-slate-800 dark:text-slate-200 text-base">최근 둘러본 매물이 없습니다</h4>
+                <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
+                    관심 있는 매물 상세페이지를 방문하시면 이곳에 자동으로 최근 본 목록이 기록됩니다!
+                </p>
+                <a href="property-news.html?v=20260715_v208" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                    매물리스트 보러가기
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="flex items-center justify-between text-xs text-slate-500 pb-1 border-b border-slate-100 dark:border-slate-800">
+            <span class="font-bold text-slate-700 dark:text-slate-300">최근 둘러본 매물 (${recents.length}건)</span>
+            <button onclick="clearAllRecents()" class="text-slate-400 hover:text-rose-500 transition-colors cursor-pointer text-[11px]">
+                기록 삭제
+            </button>
+        </div>
+        <div class="space-y-2.5">
+            ${recents.map(item => {
+                const isFav = isFavoritePost(item.id);
+                return `
+                    <div class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/70 hover:border-blue-300 transition-all">
+                        <img src="${item.image || 'https://raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main/hero.png'}" alt="" class="w-16 h-16 rounded-lg object-cover shrink-0 bg-slate-200" onerror="this.src='https://raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main/hero.png'">
+                        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                            <span class="text-[11px] font-black text-[#003891] dark:text-blue-300 bg-blue-50 dark:bg-blue-950 px-1.5 py-0.2 rounded border border-blue-200 dark:border-blue-800 w-fit">
+                                매물번호: ${item.propNumber || item.id}
+                            </span>
+                            <a href="news-detail.html?id=${item.id}" onclick="closeQuickBarModal()" class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white hover:text-blue-600 truncate no-underline">
+                                ${item.title}
+                            </a>
+                        </div>
+                        <button type="button" onclick="toggleFavoriteById('${item.id}'); renderQuickBarRecents();" class="p-2 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:scale-105 active:scale-95 transition-all shadow-xs shrink-0 cursor-pointer" title="${isFav ? '관심 매물 해제' : '관심 매물 등록'}">
+                            <span class="material-symbols-outlined text-[19px] ${isFav ? 'text-rose-500' : 'text-slate-400'}" style="font-variation-settings: 'FILL' ${isFav ? 1 : 0};">favorite</span>
+                        </button>
+                    </div>
+                `;
+            }).join('')}
+        </div>
+    `;
+}
+
+function toggleAllFavCheckboxes(checked) {
+    const checkboxes = document.querySelectorAll('input[name="fav-item-check"]');
+    checkboxes.forEach(cb => cb.checked = checked);
+}
+window.toggleAllFavCheckboxes = toggleAllFavCheckboxes;
+
+function removeFavoriteItem(id) {
+    toggleFavoriteById(id);
+    renderQuickBarFavorites();
+}
+window.removeFavoriteItem = removeFavoriteItem;
+
+function clearAllFavorites() {
+    if (!confirm('관심 매물 목록을 모두 비우시겠습니까?')) return;
+    localStorage.removeItem('choi_favorite_posts');
+    updateQuickBarBadges();
+    renderQuickBarFavorites();
+    showToast('관심 매물 목록이 모두 비워졌습니다.');
+}
+window.clearAllFavorites = clearAllFavorites;
+
+function clearAllRecents() {
+    localStorage.removeItem('choi_recent_posts');
+    updateQuickBarBadges();
+    renderQuickBarRecents();
+    showToast('최근 본 매물 기록이 삭제되었습니다.');
+}
+window.clearAllRecents = clearAllRecents;
+
+function consultFavoritesKakao() {
+    const checkedBoxes = Array.from(document.querySelectorAll('input[name="fav-item-check"]:checked'));
+    const favs = getFavoritePosts();
+    const selected = favs.filter(item => checkedBoxes.some(cb => cb.value === String(item.id)));
+
+    if (selected.length === 0) {
+        alert('상담받으실 관심 매물을 1개 이상 선택해 주세요.');
+        return;
+    }
+
+    let msg = `안녕하세요! 최가네부동산(choi114.com)에서 관심 매물을 보고 문의드립니다.\n\n[문의 관심 매물 ${selected.length}건]\n`;
+    selected.forEach((item, idx) => {
+        msg += `${idx + 1}. [매물번호: ${item.propNumber || item.id}] ${item.title}\n`;
+    });
+    msg += `\n위 매물들에 대해 비교 상담 및 방문 안내 부탁드립니다!`;
+
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(msg);
+            showToast('📋 매물 문의 내용이 복사되었습니다! 카톡창에 바로 붙여넣기하세요.');
+        }
+    } catch(e) {}
+
+    const kakaoUrl = `https://open.kakao.com/o/smt2j0Ri`;
+    setTimeout(() => {
+        window.open(kakaoUrl, '_blank');
+    }, 400);
+}
+window.consultFavoritesKakao = consultFavoritesKakao;
+
+// Auto-initialize Quick Bar when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFloatingQuickBar);
+} else {
+    initFloatingQuickBar();
+}

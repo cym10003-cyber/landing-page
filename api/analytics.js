@@ -54,30 +54,9 @@ export default async function handler(req, res) {
       const bodyData = req.body || {};
       const { type } = bodyData;
 
-      // Handle pageview and postview recording centrally
-      if (type === 'pageview' || type === 'postview') {
-        if (!token) return res.status(200).json({ success: true, localOnly: true });
-
-        try {
-          const url = `https://api.github.com/repos/${owner}/${repo}/contents/${analyticsPath}`;
-          const headers = {
-            'Accept': 'application/vnd.github.v3+json',
-            'Authorization': `Bearer ${token}`
-          };
-
-          const getRes = await fetch(url, { headers });
-          let sha = null;
-          let analytics = { totalPageviews: 0, todayPageviews: 0, todayDate: '', dailyHistory: {} };
-
-          if (getRes.ok) {
-            const data = await getRes.json();
-            sha = data.sha;
-            try {
-              const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
-              analytics = JSON.parse(contentStr);
-            } catch(e) {}
-          }
-
+      // Handle pageview, postview, and like (favorite) recording centrally
+      if (type === 'pageview' || type === 'postview' || type === 'like') {
+        const updateAnalyticsData = (analytics) => {
           const todayStr = new Date().toISOString().split('T')[0];
           if (analytics.todayDate !== todayStr) {
             analytics.todayDate = todayStr;
@@ -86,7 +65,7 @@ export default async function handler(req, res) {
 
           if (!analytics.dailyHistory) analytics.dailyHistory = {};
           if (!analytics.dailyHistory[todayStr]) {
-            analytics.dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {} };
+            analytics.dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {}, likes: {} };
           }
 
           if (type === 'pageview') {
@@ -105,6 +84,40 @@ export default async function handler(req, res) {
             const pid = String(bodyData.postId);
             if (!analytics.dailyHistory[todayStr].postViews) analytics.dailyHistory[todayStr].postViews = {};
             analytics.dailyHistory[todayStr].postViews[pid] = (analytics.dailyHistory[todayStr].postViews[pid] || 0) + 1;
+          } else if (type === 'like' && bodyData.postId) {
+            const pid = String(bodyData.postId);
+            const isUnlike = bodyData.action === 'unlike';
+            if (!analytics.likes) analytics.likes = {};
+            const cur = analytics.likes[pid] || 0;
+            const updated = isUnlike ? Math.max(0, cur - 1) : cur + 1;
+            if (updated > 0) {
+              analytics.likes[pid] = updated;
+            } else {
+              delete analytics.likes[pid];
+            }
+            analytics.totalLikes = Math.max(0, (analytics.totalLikes || 0) + (isUnlike ? -1 : 1));
+
+            if (!analytics.dailyHistory[todayStr].likes) analytics.dailyHistory[todayStr].likes = {};
+            const dayCur = analytics.dailyHistory[todayStr].likes[pid] || 0;
+            const dayUpdated = isUnlike ? Math.max(0, dayCur - 1) : dayCur + 1;
+            if (dayUpdated > 0) {
+              analytics.dailyHistory[todayStr].likes[pid] = dayUpdated;
+            } else {
+              delete analytics.dailyHistory[todayStr].likes[pid];
+            }
+
+            if (!isUnlike) {
+              if (!analytics.recentLikes) analytics.recentLikes = [];
+              analytics.recentLikes.unshift({
+                postId: pid,
+                propNumber: bodyData.propNumber || '',
+                title: bodyData.title || '',
+                timestamp: Date.now(),
+                date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+                device: bodyData.device === 'desktop' ? 'desktop' : 'mobile'
+              });
+              if (analytics.recentLikes.length > 100) analytics.recentLikes.pop();
+            }
           }
 
           // Limit history to 60 days
@@ -112,6 +125,43 @@ export default async function handler(req, res) {
           if (dates.length > 60) {
             dates.slice(0, dates.length - 60).forEach(d => delete analytics.dailyHistory[d]);
           }
+          return analytics;
+        };
+
+        if (!token) {
+          try {
+            const localFilePath = path.join(process.cwd(), analyticsPath);
+            if (fs.existsSync(localFilePath)) {
+              let analytics = JSON.parse(fs.readFileSync(localFilePath, 'utf8'));
+              analytics = updateAnalyticsData(analytics);
+              fs.writeFileSync(localFilePath, JSON.stringify(analytics, null, 2), 'utf8');
+              return res.status(200).json({ success: true, analytics, localOnly: true });
+            }
+          } catch(e) {}
+          return res.status(200).json({ success: true, localOnly: true });
+        }
+
+        try {
+          const url = `https://api.github.com/repos/${owner}/${repo}/contents/${analyticsPath}`;
+          const headers = {
+            'Accept': 'application/vnd.github.v3+json',
+            'Authorization': `Bearer ${token}`
+          };
+
+          const getRes = await fetch(url, { headers });
+          let sha = null;
+          let analytics = { totalPageviews: 0, todayPageviews: 0, todayDate: '', dailyHistory: {}, likes: {}, totalLikes: 0, recentLikes: [] };
+
+          if (getRes.ok) {
+            const data = await getRes.json();
+            sha = data.sha;
+            try {
+              const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
+              analytics = JSON.parse(contentStr);
+            } catch(e) {}
+          }
+
+          analytics = updateAnalyticsData(analytics);
 
           const jsonStr = JSON.stringify(analytics, null, 2);
           const contentBase64 = Buffer.from(jsonStr, 'utf8').toString('base64');

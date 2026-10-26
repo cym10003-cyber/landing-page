@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed flex items-center"><a href="index.html">최가네부동산공인중개사사무소</a></div>
 <div class="hidden md:flex gap-lg items-center font-nav text-nav"><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v207">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v208">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v207">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v208">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-[25px] py-[14px] rounded font-button text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-sm" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -129,7 +129,7 @@
 </div>
 </nav>
 <main class="max-w-7xl mx-auto px-lg py-[80px]">
-    <!-- v20260715_v207 force deploy -->
+    <!-- v20260715_v208 force deploy -->
     <!-- Non-logged in State (Login Form) -->
     <div id="login-view" class="hidden max-w-md mx-auto bg-surface-container-lowest p-lg md:p-xl rounded-xl shadow-card-soft border border-hairline my-12">
         <h2 class="font-subsection-h3 text-xl font-bold text-center text-ink mb-lg">관리자 로그인</h2>
@@ -208,7 +208,7 @@
         <!-- Tab 2: Analytics & Loggings -->
         <div id="tab-analytics-content" class="hidden flex flex-col gap-lg">
             <!-- Analytics Summary KPI Cards -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-md">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-md">
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
                     <span class="text-xs font-semibold text-muted mb-xs">👥 오늘 방문자 수</span>
                     <span id="stat-today-views" class="text-2xl md:text-3xl font-bold text-primary">0명</span>
@@ -216,6 +216,13 @@
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
                     <span class="text-xs font-semibold text-muted mb-xs">🌐 누적 총 방문 수</span>
                     <span id="stat-total-views" class="text-2xl md:text-3xl font-bold text-ink">0회</span>
+                </div>
+                <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                    <span class="text-xs font-semibold text-rose-600 dark:text-rose-400 mb-xs flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                        누적 관심 매물 찜
+                    </span>
+                    <span id="stat-total-likes" class="text-2xl md:text-3xl font-bold text-rose-600 dark:text-rose-400">0회</span>
                 </div>
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
                     <span class="text-xs font-semibold text-muted mb-xs">🔍 누적 총 검색 횟수</span>
@@ -284,6 +291,77 @@
                     <div id="top-views-list" class="space-y-sm">
                         <!-- Populated by JS -->
                     </div>
+                </div>
+            </div>
+
+            <!-- Full-Width Card: Top 50 Liked & Viewed Properties -->
+            <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-md">
+                    <div>
+                        <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
+                            <span class="material-symbols-outlined text-rose-500" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                            손님들이 찜한 인기 매물 TOP 50 랭킹
+                        </h3>
+                        <p class="text-xs text-muted mt-0.5">손님들이 스마트폰과 PC에서 하트(♥)를 누른 관심 매물 및 최다 조회 매물 50개 순위입니다.</p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <div class="flex bg-surface-container rounded-lg p-0.5 text-xs font-semibold">
+                            <button id="top50-sort-likes-btn" onclick="switchTop50Mode('likes')" class="px-3 py-1.5 rounded-md bg-white text-rose-600 shadow-xs font-black transition-all cursor-pointer flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">favorite</span> 최다 찜 순
+                            </button>
+                            <button id="top50-sort-views-btn" onclick="switchTop50Mode('views')" class="px-3 py-1.5 rounded-md text-muted hover:text-ink transition-all cursor-pointer flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[15px]">visibility</span> 최다 조회 순
+                            </button>
+                        </div>
+                        <input type="text" id="top50-search-input" oninput="filterTop50Table()" placeholder="매물번호·제목 검색..." class="px-3 py-1.5 bg-surface-container-low border border-hairline rounded-lg text-xs font-medium text-ink w-40 sm:w-52 focus:outline-none focus:ring-1 focus:ring-primary">
+                    </div>
+                </div>
+
+                <!-- Table container -->
+                <div class="overflow-x-auto max-h-[620px] overflow-y-auto border border-hairline rounded-xl">
+                    <table class="w-full text-left text-sm text-ink border-collapse">
+                        <thead class="bg-surface-container text-muted border-b border-hairline font-bold text-xs uppercase sticky top-0 z-10 shadow-xs">
+                            <tr>
+                                <th class="px-3 py-3 w-16 text-center">순위</th>
+                                <th class="px-3 py-3 w-28 text-center">매물번호</th>
+                                <th class="px-3 py-3">매물 제목</th>
+                                <th class="px-3 py-3 w-24 text-center">카테고리</th>
+                                <th class="px-3 py-3 w-28 text-center text-rose-600 font-extrabold">관심 찜 ♥</th>
+                                <th class="px-3 py-3 w-24 text-center text-primary font-extrabold">조회수 👁️</th>
+                                <th class="px-3 py-3 w-24 text-center">전환율</th>
+                                <th class="px-3 py-3 w-20 text-center">상세</th>
+                            </tr>
+                        </thead>
+                        <tbody id="top50-tbody" class="divide-y divide-hairline text-xs">
+                            <tr><td colspan="8" class="text-center py-8 text-muted">매물 데이터를 불러오는 중입니다...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Real-time Likes Activity Log Table -->
+            <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
+                <div class="flex justify-between items-center mb-md">
+                    <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
+                        <span class="material-symbols-outlined text-rose-500" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                        최근 실시간 손님 관심 매물 찜(♥) 로그
+                    </h3>
+                    <span class="text-xs text-muted">손님이 하트를 누른 실시간 기록</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-ink border-collapse">
+                        <thead class="bg-surface-container text-muted border-b border-hairline font-semibold text-xs uppercase">
+                            <tr>
+                                <th class="px-md py-3 w-44">시각</th>
+                                <th class="px-md py-3 w-24 text-center">기기</th>
+                                <th class="px-md py-3 w-28 text-center">매물번호</th>
+                                <th class="px-md py-3">매물 제목</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-likes-tbody" class="divide-y divide-hairline">
+                            <tr><td colspan="4" class="text-center py-6 text-muted text-xs">수집된 실시간 찜 기록이 없습니다.</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -419,10 +497,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v207">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v208">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v207">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v208">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -433,7 +511,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v207"></script>
+<script src="db.js?v=20260715_v208"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -701,6 +779,16 @@ async function renderAnalyticsView() {
     // 4. Top Views List (Filtered by Period)
     renderTopViewsList(summary);
 
+    // KPI Cards: Likes count
+    const statLikes = document.getElementById('stat-total-likes');
+    if (statLikes) statLikes.textContent = (summary.totalLikes || 0) + '회';
+
+    // 4-1. Top 50 Liked & Viewed Listings Table
+    renderTop50Table(summary);
+
+    // 4-2. Recent Likes Activity Log Table
+    renderRecentLikesTable(summary);
+
     // 5. Recent Activity Log Table
     const lTbody = document.getElementById('logs-tbody');
     if (lTbody) {
@@ -853,7 +941,10 @@ async function loadDashboardList() {
                                 <span class="text-xs font-extrabold px-2 py-0.5 bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 rounded">${post.category || '일반'}</span>
                                 ${statusBadge}
                             </div>
-                            <span class="text-xs font-mono text-slate-500 font-bold">👁️ ${vCount}회</span>
+                            <div class="flex items-center gap-2">
+    <span class="text-xs font-mono text-slate-500 font-bold">👁️ ${vCount}회</span>
+    <span class="text-xs font-mono text-rose-500 font-extrabold">♥ ${(summary.likes && summary.likes[post.id]) || 0}회</span>
+</div>
                         </div>
 
                         <div class="cursor-pointer" onclick="location.href='news-detail.html?id=${post.id}'">
@@ -910,7 +1001,12 @@ async function loadDashboardList() {
                             ${post.title}
                             ${isPriv ? '<span class="ml-1 text-xs text-gray-500 font-normal">(비공개 보관 중)</span>' : ''}
                         </td>
-                        <td class="px-2 py-3.5 text-center font-bold text-xs text-primary whitespace-nowrap w-20">👁️ ${vCount}회</td>
+                        <td class="px-2 py-3.5 text-center font-bold text-xs whitespace-nowrap w-24">
+    <div class="flex flex-col items-center gap-0.5">
+        <span class="text-primary font-bold">👁️ ${vCount}회</span>
+        <span class="text-rose-500 font-extrabold text-[11px]">♥ ${(summary.likes && summary.likes[post.id]) || 0}회</span>
+    </div>
+</td>
                         <td class="px-2 py-3.5 text-muted font-medium text-xs whitespace-nowrap w-28">${post.date}</td>
                         <td class="px-1 py-3.5 text-center whitespace-nowrap w-56">
                             <div class="flex items-center justify-center gap-1 flex-nowrap">
@@ -1180,5 +1276,185 @@ async function handleDelete(id) {
         };
 
         renderClientLeadsTab();
+
+let currentTop50Mode = 'likes';
+let _top50CachedPosts = [];
+let _top50Summary = null;
+
+function switchTop50Mode(mode) {
+    currentTop50Mode = mode;
+    const likesBtn = document.getElementById('top50-sort-likes-btn');
+    const viewsBtn = document.getElementById('top50-sort-views-btn');
+    if (likesBtn && viewsBtn) {
+        if (mode === 'likes') {
+            likesBtn.className = "px-3 py-1.5 rounded-md bg-white text-rose-600 shadow-xs font-black transition-all cursor-pointer flex items-center gap-1";
+            viewsBtn.className = "px-3 py-1.5 rounded-md text-muted hover:text-ink transition-all cursor-pointer flex items-center gap-1";
+        } else {
+            viewsBtn.className = "px-3 py-1.5 rounded-md bg-white text-primary shadow-xs font-black transition-all cursor-pointer flex items-center gap-1";
+            likesBtn.className = "px-3 py-1.5 rounded-md text-muted hover:text-ink transition-all cursor-pointer flex items-center gap-1";
+        }
+    }
+    renderTop50Table(_top50Summary);
+}
+window.switchTop50Mode = switchTop50Mode;
+
+async function renderTop50Table(summary = null) {
+    if (summary) _top50Summary = summary;
+    else summary = _top50Summary || (typeof getAnalyticsSummary === 'function' ? getAnalyticsSummary() : {});
+
+    const tbody = document.getElementById('top50-tbody');
+    if (!tbody) return;
+
+    try {
+        if (!_top50CachedPosts || _top50CachedPosts.length === 0) {
+            _top50CachedPosts = await getPosts();
+        }
+    } catch(e) {}
+
+    const posts = _top50CachedPosts || [];
+    if (!posts || posts.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-8 text-muted">등록된 매물이 없습니다.</td></tr>';
+        return;
+    }
+
+    const likesMap = summary.likes || {};
+    const viewsMap = summary.postViewsMap || {};
+
+    // Map each post with its real-time metrics
+    const mapped = posts.map(p => {
+        const pid = String(p.id);
+        const likes = Number(likesMap[pid] || 0);
+        const views = Number(viewsMap[pid] ? viewsMap[pid].count : 0);
+        const propNo = typeof getPropertyDisplayNumber === 'function' ? getPropertyDisplayNumber(p) : (pid.slice(-4));
+        const rate = views > 0 ? Math.round((likes / views) * 100) : 0;
+        return {
+            post: p,
+            id: pid,
+            title: p.title || '매물 상세',
+            category: p.category || '매물',
+            propNo,
+            likes,
+            views,
+            rate
+        };
+    });
+
+    // Sort according to mode
+    if (currentTop50Mode === 'likes') {
+        mapped.sort((a, b) => b.likes - a.likes || b.views - a.views);
+    } else {
+        mapped.sort((a, b) => b.views - a.views || b.likes - a.likes);
+    }
+
+    // Top 50 slice
+    const top50 = mapped.slice(0, 50);
+
+    const filterInput = document.getElementById('top50-search-input');
+    const q = (filterInput ? filterInput.value : '').trim().toLowerCase();
+
+    const filtered = q ? top50.filter(item => 
+        item.title.toLowerCase().includes(q) || 
+        item.propNo.toLowerCase().includes(q) || 
+        item.category.toLowerCase().includes(q)
+    ) : top50;
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-8 text-muted">검색 조건에 맞는 매물이 없습니다.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = filtered.map((item, idx) => {
+        const rank = idx + 1;
+        let rankBadge = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs">${rank}</span>`;
+        if (rank === 1) {
+            rankBadge = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-400 text-white font-black text-xs shadow-xs" title="1위">🥇1</span>`;
+        } else if (rank === 2) {
+            rankBadge = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-400 text-white font-black text-xs shadow-xs" title="2위">🥈2</span>`;
+        } else if (rank === 3) {
+            rankBadge = `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-700 text-white font-black text-xs shadow-xs" title="3위">🥉3</span>`;
+        }
+
+        return `
+            <tr class="hover:bg-surface-container-low transition-colors">
+                <td class="px-3 py-3 text-center whitespace-nowrap">${rankBadge}</td>
+                <td class="px-3 py-3 text-center whitespace-nowrap">
+                    <span class="bg-blue-50 dark:bg-blue-950 text-[#003891] dark:text-blue-300 border border-blue-200 dark:border-blue-800 px-2 py-0.5 rounded font-black text-[11px]">
+                        ${item.propNo}
+                    </span>
+                </td>
+                <td class="px-3 py-3">
+                    <a href="news-detail.html?id=${item.id}" target="_blank" class="font-bold text-slate-900 dark:text-white hover:text-blue-600 line-clamp-1 no-underline">
+                        ${item.title}
+                    </a>
+                </td>
+                <td class="px-3 py-3 text-center whitespace-nowrap">
+                    <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded text-[11px] font-bold">
+                        ${item.category}
+                    </span>
+                </td>
+                <td class="px-3 py-3 text-center whitespace-nowrap">
+                    <span class="text-rose-600 dark:text-rose-400 font-black flex items-center justify-center gap-0.5 text-xs">
+                        <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                        ${item.likes}회
+                    </span>
+                </td>
+                <td class="px-3 py-3 text-center whitespace-nowrap font-bold text-primary dark:text-blue-400">
+                    👁️ ${item.views}회
+                </td>
+                <td class="px-3 py-3 text-center whitespace-nowrap font-medium text-slate-600 dark:text-slate-400">
+                    ${item.views > 0 ? `${item.rate}%` : '-'}
+                </td>
+                <td class="px-3 py-3 text-center whitespace-nowrap">
+                    <a href="news-detail.html?id=${item.id}" target="_blank" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 dark:bg-slate-800 dark:text-slate-300 text-[11px] font-bold no-underline inline-flex items-center gap-0.5 transition-all">
+                        <span>보기</span>
+                        <span class="material-symbols-outlined text-[13px]">arrow_outward</span>
+                    </a>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+window.renderTop50Table = renderTop50Table;
+
+function filterTop50Table() {
+    renderTop50Table(_top50Summary);
+}
+window.filterTop50Table = filterTop50Table;
+
+function renderRecentLikesTable(summary) {
+    const tbody = document.getElementById('recent-likes-tbody');
+    if (!tbody) return;
+
+    const recentLikes = (summary && summary.recentLikes) ? summary.recentLikes : [];
+    if (!recentLikes || recentLikes.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-muted text-xs">아직 수집된 실시간 찜 기록이 없습니다. (손님이 하트 클릭 시 실시간 기록)</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = recentLikes.slice(0, 30).map(log => {
+        const devBadge = log.device === 'desktop' 
+            ? '<span class="bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 px-2 py-0.5 rounded text-[11px] font-semibold">💻 PC</span>' 
+            : '<span class="bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-300 px-2 py-0.5 rounded text-[11px] font-semibold">📱 모바일</span>';
+        
+        return `
+            <tr class="hover:bg-surface-container-low transition-colors text-ink text-xs">
+                <td class="px-md py-2.5 text-muted whitespace-nowrap">${log.date || ''}</td>
+                <td class="px-md py-2.5 text-center whitespace-nowrap">${devBadge}</td>
+                <td class="px-md py-2.5 text-center whitespace-nowrap">
+                    <span class="bg-blue-50 dark:bg-blue-950 text-[#003891] dark:text-blue-300 border border-blue-200 dark:border-blue-800 px-2 py-0.5 rounded font-black text-[11px]">
+                        ${log.propNumber || '-'}
+                    </span>
+                </td>
+                <td class="px-md py-2.5 font-bold text-ink truncate max-w-xs">
+                    <a href="news-detail.html?id=${log.postId}" target="_blank" class="hover:text-primary no-underline text-ink">
+                        ${log.title || '매물 상세'}
+                    </a>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+window.renderRecentLikesTable = renderRecentLikesTable;
+
 </script>
 </body></html>
