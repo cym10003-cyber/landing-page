@@ -5621,7 +5621,9 @@
       "date": "2026-10-28",
       "count": 1,
       "referrers": {},
-      "postViews": {},
+      "postViews": {
+        "1783987867685": 1
+      },
       "likes": {}
     }
   },
