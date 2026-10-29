@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v211");
+console.log("Antigravity db.js version: 20260715_v212");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v211";
+const APP_VERSION = "20260715_v212";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -511,7 +511,7 @@ function renderMarkdown(src) {
 
     // Convert Markdown image syntax ![alt](url) to HTML <img> tags in HTML mode
     cleanHtml = cleanHtml.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, url) => {
-      return `<img src="${url}" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main','raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main');}" alt="${alt || '매물 이미지'}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" loading="lazy">`;
+      return `<img src="${url}" onerror="if(typeof handlePostImgError==='function'){handlePostImgError(this);}else if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main','raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main');}" alt="${alt || '매물 이미지'}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" loading="lazy">`;
     });
 
     // Format any raw unformatted plain text outside HTML tags into clean <p> blocks
@@ -733,7 +733,7 @@ function renderMarkdown(src) {
       const { altText, url } = imgPlaceholders[parseInt(idx, 10)];
       const cleanUrl = url.trim();
       if (/^(https?:\/\/|data:image\/)/i.test(cleanUrl)) {
-        return `<img src="${cleanUrl}" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main','raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main');}" alt="${altText}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" />`;
+        return `<img src="${cleanUrl}" onerror="if(typeof handlePostImgError==='function'){handlePostImgError(this);}else if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main','raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main');}" alt="${altText}" class="max-w-full h-auto rounded-xl shadow-card-soft border border-hairline my-md mx-auto block" />`;
       }
       return `![${altText}](${url})`;
     });
@@ -1805,7 +1805,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v211`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v212`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
@@ -1921,6 +1921,59 @@ const DB_FALLBACK_IMAGES = [
     "https://lh3.googleusercontent.com/aida-public/AB6AXuDSPLN1-SGjcEvbjw9WnBsD6clfPaz-0RsQBNAzLGqKPoDXhrQ-j0UVR2O0Hbx5oPlmkKnIEeZqm8f9gBjahcMmLU9PyBfCBRuwZ6oq62qhPdy2oCCCPIpquntvosL7d_wCt0lmwcFnp_btQnN54oJTlojjqKAuV5vktthcAcSWZr1jmMDyixvnSqlSYJTp_qMsNfopnzjYpJCGf-YbCbS5S0P3P6XMAh-cu7xuwPalCbdUnaJDjoEvXFpwhqKYuuLgb5WBFdxvCew",
     "https://lh3.googleusercontent.com/aida-public/AB6AXuBX-myFJEALqPkFc0UZCHTJBXA6awz2lb1x7CsHBsodkyWcOb4dFyIrQ7miBRsZzkCQsts2rpJQTJ_N47oxy9pqCPTEfNXS3NHKCMkRR70oJMLmv9PL22NpqPbHRPIKlHi-Qs7QQ7TknYmky-L46atqcY8lpca7UO2sMXud3m1jVI3hdBWoATZ_cU4-lSpj9kMOE_jCyevOxw6lK_GnvTrhScMpybyiamp8f-e7gNBHU232V9aXqK1Kl8B_O1atEmar0FARd4PHHPI"
 ];
+
+function handlePostImgError(el, postId) {
+    if (!el) return;
+    let step = parseInt(el.dataset.errorStep || '0', 10);
+    el.dataset.errorStep = String(step + 1);
+
+    const originalSrc = el.getAttribute('data-original-src') || el.src || '';
+    if (!el.getAttribute('data-original-src')) {
+        el.setAttribute('data-original-src', originalSrc);
+    }
+
+    if (step === 0) {
+        if (originalSrc.includes('cdn.jsdelivr.net/gh/')) {
+            el.src = originalSrc
+                .replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main', 'raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main')
+                .replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main', 'raw.githubusercontent.com/cym10003-cyber/landing-page/main');
+            return;
+        } else if (originalSrc.includes('raw.githubusercontent.com/')) {
+            el.src = originalSrc
+                .replace('raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main', 'cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main')
+                .replace('raw.githubusercontent.com/cym10003-cyber/landing-page/main', 'cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main');
+            return;
+        }
+    }
+
+    if (step === 1 && originalSrc.includes('landing-page-assets')) {
+        const m = originalSrc.match(/images\/[^?#]+/);
+        if (m) {
+            el.src = `https://fastly.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/${m[0]}`;
+            return;
+        }
+    }
+
+    if (step === 2 && originalSrc.includes('landing-page-assets')) {
+        const m = originalSrc.match(/images\/[^?#]+/);
+        if (m) {
+            el.src = `https://cdn.statically.io/gh/cym10003-cyber/landing-page-assets/main/${m[0]}`;
+            return;
+        }
+    }
+
+    el.removeAttribute('alt');
+    el.removeAttribute('onerror');
+    const key = String(postId || originalSrc || '1');
+    const hash = key.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const fallbacks = (typeof DB_FALLBACK_IMAGES !== 'undefined' && Array.isArray(DB_FALLBACK_IMAGES) && DB_FALLBACK_IMAGES.length > 0)
+        ? DB_FALLBACK_IMAGES
+        : [
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuCkR-wQyhx_M0SJF0T5FH04XUIMeg6qiswo7SylZDzAmaNZvZNKh-wSI9vVX9PD3ylL4DgGtEcd9m-jU4fF9tHKVSy84-4kUI67OMbysZG-c-eZ-HNPMnu2O57NDO0AJxiPsGRrtHLH_CUoVJXqZF9XBhPBL4bFlBVSwxWLNpZySjR3UivnfVo-2scUE5413YQbsf2XE13SapJwBA4jwKU5GONGrtt6hTLhBS3CDMiaaNXF9Hn9317Qs6JQYBaTuvRjbvGd69nQyzw"
+        ];
+    el.src = fallbacks[hash % fallbacks.length];
+}
+window.handlePostImgError = handlePostImgError;
 
 function extractPostImage(p) {
     if (!p) return DB_FALLBACK_IMAGES[0];
@@ -2324,7 +2377,7 @@ function renderQuickBarFavorites() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     매물 사진 우측 상단의 하트(♥)를 누르면 관심 매물에 쏙 담아 한 번에 비교 상담받으실 수 있습니다!
                 </p>
-                <a href="property-news.html?v=20260715_v211" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v212" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -2358,7 +2411,7 @@ function renderQuickBarFavorites() {
             ${favs.map(item => `
                 <div class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/70 hover:border-rose-300 transition-all">
                     <input type="checkbox" name="fav-item-check" value="${item.id}" checked class="w-4 h-4 rounded text-rose-600 shrink-0 cursor-pointer">
-                    <img src="${item.image}" alt="" class="w-16 h-16 rounded-xl object-cover shrink-0 bg-slate-100 border border-slate-200 dark:border-slate-700 shadow-xs" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main','raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main');}else{this.src='${DB_FALLBACK_IMAGES[0]}';}" loading="lazy">
+                    <img src="${item.image}" alt="" class="w-16 h-16 rounded-xl object-cover shrink-0 bg-slate-100 border border-slate-200 dark:border-slate-700 shadow-xs" onerror="handlePostImgError(this, '${item.id}')" loading="lazy">
                     <div class="flex-1 min-w-0 flex flex-col gap-0.5">
                         <div class="flex items-center gap-1.5">
                             <span class="text-[11px] font-black text-[#003891] dark:text-blue-300 bg-blue-50 dark:bg-blue-950 px-1.5 py-0.2 rounded border border-blue-200 dark:border-blue-800">
@@ -2393,7 +2446,7 @@ function renderQuickBarRecents() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     관심 있는 매물 상세페이지를 방문하시면 이곳에 자동으로 최근 본 목록이 기록됩니다!
                 </p>
-                <a href="property-news.html?v=20260715_v211" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v212" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -2425,7 +2478,7 @@ function renderQuickBarRecents() {
                 const isFav = isFavoritePost(item.id);
                 return `
                     <div class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/70 hover:border-blue-300 transition-all">
-                        <img src="${item.image}" alt="" class="w-16 h-16 rounded-xl object-cover shrink-0 bg-slate-100 border border-slate-200 dark:border-slate-700 shadow-xs" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main','raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main');}else{this.src='${DB_FALLBACK_IMAGES[0]}';}" loading="lazy">
+                        <img src="${item.image}" alt="" class="w-16 h-16 rounded-xl object-cover shrink-0 bg-slate-100 border border-slate-200 dark:border-slate-700 shadow-xs" onerror="handlePostImgError(this, '${item.id}')" loading="lazy">
                         <div class="flex-1 min-w-0 flex flex-col gap-0.5">
                             <span class="text-[11px] font-black text-[#003891] dark:text-blue-300 bg-blue-50 dark:bg-blue-950 px-1.5 py-0.2 rounded border border-blue-200 dark:border-blue-800 w-fit">
                                 매물번호: ${item.propNumber || item.id}
