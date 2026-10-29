@@ -1,6 +1,12 @@
 [
   {
     "query": "중구",
+    "device": "desktop",
+    "timestamp": 1793243680678,
+    "date": "2026. 10. 29. 오후 12:14:40"
+  },
+  {
+    "query": "중구",
     "device": "mobile",
     "timestamp": 1793192255585,
     "date": "2026. 10. 28. 오후 9:57:35"
