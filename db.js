@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v215");
+console.log("Antigravity db.js version: 20260715_v216");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v215";
+const APP_VERSION = "20260715_v216";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1805,7 +1805,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v215`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v216`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
@@ -2377,7 +2377,7 @@ function renderQuickBarFavorites() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     매물 사진 우측 상단의 하트(♥)를 누르면 관심 매물에 쏙 담아 한 번에 비교 상담받으실 수 있습니다!
                 </p>
-                <a href="property-news.html?v=20260715_v215" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v216" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -2446,7 +2446,7 @@ function renderQuickBarRecents() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     관심 있는 매물 상세페이지를 방문하시면 이곳에 자동으로 최근 본 목록이 기록됩니다!
                 </p>
-                <a href="property-news.html?v=20260715_v215" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v216" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
