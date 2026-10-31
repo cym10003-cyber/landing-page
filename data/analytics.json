@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 7332,
-  "todayPageviews": 109,
+  "totalPageviews": 7333,
+  "todayPageviews": 110,
   "dailyHistory": {
     "2026-09-24": {
       "date": "2026-09-24",
@@ -5620,9 +5620,9 @@
     },
     "2026-10-31": {
       "date": "2026-10-31",
-      "count": 109,
+      "count": 110,
       "referrers": {
-        "직접 접속 / 카카오톡 링크": 15,
+        "직접 접속 / 카카오톡 링크": 16,
         "네이버 (Naver)": 5,
         "SNS (인스타/페북)": 1,
         "l.threads.com": 1,
