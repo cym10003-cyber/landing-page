@@ -1,6 +1,9 @@
 ---
 name: board-builder
-description: GitHub API & Vercel 기반 정적 게시판 홈페이지 빌더
+description: >-
+  GitHub API & Vercel 기반 정적 게시판 홈페이지 빌더.
+  공지사항, 부동산 뉴스(property-news), 관리자 대시보드(admin), 글쓰기/수정/삭제 폼,
+  db.js 마크다운 렌더러 또는 깃허브 원격 저장소 JSON 포스트 연동 작업을 수행하거나 문의할 때 반드시 사용합니다.
 ---
 
 # board-builder Skill
