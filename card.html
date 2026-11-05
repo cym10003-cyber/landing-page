@@ -101,7 +101,7 @@
         <div class="relative -mt-10 flex flex-col items-center px-5">
             <div class="relative">
                 <div class="w-24 h-24 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white ring-2 ring-brand-blue/20">
-                    <img src="agent.jpg" alt="최가네부동산 최이명 대표" class="w-full h-full object-cover">
+                    <img src="agent.jpg?v=20260715_v226" alt="최가네부동산 최이명 대표" class="w-full h-full object-cover">
                 </div>
                 <div class="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center border-2 border-white shadow-sm" title="공인중개사 정식 등록">
                     <span class="material-symbols-outlined text-[15px]">verified</span>
@@ -115,7 +115,7 @@
             </div>
         </div>
 
-        <!-- 3 Primary Action Buttons (Call / SMS / Save Contact) -->
+        <!-- 3 Primary Action Buttons (Call / SMS / Kakao Chat) -->
         <section class="px-5 mt-5">
             <div class="grid grid-cols-3 gap-2.5">
                 <!-- 1. Call Button -->
@@ -126,15 +126,15 @@
 
                 <!-- 2. SMS Button -->
                 <a href="sms:01035484000" class="flex flex-col items-center justify-center gap-1 py-3 px-2 rounded-2xl bg-brand-soft hover:bg-blue-100 text-brand-blue font-bold text-xs border border-brand-border shadow-xs active:scale-95 transition-all">
-                    <span class="material-symbols-outlined text-[24px]">chat</span>
+                    <span class="material-symbols-outlined text-[24px]">sms</span>
                     <span>문자 상담</span>
                 </a>
 
-                <!-- 3. Save Contact (.vcf) Button (Super High Value) -->
-                <button type="button" onclick="downloadVCard()" class="flex flex-col items-center justify-center gap-1 py-3 px-2 rounded-2xl bg-gradient-to-br from-brand-navy to-brand-blue hover:from-brand-blue hover:to-brand-light text-white font-bold text-xs shadow-md active:scale-95 transition-all cursor-pointer">
-                    <span class="material-symbols-outlined text-[24px] text-amber-300">person_add</span>
-                    <span>연락처 저장</span>
-                </button>
+                <!-- 3. Kakao 1:1 Consultation Button (Safe & Direct) -->
+                <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center gap-1 py-3 px-2 rounded-2xl bg-[#fee500] hover:bg-[#fdd835] text-[#191600] font-black text-xs shadow-md active:scale-95 transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[24px]">chat</span>
+                    <span>카톡 상담</span>
+                </a>
             </div>
         </section>
 
@@ -358,7 +358,7 @@
 
         <!-- Official Website Link Button -->
         <section class="px-5">
-            <a href="index.html" class="w-full py-3.5 px-4 rounded-2xl bg-slate-900 hover:bg-black text-white font-bold text-sm flex items-center justify-between shadow-md active:scale-[0.98] transition-all">
+            <a href="index.html?v=20260715_v226" class="w-full py-3.5 px-4 rounded-2xl bg-slate-900 hover:bg-black text-white font-bold text-sm flex items-center justify-between shadow-md active:scale-[0.98] transition-all">
                 <span class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-[20px] text-amber-300">travel_explore</span>
                     최가네부동산 공식 홈페이지 매물 검색
@@ -395,35 +395,6 @@
                 if (textEl) textEl.textContent = '주요 중개이력 전체보기';
                 if (iconEl) iconEl.classList.remove('rotate-180');
             }
-        }
-
-        // 2. Download vCard (One-click contact saving)
-        function downloadVCard() {
-            const vcardData = [
-                'BEGIN:VCARD',
-                'VERSION:3.0',
-                'N:최;이명;;대표;',
-                'FN:최가네부동산 최이명 대표',
-                'ORG:최가네부동산공인중개사사무소',
-                'TITLE:대표소장 / 공인중개사',
-                'TEL;TYPE=CELL,VOICE,PREF:010-3548-4000',
-                'EMAIL;TYPE=INTERNET,WORK:cym10003@gmail.com',
-                'ADR;TYPE=WORK:;;대구광역시 수성구 수성동1가 72-3번지;대구광역시;수성구;;대한민국',
-                'URL;TYPE=WORK:https://www.choi114.com',
-                'URL;TYPE=CARD:https://www.choi114.com/card',
-                'NOTE:대구 전 지역 상가·사무실·대형법인 전문 중개\\n등록번호: 27260-2024-00085\\n매수신청대리인: 12-25-21',
-                'END:VCARD'
-            ].join('\r\n');
-
-            const blob = new Blob([vcardData], { type: 'text/vcard;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.setAttribute('download', '최가네부동산_최이명대표.vcf');
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
 
         // 3. Web Share or Clipboard Copy for Business Card
