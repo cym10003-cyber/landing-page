@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v222");
+console.log("Antigravity db.js version: 20260715_v223");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v222";
+const APP_VERSION = "20260715_v223";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1576,14 +1576,14 @@ function showLeadForm(type = 'buyer') {
                         </label>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2 sm:gap-3">
-                    <div>
-                        <label class="block font-bold mb-0.5 text-xs sm:text-sm text-slate-800 dark:text-slate-200" id="lead-pyeong-label">희망 평수</label>
+                <div class="grid grid-cols-5 gap-2 sm:gap-3">
+                    <div class="col-span-2">
+                        <label class="block font-bold mb-0.5 text-xs sm:text-sm text-slate-800 dark:text-slate-200 whitespace-nowrap" id="lead-pyeong-label">희망 평수</label>
                         <input type="text" id="lead-pyeong" placeholder="예: 50평대" class="w-full p-1.5 sm:p-2 text-xs sm:text-sm font-medium rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                     </div>
-                    <div>
-                        <label class="block font-bold mb-0.5 text-xs sm:text-sm text-slate-800 dark:text-slate-200" id="lead-budget-label">예산 / 임대조건 / 매매조건</label>
-                        <input type="text" id="lead-budget" placeholder="예: 보증금 5천/월 300 또는 매매 15억" class="w-full p-1.5 sm:p-2 text-xs sm:text-sm font-medium rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                    <div class="col-span-3">
+                        <label class="block font-bold mb-0.5 text-xs sm:text-sm text-slate-800 dark:text-slate-200 whitespace-nowrap" id="lead-budget-label">예산 / 임대조건 / 매매조건</label>
+                        <input type="text" id="lead-budget" placeholder="예: 보증금 5천/월 300 / 매매 15억" class="w-full p-1.5 sm:p-2 text-xs sm:text-sm font-medium rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                     </div>
                 </div>
                 <div>
@@ -1656,7 +1656,7 @@ function switchLeadTab(type) {
         if (pyeongLabel) pyeongLabel.textContent = '평수';
         if (budgetLabel) budgetLabel.textContent = '임대·매매조건 / 권리금 등';
         const sBudgetInput = document.getElementById('lead-budget');
-        if (sBudgetInput && !sBudgetInput.value) sBudgetInput.placeholder = '예: 보증금 1억/월 500 또는 매매 25억';
+        if (sBudgetInput && !sBudgetInput.value) sBudgetInput.placeholder = '예: 보증금 1억/월 500 / 매매 25억';
     } else {
         hiddenInput.value = 'buyer';
         tabBuyer.className = 'flex-1 py-2 sm:py-2.5 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer';
@@ -1668,7 +1668,7 @@ function switchLeadTab(type) {
         if (pyeongLabel) pyeongLabel.textContent = '희망 평수';
         if (budgetLabel) budgetLabel.textContent = '예산 / 임대조건 / 매매조건';
         const bBudgetInput = document.getElementById('lead-budget');
-        if (bBudgetInput && !bBudgetInput.value) bBudgetInput.placeholder = '예: 보증금 5천/월 300 또는 매매 15억';
+        if (bBudgetInput && !bBudgetInput.value) bBudgetInput.placeholder = '예: 보증금 5천/월 300 / 매매 15억';
     }
 }
 
@@ -1809,7 +1809,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v222`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v223`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
@@ -2381,7 +2381,7 @@ function renderQuickBarFavorites() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     매물 사진 우측 상단의 하트(♥)를 누르면 관심 매물에 쏙 담아 한 번에 비교 상담받으실 수 있습니다!
                 </p>
-                <a href="property-news.html?v=20260715_v222" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v223" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -2450,7 +2450,7 @@ function renderQuickBarRecents() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     관심 있는 매물 상세페이지를 방문하시면 이곳에 자동으로 최근 본 목록이 기록됩니다!
                 </p>
-                <a href="property-news.html?v=20260715_v222" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v223" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
