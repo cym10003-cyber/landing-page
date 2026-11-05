@@ -1518,8 +1518,8 @@ function showLeadForm(type = 'buyer') {
             </div>
 
             <div class="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#07102b] text-xs sm:text-sm font-medium">
-                <button id="lead-tab-buyer" type="button" onclick="switchLeadTab('buyer')" class="flex-1 py-2 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer text-xs sm:text-sm">🔍 매물 구해요 (손님)</button>
-                <button id="lead-tab-seller" type="button" onclick="switchLeadTab('seller')" class="flex-1 py-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer text-xs sm:text-sm">🏢 매물 내놓습니다 (건물주/임차인)</button>
+                <button id="lead-tab-buyer" type="button" onclick="switchLeadTab('buyer')" class="flex-1 py-2 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer text-xs sm:text-sm">🔍 매물 구하기 (손님/매수인)</button>
+                <button id="lead-tab-seller" type="button" onclick="switchLeadTab('seller')" class="flex-1 py-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer text-xs sm:text-sm">🏢 매물 내놓기 (건물주/임차인)</button>
             </div>
 
             <form id="lead-submit-form" onsubmit="submitClientLead(event)" class="p-3 sm:p-4 overflow-y-auto space-y-2 text-xs sm:text-sm">
@@ -1582,8 +1582,8 @@ function showLeadForm(type = 'buyer') {
                         <input type="text" id="lead-pyeong" placeholder="예: 50평대" class="w-full p-1.5 sm:p-2 text-xs sm:text-sm font-medium rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                     </div>
                     <div>
-                        <label class="block font-bold mb-0.5 text-xs sm:text-sm text-slate-800 dark:text-slate-200" id="lead-budget-label">예산 / 임대조건</label>
-                        <input type="text" id="lead-budget" placeholder="예: 보증금 5천/월 300" class="w-full p-1.5 sm:p-2 text-xs sm:text-sm font-medium rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
+                        <label class="block font-bold mb-0.5 text-xs sm:text-sm text-slate-800 dark:text-slate-200" id="lead-budget-label">예산 / 임대조건 / 매매조건</label>
+                        <input type="text" id="lead-budget" placeholder="예: 보증금 5천/월 300 또는 매매 15억" class="w-full p-1.5 sm:p-2 text-xs sm:text-sm font-medium rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#142654]">
                     </div>
                 </div>
                 <div>
@@ -1655,6 +1655,8 @@ function switchLeadTab(type) {
         if (floorLabel) floorLabel.textContent = '층수 (중복 선택 가능)';
         if (pyeongLabel) pyeongLabel.textContent = '평수';
         if (budgetLabel) budgetLabel.textContent = '임대·매매조건 / 권리금 등';
+        const sBudgetInput = document.getElementById('lead-budget');
+        if (sBudgetInput && !sBudgetInput.value) sBudgetInput.placeholder = '예: 보증금 1억/월 500 또는 매매 25억';
     } else {
         hiddenInput.value = 'buyer';
         tabBuyer.className = 'flex-1 py-2 sm:py-2.5 border-b-2 border-[#003891] text-[#003891] dark:text-blue-400 font-bold cursor-pointer';
@@ -1664,7 +1666,9 @@ function switchLeadTab(type) {
         if (locLabel) locLabel.textContent = '희망 지역 / 희망 위치';
         if (floorLabel) floorLabel.textContent = '희망 층수 (중복 선택 가능)';
         if (pyeongLabel) pyeongLabel.textContent = '희망 평수';
-        if (budgetLabel) budgetLabel.textContent = '예산 / 임대조건';
+        if (budgetLabel) budgetLabel.textContent = '예산 / 임대조건 / 매매조건';
+        const bBudgetInput = document.getElementById('lead-budget');
+        if (bBudgetInput && !bBudgetInput.value) bBudgetInput.placeholder = '예: 보증금 5천/월 300 또는 매매 15억';
     }
 }
 
@@ -1849,7 +1853,7 @@ function openPrivacyModal() {
                         <span class="w-1.5 h-4 bg-blue-600 rounded-full inline-block"></span> 2. 수집하는 개인정보 항목 및 수집 방법
                     </h4>
                     <ul class="list-disc pl-5 space-y-0.5 text-slate-600 dark:text-slate-400">
-                        <li><b>직접 수집 항목</b>: 성명(상호명), 연락처(전화번호), 매물 종류, 희망 업종, 매물/희망 위치, 층수, 희망 평수, 예산/임대조건, 세부 요청사항</li>
+                        <li><b>직접 수집 항목</b>: 성명(상호명), 연락처(전화번호), 매물 종류, 희망 업종, 매물/희망 위치, 층수, 희망 평수, 예산/임대·매매조건, 세부 요청사항</li>
                         <li><b>자동 수집 항목</b>: 서비스 이용 기록, 접속 디바이스 유형(모바일/PC), 접속 시각, 검색 키워드 로그</li>
                         <li><b>수집 방법</b>: 홈페이지 온라인 매물 접수 폼, 전화 및 방문 상담</li>
                     </ul>
