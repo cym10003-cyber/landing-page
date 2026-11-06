@@ -5523,7 +5523,9 @@
       "referrers": {
         "네이버 (Naver)": 1
       },
-      "postViews": {},
+      "postViews": {
+        "1786690569168": 1
+      },
       "likes": {}
     }
   },
