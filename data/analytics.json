@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 8322,
-  "todayPageviews": 26,
+  "totalPageviews": 8323,
+  "todayPageviews": 27,
   "dailyHistory": {
     "2026-10-04": {
       "date": "2026-10-04",
@@ -5467,9 +5467,9 @@
     },
     "2026-11-08": {
       "date": "2026-11-08",
-      "count": 26,
+      "count": 27,
       "referrers": {
-        "직접 접속 / 카카오톡 링크": 7,
+        "직접 접속 / 카카오톡 링크": 8,
         "l.threads.com": 2
       },
       "postViews": {
