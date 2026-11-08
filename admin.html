@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed flex items-center"><a href="index.html">최가네부동산<span class="inline md:hidden xl:inline">공인중개사사무소</span></a></div>
 <div class="hidden md:flex gap-1.5 lg:gap-3 xl:gap-lg items-center text-xs lg:text-sm font-semibold shrink-0"><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v226">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v227">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v226">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v227">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-2.5 py-1.5 lg:px-[25px] lg:py-[14px] rounded font-button text-xs lg:text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-1 lg:gap-sm whitespace-nowrap shrink-0" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -129,7 +129,7 @@
 </div>
 </nav>
 <main class="max-w-7xl mx-auto px-lg py-[80px]">
-    <!-- v20260715_v226 force deploy 20261026_1513 -->
+    <!-- v20260715_v227 force deploy 20261026_1513 -->
     <!-- Non-logged in State (Login Form) -->
     <div id="login-view" class="hidden max-w-md mx-auto bg-surface-container-lowest p-lg md:p-xl rounded-xl shadow-card-soft border border-hairline my-12">
         <h2 class="font-subsection-h3 text-xl font-bold text-center text-ink mb-lg">관리자 로그인</h2>
@@ -252,10 +252,12 @@
                         <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
                             <span class="material-symbols-outlined text-primary">alt_route</span> 손님 유입 경로 TOP
                         </h3>
-                        <div class="flex bg-surface-container rounded-lg p-0.5 text-xs font-semibold">
-                            <button id="ref-period-today" class="px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer">오늘</button>
-                            <button id="ref-period-7days" class="px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer">최근 7일</button>
-                            <button id="ref-period-all" class="px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer">전체 누적</button>
+                        <div class="flex bg-surface-container rounded-lg p-0.5 text-[11px] sm:text-xs font-semibold overflow-x-auto max-w-full">
+                            <button id="ref-period-today" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">오늘</button>
+                            <button id="ref-period-yesterday" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">어제</button>
+                            <button id="ref-period-3days" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">3일전</button>
+                            <button id="ref-period-7days" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">최근 7일</button>
+                            <button id="ref-period-all" class="px-2 sm:px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer whitespace-nowrap">전체 누적</button>
                         </div>
                     </div>
                     <div id="top-referrers-list" class="space-y-sm">
@@ -282,10 +284,12 @@
                         <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
                             <span class="material-symbols-outlined text-primary">visibility</span> 인기 매물 TOP 10
                         </h3>
-                        <div class="flex bg-surface-container rounded-lg p-0.5 text-xs font-semibold">
-                            <button id="view-period-today" class="px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer">오늘</button>
-                            <button id="view-period-7days" class="px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer">최근 7일</button>
-                            <button id="view-period-all" class="px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer">전체 누적</button>
+                        <div class="flex bg-surface-container rounded-lg p-0.5 text-[11px] sm:text-xs font-semibold overflow-x-auto max-w-full">
+                            <button id="view-period-today" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">오늘</button>
+                            <button id="view-period-yesterday" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">어제</button>
+                            <button id="view-period-3days" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">3일전</button>
+                            <button id="view-period-7days" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">최근 7일</button>
+                            <button id="view-period-all" class="px-2 sm:px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer whitespace-nowrap">전체 누적</button>
                         </div>
                     </div>
                     <div id="top-views-list" class="space-y-sm">
@@ -497,10 +501,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v226">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v227">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v226">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v227">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -511,7 +515,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v226"></script>
+<script src="db.js?v=20260715_v227"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -568,62 +572,56 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
 
-        // View Period Toggle Handlers (Referrers & Top Views)
-        const periodTodayBtn = document.getElementById('view-period-today');
-        const period7DaysBtn = document.getElementById('view-period-7days');
-        const periodAllBtn = document.getElementById('view-period-all');
+        // View Period Toggle Handlers (Referrers & Top Views) - 5 Periods
+        const viewPeriodBtns = {
+            today: document.getElementById('view-period-today'),
+            yesterday: document.getElementById('view-period-yesterday'),
+            '3days': document.getElementById('view-period-3days'),
+            '7days': document.getElementById('view-period-7days'),
+            all: document.getElementById('view-period-all')
+        };
 
-        const refTodayBtn = document.getElementById('ref-period-today');
-        const ref7DaysBtn = document.getElementById('ref-period-7days');
-        const refAllBtn = document.getElementById('ref-period-all');
-
-        if (periodTodayBtn && period7DaysBtn && periodAllBtn) {
-            periodTodayBtn.addEventListener('click', () => {
-                currentViewPeriod = 'today';
-                periodTodayBtn.className = 'px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer';
-                period7DaysBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                periodAllBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                renderTopViewsList(getAnalyticsSummary());
+        function setViewPeriod(activeKey) {
+            currentViewPeriod = activeKey;
+            Object.entries(viewPeriodBtns).forEach(([key, btn]) => {
+                if (!btn) return;
+                if (key === activeKey) {
+                    btn.className = 'px-2 sm:px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer whitespace-nowrap';
+                } else {
+                    btn.className = 'px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap';
+                }
             });
-            period7DaysBtn.addEventListener('click', () => {
-                currentViewPeriod = '7days';
-                period7DaysBtn.className = 'px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer';
-                periodTodayBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                periodAllBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                renderTopViewsList(getAnalyticsSummary());
-            });
-            periodAllBtn.addEventListener('click', () => {
-                currentViewPeriod = 'all';
-                periodAllBtn.className = 'px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer';
-                periodTodayBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                period7DaysBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                renderTopViewsList(getAnalyticsSummary());
-            });
+            renderTopViewsList(getAnalyticsSummary());
         }
 
-        if (refTodayBtn && ref7DaysBtn && refAllBtn) {
-            refTodayBtn.addEventListener('click', () => {
-                currentRefPeriod = 'today';
-                refTodayBtn.className = 'px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer';
-                ref7DaysBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                refAllBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                renderReferrersList(getAnalyticsSummary());
+        Object.entries(viewPeriodBtns).forEach(([key, btn]) => {
+            if (btn) btn.addEventListener('click', () => setViewPeriod(key));
+        });
+
+        const refPeriodBtns = {
+            today: document.getElementById('ref-period-today'),
+            yesterday: document.getElementById('ref-period-yesterday'),
+            '3days': document.getElementById('ref-period-3days'),
+            '7days': document.getElementById('ref-period-7days'),
+            all: document.getElementById('ref-period-all')
+        };
+
+        function setRefPeriod(activeKey) {
+            currentRefPeriod = activeKey;
+            Object.entries(refPeriodBtns).forEach(([key, btn]) => {
+                if (!btn) return;
+                if (key === activeKey) {
+                    btn.className = 'px-2 sm:px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer whitespace-nowrap';
+                } else {
+                    btn.className = 'px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap';
+                }
             });
-            ref7DaysBtn.addEventListener('click', () => {
-                currentRefPeriod = '7days';
-                ref7DaysBtn.className = 'px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer';
-                refTodayBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                refAllBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                renderReferrersList(getAnalyticsSummary());
-            });
-            refAllBtn.addEventListener('click', () => {
-                currentRefPeriod = 'all';
-                refAllBtn.className = 'px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer';
-                refTodayBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                ref7DaysBtn.className = 'px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer';
-                renderReferrersList(getAnalyticsSummary());
-            });
+            renderReferrersList(getAnalyticsSummary());
         }
+
+        Object.entries(refPeriodBtns).forEach(([key, btn]) => {
+            if (btn) btn.addEventListener('click', () => setRefPeriod(key));
+        });
         
         document.getElementById('logout-btn').onclick = () => {
             sessionStorage.removeItem('isAdmin');
@@ -816,10 +814,19 @@ function renderReferrersList(summary) {
     let refData = summary.topReferrers; // default 'all'
     let emptyMsg = '아직 수집된 외부 유입 데이터가 없습니다.';
 
+    const todayStr = (summary.todayDate || new Date().toISOString().split('T')[0]).slice(5);
+    const yesterdayStr = (summary.yesterdayDate || '').slice(5);
+    const day3Str = (summary.day3Date || '').slice(5);
+
     if (currentRefPeriod === 'today') {
         refData = summary.topReferrersToday;
-        const todayStr = new Date().toISOString().split('T')[0].slice(5);
-        emptyMsg = `오늘(${todayStr}) 수집된 유입 경로 데이터가 아직 없습니다. [최근 7일] 또는 [전체 누적] 버튼을 클릭해 보세요.`;
+        emptyMsg = `오늘(${todayStr}) 수집된 유입 경로 데이터가 아직 없습니다. [어제] 또는 [전체 누적] 버튼을 클릭해 보세요.`;
+    } else if (currentRefPeriod === 'yesterday') {
+        refData = summary.topReferrersYesterday;
+        emptyMsg = `어제(${yesterdayStr}) 수집된 유입 경로 데이터가 없습니다.`;
+    } else if (currentRefPeriod === '3days') {
+        refData = summary.topReferrers3Days;
+        emptyMsg = `최근 3일간(${day3Str}~${todayStr}) 수집된 유입 경로 데이터가 없습니다.`;
     } else if (currentRefPeriod === '7days') {
         refData = summary.topReferrers7Days;
         emptyMsg = '최근 7일간 수집된 유입 경로 데이터가 없습니다.';
@@ -866,12 +873,22 @@ function renderTopViewsList(summary) {
     let viewsData = summary.topViews; // default 'all'
     let emptyMsg = '아직 수집된 매물 조회 기록이 없습니다.';
 
+    const todayStr = (summary.todayDate || new Date().toISOString().split('T')[0]).slice(5);
+    const yesterdayStr = (summary.yesterdayDate || '').slice(5);
+    const day3Str = (summary.day3Date || '').slice(5);
+
     if (currentViewPeriod === 'today') {
         viewsData = summary.todayTopViews;
-        const todayStr = new Date().toISOString().split('T')[0].slice(5);
-        emptyMsg = `오늘(${todayStr})은 매물 상세페이지 클릭이 아직 없었습니다. [최근 7일] 또는 [전체 누적] 버튼을 클릭해 보세요.`;
+        emptyMsg = `오늘(${todayStr})은 매물 상세페이지 클릭이 아직 없었습니다. [어제] 또는 [전체 누적] 버튼을 클릭해 보세요.`;
+    } else if (currentViewPeriod === 'yesterday') {
+        viewsData = summary.yesterdayTopViews;
+        emptyMsg = `어제(${yesterdayStr})는 매물 상세페이지 클릭이 없었습니다.`;
+    } else if (currentViewPeriod === '3days') {
+        viewsData = summary.days3TopViews;
+        emptyMsg = `최근 3일간(${day3Str}~${todayStr}) 매물 상세페이지 클릭이 없었습니다.`;
     } else if (currentViewPeriod === '7days') {
-        viewsData = summary.topViews;
+        viewsData = summary.days7TopViews || summary.topViews;
+        emptyMsg = '최근 7일간 매물 상세페이지 클릭이 없었습니다.';
     }
 
     if (!viewsData || viewsData.length === 0) {

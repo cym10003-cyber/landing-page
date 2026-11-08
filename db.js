@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v226");
+console.log("Antigravity db.js version: 20260715_v227");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v226";
+const APP_VERSION = "20260715_v227";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1175,32 +1175,74 @@ function getAnalyticsSummary(remoteData = null) {
         });
         const topReferrersAll = calcReferrers(allRefMap, Math.max(pageData.total || 0, allVisitsSum));
 
-        // Today Referrers
+        // 1) Helper to format topViews from a given postViews map
+        const calcTopViews = (pvMap) => {
+            if (!pvMap || typeof pvMap !== 'object') return [];
+            return Object.entries(pvMap)
+                .map(([id, count]) => ({
+                    id,
+                    title: postViews[id] ? postViews[id].title : '매물 상세',
+                    count: count || 0
+                }))
+                .filter(item => item.count > 0)
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 10);
+        };
+
+        const yesterdayStr = getKSTDateStr(-1);
+        const day2Str = getKSTDateStr(-2);
+
+        // 2) Today Referrers & Top Views
         const todayEntry = dailyHistory[todayStr] || { count: pageData.today || 0, referrers: {}, postViews: {} };
         const todayVisitCount = Math.max(pageData.today || 0, todayEntry.count || 0);
         const topReferrersToday = calcReferrers(todayEntry.referrers || {}, todayVisitCount);
+        const todayTopViews = calcTopViews(todayEntry.postViews || {});
 
-        // Recent 7 Days Referrers
+        // 3) Yesterday Referrers & Top Views
+        const yesterdayEntry = dailyHistory[yesterdayStr] || { count: 0, referrers: {}, postViews: {} };
+        const topReferrersYesterday = calcReferrers(yesterdayEntry.referrers || {}, yesterdayEntry.count || 0);
+        const yesterdayTopViews = calcTopViews(yesterdayEntry.postViews || {});
+
+        // 4) 3 Days (Recent 3 days: day2Str, yesterdayStr, todayStr) Referrers & Top Views
+        const ref3Map = {};
+        const pv3Map = {};
+        let total3DaysVisits = 0;
+        [day2Str, yesterdayStr, todayStr].forEach(ds => {
+            const entry = dailyHistory[ds];
+            if (entry) {
+                total3DaysVisits += (entry.count || 0);
+                if (entry.referrers) {
+                    Object.entries(entry.referrers).forEach(([src, count]) => {
+                        ref3Map[src] = (ref3Map[src] || 0) + count;
+                    });
+                }
+                if (entry.postViews) {
+                    Object.entries(entry.postViews).forEach(([id, count]) => {
+                        pv3Map[id] = (pv3Map[id] || 0) + count;
+                    });
+                }
+            }
+        });
+        const topReferrers3Days = calcReferrers(ref3Map, total3DaysVisits);
+        const days3TopViews = calcTopViews(pv3Map);
+
+        // 5) Recent 7 Days Referrers & Top Views
         const ref7Map = {};
+        const pv7Map = {};
         datesList.forEach(d => {
             if (d.referrers) {
                 Object.entries(d.referrers).forEach(([src, count]) => {
                     ref7Map[src] = (ref7Map[src] || 0) + count;
                 });
             }
+            if (d.postViews) {
+                Object.entries(d.postViews).forEach(([id, count]) => {
+                    pv7Map[id] = (pv7Map[id] || 0) + count;
+                });
+            }
         });
         const topReferrers7Days = calcReferrers(ref7Map, total7DaysVisits);
-
-        // Today Top Views
-        const todayPostViewsMap = todayEntry.postViews || {};
-        const todayTopViews = Object.entries(todayPostViewsMap)
-            .map(([id, count]) => ({
-                id,
-                title: postViews[id] ? postViews[id].title : '매물 상세',
-                count
-            }))
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 10);
+        const days7TopViews = calcTopViews(pv7Map);
 
         const qCounts = {};
         let mobileCount = 0;
@@ -1226,9 +1268,17 @@ function getAnalyticsSummary(remoteData = null) {
             topQueries,
             topViews,
             todayTopViews,
+            yesterdayTopViews,
+            days3TopViews,
+            days7TopViews,
+            todayDate: todayStr,
+            yesterdayDate: yesterdayStr,
+            day3Date: day2Str,
             recent7Days: datesList,
             topReferrers: topReferrersAll,
             topReferrersToday,
+            topReferrersYesterday,
+            topReferrers3Days,
             topReferrers7Days,
             dailyHistory,
             totalSearches: searchLogs.length,
@@ -1242,7 +1292,7 @@ function getAnalyticsSummary(remoteData = null) {
             recentLikes: (remoteData && remoteData.recentLikes) ? remoteData.recentLikes : []
         };
     } catch(e) {
-        return { searchLogs: [], topQueries: [], topViews: [], todayTopViews: [], recent7Days: [], topReferrers: [], topReferrersToday: [], topReferrers7Days: [], dailyHistory: {}, totalSearches: 0, mobileCount: 0, desktopCount: 0, totalPageviews: 0, todayPageviews: 0, postViewsMap: {} };
+        return { searchLogs: [], topQueries: [], topViews: [], todayTopViews: [], yesterdayTopViews: [], days3TopViews: [], days7TopViews: [], todayDate: '', yesterdayDate: '', day3Date: '', recent7Days: [], topReferrers: [], topReferrersToday: [], topReferrersYesterday: [], topReferrers3Days: [], topReferrers7Days: [], dailyHistory: {}, totalSearches: 0, mobileCount: 0, desktopCount: 0, totalPageviews: 0, todayPageviews: 0, postViewsMap: {} };
     }
 }
 
@@ -1809,7 +1859,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v226`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v227`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
@@ -2381,7 +2431,7 @@ function renderQuickBarFavorites() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     매물 사진 우측 상단의 하트(♥)를 누르면 관심 매물에 쏙 담아 한 번에 비교 상담받으실 수 있습니다!
                 </p>
-                <a href="property-news.html?v=20260715_v226" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v227" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -2450,7 +2500,7 @@ function renderQuickBarRecents() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     관심 있는 매물 상세페이지를 방문하시면 이곳에 자동으로 최근 본 목록이 기록됩니다!
                 </p>
-                <a href="property-news.html?v=20260715_v226" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v227" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
