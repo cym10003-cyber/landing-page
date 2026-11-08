@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 8341,
-  "todayPageviews": 45,
+  "totalPageviews": 8342,
+  "todayPageviews": 46,
   "dailyHistory": {
     "2026-10-04": {
       "date": "2026-10-04",
@@ -5467,12 +5467,13 @@
     },
     "2026-11-08": {
       "date": "2026-11-08",
-      "count": 45,
+      "count": 46,
       "referrers": {
         "직접 접속 / 카카오톡 링크": 8,
         "l.threads.com": 2,
         "네이버 (Naver)": 2,
-        "구글 (Google)": 4
+        "구글 (Google)": 4,
+        "perplexity.ai": 1
       },
       "postViews": {
         "1783987714318": 1,
