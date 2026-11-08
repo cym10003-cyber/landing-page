@@ -1,6 +1,6 @@
 {
-  "totalPageviews": 8296,
-  "todayPageviews": 0,
+  "totalPageviews": 8297,
+  "todayPageviews": 1,
   "dailyHistory": {
     "2026-10-04": {
       "date": "2026-10-04",
@@ -5467,7 +5467,7 @@
     },
     "2026-11-08": {
       "date": "2026-11-08",
-      "count": 0,
+      "count": 1,
       "referrers": {},
       "postViews": {
         "1783987714318": 1
