@@ -17,6 +17,7 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
     <title>매물지도 - 최가네부동산공인중개사사무소</title><meta name="description" content="최가네부동산 상가 및 사무실 매물의 대략적인 위치를 지도로 확인하실 수 있는 매물지도 서비스입니다." /><meta property="og:type" content="website" /><meta property="og:title" content="매물지도 - 최가네부동산공인중개사사무소" /><meta property="og:description" content="대구 수성구 및 달구벌대로 상업용 부동산 매물을 위치 기반 지도로 편리하게 확인해 보세요." /><meta property="og:image" content="https://www.choi114.com/og_map_v2b.jpg" /><meta property="og:url" content="https://www.choi114.com/map" /><link rel="image_src" href="https://www.choi114.com/og_map_v2b.jpg" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="매물지도 - 최가네부동산공인중개사사무소" /><meta name="twitter:description" content="대구 위치 기반 상가 및 사무실 매물지도 서비스입니다." /><meta name="twitter:image" content="https://www.choi114.com/og_map_v2b.jpg" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
@@ -138,6 +139,11 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
         } catch (_e) {}
     </script>
     <style>
+        body, button, input, select, textarea, .leaflet-popup, .leaflet-popup-content {
+            font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif !important;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
         .custom-scrollbar::-webkit-scrollbar {
             width: 5px;
         }
@@ -239,17 +245,21 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
             overscroll-behavior: none !important;
         }
     
-        /* High-Contrast Leaflet Popup Action Buttons */
+        /* Sleek & Refined Leaflet Popup Action Buttons */
         .leaflet-popup-content a.popup-call-btn {
             background-color: #003891 !important;
             color: #ffffff !important;
             text-decoration: none !important;
-            font-weight: 900 !important;
-            box-shadow: 0 2px 6px rgba(0, 56, 145, 0.4) !important;
+            font-weight: 700 !important;
+            box-shadow: 0 2px 6px rgba(0, 56, 145, 0.25) !important;
+            font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif !important;
+            letter-spacing: -0.2px !important;
+            border-radius: 8px !important;
         }
         .leaflet-popup-content a.popup-call-btn:hover {
-            background-color: #002561 !important;
+            background-color: #002766 !important;
             color: #ffffff !important;
+            box-shadow: 0 4px 10px rgba(0, 56, 145, 0.35) !important;
         }
         .leaflet-popup-content a.popup-call-btn span {
             color: #ffeb3b !important;
@@ -258,8 +268,11 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
             background-color: #0f172a !important;
             color: #ffffff !important;
             text-decoration: none !important;
-            font-weight: 800 !important;
+            font-weight: 600 !important;
             border: 1px solid #334155 !important;
+            font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif !important;
+            letter-spacing: -0.2px !important;
+            border-radius: 8px !important;
         }
         .leaflet-popup-content a.popup-detail-btn:hover {
             background-color: #1e293b !important;
@@ -269,8 +282,11 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
             background-color: #fee500 !important;
             color: #191600 !important;
             text-decoration: none !important;
-            font-weight: 900 !important;
+            font-weight: 700 !important;
             border: 1px solid #d4be00 !important;
+            font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif !important;
+            letter-spacing: -0.2px !important;
+            border-radius: 8px !important;
         }
         .leaflet-popup-content a.popup-kakao-btn:hover {
             background-color: #fdd835 !important;
@@ -290,10 +306,10 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
 <div class="hidden md:flex gap-1.5 lg:gap-3 xl:gap-lg items-center text-xs lg:text-sm font-semibold shrink-0">
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v227">매물리스트</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v228">매물리스트</a>
     <a class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v227">부동산 소식</a>
+    <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v228">부동산 소식</a>
     <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button>
 </div>
@@ -386,10 +402,10 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v227">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v228">매물리스트</a>
       <a class="text-primary hover:text-primary py-sm border-b border-hairline/50 font-bold" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v227">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v228">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -422,7 +438,7 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
 </div>
 
 <!-- Load Database and Page Logic -->
-<script src="db.js?v=20260715_v227"></script>
+<script src="db.js?v=20260715_v228"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Setup Mobile Menu Drawer
@@ -1302,22 +1318,22 @@ ${conditionBlock}
                             <p class="text-[11px] text-muted leading-tight truncate">${item.address}</p>
                             ${item.description ? `<div class="text-[11px] text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-2 rounded-lg border border-slate-100 dark:border-slate-700/60 leading-snug line-clamp-2 mt-0.5 font-medium">${item.description}</div>` : ''}
                         </div>
-                                                                        <div class="flex flex-col gap-2 mt-2">
-                            <a href="tel:010-3548-4000" class="popup-call-btn w-full py-2.5 px-3 rounded-xl text-center shadow-md flex items-center justify-center gap-2 no-underline active:scale-95" style="background:#003891 !important; color:#ffffff !important; text-decoration:none !important; border:none !important;">
-                                <span class="material-symbols-outlined text-[19px]" style="color:#ffeb3b !important;">call</span>
-                                <span style="color:#ffffff !important; font-size:14px; font-weight:900; letter-spacing:0.5px;">010-3548-4000 전화상담</span>
+                                                        <div class="flex flex-col gap-1.5 mt-2">
+                            <a href="tel:010-3548-4000" class="popup-call-btn w-full h-9 rounded-lg text-center flex items-center justify-center gap-1.5 no-underline active:scale-95 transition-all shadow-xs" style="background:#003891 !important; color:#ffffff !important; text-decoration:none !important; border:none !important;">
+                                <span class="material-symbols-outlined text-[17px]" style="color:#ffeb3b !important;">call</span>
+                                <span style="color:#ffffff !important; font-size:13px; font-weight:700; letter-spacing:-0.2px;">010-3548-4000 전화상담</span>
                             </a>
-                            <div class="flex gap-2 items-center">
-                                <button type="button" onclick="event.stopPropagation(); toggleFavoriteById('${item.id}')" class="fav-btn-${item.id} py-2 px-2.5 rounded-xl bg-white border border-slate-300 hover:border-rose-400 flex items-center justify-center shadow-xs cursor-pointer active:scale-95" title="관심 매물 찜하기">
-                                    <span class="material-symbols-outlined text-[17px] ${typeof isFavoritePost === 'function' && isFavoritePost(item.id) ? 'text-rose-500' : 'text-slate-400'}" style="font-variation-settings: 'FILL' ${typeof isFavoritePost === 'function' && isFavoritePost(item.id) ? 1 : 0};">favorite</span>
+                            <div class="flex gap-1.5 items-center">
+                                <button type="button" onclick="event.stopPropagation(); toggleFavoriteById('${item.id}')" class="fav-btn-${item.id} w-8.5 h-8 rounded-lg bg-white border border-slate-200 hover:border-rose-400 flex items-center justify-center shadow-2xs cursor-pointer active:scale-95 transition-all shrink-0" title="관심 매물 찜하기">
+                                    <span class="material-symbols-outlined text-[16px] ${typeof isFavoritePost === 'function' && isFavoritePost(item.id) ? 'text-rose-500' : 'text-slate-400'}" style="font-variation-settings: 'FILL' ${typeof isFavoritePost === 'function' && isFavoritePost(item.id) ? 1 : 0};">favorite</span>
                                 </button>
-                                <a href="news-detail.html?id=${item.id}" class="popup-detail-btn flex-1 py-2 px-2 rounded-xl text-center no-underline active:scale-95 flex items-center justify-center gap-1 shadow-xs" style="background:#0f172a !important; color:#ffffff !important; font-size:12px; font-weight:900; text-decoration:none !important; border:1px solid #334155 !important;">
-                                    <span class="material-symbols-outlined text-[15px]" style="color:#38bdf8 !important;">visibility</span>
-                                    <span style="color:#ffffff !important; font-weight:900;">상세보기</span>
+                                <a href="news-detail.html?id=${item.id}" class="popup-detail-btn flex-1 h-8 rounded-lg text-center no-underline active:scale-95 flex items-center justify-center gap-1 shadow-2xs transition-all" style="background:#0f172a !important; color:#ffffff !important; font-size:12px; font-weight:600; text-decoration:none !important; border:1px solid #334155 !important;">
+                                    <span class="material-symbols-outlined text-[14px]" style="color:#38bdf8 !important;">visibility</span>
+                                    <span style="color:#ffffff !important; font-weight:600; letter-spacing:-0.2px;">상세보기</span>
                                 </a>
-                                <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" onclick="prepareKakaoConsultationFromMap('${item.id}')" class="popup-kakao-btn flex-1 py-2 px-2 rounded-xl text-center no-underline active:scale-95 flex items-center justify-center gap-1 shadow-xs" style="background:#fee500 !important; color:#191600 !important; font-size:12px; font-weight:900; text-decoration:none !important; border:1px solid #d4be00 !important;">
-                                    <span class="material-symbols-outlined text-[15px]" style="color:#191600 !important;">chat</span>
-                                    <span style="color:#191600 !important; font-weight:900;">카톡상담</span>
+                                <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" onclick="prepareKakaoConsultationFromMap('${item.id}')" class="popup-kakao-btn flex-1 h-8 rounded-lg text-center no-underline active:scale-95 flex items-center justify-center gap-1 shadow-2xs transition-all" style="background:#fee500 !important; color:#191600 !important; font-size:12px; font-weight:700; text-decoration:none !important; border:1px solid #d4be00 !important;">
+                                    <span class="material-symbols-outlined text-[14px]" style="color:#191600 !important;">chat</span>
+                                    <span style="color:#191600 !important; font-weight:700; letter-spacing:-0.2px;">카톡상담</span>
                                 </a>
                             </div>
                         </div>
