@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v231");
+console.log("Antigravity db.js version: 20260715_v232");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v231";
+const APP_VERSION = "20260715_v232";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.setItem('app_version', APP_VERSION);
@@ -1859,7 +1859,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v231`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v232`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
@@ -2431,7 +2431,7 @@ function renderQuickBarFavorites() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     매물 사진 우측 상단의 하트(♥)를 누르면 관심 매물에 쏙 담아 한 번에 비교 상담받으실 수 있습니다!
                 </p>
-                <a href="property-news.html?v=20260715_v231" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v232" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -2500,7 +2500,7 @@ function renderQuickBarRecents() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     관심 있는 매물 상세페이지를 방문하시면 이곳에 자동으로 최근 본 목록이 기록됩니다!
                 </p>
-                <a href="property-news.html?v=20260715_v231" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v232" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -2747,3 +2747,332 @@ if (document.readyState === 'loading') {
 } else {
     initFloatingQuickBar();
 }
+
+// =========================================================================
+// 🗂️ 최가네부동산 『메모창고 & 손님 맞춤 브리핑 보드』 코어 엔진 (db.js)
+// =========================================================================
+
+function parseKoreanMoneyToManwon(rawStr) {
+    if (!rawStr) return 0;
+    const s = String(rawStr).replace(/,/g, '').trim();
+    if (!s || s.includes('무권리') || s.includes('없음') || s.includes('해당없음')) return 0;
+
+    let total = 0;
+    const eokMatch = s.match(/(\d+(?:\.\d+)?)\s*억/);
+    if (eokMatch) {
+        total += parseFloat(eokMatch[1]) * 10000;
+    }
+    const afterEok = eokMatch ? s.slice(s.indexOf('억') + 1) : s;
+    const cheonMatch = afterEok.match(/(\d+(?:\.\d+)?)\s*천/);
+    if (cheonMatch) {
+        total += parseFloat(cheonMatch[1]) * 1000;
+    }
+    const baekMatch = afterEok.match(/(\d+(?:\.\d+)?)\s*백/);
+    if (baekMatch) {
+        total += parseFloat(baekMatch[1]) * 100;
+    }
+    const manMatch = afterEok.match(/(\d+(?:\.\d+)?)\s*만/);
+    if (manMatch && !cheonMatch && !baekMatch) {
+        total += parseFloat(manMatch[1]);
+    }
+    if (total === 0) {
+        const plainNum = s.match(/(\d+(?:\.\d+)?)/);
+        if (plainNum) total = parseFloat(plainNum[1]);
+    }
+    return Math.round(total * 10) / 10;
+}
+window.parseKoreanMoneyToManwon = parseKoreanMoneyToManwon;
+
+function extractAllPostImages(post, maxCount = 8) {
+    if (!post) return [];
+    const urls = [];
+    const content = post.content || '';
+    const mdRegex = /!\[[^\]]*\]\(([^)]+)\)/g;
+    let m;
+    while ((m = mdRegex.exec(content)) !== null) {
+        let u = m[1].trim();
+        if (u.includes('raw.githubusercontent.com')) {
+            u = u.replace(/raw\.githubusercontent\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)\/main\//g, 'cdn.jsdelivr.net/gh/$1/$2@main/');
+        }
+        if (u && !urls.includes(u)) urls.push(u);
+        if (urls.length >= maxCount) break;
+    }
+    if (urls.length < maxCount) {
+        const htmlRegex = /<img[^>]+src=["']([^"']+)["']/gi;
+        while ((m = htmlRegex.exec(content)) !== null) {
+            let u = m[1].trim();
+            if (u.includes('raw.githubusercontent.com')) {
+                u = u.replace(/raw\.githubusercontent\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)\/main\//g, 'cdn.jsdelivr.net/gh/$1/$2@main/');
+            }
+            if (u && !urls.includes(u)) urls.push(u);
+            if (urls.length >= maxCount) break;
+        }
+    }
+    if (urls.length === 0) {
+        urls.push(extractPostImage(post));
+    }
+    return urls;
+}
+window.extractAllPostImages = extractAllPostImages;
+
+function parsePostToBriefingItem(post) {
+    if (!post) return null;
+    const content = (post.content || '').normalize('NFC');
+    const title = (post.title || '').normalize('NFC');
+    const propNo = getPropertyDisplayNumber(post) || String(post.id || '').slice(-4);
+
+    const getLineVal = (labelPattern) => {
+        const re = new RegExp(`(?:✅|•|-)?\\s*${labelPattern}\\s*[:：]\\s*([^\\n\\r]+)`, 'i');
+        const m = content.match(re);
+        return m ? m[1].trim() : '';
+    };
+
+    const locLine = getLineVal('위치|소재지') || post.address || '';
+    const jeonyongLine = getLineVal('전용면적');
+    const gonggeupLine = getLineVal('공급면적');
+    const generalAreaLine = getLineVal('면적');
+    const daejiLine = getLineVal('대지면적');
+    const yeonLine = getLineVal('연면적');
+
+    let areaStr = '';
+    if (jeonyongLine) {
+        const py = jeonyongLine.match(/약?\s*\d+(?:\.\d+)?\s*평/);
+        areaStr = py ? `전용 ${py[0]}` : jeonyongLine.split('(')[0].trim();
+    } else if (daejiLine || yeonLine) {
+        const dPy = daejiLine.match(/약?\s*\d+(?:\.\d+)?\s*평/);
+        const yPy = yeonLine.match(/약?\s*\d+(?:\.\d+)?\s*평/);
+        areaStr = [dPy ? `대지 ${dPy[0]}` : '', yPy ? `연면적 ${yPy[0]}` : ''].filter(Boolean).join(' / ');
+    } else if (generalAreaLine) {
+        const py = generalAreaLine.match(/약?\s*\d+(?:\.\d+)?\s*평/);
+        areaStr = py ? py[0] : generalAreaLine.split('(')[0].trim();
+    } else if (gonggeupLine) {
+        areaStr = gonggeupLine.split('(')[0].trim();
+    }
+
+    const curFloor = getLineVal('해당\\s*층수');
+    const totFloor = getLineVal('총\\s*층수');
+    let floorStr = curFloor || totFloor || '';
+    if (curFloor && totFloor && curFloor !== totFloor) {
+        floorStr = `${curFloor} (총 ${totFloor})`;
+    }
+
+    const depLine = getLineVal('보증금');
+    const rentLine = getLineVal('월세|임대료');
+    const maintLine = getLineVal('공용관리비|관리비');
+    const premLine = getLineVal('권리금(?:\\(시설비\\))?');
+    const saleLine = getLineVal('매매가|매매금액');
+    const tradeLine = getLineVal('거래형태');
+
+    const isSale = (tradeLine && tradeLine.includes('매매')) || title.includes('매매') || Boolean(saleLine);
+    const deposit = parseKoreanMoneyToManwon(depLine);
+    const rent = parseKoreanMoneyToManwon(rentLine);
+    const managementFee = parseKoreanMoneyToManwon(maintLine);
+    const premium = parseKoreanMoneyToManwon(premLine);
+    const salePrice = parseKoreanMoneyToManwon(saleLine);
+
+    let premiumText = '무권리';
+    if (premLine) {
+        if (premLine.includes('무권리') || premLine.includes('없음')) premiumText = '무권리';
+        else if (premium > 0) premiumText = '';
+        else premiumText = premLine;
+    }
+
+    // Auto-detect commercial badges (Rec 4)
+    const badges = [];
+    const fullText = title + '\n' + content;
+    if (fullText.includes('주차편리') || fullText.includes('주차 매우') || fullText.includes('고정주차') || /[5-9]\d대|[1-9]\d\d대/.test(getLineVal('주차'))) {
+        badges.push('🚗 주차 편함');
+    }
+    const elevLine = getLineVal('엘리베이터');
+    if (elevLine && !elevLine.toLowerCase().includes('x') && !elevLine.includes('없음')) {
+        badges.push('🛗 엘리베이터 유');
+    }
+    if (fullText.includes('내부화장실')) {
+        badges.push('🚻 내부화장실');
+    }
+    if (fullText.includes('렌트프리')) {
+        badges.push('🎁 렌트프리 협의');
+    }
+    if (fullText.includes('무권리') || premium === 0) {
+        if (!isSale) badges.push('✨ 무권리');
+    }
+    if (fullText.includes('인테리어') || fullText.includes('시설완비') || fullText.includes('천장형')) {
+        badges.push('🔨 인테리어 완비');
+    }
+    if (fullText.includes('즉시 입주') || fullText.includes('즉시입주')) {
+        badges.push('⚡ 즉시입주');
+    }
+    if (fullText.includes('대로변') || fullText.includes('초역세권') || fullText.includes('코너')) {
+        badges.push('🛣️ 대로변/역세권');
+    }
+
+    // Extract clean summary comment from ⭐매물특징⭐
+    let autoComment = '';
+    const featMatch = content.match(/⭐매물특징⭐([\s\S]*?)(?:📢|🏢|💼|$)/);
+    if (featMatch && featMatch[1]) {
+        const lines = featMatch[1]
+            .split('\n')
+            .map(l => l.replace(/🔎/g, '•').trim())
+            .filter(l => l && !l.includes('편하게 연락주시면'));
+        autoComment = lines.slice(0, 3).join('\n');
+    }
+
+    const cleanTitle = title
+        .replace(/매물번호\s*[:：]?\s*\d+/gi, '')
+        .replace(/대구(상가|사무실|건물|상가주택)(임대|매매)/g, '')
+        .replace(/\s+/g, ' ')
+        .trim() || title;
+
+    return {
+        itemId: 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        postId: String(post.id || ''),
+        propNo: String(propNo || ''),
+        tradeType: isSale ? 'sale' : 'rent',
+        title: cleanTitle,
+        address: locLine || post.address || '대구광역시',
+        floor: floorStr || '-',
+        area: areaStr || '-',
+        deposit,
+        rent,
+        managementFee,
+        premium,
+        premiumText,
+        salePrice,
+        badges,
+        agentComment: autoComment,
+        photos: extractAllPostImages(post, 6),
+        coordinates: Array.isArray(post.coordinates) ? post.coordinates : []
+    };
+}
+window.parsePostToBriefingItem = parsePostToBriefingItem;
+
+async function getBriefingData() {
+    let remoteData = null;
+
+    // 1. Try serverless API /api/briefing (zero cache)
+    try {
+        const res = await fetch('/api/briefing?t=' + Date.now(), { cache: 'no-store' });
+        if (res.ok) {
+            remoteData = await res.json();
+        }
+    } catch (e) {}
+
+    // 2. Fallback to GitHub REST API directly if config token exists
+    if (!remoteData) {
+        try {
+            const config = await loadConfig();
+            if (config.github_token && config.github_owner && config.github_repo) {
+                const ghRes = await fetch(`https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/data/briefings.json?t=${Date.now()}`, {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Authorization': `token ${config.github_token}`
+                    },
+                    cache: 'no-store'
+                });
+                if (ghRes.ok) {
+                    const d = await ghRes.json();
+                    const str = base64ToUtf8(d.content);
+                    if (str) remoteData = JSON.parse(str);
+                }
+            }
+        } catch (e) {}
+    }
+
+    // 3. Fallback to local file
+    if (!remoteData) {
+        try {
+            const fRes = await fetch('data/briefings.json?t=' + Date.now());
+            if (fRes.ok) remoteData = await fRes.json();
+        } catch (e) {}
+    }
+
+    // Check if localStorage has a newer version saved within last 15 min
+    try {
+        const localRaw = localStorage.getItem('choi_briefings_cache');
+        if (localRaw) {
+            const localData = JSON.parse(localRaw);
+            if (localData && localData.updatedAt) {
+                if (!remoteData || (localData.updatedAt > (remoteData.updatedAt || 0) && Date.now() - localData.updatedAt < 900000)) {
+                    // Merge customerPicks from remoteData if any arrived
+                    if (remoteData && Array.isArray(remoteData.briefings) && Array.isArray(localData.briefings)) {
+                        localData.briefings.forEach(lb => {
+                            const rb = remoteData.briefings.find(r => String(r.id) === String(lb.id));
+                            if (rb && Array.isArray(rb.customerPicks) && rb.customerPicks.length > (lb.customerPicks || []).length) {
+                                lb.customerPicks = rb.customerPicks;
+                            }
+                        });
+                    }
+                    remoteData = localData;
+                }
+            }
+        }
+    } catch (e) {}
+
+    if (!remoteData || typeof remoteData !== 'object') {
+        remoteData = { updatedAt: Date.now(), memos: [], briefings: [] };
+    }
+    if (!Array.isArray(remoteData.memos)) remoteData.memos = [];
+    if (!Array.isArray(remoteData.briefings)) remoteData.briefings = [];
+
+    try {
+        localStorage.setItem('choi_briefings_cache', JSON.stringify(remoteData));
+    } catch (e) {}
+
+    return remoteData;
+}
+window.getBriefingData = getBriefingData;
+
+async function saveBriefingData(dataObj) {
+    dataObj.updatedAt = Date.now();
+    try {
+        localStorage.setItem('choi_briefings_cache', JSON.stringify(dataObj));
+    } catch (e) {}
+
+    let savedServer = false;
+    try {
+        const res = await fetch('/api/briefing', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'save_all',
+                memos: dataObj.memos,
+                briefings: dataObj.briefings
+            })
+        });
+        if (res.ok) {
+            const j = await res.json();
+            if (j && j.ok) savedServer = true;
+        }
+    } catch (e) {}
+
+    if (!savedServer) {
+        try {
+            const config = await loadConfig();
+            if (config.github_token && config.github_owner && config.github_repo) {
+                const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/data/briefings.json`;
+                const headers = {
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Authorization': `token ${config.github_token}`,
+                    'Content-Type': 'application/json'
+                };
+                let sha = null;
+                const getRes = await fetch(`${url}?t=${Date.now()}`, { headers });
+                if (getRes.ok) {
+                    const gd = await getRes.json();
+                    sha = gd.sha || null;
+                }
+                const body = {
+                    message: 'briefing: update memos and customer briefings [skip vercel]',
+                    content: utf8ToBase64(JSON.stringify(dataObj, null, 2)),
+                    branch: 'main'
+                };
+                if (sha) body.sha = sha;
+                await fetch(url, { method: 'PUT', headers, body: JSON.stringify(body) });
+            }
+        } catch (e) {}
+    }
+
+    return dataObj;
+}
+window.saveBriefingData = saveBriefingData;
+

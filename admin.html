@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed flex items-center"><a href="index.html">최가네부동산<span class="inline md:hidden xl:inline">공인중개사사무소</span></a></div>
 <div class="hidden md:flex gap-1.5 lg:gap-3 xl:gap-lg items-center text-xs lg:text-sm font-semibold shrink-0"><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v231">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v232">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v231">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v232">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-2.5 py-1.5 lg:px-[25px] lg:py-[14px] rounded font-button text-xs lg:text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-1 lg:gap-sm whitespace-nowrap shrink-0" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -129,7 +129,7 @@
 </div>
 </nav>
 <main class="max-w-7xl mx-auto px-lg py-[80px]">
-    <!-- v20260715_v231 force deploy 20261111_101043 -->
+    <!-- v20260715_v232 force deploy 20261111_124455 -->
     <!-- Non-logged in State (Login Form) -->
     <div id="login-view" class="hidden max-w-md mx-auto bg-surface-container-lowest p-lg md:p-xl rounded-xl shadow-card-soft border border-hairline my-12">
         <h2 class="font-subsection-h3 text-xl font-bold text-center text-ink mb-lg">관리자 로그인</h2>
@@ -159,10 +159,15 @@
         </div>
 
         <!-- Dashboard Navigation Tabs -->
-        <div class="grid grid-cols-3 bg-slate-100 dark:bg-slate-800/80 p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 gap-1 text-center">
+        <div class="grid grid-cols-2 sm:grid-cols-4 bg-slate-100 dark:bg-slate-800/80 p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 gap-1 text-center">
             <button id="tab-posts-btn" class="py-2.5 px-1 font-extrabold text-xs sm:text-sm rounded-lg bg-white dark:bg-slate-700 text-primary dark:text-white shadow-xs flex items-center justify-center gap-1 cursor-pointer transition-all">
                 <span class="material-symbols-outlined text-[16px] sm:text-[18px]">article</span>
                 <span>게시글<span class="hidden sm:inline"> 관리</span></span>
+            </button>
+            <button id="tab-briefing-btn" class="py-2.5 px-1 font-semibold text-xs sm:text-sm rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-1 cursor-pointer transition-all">
+                <span class="material-symbols-outlined text-[16px] sm:text-[18px] text-amber-500">inventory_2</span>
+                <span>메모창고/브리핑</span>
+                <span id="briefing-count-badge" class="bg-blue-600 text-white text-[10px] sm:text-xs px-1.5 py-0.2 sm:py-0.5 rounded-full font-extrabold ml-0.5">1</span>
             </button>
             <button id="tab-analytics-btn" class="py-2.5 px-1 font-semibold text-xs sm:text-sm rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-1 cursor-pointer transition-all">
                 <span class="material-symbols-outlined text-[16px] sm:text-[18px]">analytics</span>
@@ -437,8 +442,284 @@
                 </div>
             </div>
         </div>
+
+        <!-- Tab 4: Memo Warehouse & Customer Briefing Board (🗂️ 메모창고 / 손님 맞춤 브리핑) -->
+        <div id="tab-briefing-content" class="hidden flex flex-col gap-5">
+            <!-- Sub-tab Switcher Banner -->
+            <div class="bg-gradient-to-r from-[#0b1739] via-[#12265a] to-[#003891] text-white rounded-2xl p-4 sm:p-5 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="space-y-1">
+                    <div class="inline-flex items-center gap-1.5 bg-amber-400 text-slate-950 text-[11px] font-black px-2.5 py-0.5 rounded-full">
+                        <span class="material-symbols-outlined text-[14px]">bolt</span>
+                        상업용 중개 특화 솔루션
+                    </div>
+                    <h2 class="text-base sm:text-xl font-black tracking-tight">🗂️ 메모창고 & 손님 맞춤형 매물 브리핑 보드</h2>
+                    <p class="text-xs text-blue-200">오늘 손님과 본 매물 리스트를 1초 만에 링크·A4보고서로 만들고, 자주 쓰는 서류·특약·세무 안내문을 원클릭 복사하세요.</p>
+                </div>
+                <div class="flex bg-black/30 p-1 rounded-xl border border-white/15 shrink-0">
+                    <button type="button" id="subtab-btn-briefing" onclick="switchBriefingSubTab('briefing')" class="px-3.5 py-2 rounded-lg bg-amber-400 text-slate-950 font-black text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition">
+                        <span class="material-symbols-outlined text-[17px]">assignment_ind</span>
+                        <span>손님 브리핑 보드</span>
+                    </button>
+                    <button type="button" id="subtab-btn-memo" onclick="switchBriefingSubTab('memo')" class="px-3.5 py-2 rounded-lg text-white/80 hover:text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition">
+                        <span class="material-symbols-outlined text-[17px]">inventory_2</span>
+                        <span>메모창고 (안내문 보관함)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUB-VIEW 1: Customer Briefing Board List & Builder -->
+            <div id="subview-briefing-board" class="space-y-5">
+                <!-- Saved Briefings List Card -->
+                <div class="bg-surface-container-lowest p-4 sm:p-6 rounded-2xl shadow-card-soft border border-hairline space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-hairline pb-3">
+                        <div>
+                            <h3 class="font-extrabold text-base sm:text-lg text-ink flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-primary">folder_shared</span>
+                                <span>생성된 손님별 매물 브리핑 리스트</span>
+                            </h3>
+                            <p class="text-xs text-muted mt-0.5">생성된 링크를 카톡으로 보내신 뒤 내용을 수정·저장하시면 손님 링크 화면에도 실시간으로 자동 반영됩니다.</p>
+                        </div>
+                        <button type="button" onclick="startNewBriefingEditor()" class="px-4 py-2.5 rounded-xl bg-primary hover:bg-blue-mid text-white font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-sm cursor-pointer shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">add_circle</span>
+                            <span>+ 새 손님 맞춤 브리핑 만들기</span>
+                        </button>
+                    </div>
+
+                    <div id="saved-briefings-list" class="grid grid-cols-1 gap-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Briefing Builder / Editor Card -->
+                <div id="briefing-editor-card" class="bg-surface-container-lowest p-4 sm:p-6 rounded-2xl shadow-card-soft border-2 border-primary/30 space-y-6">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center font-black">
+                                <span class="material-symbols-outlined text-[19px]">edit_document</span>
+                            </span>
+                            <div>
+                                <h3 class="font-black text-base sm:text-lg text-ink" id="briefing-editor-heading">손님 맞춤 브리핑 보드 작성 / 편집</h3>
+                                <p class="text-xs text-muted" id="briefing-editor-subheading">홈페이지 매물번호 검색으로 1초 만에 불러오거나 현장 비공개 매물을 직접 추가하세요.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="saveCurrentBriefing(true)" class="px-4 py-2 rounded-xl bg-primary hover:bg-blue-mid text-white font-black text-xs sm:text-sm flex items-center gap-1 shadow-sm cursor-pointer">
+                                <span class="material-symbols-outlined text-[17px]">save</span>
+                                <span>저장 및 링크 생성</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Customer Info & Security/Calculation Switches -->
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4">
+                        <div class="text-xs font-black text-primary uppercase tracking-wider flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">person_pin</span>
+                            <span>1단계 · 고객 정보 및 보안·자동계산 옵션 설정</span>
+                        </div>
+                        <input type="hidden" id="bf-id" value="" />
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-200 mb-1">고객님 성함 / 호칭 <span class="text-rose-500">*</span></label>
+                                <input type="text" id="bf-customer-name" placeholder="예: 김OO 대표님 / 박원장님" class="w-full rounded-xl border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-xs sm:text-sm font-bold p-2.5" />
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-200 mb-1">브리핑 보드 제목 <span class="text-rose-500">*</span></label>
+                                <input type="text" id="bf-title" placeholder="예: 수성구 달구벌대로·알파시티 무권리 추천 오피스 3곳 비교 리포트" class="w-full rounded-xl border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-xs sm:text-sm font-bold p-2.5" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="text-xs font-extrabold text-slate-700 dark:text-slate-200">최이명 대표소장 종합 브리핑 인사말 / 총평 메모</label>
+                                <button type="button" onclick="fillDefaultBriefingGreeting()" class="text-[11px] font-bold text-primary hover:underline flex items-center gap-0.5 cursor-pointer">
+                                    <span class="material-symbols-outlined text-[14px]">auto_fix_high</span> 기본 감사 인사말 자동 채우기
+                                </button>
+                            </div>
+                            <textarea id="bf-general-note" rows="2" placeholder="손님 화면 상단에 표시될 종합 코멘트를 입력하세요." class="w-full rounded-xl border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-xs sm:text-sm p-2.5"></textarea>
+                        </div>
+
+                        <!-- 4 Key Commercial Switches (Rec 1, Rec 2, Rec 6) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1">
+                            <label class="flex items-start gap-2 p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                                <input type="checkbox" id="bf-blind-address" checked class="mt-0.5 w-4 h-4 rounded text-primary" />
+                                <div class="text-xs">
+                                    <div class="font-extrabold text-slate-800 dark:text-slate-100">🔒 상세 번지·호수 블라인드</div>
+                                    <div class="text-[11px] text-slate-500">손님 화면에서 상세 지번 자동 가림</div>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-2 p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                                <input type="checkbox" id="bf-include-vat" checked class="mt-0.5 w-4 h-4 rounded text-primary" />
+                                <div class="text-xs">
+                                    <div class="font-extrabold text-slate-800 dark:text-slate-100">💳 월 고정비 VAT 10% 포함</div>
+                                    <div class="text-[11px] text-slate-500">월세+부가세+관리비 합산 비교표</div>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-2 p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                                <input type="checkbox" id="bf-show-yield" checked class="mt-0.5 w-4 h-4 rounded text-primary" />
+                                <div class="text-xs">
+                                    <div class="font-extrabold text-slate-800 dark:text-slate-100">📈 매매 수익률(%) 자동 표시</div>
+                                    <div class="text-[11px] text-slate-500">건물/상가 매매 시 연 수익률 계산</div>
+                                </div>
+                            </label>
+
+                            <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs">
+                                <label class="block font-extrabold text-slate-800 dark:text-slate-100 mb-1">⏰ 링크 열람 만료일 잠금</label>
+                                <input type="date" id="bf-expires-at" class="w-full rounded-lg border-slate-300 dark:border-slate-600 text-xs p-1 font-bold" title="비워두면 기간 제한 없이 열람 가능" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Add & Edit Briefed Properties (Core 1, Rec 4) -->
+                    <div class="space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="text-xs font-black text-primary uppercase tracking-wider flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">domain_add</span>
+                                <span>2단계 · 브리핑할 매물 담기 (홈페이지 매물 1초 불러오기 또는 현장 매물 직접 추가)</span>
+                            </div>
+                            <button type="button" onclick="addStealthBriefingItem()" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs flex items-center gap-1 shadow-xs cursor-pointer self-start sm:self-auto">
+                                <span class="material-symbols-outlined text-[16px]">add_a_photo</span>
+                                <span>+ 홈페이지 미등록(비공개) 현장 매물 직접 추가</span>
+                            </button>
+                        </div>
+
+                        <!-- 1-Second Property Search Box -->
+                        <div class="bg-blue-50/70 dark:bg-slate-800 p-3.5 rounded-2xl border border-blue-200 dark:border-slate-700 space-y-2.5">
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <div class="relative flex-1">
+                                    <input type="text" id="bf-post-search-input" oninput="searchPostsForBriefing()" placeholder="🔍 매물번호(예: 1790, 5556) 또는 동이름·키워드(예: 노변동, 알파시티, 대명동) 입력..." class="w-full rounded-xl border-blue-300 bg-white text-xs sm:text-sm font-bold pl-3 pr-8 py-2.5 focus:ring-primary focus:border-primary" />
+                                </div>
+                                <button type="button" onclick="searchPostsForBriefing(true)" class="px-4 py-2.5 rounded-xl bg-[#003891] text-white font-extrabold text-xs sm:text-sm cursor-pointer shrink-0">
+                                    매물 검색
+                                </button>
+                            </div>
+                            <div id="bf-post-search-results" class="max-h-56 overflow-y-auto space-y-1.5">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Added Briefing Items Container -->
+                        <div id="bf-items-container" class="space-y-4">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Attach Memo Cards from Memo Warehouse (Core 4) -->
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="text-xs font-black text-primary uppercase tracking-wider flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">checklist</span>
+                                <span>3단계 · 손님 브리핑 하단에 함께 첨부할 『메모창고』 안내 카드 선택</span>
+                            </div>
+                            <button type="button" onclick="switchBriefingSubTab('memo')" class="text-xs font-bold text-primary hover:underline cursor-pointer">
+                                메모창고 관리 이동 →
+                            </button>
+                        </div>
+                        <div id="bf-memo-checkboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Bottom Save & Share Action Bar -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2 border-t border-hairline">
+                        <div class="text-xs text-muted font-medium">
+                            💡 저장 즉시 손님 전용 링크(<code class="text-primary font-bold">choi114.com/briefing?id=...</code>)에 모든 변경사항이 실시간 반영됩니다.
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" onclick="saveCurrentBriefing(true)" class="flex-1 sm:flex-initial px-6 py-3 rounded-xl bg-[#003891] hover:bg-blue-800 text-white font-black text-sm flex items-center justify-center gap-1.5 shadow-md cursor-pointer">
+                                <span class="material-symbols-outlined text-[19px]">cloud_upload</span>
+                                <span>브리핑 저장 및 공유 링크 생성</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-VIEW 2: Memo Warehouse (🗂️ 메모창고 - 자주 쓰는 안내문/서류/특약 카드 보관함) -->
+            <div id="subview-memo-warehouse" class="hidden space-y-5">
+                <div class="bg-surface-container-lowest p-4 sm:p-6 rounded-2xl shadow-card-soft border border-hairline space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-hairline pb-3">
+                        <div>
+                            <h3 class="font-extrabold text-base sm:text-lg text-ink flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-amber-500">inventory_2</span>
+                                <span>메모창고 (상가·사무실·건물 자주 쓰는 안내문·서류·특약 보관함)</span>
+                            </h3>
+                            <p class="text-xs text-muted mt-0.5">카톡/문자 상담 중 필요한 카드를 1초 만에 검색해 [📋 내용 복사]를 누르거나 손님 브리핑 보드에 첨부하세요.</p>
+                        </div>
+                        <button type="button" onclick="openMemoEditorModal()" class="px-4 py-2.5 rounded-xl bg-primary hover:bg-blue-mid text-white font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-sm cursor-pointer shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">add_circle</span>
+                            <span>+ 새 메모 카드 등록</span>
+                        </button>
+                    </div>
+
+                    <!-- Category Filter Chips & Keyword Search -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                        <div class="flex flex-wrap gap-1.5" id="memo-category-chips">
+                            <button type="button" onclick="setMemoCategoryFilter('전체')" data-cat="전체" class="px-3 py-1.5 rounded-xl bg-primary text-white text-xs font-extrabold cursor-pointer">전체</button>
+                            <button type="button" onclick="setMemoCategoryFilter('즐겨찾기')" data-cat="즐겨찾기" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-bold cursor-pointer">📌 상단고정</button>
+                            <button type="button" onclick="setMemoCategoryFilter('계약서류')" data-cat="계약서류" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-bold cursor-pointer">계약서류</button>
+                            <button type="button" onclick="setMemoCategoryFilter('특약문구')" data-cat="특약문구" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-bold cursor-pointer">특약문구</button>
+                            <button type="button" onclick="setMemoCategoryFilter('세무/대출')" data-cat="세무/대출" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-bold cursor-pointer">세무/대출</button>
+                            <button type="button" onclick="setMemoCategoryFilter('인사말/기타')" data-cat="인사말/기타" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-bold cursor-pointer">인사말/기타</button>
+                        </div>
+                        <input type="text" id="memo-search-input" oninput="renderMemoWarehouseGrid()" placeholder="🔍 메모 제목·내용 키워드 검색 (예: 권리금, 법인, 특약)..." class="w-full sm:w-64 rounded-xl border-slate-300 text-xs sm:text-sm p-2 font-medium" />
+                    </div>
+
+                    <!-- Memo Cards Grid -->
+                    <div id="memo-warehouse-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
+
+<!-- Memo Card Create/Edit Modal -->
+<div id="memo-editor-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-[9999] hidden">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2" id="memo-modal-heading">
+                <span class="material-symbols-outlined text-primary">inventory_2</span>
+                <span>메모창고 안내 카드 등록 / 수정</span>
+            </h3>
+            <button type="button" onclick="closeMemoEditorModal()" class="text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
+                <span class="material-symbols-outlined text-2xl">close</span>
+            </button>
+        </div>
+        <input type="hidden" id="edit-memo-id" value="" />
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">분류 카테고리</label>
+                <select id="edit-memo-category" class="w-full rounded-xl border-slate-300 text-xs sm:text-sm font-bold p-2.5">
+                    <option value="계약서류">계약서류</option>
+                    <option value="특약문구">특약문구</option>
+                    <option value="세무/대출">세무/대출</option>
+                    <option value="인사말/기타">인사말/기타</option>
+                </select>
+            </div>
+            <div class="sm:col-span-2 flex items-end pb-1">
+                <label class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 cursor-pointer">
+                    <input type="checkbox" id="edit-memo-pinned" class="w-4 h-4 rounded text-primary" />
+                    <span>📌 자주 쓰는 카드로 상단 고정하기</span>
+                </label>
+            </div>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">카드 제목 <span class="text-rose-500">*</span></label>
+            <input type="text" id="edit-memo-title" placeholder="예: 📋 상가 임대차 계약 시 준비서류 안내" class="w-full rounded-xl border-slate-300 text-xs sm:text-sm font-bold p-2.5" />
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">안내문 본문 내용 (카톡/브리핑 표시용) <span class="text-rose-500">*</span></label>
+            <textarea id="edit-memo-content" rows="9" placeholder="손님께 카톡으로 복사해 보내거나 브리핑 하단에 첨부할 내용을 적어주세요." class="w-full rounded-xl border-slate-300 text-xs sm:text-sm p-3 leading-relaxed"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+            <button type="button" onclick="closeMemoEditorModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs cursor-pointer">취소</button>
+            <button type="button" onclick="saveMemoFromModal()" class="px-5 py-2.5 rounded-xl bg-primary text-white font-black text-xs sm:text-sm cursor-pointer shadow-sm">💾 메모 카드 저장</button>
+        </div>
+    </div>
+</div>
 
 <!-- Lead Detail Modal -->
 <div id="lead-detail-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-[9999] hidden">
@@ -501,10 +782,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v231">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v232">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v231">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v232">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -515,7 +796,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v231"></script>
+<script src="db.js?v=20260715_v232"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -525,6 +806,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadDashboardList();
         renderClientLeadsTab();
         renderAnalyticsView();
+        initBriefingAndMemoTab();
 
         // Browser Back/Forward navigation auto-refresh handler
         window.addEventListener('pageshow', (event) => {
@@ -535,10 +817,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Tab Switching Handlers
         const tabPostsBtn = document.getElementById('tab-posts-btn');
+        const tabBriefingBtn = document.getElementById('tab-briefing-btn');
         const tabAnalyticsBtn = document.getElementById('tab-analytics-btn');
         const tabLeadsBtn = document.getElementById('tab-leads-btn');
 
         const tabPostsContent = document.getElementById('tab-posts-content');
+        const tabBriefingContent = document.getElementById('tab-briefing-content');
         const tabAnalyticsContent = document.getElementById('tab-analytics-content');
         const tabLeadsContent = document.getElementById('tab-leads-content');
 
@@ -547,18 +831,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         function showTab(target) {
             if (tabPostsBtn) tabPostsBtn.className = target === 'posts' ? activeTabClass : inactiveTabClass;
+            if (tabBriefingBtn) tabBriefingBtn.className = target === 'briefing' ? activeTabClass : inactiveTabClass;
             if (tabAnalyticsBtn) tabAnalyticsBtn.className = target === 'analytics' ? activeTabClass : inactiveTabClass;
             if (tabLeadsBtn) tabLeadsBtn.className = target === 'leads' ? activeTabClass : inactiveTabClass;
 
             if (tabPostsContent) tabPostsContent.classList.toggle('hidden', target !== 'posts');
+            if (tabBriefingContent) tabBriefingContent.classList.toggle('hidden', target !== 'briefing');
             if (tabAnalyticsContent) tabAnalyticsContent.classList.toggle('hidden', target !== 'analytics');
             if (tabLeadsContent) tabLeadsContent.classList.toggle('hidden', target !== 'leads');
 
+            if (target === 'briefing') initBriefingAndMemoTab();
             if (target === 'analytics') renderAnalyticsView();
             if (target === 'leads') renderClientLeadsTab();
         }
+        window.showAdminTab = showTab;
 
         if (tabPostsBtn) tabPostsBtn.addEventListener('click', () => showTab('posts'));
+        if (tabBriefingBtn) tabBriefingBtn.addEventListener('click', () => showTab('briefing'));
         if (tabAnalyticsBtn) tabAnalyticsBtn.addEventListener('click', () => showTab('analytics'));
         if (tabLeadsBtn) tabLeadsBtn.addEventListener('click', () => showTab('leads'));
 
@@ -974,7 +1263,10 @@ async function loadDashboardList() {
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-100 dark:border-slate-700/60">
+                        <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-100 dark:border-slate-700/60 flex-wrap">
+                            <button onclick="quickAddPostToBriefing('${post.id}')" class="bg-blue-50 text-[#003891] border border-blue-200 hover:bg-blue-100 px-2.5 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1 cursor-pointer transition">
+                                <span class="material-symbols-outlined text-[14px]">assignment_add</span> 브리핑 담기
+                            </button>
                             <button onclick="handleTogglePrivate('${post.id}')" class="${toggleBtnClass} px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer transition">
                                 <span class="material-symbols-outlined text-[14px]">${toggleIcon}</span> ${toggleLabel}
                             </button>
@@ -1025,8 +1317,11 @@ async function loadDashboardList() {
     </div>
 </td>
                         <td class="px-2 py-3.5 text-muted font-medium text-xs whitespace-nowrap w-28">${post.date}</td>
-                        <td class="px-1 py-3.5 text-center whitespace-nowrap w-56">
+                        <td class="px-1 py-3.5 text-center whitespace-nowrap w-64">
                             <div class="flex items-center justify-center gap-1 flex-nowrap">
+                                <button onclick="quickAddPostToBriefing('${post.id}')" class="bg-blue-50 text-[#003891] hover:bg-blue-100 border border-blue-200 px-2 py-1.5 rounded text-[11px] font-extrabold flex items-center gap-0.5 cursor-pointer transition-all whitespace-nowrap" title="손님 맞춤 브리핑 보드에 바로 담기">
+                                    <span class="material-symbols-outlined text-[13px]">assignment_add</span> 브리핑
+                                </button>
                                 <button onclick="handleTogglePrivate('${post.id}')" class="${toggleBtnClass} px-2 py-1.5 rounded text-[11px] font-extrabold flex items-center gap-0.5 cursor-pointer transition-all whitespace-nowrap">
                                     <span class="material-symbols-outlined text-[13px]">${toggleIcon}</span> ${toggleLabel}
                                 </button>
@@ -1472,6 +1767,933 @@ function renderRecentLikesTable(summary) {
     }).join('');
 }
 window.renderRecentLikesTable = renderRecentLikesTable;
+
+// =========================================================================
+// 🗂️ 최가네부동산 『메모창고 & 손님 맞춤 브리핑 보드』 관리자 컨트롤러
+// =========================================================================
+
+const COMMERCIAL_CHECK_BADGES = [
+    '🚗 주차 편함',
+    '🛗 엘리베이터 유',
+    '🚻 내부화장실',
+    '🎁 렌트프리 협의',
+    '✨ 무권리',
+    '🔨 인테리어 완비',
+    '⚡ 즉시입주',
+    '🛣️ 대로변/역세권'
+];
+
+let _briefingStore = { updatedAt: 0, memos: [], briefings: [] };
+let _editingBriefingItems = [];
+let _allPostsForBriefing = [];
+let _currentMemoCatFilter = '전체';
+let _briefingInitialized = false;
+
+function escAdminHtml(s) {
+    if (!s) return '';
+    return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function fmtAdminManwon(val) {
+    const n = parseFloat(val);
+    if (isNaN(n) || n <= 0) return '0원';
+    const eok = Math.floor(n / 10000);
+    const rem = Math.round((n % 10000) * 10) / 10;
+    if (eok > 0 && rem > 0) return `${eok}억 ${rem.toLocaleString()}만`;
+    if (eok > 0) return `${eok}억`;
+    return `${rem.toLocaleString()}만`;
+}
+
+async function initBriefingAndMemoTab() {
+    try {
+        _briefingStore = await getBriefingData();
+    } catch (e) {}
+
+    const badge = document.getElementById('briefing-count-badge');
+    if (badge) {
+        badge.textContent = (_briefingStore.briefings || []).length;
+    }
+
+    try {
+        if (!_allPostsForBriefing || _allPostsForBriefing.length === 0) {
+            _allPostsForBriefing = await getPosts();
+        }
+    } catch (e) {}
+
+    renderSavedBriefingsList();
+    renderMemoWarehouseGrid();
+    renderBriefingMemoCheckboxes();
+
+    if (!_briefingInitialized) {
+        _briefingInitialized = true;
+        if (_briefingStore.briefings && _briefingStore.briefings.length > 0) {
+            loadBriefingIntoEditor(_briefingStore.briefings[0].id, false);
+        } else {
+            startNewBriefingEditor(false);
+        }
+        searchPostsForBriefing(true);
+    }
+}
+window.initBriefingAndMemoTab = initBriefingAndMemoTab;
+
+function switchBriefingSubTab(sub) {
+    const bView = document.getElementById('subview-briefing-board');
+    const mView = document.getElementById('subview-memo-warehouse');
+    const bBtn = document.getElementById('subtab-btn-briefing');
+    const mBtn = document.getElementById('subtab-btn-memo');
+
+    if (sub === 'memo') {
+        if (bView) bView.classList.add('hidden');
+        if (mView) mView.classList.remove('hidden');
+        if (mBtn) mBtn.className = 'px-3.5 py-2 rounded-lg bg-amber-400 text-slate-950 font-black text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition';
+        if (bBtn) bBtn.className = 'px-3.5 py-2 rounded-lg text-white/80 hover:text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition';
+        renderMemoWarehouseGrid();
+    } else {
+        if (mView) mView.classList.add('hidden');
+        if (bView) bView.classList.remove('hidden');
+        if (bBtn) bBtn.className = 'px-3.5 py-2 rounded-lg bg-amber-400 text-slate-950 font-black text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition';
+        if (mBtn) mBtn.className = 'px-3.5 py-2 rounded-lg text-white/80 hover:text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition';
+        renderBriefingMemoCheckboxes();
+    }
+}
+window.switchBriefingSubTab = switchBriefingSubTab;
+
+function renderSavedBriefingsList() {
+    const container = document.getElementById('saved-briefings-list');
+    const badge = document.getElementById('briefing-count-badge');
+    const list = _briefingStore.briefings || [];
+    if (badge) badge.textContent = list.length;
+    if (!container) return;
+
+    if (list.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-8 text-muted text-sm bg-slate-50 rounded-xl border border-dashed border-slate-300">
+                아직 생성된 손님 맞춤 브리핑이 없습니다. 아래 작성 폼에서 첫 브리핑을 만들어 보세요!
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = list.map(b => {
+        const itemCount = (b.items || []).length;
+        const shareUrl = `${window.location.origin}/briefing?id=${encodeURIComponent(b.id)}`;
+        const picks = Array.isArray(b.customerPicks) ? b.customerPicks : [];
+        const latestPick = picks.length > 0 ? picks[0] : null;
+
+        return `
+            <div class="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3 hover:border-primary/50 transition">
+                <div class="space-y-1.5 flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-[#003891] font-black text-xs">
+                            👤 ${escAdminHtml(b.customerName || 'VIP 고객')}
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-extrabold text-xs">
+                            매물 ${itemCount}건
+                        </span>
+                        ${b.blindAddress ? `<span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[11px]">🔒 지번 블라인드</span>` : ''}
+                        ${b.expiresAt ? `<span class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 font-bold text-[11px]">⏰ 만료: ${escAdminHtml(b.expiresAt)}</span>` : ''}
+                        <span class="text-[11px] text-slate-400 font-mono">${escAdminHtml(b.createdAt || '')}</span>
+                    </div>
+                    <div class="font-black text-sm sm:text-base text-slate-900 dark:text-white truncate">
+                        ${escAdminHtml(b.title || '맞춤 매물 브리핑')}
+                    </div>
+                    <div class="text-xs text-slate-500 truncate font-mono">
+                        🔗 ${escAdminHtml(shareUrl)}
+                    </div>
+                    ${latestPick ? `
+                        <div class="mt-1 inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200 text-rose-700 px-3 py-1 rounded-xl text-xs font-extrabold">
+                            <span>🔥 손님 실시간 반응 (${escAdminHtml(latestPick.date)}): [매물 ${escAdminHtml(latestPick.propNo)}] ${escAdminHtml(latestPick.pickType)}</span>
+                            ${latestPick.customerMemo ? `<span class="text-slate-700 font-bold">"${escAdminHtml(latestPick.customerMemo)}"</span>` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+
+                <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+                    <button type="button" onclick="copyBriefingShareLink('${escAdminHtml(b.id)}')" class="px-3 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#003891] border border-blue-200 font-black text-xs flex items-center gap-1 cursor-pointer">
+                        <span class="material-symbols-outlined text-[15px]">link</span> 링크 복사
+                    </button>
+                    <button type="button" onclick="copyBriefingKakaoMsg('${escAdminHtml(b.id)}')" class="px-3 py-2 rounded-xl bg-[#fee500] hover:bg-[#fdd835] text-[#191600] border border-[#d4be00] font-black text-xs flex items-center gap-1 cursor-pointer">
+                        <span class="material-symbols-outlined text-[15px]">chat</span> 카톡 안내문+링크 복사
+                    </button>
+                    <a href="briefing.html?id=${encodeURIComponent(b.id)}&preview=admin" target="_blank" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-xs flex items-center gap-1 no-underline">
+                        <span class="material-symbols-outlined text-[15px] text-amber-300">print</span> 손님화면 / A4인쇄
+                    </a>
+                    <button type="button" onclick="loadBriefingIntoEditor('${escAdminHtml(b.id)}', true)" class="px-2.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-0.5 cursor-pointer">
+                        <span class="material-symbols-outlined text-[15px]">edit</span> 수정
+                    </button>
+                    <button type="button" onclick="deleteBriefingById('${escAdminHtml(b.id)}')" class="px-2.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs flex items-center cursor-pointer" title="삭제">
+                        <span class="material-symbols-outlined text-[15px]">delete</span>
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function startNewBriefingEditor(scroll = true) {
+    const newId = 'br_' + Date.now().toString(36);
+    document.getElementById('bf-id').value = newId;
+    document.getElementById('bf-customer-name').value = '';
+    document.getElementById('bf-title').value = '';
+    document.getElementById('bf-general-note').value = '오늘 최가네부동산과 함께 현장에서 둘러보신 추천 매물 비교 리포트입니다. 초기 필요자금과 월 고정비를 한눈에 비교해 보시고, 가장 마음에 드시는 1순위 매물을 선택해 주시면 렌트프리 및 임대·매매 조건을 최우선으로 조율해 드리겠습니다.';
+    document.getElementById('bf-blind-address').checked = true;
+    document.getElementById('bf-include-vat').checked = true;
+    document.getElementById('bf-show-yield').checked = true;
+    document.getElementById('bf-expires-at').value = '';
+
+    _editingBriefingItems = [];
+    renderBriefingEditorItems();
+    renderBriefingMemoCheckboxes(['memo_doc_rent', 'memo_special_terms_rent']);
+
+    const heading = document.getElementById('briefing-editor-heading');
+    if (heading) heading.textContent = '✨ 새 손님 맞춤 브리핑 보드 만들기';
+
+    if (scroll) {
+        const card = document.getElementById('briefing-editor-card');
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('bf-customer-name').focus();
+    }
+}
+window.startNewBriefingEditor = startNewBriefingEditor;
+
+function loadBriefingIntoEditor(id, scroll = true) {
+    const found = (_briefingStore.briefings || []).find(b => String(b.id) === String(id));
+    if (!found) return;
+
+    document.getElementById('bf-id').value = found.id;
+    document.getElementById('bf-customer-name').value = found.customerName || '';
+    document.getElementById('bf-title').value = found.title || '';
+    document.getElementById('bf-general-note').value = found.generalNote || '';
+    document.getElementById('bf-blind-address').checked = found.blindAddress !== false;
+    document.getElementById('bf-include-vat').checked = found.includeVat !== false;
+    document.getElementById('bf-show-yield').checked = found.showYield !== false;
+    document.getElementById('bf-expires-at').value = found.expiresAt || '';
+
+    _editingBriefingItems = JSON.parse(JSON.stringify(found.items || []));
+    renderBriefingEditorItems();
+    renderBriefingMemoCheckboxes(found.attachedMemoIds || []);
+
+    const heading = document.getElementById('briefing-editor-heading');
+    if (heading) heading.textContent = `✏️ [${found.customerName || '고객'}] 브리핑 보드 수정 중`;
+
+    if (scroll) {
+        const card = document.getElementById('briefing-editor-card');
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+window.loadBriefingIntoEditor = loadBriefingIntoEditor;
+
+function fillDefaultBriefingGreeting() {
+    const cName = (document.getElementById('bf-customer-name').value || '대표님').trim();
+    document.getElementById('bf-general-note').value = `안녕하세요 ${cName}! 오늘 바쁘신 일정 중에도 최가네부동산과 함께 현장 투어를 진행해 주셔서 감사드립니다. 오늘 보신 매물들의 사진, 초기 필요자금 및 월 실제 고정비 비교표, 그리고 제 현장 브리핑 코멘트를 깔끔하게 정리해 두었습니다. 천천히 검토해 보시고 1순위 매물을 말씀해 주시면 가장 유리한 조건으로 책임 협상해 드리겠습니다!`;
+}
+window.fillDefaultBriefingGreeting = fillDefaultBriefingGreeting;
+
+async function searchPostsForBriefing(showDefaultRecent = false) {
+    const input = document.getElementById('bf-post-search-input');
+    const resultsDiv = document.getElementById('bf-post-search-results');
+    if (!resultsDiv) return;
+
+    if (!_allPostsForBriefing || _allPostsForBriefing.length === 0) {
+        try { _allPostsForBriefing = await getPosts(); } catch (e) {}
+    }
+
+    const q = (input ? input.value : '').trim().toLowerCase();
+    let matched = [];
+
+    if (!q) {
+        if (!showDefaultRecent) {
+            resultsDiv.innerHTML = '';
+            return;
+        }
+        matched = (_allPostsForBriefing || []).slice(0, 6);
+    } else {
+        matched = (_allPostsForBriefing || []).filter(p => {
+            const pNo = typeof getPropertyDisplayNumber === 'function' ? getPropertyDisplayNumber(p) : '';
+            const t = (p.title || '').toLowerCase();
+            const addr = (p.address || '').toLowerCase();
+            return pNo.includes(q) || t.includes(q) || addr.includes(q) || String(p.id).includes(q);
+        }).slice(0, 12);
+    }
+
+    if (matched.length === 0) {
+        resultsDiv.innerHTML = `<div class="text-xs text-slate-500 py-2 px-2">일치하는 등록 매물이 없습니다. 우측 상단 [+ 비공개 현장 매물 직접 추가] 버튼을 이용해 직접 입력하실 수도 있습니다.</div>`;
+        return;
+    }
+
+    resultsDiv.innerHTML = matched.map(p => {
+        const pNo = typeof getPropertyDisplayNumber === 'function' ? getPropertyDisplayNumber(p) : String(p.id).slice(-4);
+        const thumb = typeof extractPostImage === 'function' ? extractPostImage(p) : '';
+        const alreadyAdded = _editingBriefingItems.some(it => String(it.postId) === String(p.id));
+
+        return `
+            <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-white border border-slate-200 hover:border-primary transition">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <img src="${escAdminHtml(thumb)}" alt="" class="w-11 h-11 rounded-lg object-cover shrink-0 bg-slate-100 border border-slate-200" onerror="handlePostImgError(this, '${p.id}')" />
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-1.5 py-0.5 rounded bg-blue-50 text-[#003891] border border-blue-200 text-[10px] font-black">매물번호: ${escAdminHtml(pNo)}</span>
+                            <span class="text-[11px] text-slate-500 font-bold">${escAdminHtml(p.address || '')}</span>
+                        </div>
+                        <div class="text-xs font-extrabold text-slate-900 truncate">${escAdminHtml(p.title)}</div>
+                    </div>
+                </div>
+                <button type="button" onclick="addPostToCurrentBriefing('${p.id}')" class="px-3 py-1.5 rounded-lg ${alreadyAdded ? 'bg-emerald-100 text-emerald-800' : 'bg-[#003891] hover:bg-blue-800 text-white'} font-black text-xs shrink-0 cursor-pointer">
+                    ${alreadyAdded ? '✓ 추가됨 (한번 더 담기)' : '+ 브리핑에 추가'}
+                </button>
+            </div>
+        `;
+    }).join('');
+}
+window.searchPostsForBriefing = searchPostsForBriefing;
+
+async function addPostToCurrentBriefing(postId) {
+    if (!_allPostsForBriefing || _allPostsForBriefing.length === 0) {
+        _allPostsForBriefing = await getPosts();
+    }
+    const post = (_allPostsForBriefing || []).find(p => String(p.id) === String(postId));
+    if (!post) return;
+
+    syncEditorInputsToMemory();
+    const parsedItem = parsePostToBriefingItem(post);
+    if (parsedItem) {
+        _editingBriefingItems.push(parsedItem);
+        renderBriefingEditorItems();
+        searchPostsForBriefing(true);
+        if (typeof showToast === 'function') {
+            showToast(`✅ [매물번호: ${parsedItem.propNo}] 매물이 브리핑 리스트에 자동 입력되었습니다!`);
+        }
+    }
+}
+window.addPostToCurrentBriefing = addPostToCurrentBriefing;
+
+async function quickAddPostToBriefing(postId) {
+    if (typeof window.showAdminTab === 'function') {
+        window.showAdminTab('briefing');
+    }
+    await initBriefingAndMemoTab();
+    switchBriefingSubTab('briefing');
+    await addPostToCurrentBriefing(postId);
+    const card = document.getElementById('briefing-editor-card');
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+window.quickAddPostToBriefing = quickAddPostToBriefing;
+
+function addStealthBriefingItem() {
+    syncEditorInputsToMemory();
+    _editingBriefingItems.push({
+        itemId: 'stealth_' + Date.now(),
+        postId: '',
+        propNo: '비공개-' + (_editingBriefingItems.length + 1),
+        tradeType: 'rent',
+        title: '수성구 추천 비공개 현장 매물',
+        address: '대구광역시 수성구',
+        floor: '지상 1층',
+        area: '전용 약 30평',
+        deposit: 3000,
+        rent: 200,
+        managementFee: 10,
+        premium: 0,
+        premiumText: '무권리',
+        salePrice: 0,
+        badges: ['🚗 주차 편함', '✨ 무권리', '⚡ 즉시입주'],
+        agentComment: '홈페이지 미공개 상태로 확보한 알짜 현장 매물입니다. 임대료 및 렌트프리 조건 적극 협의해 드리겠습니다.',
+        photos: [],
+        coordinates: [35.8581, 128.6205]
+    });
+    renderBriefingEditorItems();
+    if (typeof showToast === 'function') {
+        showToast('✨ 비공개 현장 매물 카드가 추가되었습니다. 사진과 조건을 입력해 주세요!');
+    }
+}
+window.addStealthBriefingItem = addStealthBriefingItem;
+
+function syncEditorInputsToMemory() {
+    _editingBriefingItems.forEach((item, idx) => {
+        const getVal = (suffix) => {
+            const el = document.getElementById(`bf-item-${idx}-${suffix}`);
+            return el ? el.value : null;
+        };
+        const propNo = getVal('propNo');
+        if (propNo !== null) item.propNo = propNo.trim();
+
+        const tradeType = getVal('tradeType');
+        if (tradeType !== null) item.tradeType = tradeType;
+
+        const title = getVal('title');
+        if (title !== null) item.title = title.trim();
+
+        const address = getVal('address');
+        if (address !== null) item.address = address.trim();
+
+        const floor = getVal('floor');
+        if (floor !== null) item.floor = floor.trim();
+
+        const area = getVal('area');
+        if (area !== null) item.area = area.trim();
+
+        const deposit = getVal('deposit');
+        if (deposit !== null) item.deposit = parseFloat(deposit) || 0;
+
+        const rent = getVal('rent');
+        if (rent !== null) item.rent = parseFloat(rent) || 0;
+
+        const managementFee = getVal('managementFee');
+        if (managementFee !== null) item.managementFee = parseFloat(managementFee) || 0;
+
+        const premium = getVal('premium');
+        if (premium !== null) item.premium = parseFloat(premium) || 0;
+
+        const premiumText = getVal('premiumText');
+        if (premiumText !== null) item.premiumText = premiumText.trim();
+
+        const salePrice = getVal('salePrice');
+        if (salePrice !== null) item.salePrice = parseFloat(salePrice) || 0;
+
+        const comment = getVal('agentComment');
+        if (comment !== null) item.agentComment = comment.trim();
+    });
+}
+
+function toggleBriefingItemBadge(itemIdx, badgeLabel) {
+    syncEditorInputsToMemory();
+    const item = _editingBriefingItems[itemIdx];
+    if (!item) return;
+    if (!Array.isArray(item.badges)) item.badges = [];
+    const bIdx = item.badges.indexOf(badgeLabel);
+    if (bIdx === -1) item.badges.push(badgeLabel);
+    else item.badges.splice(bIdx, 1);
+    renderBriefingEditorItems();
+}
+window.toggleBriefingItemBadge = toggleBriefingItemBadge;
+
+function moveBriefingItem(idx, dir) {
+    syncEditorInputsToMemory();
+    const target = idx + dir;
+    if (target < 0 || target >= _editingBriefingItems.length) return;
+    const temp = _editingBriefingItems[idx];
+    _editingBriefingItems[idx] = _editingBriefingItems[target];
+    _editingBriefingItems[target] = temp;
+    renderBriefingEditorItems();
+}
+window.moveBriefingItem = moveBriefingItem;
+
+function removeBriefingItem(idx) {
+    syncEditorInputsToMemory();
+    _editingBriefingItems.splice(idx, 1);
+    renderBriefingEditorItems();
+}
+window.removeBriefingItem = removeBriefingItem;
+
+function removeBriefingItemPhoto(itemIdx, photoIdx) {
+    syncEditorInputsToMemory();
+    const item = _editingBriefingItems[itemIdx];
+    if (!item || !Array.isArray(item.photos)) return;
+    item.photos.splice(photoIdx, 1);
+    renderBriefingEditorItems();
+}
+window.removeBriefingItemPhoto = removeBriefingItemPhoto;
+
+async function handleBriefingPhotoUpload(itemIdx, inputEl) {
+    if (!inputEl || !inputEl.files || inputEl.files.length === 0) return;
+    syncEditorInputsToMemory();
+    const item = _editingBriefingItems[itemIdx];
+    if (!item) return;
+    if (!Array.isArray(item.photos)) item.photos = [];
+
+    const files = Array.from(inputEl.files);
+    if (typeof showToast === 'function') {
+        showToast(`📷 현장 사진 ${files.length}장을 업로드하고 있습니다...`);
+    }
+
+    for (const file of files) {
+        try {
+            const url = await uploadImageFile(file);
+            if (url) item.photos.push(url);
+        } catch (e) {}
+    }
+
+    renderBriefingEditorItems();
+    if (typeof showToast === 'function') {
+        showToast('✅ 현장 사진 업로드 완료!');
+    }
+}
+window.handleBriefingPhotoUpload = handleBriefingPhotoUpload;
+
+function renderBriefingEditorItems() {
+    const container = document.getElementById('bf-items-container');
+    if (!container) return;
+
+    if (!_editingBriefingItems || _editingBriefingItems.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-10 px-4 bg-white rounded-2xl border-2 border-dashed border-slate-300 text-slate-500 text-xs sm:text-sm space-y-2">
+                <span class="material-symbols-outlined text-3xl text-slate-400">playlist_add</span>
+                <div class="font-bold text-slate-700">아직 브리핑에 담긴 매물이 없습니다.</div>
+                <div>위 검색창에서 <b>매물번호(예: 1790)</b>를 클릭해 추가하거나 <b>[+ 비공개 현장 매물 직접 추가]</b>를 눌러주세요.</div>
+            </div>
+        `;
+        return;
+    }
+
+    const circles = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'];
+
+    container.innerHTML = _editingBriefingItems.map((item, idx) => {
+        const cSym = circles[idx] || `(${idx + 1})`;
+        const isSale = item.tradeType === 'sale';
+        const dep = Number(item.deposit) || 0;
+        const rent = Number(item.rent) || 0;
+        const maint = Number(item.managementFee) || 0;
+        const prem = Number(item.premium) || 0;
+        const saleP = Number(item.salePrice) || 0;
+
+        const initCap = isSale ? Math.max(saleP - dep, 0) : (dep + prem);
+        const monthlyVat = Math.round(rent * 1.1 * 10) / 10 + maint;
+        const yieldPct = (saleP > 0 && rent > 0 && (saleP - dep) > 0)
+            ? (((rent * 12) / (saleP - dep)) * 100).toFixed(2)
+            : null;
+
+        const badgesHtml = COMMERCIAL_CHECK_BADGES.map(bg => {
+            const active = Array.isArray(item.badges) && item.badges.includes(bg);
+            return `
+                <button type="button" onclick="toggleBriefingItemBadge(${idx}, '${bg}')" class="px-2.5 py-1 rounded-full text-xs font-extrabold border transition cursor-pointer ${active ? 'bg-[#003891] text-white border-[#003891] shadow-xs' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-100'}">
+                    ${active ? '✓ ' : ''}${bg}
+                </button>
+            `;
+        }).join('');
+
+        const photos = Array.isArray(item.photos) ? item.photos : [];
+        const photosHtml = photos.map((pUrl, pIdx) => `
+            <div class="relative w-20 h-16 rounded-xl overflow-hidden border border-slate-300 group shrink-0 bg-slate-100">
+                <img src="${escAdminHtml(pUrl)}" alt="" class="w-full h-full object-cover" onerror="handlePostImgError(this, '${item.postId || idx}')" />
+                <button type="button" onclick="removeBriefingItemPhoto(${idx}, ${pIdx})" class="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center opacity-90 hover:opacity-100 cursor-pointer" title="사진 제외">&times;</button>
+            </div>
+        `).join('');
+
+        return `
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border-2 border-slate-200 dark:border-slate-700 overflow-hidden shadow-xs">
+                <!-- Card Header -->
+                <div class="bg-slate-900 text-white px-4 py-2.5 flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-amber-400 text-slate-950 font-black text-xs px-2.5 py-0.5 rounded-full">${cSym}번 브리핑 매물</span>
+                        <span class="text-xs text-slate-300 font-bold">매물번호: ${escAdminHtml(item.propNo || '-')}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button type="button" onclick="moveBriefingItem(${idx}, -1)" class="px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-xs font-bold cursor-pointer" title="위로 이동">▲</button>
+                        <button type="button" onclick="moveBriefingItem(${idx}, 1)" class="px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-xs font-bold cursor-pointer" title="아래로 이동">▼</button>
+                        <button type="button" onclick="removeBriefingItem(${idx})" class="px-2.5 py-1 rounded bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold cursor-pointer ml-1">삭제</button>
+                    </div>
+                </div>
+
+                <div class="p-4 space-y-3.5 text-xs">
+                    <!-- Row 1: Basic Info -->
+                    <div class="grid grid-cols-2 sm:grid-cols-6 gap-2.5">
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-1">매물번호</label>
+                            <input type="text" id="bf-item-${idx}-propNo" value="${escAdminHtml(item.propNo)}" class="w-full rounded-lg border-slate-300 text-xs font-bold p-2" />
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-1">거래형태</label>
+                            <select id="bf-item-${idx}-tradeType" onchange="syncEditorInputsToMemory(); renderBriefingEditorItems();" class="w-full rounded-lg border-slate-300 text-xs font-bold p-2">
+                                <option value="rent" ${!isSale ? 'selected' : ''}>임대(월세)</option>
+                                <option value="sale" ${isSale ? 'selected' : ''}>매매</option>
+                            </select>
+                        </div>
+                        <div class="col-span-2 sm:col-span-4">
+                            <label class="block font-bold text-slate-600 mb-1">손님 브리핑용 매물 제목</label>
+                            <input type="text" id="bf-item-${idx}-title" value="${escAdminHtml(item.title)}" class="w-full rounded-lg border-slate-300 text-xs font-bold p-2" />
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Location, Floor, Area -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-1">소재지 (블라인드 켜면 번지 자동가림)</label>
+                            <input type="text" id="bf-item-${idx}-address" value="${escAdminHtml(item.address)}" class="w-full rounded-lg border-slate-300 text-xs font-bold p-2" />
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-1">해당층 / 총층</label>
+                            <input type="text" id="bf-item-${idx}-floor" value="${escAdminHtml(item.floor)}" class="w-full rounded-lg border-slate-300 text-xs font-bold p-2" />
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-1">면적 (평수)</label>
+                            <input type="text" id="bf-item-${idx}-area" value="${escAdminHtml(item.area)}" class="w-full rounded-lg border-slate-300 text-xs font-bold p-2" />
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Financial Numbers (Man-won) -->
+                    <div class="grid grid-cols-2 sm:grid-cols-6 gap-2.5 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <div>
+                            <label class="block font-extrabold text-[#003891] mb-1">보증금 (만원)</label>
+                            <input type="number" step="any" id="bf-item-${idx}-deposit" value="${dep}" oninput="syncEditorInputsToMemory()" class="w-full rounded-lg border-slate-300 text-xs font-black p-2" />
+                        </div>
+                        <div>
+                            <label class="block font-extrabold text-rose-600 mb-1">월세 (만원)</label>
+                            <input type="number" step="any" id="bf-item-${idx}-rent" value="${rent}" oninput="syncEditorInputsToMemory()" class="w-full rounded-lg border-slate-300 text-xs font-black p-2" />
+                        </div>
+                        <div>
+                            <label class="block font-extrabold text-slate-700 mb-1">관리비 (만원)</label>
+                            <input type="number" step="any" id="bf-item-${idx}-managementFee" value="${maint}" oninput="syncEditorInputsToMemory()" class="w-full rounded-lg border-slate-300 text-xs font-black p-2" />
+                        </div>
+                        <div>
+                            <label class="block font-extrabold text-amber-700 mb-1">권리금 (만원)</label>
+                            <input type="number" step="any" id="bf-item-${idx}-premium" value="${prem}" oninput="syncEditorInputsToMemory()" class="w-full rounded-lg border-slate-300 text-xs font-black p-2" />
+                        </div>
+                        <div>
+                            <label class="block font-extrabold text-emerald-700 mb-1">권리금 표시문구</label>
+                            <input type="text" id="bf-item-${idx}-premiumText" value="${escAdminHtml(item.premiumText || '')}" placeholder="예: 무권리 / 협의" class="w-full rounded-lg border-slate-300 text-xs font-bold p-2" />
+                        </div>
+                        <div>
+                            <label class="block font-extrabold text-purple-700 mb-1">매매가 (만원)</label>
+                            <input type="number" step="any" id="bf-item-${idx}-salePrice" value="${saleP}" oninput="syncEditorInputsToMemory()" class="w-full rounded-lg border-slate-300 text-xs font-black p-2" />
+                        </div>
+                        <div class="col-span-2 sm:col-span-6 flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px] font-extrabold text-slate-600">
+                            <span>💡 자동 계산 미리보기: 초기 필요자금 <b class="text-[#003891]">${fmtAdminManwon(initCap)}원</b> · 월 고정비(VAT·관리비 포함) <b class="text-rose-600">월 ${fmtAdminManwon(monthlyVat)}원</b></span>
+                            ${yieldPct ? `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-black">📈 예상 연 수익률: ${yieldPct}%</span>` : ''}
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Rec 4 Check Point Badges -->
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1.5">✨ 상업용 핵심 스펙 체크 포인트 뱃지 (클릭하여 ON/OFF)</label>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${badgesHtml}
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Agent 1-Line Comment -->
+                    <div>
+                        <label class="block font-extrabold text-amber-800 mb-1">👨‍💼 최이명 소장님의 현장 브리핑 코멘트 / 협상 포인트</label>
+                        <textarea id="bf-item-${idx}-agentComment" rows="2" placeholder="예: 임대인분과 렌트프리 1개월 추가 협의 가능 / 주차 여건이 이 주변 최고입니다." class="w-full rounded-xl border-amber-300 bg-amber-50/50 text-xs font-semibold p-2.5">${escAdminHtml(item.agentComment || '')}</textarea>
+                    </div>
+
+                    <!-- Row 6: Photos & Stealth Upload -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="font-bold text-slate-700">📷 브리핑 노출 사진 (${photos.length}장)</span>
+                            <label class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs cursor-pointer inline-flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">upload</span>
+                                <span>+ 현장 사진 추가 업로드</span>
+                                <input type="file" accept="image/*" multiple class="hidden" onchange="handleBriefingPhotoUpload(${idx}, this)" />
+                            </label>
+                        </div>
+                        <div class="flex items-center gap-2 overflow-x-auto pb-1">
+                            ${photosHtml || '<span class="text-slate-400 text-xs">등록된 사진이 없습니다. 우측 버튼으로 현장 사진을 추가해 주세요.</span>'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderBriefingMemoCheckboxes(selectedIds = null) {
+    const container = document.getElementById('bf-memo-checkboxes');
+    if (!container) return;
+
+    let currentChecked = selectedIds;
+    if (!currentChecked) {
+        currentChecked = Array.from(document.querySelectorAll('input[name="bf-attach-memo"]:checked')).map(cb => cb.value);
+    }
+
+    const memos = _briefingStore.memos || [];
+    container.innerHTML = memos.map(m => {
+        const isChecked = currentChecked.includes(m.id);
+        return `
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-white dark:bg-slate-900 border ${isChecked ? 'border-primary bg-blue-50/30' : 'border-slate-200 dark:border-slate-700'} cursor-pointer hover:border-primary/60 transition">
+                <input type="checkbox" name="bf-attach-memo" value="${escAdminHtml(m.id)}" ${isChecked ? 'checked' : ''} class="w-4 h-4 rounded text-primary" />
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] font-black px-1.5 py-0.2 rounded bg-slate-100 text-slate-700">${escAdminHtml(m.category || '안내')}</span>
+                        <span class="text-xs font-extrabold text-slate-900 dark:text-white truncate">${escAdminHtml(m.title)}</span>
+                    </div>
+                </div>
+            </label>
+        `;
+    }).join('');
+}
+
+async function saveCurrentBriefing(showShareToast = true) {
+    syncEditorInputsToMemory();
+
+    const id = (document.getElementById('bf-id').value || ('br_' + Date.now().toString(36))).trim();
+    const customerName = (document.getElementById('bf-customer-name').value || '').trim() || 'VIP 고객님';
+    const title = (document.getElementById('bf-title').value || '').trim() || `${customerName} 맞춤 매물 비교 브리핑`;
+    const generalNote = (document.getElementById('bf-general-note').value || '').trim();
+    const blindAddress = document.getElementById('bf-blind-address').checked;
+    const includeVat = document.getElementById('bf-include-vat').checked;
+    const showYield = document.getElementById('bf-show-yield').checked;
+    const expiresAt = (document.getElementById('bf-expires-at').value || '').trim();
+    const attachedMemoIds = Array.from(document.querySelectorAll('input[name="bf-attach-memo"]:checked')).map(cb => cb.value);
+
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}. ${String(now.getMonth() + 1).padStart(2, '0')}. ${String(now.getDate()).padStart(2, '0')}`;
+
+    const existingIdx = (_briefingStore.briefings || []).findIndex(b => String(b.id) === id);
+    const briefingObj = {
+        id,
+        customerName,
+        customerPhone: '',
+        title,
+        createdAt: existingIdx !== -1 ? (_briefingStore.briefings[existingIdx].createdAt || dateStr) : dateStr,
+        updatedAt: Date.now(),
+        expiresAt,
+        blindAddress,
+        includeVat,
+        showYield,
+        generalNote,
+        attachedMemoIds,
+        customerPicks: existingIdx !== -1 ? (_briefingStore.briefings[existingIdx].customerPicks || []) : [],
+        items: _editingBriefingItems
+    };
+
+    if (existingIdx !== -1) {
+        _briefingStore.briefings[existingIdx] = briefingObj;
+    } else {
+        _briefingStore.briefings.unshift(briefingObj);
+    }
+
+    await saveBriefingData(_briefingStore);
+    renderSavedBriefingsList();
+
+    if (showShareToast) {
+        copyBriefingKakaoMsg(id);
+    }
+}
+window.saveCurrentBriefing = saveCurrentBriefing;
+
+function copyBriefingShareLink(id) {
+    const shareUrl = `https://www.choi114.com/briefing?id=${encodeURIComponent(id)}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl);
+    }
+    if (typeof showToast === 'function') {
+        showToast('🔗 손님 전용 브리핑 링크가 복사되었습니다!');
+    } else {
+        alert('링크가 복사되었습니다:\n' + shareUrl);
+    }
+}
+window.copyBriefingShareLink = copyBriefingShareLink;
+
+function copyBriefingKakaoMsg(id) {
+    const b = (_briefingStore.briefings || []).find(item => String(item.id) === String(id));
+    if (!b) return;
+    const shareUrl = `https://www.choi114.com/briefing?id=${encodeURIComponent(b.id)}`;
+    const circles = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'];
+    const itemLines = (b.items || []).map((it, i) => {
+        const addr = b.blindAddress
+            ? String(it.address || '').replace(/\d+(?:-\d+)?\s*번지/g, '').trim()
+            : (it.address || '');
+        return `${circles[i] || (i + 1)} [매물번호:${it.propNo || '-'}] ${addr} (${it.floor || '-'} / ${it.area || '-'})`;
+    }).join('\n');
+
+    const msg = `📋 [${b.customerName || '고객님'} 전용 맞춤 매물 브리핑 리포트]\n\n안녕하세요! 최가네부동산 최이명 대표소장입니다. 😊\n함께 검토하신 추천 매물 ${(b.items || []).length}곳의 현장 사진, 초기 필요자금·월 실제 고정비 비교표, 위치 지도 및 소장 코멘트를 아래 전용 링크에 깔끔하게 정리해 두었습니다.\n\n${itemLines ? `[브리핑 매물 요약]\n${itemLines}\n\n` : ''}👇 아래 링크를 누르시면 스마트폰과 PC에서 바로 비교해 보실 수 있습니다!\n${shareUrl}\n\n검토해 보시고 가장 마음에 드시는 1순위 매물이나 조건 협의(렌트프리·임대료 조정 등)가 필요한 부분을 편하게 말씀해 주세요!\n\n- 최가네부동산 대표소장 최이명 배상 (📞 010-3548-4000)`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(msg);
+    }
+    if (typeof showToast === 'function') {
+        showToast('💬 카톡 전송용 [안내문 + 브리핑 링크]가 통째로 복사되었습니다! 손님 카톡창에 붙여넣기 하세요.');
+    } else {
+        alert('카톡 안내문과 링크가 복사되었습니다!\n\n' + msg);
+    }
+}
+window.copyBriefingKakaoMsg = copyBriefingKakaoMsg;
+
+async function deleteBriefingById(id) {
+    if (!confirm('이 손님 브리핑 보드를 삭제하시겠습니까?')) return;
+    _briefingStore.briefings = (_briefingStore.briefings || []).filter(b => String(b.id) !== String(id));
+    await saveBriefingData(_briefingStore);
+    renderSavedBriefingsList();
+    if (typeof showToast === 'function') {
+        showToast('🗑️ 브리핑 보드가 삭제되었습니다.');
+    }
+}
+window.deleteBriefingById = deleteBriefingById;
+
+// =========================================================================
+// 🗂️ 메모창고 (Memo Warehouse) 관리 함수
+// =========================================================================
+
+function setMemoCategoryFilter(cat) {
+    _currentMemoCatFilter = cat;
+    const btns = document.querySelectorAll('#memo-category-chips button');
+    btns.forEach(btn => {
+        if (btn.getAttribute('data-cat') === cat) {
+            btn.className = 'px-3 py-1.5 rounded-xl bg-primary text-white text-xs font-extrabold cursor-pointer';
+        } else {
+            btn.className = 'px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-bold cursor-pointer';
+        }
+    });
+    renderMemoWarehouseGrid();
+}
+window.setMemoCategoryFilter = setMemoCategoryFilter;
+
+function renderMemoWarehouseGrid() {
+    const grid = document.getElementById('memo-warehouse-grid');
+    if (!grid) return;
+
+    const q = (document.getElementById('memo-search-input')?.value || '').trim().toLowerCase();
+    let list = (_briefingStore.memos || []).slice();
+
+    // Sort pinned first
+    list.sort((a, b) => (b.isPinned ? 1 : 0) - (a.isPinned ? 1 : 0));
+
+    if (_currentMemoCatFilter === '즐겨찾기') {
+        list = list.filter(m => m.isPinned);
+    } else if (_currentMemoCatFilter !== '전체') {
+        list = list.filter(m => m.category === _currentMemoCatFilter);
+    }
+
+    if (q) {
+        list = list.filter(m =>
+            (m.title || '').toLowerCase().includes(q) ||
+            (m.content || '').toLowerCase().includes(q) ||
+            (m.category || '').toLowerCase().includes(q)
+        );
+    }
+
+    if (list.length === 0) {
+        grid.innerHTML = `<div class="col-span-2 text-center py-10 text-muted text-sm">조건에 맞는 메모 카드가 없습니다.</div>`;
+        return;
+    }
+
+    grid.innerHTML = list.map(m => `
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-5 border ${m.isPinned ? 'border-amber-400 shadow-sm' : 'border-slate-200 dark:border-slate-700'} flex flex-col justify-between gap-3">
+            <div class="space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5">
+                        <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#003891] border border-blue-200 text-[11px] font-black">
+                            ${escAdminHtml(m.category || '일반')}
+                        </span>
+                        <button type="button" onclick="toggleMemoPin('${escAdminHtml(m.id)}')" class="text-xs font-bold ${m.isPinned ? 'text-amber-600' : 'text-slate-400 hover:text-slate-600'} cursor-pointer" title="상단 고정 토글">
+                            ${m.isPinned ? '📌 상단고정됨' : '📍 고정하기'}
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button type="button" onclick="openMemoEditorModal('${escAdminHtml(m.id)}')" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer">수정</button>
+                        <button type="button" onclick="deleteMemoById('${escAdminHtml(m.id)}')" class="px-2 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold cursor-pointer">삭제</button>
+                    </div>
+                </div>
+
+                <h4 class="font-black text-sm sm:text-base text-slate-900 dark:text-white">${escAdminHtml(m.title)}</h4>
+                <div class="text-xs text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-100 dark:border-slate-700 whitespace-pre-line max-h-44 overflow-y-auto leading-relaxed font-medium">${escAdminHtml(m.content)}</div>
+            </div>
+
+            <div class="flex items-center gap-2 pt-1">
+                <button type="button" onclick="copyMemoFromWarehouse('${escAdminHtml(m.id)}')" class="flex-1 py-2.5 px-3 rounded-xl bg-[#fee500] hover:bg-[#fdd835] text-[#191600] border border-[#d4be00] font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-xs cursor-pointer">
+                    <span class="material-symbols-outlined text-[17px]">content_copy</span>
+                    <span>원클릭 내용 복사 (카톡·문자 전송용)</span>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+window.renderMemoWarehouseGrid = renderMemoWarehouseGrid;
+
+function copyMemoFromWarehouse(id) {
+    const found = (_briefingStore.memos || []).find(m => String(m.id) === String(id));
+    if (!found) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(found.content);
+    }
+    if (typeof showToast === 'function') {
+        showToast(`📋 [${found.title}] 전체 내용이 복사되었습니다! 카톡이나 문자에 바로 붙여넣기 하세요.`);
+    }
+}
+window.copyMemoFromWarehouse = copyMemoFromWarehouse;
+
+async function toggleMemoPin(id) {
+    const found = (_briefingStore.memos || []).find(m => String(m.id) === String(id));
+    if (!found) return;
+    found.isPinned = !found.isPinned;
+    await saveBriefingData(_briefingStore);
+    renderMemoWarehouseGrid();
+}
+window.toggleMemoPin = toggleMemoPin;
+
+function openMemoEditorModal(id = '') {
+    const modal = document.getElementById('memo-editor-modal');
+    if (!modal) return;
+
+    if (id) {
+        const found = (_briefingStore.memos || []).find(m => String(m.id) === String(id));
+        if (!found) return;
+        document.getElementById('edit-memo-id').value = found.id;
+        document.getElementById('edit-memo-category').value = found.category || '계약서류';
+        document.getElementById('edit-memo-pinned').checked = Boolean(found.isPinned);
+        document.getElementById('edit-memo-title').value = found.title || '';
+        document.getElementById('edit-memo-content').value = found.content || '';
+    } else {
+        document.getElementById('edit-memo-id').value = '';
+        document.getElementById('edit-memo-category').value = '계약서류';
+        document.getElementById('edit-memo-pinned').checked = true;
+        document.getElementById('edit-memo-title').value = '';
+        document.getElementById('edit-memo-content').value = '';
+    }
+
+    modal.classList.remove('hidden');
+}
+window.openMemoEditorModal = openMemoEditorModal;
+
+function closeMemoEditorModal() {
+    const modal = document.getElementById('memo-editor-modal');
+    if (modal) modal.classList.add('hidden');
+}
+window.closeMemoEditorModal = closeMemoEditorModal;
+
+async function saveMemoFromModal() {
+    const id = (document.getElementById('edit-memo-id').value || '').trim();
+    const category = document.getElementById('edit-memo-category').value || '계약서류';
+    const isPinned = document.getElementById('edit-memo-pinned').checked;
+    const title = (document.getElementById('edit-memo-title').value || '').trim();
+    const content = (document.getElementById('edit-memo-content').value || '').trim();
+
+    if (!title || !content) {
+        alert('카드 제목과 본문 내용을 모두 입력해 주세요.');
+        return;
+    }
+
+    if (id) {
+        const idx = (_briefingStore.memos || []).findIndex(m => String(m.id) === id);
+        if (idx !== -1) {
+            _briefingStore.memos[idx] = { ..._briefingStore.memos[idx], category, isPinned, title, content, updatedAt: Date.now() };
+        }
+    } else {
+        _briefingStore.memos.unshift({
+            id: 'memo_' + Date.now().toString(36),
+            category,
+            isPinned,
+            title,
+            content,
+            updatedAt: Date.now()
+        });
+    }
+
+    closeMemoEditorModal();
+    await saveBriefingData(_briefingStore);
+    renderMemoWarehouseGrid();
+    renderBriefingMemoCheckboxes();
+    if (typeof showToast === 'function') {
+        showToast('✅ 메모창고 카드가 저장되었습니다!');
+    }
+}
+window.saveMemoFromModal = saveMemoFromModal;
+
+async function deleteMemoById(id) {
+    if (!confirm('이 메모창고 카드를 삭제하시겠습니까?')) return;
+    _briefingStore.memos = (_briefingStore.memos || []).filter(m => String(m.id) !== String(id));
+    await saveBriefingData(_briefingStore);
+    renderMemoWarehouseGrid();
+    renderBriefingMemoCheckboxes();
+    if (typeof showToast === 'function') {
+        showToast('🗑️ 메모 카드가 삭제되었습니다.');
+    }
+}
+window.deleteMemoById = deleteMemoById;
 
 </script>
 </body></html>
