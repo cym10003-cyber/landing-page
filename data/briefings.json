@@ -1,5 +1,5 @@
 {
-  "updatedAt": 1794372886917,
+  "updatedAt": 1794373887174,
   "memos": [
     {
       "id": "memo_doc_rent",
@@ -94,7 +94,7 @@
       "customerPhone": "",
       "title": "수성구 역세권 & 알파시티 무권리 추천 오피스·학원 비교 브리핑",
       "createdAt": "2026. 11. 11",
-      "updatedAt": 1794372886635,
+      "updatedAt": 1794373886963,
       "expiresAt": "",
       "blindAddress": true,
       "showComparisonTable": true,
@@ -120,7 +120,7 @@
           "currentFloor": "지상 3층",
           "totalFloor": "지하 1층~지상 5층",
           "floor": "지상 3층 / 총 지하 1층~지상 5층",
-          "area": "전용 약 130.25평",
+          "area": "약 130.25평",
           "deposit": 10000,
           "rent": 510,
           "managementFee": 90,
