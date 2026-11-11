@@ -421,7 +421,7 @@
         </div>
     </div>
 
-    <script src="db.js?v=20260715_v239"></script>
+    <script src="db.js?v=20260715_v240"></script>
     <script>
         let _briefing = null;
         let _attachedMemos = [];
@@ -1047,7 +1047,58 @@
             section.classList.remove('hidden');
 
             grid.innerHTML = _attachedMemos.map(m => {
-                const cleanContent = String(m.content || '').replace(/최이명\s*(대표)?소장(님)?/g, '최가네부동산');
+                const rawContent = String(m.content || '').replace(/최이명\s*(대표)?소장(님)?/g, '최가네부동산');
+                const isHtml = /<[a-z][\s\S]*>/i.test(rawContent);
+                const bodyHtml = isHtml ? rawContent : escHtml(rawContent).replace(/\n/g, '<br>');
+
+                // Attached Photos
+                const photos = Array.isArray(m.photos) ? m.photos : [];
+                const photosHtml = photos.length > 0 ? `
+                    <div class="pt-2 border-t border-slate-200">
+                        <div class="text-[11px] font-extrabold text-[#003891] flex items-center gap-1 mb-1">
+                            <span class="material-symbols-outlined text-[14px]">photo_library</span>
+                            <span>참고 사진 (${photos.length}장)</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                            ${photos.map(p => {
+                                const url = typeof p === 'string' ? p : p.url;
+                                return `
+                                    <a href="${escHtml(url)}" target="_blank" class="w-16 h-16 rounded-lg overflow-hidden border border-slate-200 shrink-0 block hover:opacity-80 transition" title="사진 크게 보기">
+                                        <img src="${escHtml(url)}" class="w-full h-full object-cover" />
+                                    </a>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                ` : '';
+
+                // Attached Documents (PDF/HWP/Excel)
+                const attachments = Array.isArray(m.attachments) ? m.attachments : [];
+                const attachmentsHtml = attachments.length > 0 ? `
+                    <div class="pt-2 border-t border-slate-200 space-y-1">
+                        <div class="text-[11px] font-extrabold text-emerald-800 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">attach_file</span>
+                            <span>첨부 서류 서식 (${attachments.length}건)</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${attachments.map(att => {
+                                let badgeColor = 'bg-slate-100 text-slate-800 border-slate-300';
+                                if (att.ext === 'pdf') badgeColor = 'bg-rose-50 text-rose-700 border-rose-200';
+                                else if (att.ext === 'hwp' || att.ext === 'hwpx') badgeColor = 'bg-blue-50 text-blue-700 border-blue-200';
+                                else if (att.ext === 'xls' || att.ext === 'xlsx') badgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+
+                                return `
+                                    <a href="${escHtml(att.url)}" download="${escHtml(att.name)}" target="_blank" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold border ${badgeColor} hover:shadow-xs transition" title="${escHtml(att.name)} 다운로드">
+                                        <span class="material-symbols-outlined text-[14px]">download</span>
+                                        <span class="truncate max-w-[200px]">${escHtml(att.name)}</span>
+                                        <span class="text-[10px] opacity-75">(${escHtml(att.size || '')})</span>
+                                    </a>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                ` : '';
+
                 return `
                 <div class="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200 flex flex-col justify-between gap-3 print-break-inside-avoid">
                     <div class="space-y-2.5">
@@ -1060,7 +1111,9 @@
                             </button>
                         </div>
                         <h3 class="font-extrabold text-sm sm:text-base text-slate-900">${escHtml(m.title)}</h3>
-                        <div class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line bg-white p-3.5 rounded-lg border border-slate-200">${escHtml(cleanContent)}</div>
+                        <div class="text-xs sm:text-sm text-slate-800 leading-relaxed bg-white p-3.5 rounded-lg border border-slate-200 space-y-1">${bodyHtml}</div>
+                        ${photosHtml}
+                        ${attachmentsHtml}
                     </div>
                 </div>
                 `;
@@ -1070,9 +1123,27 @@
         function copyMemoCardText(memoId) {
             const found = _attachedMemos.find(m => String(m.id) === String(memoId));
             if (!found) return;
-            const cleanContent = String(found.content || '').replace(/최이명\s*(대표)?소장(님)?/g, '최가네부동산');
+
+            let cleanContent = '';
+            if (found.plainText) {
+                cleanContent = found.plainText;
+            } else {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = found.content || '';
+                cleanContent = tempDiv.innerText || tempDiv.textContent || '';
+            }
+            cleanContent = cleanContent.replace(/최이명\s*(대표)?소장(님)?/g, '최가네부동산');
+
+            let copyText = `[${found.title}]\n\n${cleanContent}`;
+            if (Array.isArray(found.attachments) && found.attachments.length > 0) {
+                copyText += `\n\n[첨부 서류 다운로드]\n`;
+                found.attachments.forEach(att => {
+                    copyText += `• ${att.name}: ${att.url}\n`;
+                });
+            }
+
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(cleanContent);
+                navigator.clipboard.writeText(copyText);
             }
             if (typeof showToast === 'function') {
                 showToast('안내문 내용이 클립보드에 복사되었습니다.');

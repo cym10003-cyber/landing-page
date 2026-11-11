@@ -114,10 +114,10 @@
 <div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed flex items-center"><a href="index.html">최가네부동산<span class="inline md:hidden xl:inline">공인중개사사무소</span></a></div>
 <div class="hidden md:flex gap-1.5 lg:gap-3 xl:gap-lg items-center text-xs lg:text-sm font-semibold shrink-0"><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v239">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v240">매물리스트</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v239">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v240">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-2.5 py-1.5 lg:px-[25px] lg:py-[14px] rounded font-button text-xs lg:text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-1 lg:gap-sm whitespace-nowrap shrink-0" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -129,7 +129,7 @@
 </div>
 </nav>
 <main class="max-w-7xl mx-auto px-lg py-[80px]">
-    <!-- v20260715_v239 force deploy 20261111_133950 -->
+    <!-- v20260715_v240 force deploy 20261111_133950 -->
     <!-- Non-logged in State (Login Form) -->
     <div id="login-view" class="hidden max-w-md mx-auto bg-surface-container-lowest p-lg md:p-xl rounded-xl shadow-card-soft border border-hairline my-12">
         <h2 class="font-subsection-h3 text-xl font-bold text-center text-ink mb-lg">관리자 로그인</h2>
@@ -737,9 +737,9 @@
     </div>
 </main>
 
-<!-- Memo Card Create/Edit Modal -->
-<div id="memo-editor-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-[9999] hidden">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto">
+<!-- Memo Card Create/Edit Modal (Rich Editor with Fonts, Sizes, Highlighting, Emoji, Photos & PDF/HWP Attachments) -->
+<div id="memo-editor-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[9999] hidden">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full p-5 sm:p-6 shadow-2xl space-y-4 border border-slate-200 dark:border-slate-800 max-h-[92vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
             <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2" id="memo-modal-heading">
                 <span class="material-symbols-outlined text-primary">inventory_2</span>
@@ -771,10 +771,165 @@
             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">카드 제목 <span class="text-rose-500">*</span></label>
             <input type="text" id="edit-memo-title" placeholder="예: 📋 상가 임대차 계약 시 준비서류 안내" class="w-full rounded-xl border-slate-300 text-xs sm:text-sm font-bold p-2.5" />
         </div>
+
+        <!-- Rich Board Editor Section -->
         <div>
-            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">안내문 본문 내용 (카톡/브리핑 표시용) <span class="text-rose-500">*</span></label>
-            <textarea id="edit-memo-content" rows="9" placeholder="손님께 카톡으로 복사해 보내거나 브리핑 하단에 첨부할 내용을 적어주세요." class="w-full rounded-xl border-slate-300 text-xs sm:text-sm p-3 leading-relaxed"></textarea>
+            <div class="flex items-center justify-between mb-1.5">
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                    안내문 본문 내용 (서식·사진·문서첨부 지원) <span class="text-rose-500">*</span>
+                </label>
+                <span class="text-[11px] text-slate-500">※ 카톡 복사 시 서식 태그 없이 깔끔한 텍스트로 자동 변환 복사됩니다.</span>
+            </div>
+
+            <!-- Editor Toolbar -->
+            <div class="bg-slate-50 dark:bg-slate-800 p-2 rounded-t-xl border border-b-0 border-slate-300 dark:border-slate-700 space-y-1.5 select-none">
+                <!-- Toolbar Row 1: Font, Size, Style, Colors -->
+                <div class="flex flex-wrap items-center gap-1.5 text-xs">
+                    <!-- Font Family -->
+                    <select id="memo-tool-font" onchange="applyMemoFont(this.value)" class="rounded-lg border-slate-300 bg-white text-xs py-1 px-2 font-bold cursor-pointer text-slate-800">
+                        <option value="Pretendard Variable, Pretendard, sans-serif">프리텐다드</option>
+                        <option value="'Nanum Gothic', sans-serif">나눔고딕</option>
+                        <option value="'Noto Sans KR', sans-serif">본고딕</option>
+                        <option value="'Batang', serif">바탕체</option>
+                        <option value="'Dotum', sans-serif">돋움체</option>
+                    </select>
+
+                    <!-- Font Size -->
+                    <select id="memo-tool-size" onchange="applyMemoFontSize(this.value)" class="rounded-lg border-slate-300 bg-white text-xs py-1 px-2 font-bold cursor-pointer text-slate-800">
+                        <option value="">글자크기</option>
+                        <option value="12px">12px (작게)</option>
+                        <option value="14px">14px (보통)</option>
+                        <option value="16px">16px (약간 크게)</option>
+                        <option value="18px">18px (강조/소제목)</option>
+                        <option value="22px">22px (대제목)</option>
+                    </select>
+
+                    <div class="h-4 w-px bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
+
+                    <!-- Bold, Italic, Underline, Strike -->
+                    <button type="button" onclick="formatMemoDoc('bold')" class="p-1 rounded bg-white hover:bg-slate-200 border border-slate-300 font-black text-xs w-7 h-7 flex items-center justify-center cursor-pointer shadow-2xs text-slate-800" title="굵게 (Ctrl+B)">B</button>
+                    <button type="button" onclick="formatMemoDoc('italic')" class="p-1 rounded bg-white hover:bg-slate-200 border border-slate-300 italic font-black text-xs w-7 h-7 flex items-center justify-center cursor-pointer shadow-2xs text-slate-800" title="기울임 (Ctrl+I)">I</button>
+                    <button type="button" onclick="formatMemoDoc('underline')" class="p-1 rounded bg-white hover:bg-slate-200 border border-slate-300 underline font-black text-xs w-7 h-7 flex items-center justify-center cursor-pointer shadow-2xs text-slate-800" title="밑줄 (Ctrl+U)">U</button>
+                    <button type="button" onclick="formatMemoDoc('strikeThrough')" class="p-1 rounded bg-white hover:bg-slate-200 border border-slate-300 line-through font-bold text-xs w-7 h-7 flex items-center justify-center cursor-pointer shadow-2xs text-slate-800" title="취소선">S</button>
+
+                    <div class="h-4 w-px bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
+
+                    <!-- Text Color -->
+                    <select id="memo-tool-color" onchange="applyMemoColor(this.value)" class="rounded-lg border-slate-300 bg-white text-xs py-1 px-2 font-bold cursor-pointer text-slate-800">
+                        <option value="">글자색</option>
+                        <option value="#0f172a" style="color:#0f172a; font-weight:bold;">● 기본(검정)</option>
+                        <option value="#003891" style="color:#003891; font-weight:bold;">● 로열블루</option>
+                        <option value="#dc2626" style="color:#dc2626; font-weight:bold;">● 레드(강조)</option>
+                        <option value="#059669" style="color:#059669; font-weight:bold;">● 그린</option>
+                        <option value="#d97706" style="color:#d97706; font-weight:bold;">● 오렌지</option>
+                        <option value="#7c3aed" style="color:#7c3aed; font-weight:bold;">● 퍼플</option>
+                    </select>
+
+                    <!-- Highlight Background Color -->
+                    <select id="memo-tool-bgcolor" onchange="applyMemoBgColor(this.value)" class="rounded-lg border-slate-300 bg-white text-xs py-1 px-2 font-bold cursor-pointer text-slate-800">
+                        <option value="">형광펜</option>
+                        <option value="#fef08a" style="background-color:#fef08a; color:#854d0e; font-weight:bold;">노랑 하이라이트</option>
+                        <option value="#bfdbfe" style="background-color:#bfdbfe; color:#1e40af; font-weight:bold;">파랑 하이라이트</option>
+                        <option value="#bbf7d0" style="background-color:#bbf7d0; color:#166534; font-weight:bold;">초록 하이라이트</option>
+                        <option value="#fbcfe8" style="background-color:#fbcfe8; color:#9d174d; font-weight:bold;">분홍 하이라이트</option>
+                        <option value="transparent">배경 지우기</option>
+                    </select>
+                </div>
+
+                <!-- Toolbar Row 2: Alignments, Lists, Boxes, Emoji, Photos & Files -->
+                <div class="flex flex-wrap items-center gap-1.5 text-xs pt-1 border-t border-slate-200 dark:border-slate-700">
+                    <!-- Alignments -->
+                    <button type="button" onclick="formatMemoDoc('justifyLeft')" class="p-1 rounded bg-white hover:bg-slate-200 border border-slate-300 w-7 h-7 flex items-center justify-center cursor-pointer text-slate-700" title="좌측 정렬">
+                        <span class="material-symbols-outlined text-[16px]">format_align_left</span>
+                    </button>
+                    <button type="button" onclick="formatMemoDoc('justifyCenter')" class="p-1 rounded bg-white hover:bg-slate-200 border border-slate-300 w-7 h-7 flex items-center justify-center cursor-pointer text-slate-700" title="가운데 정렬">
+                        <span class="material-symbols-outlined text-[16px]">format_align_center</span>
+                    </button>
+                    <button type="button" onclick="formatMemoDoc('justifyRight')" class="p-1 rounded bg-white hover:bg-slate-200 border border-slate-300 w-7 h-7 flex items-center justify-center cursor-pointer text-slate-700" title="우측 정렬">
+                        <span class="material-symbols-outlined text-[16px]">format_align_right</span>
+                    </button>
+
+                    <!-- Lists -->
+                    <button type="button" onclick="formatMemoDoc('insertUnorderedList')" class="p-1 rounded bg-white hover:bg-slate-200 border border-slate-300 w-7 h-7 flex items-center justify-center cursor-pointer text-slate-700" title="글머리 기호(•)">
+                        <span class="material-symbols-outlined text-[16px]">format_list_bulleted</span>
+                    </button>
+                    <button type="button" onclick="formatMemoDoc('insertOrderedList')" class="p-1 rounded bg-white hover:bg-slate-200 border border-slate-300 w-7 h-7 flex items-center justify-center cursor-pointer text-slate-700" title="번호 목록(1. 2.)">
+                        <span class="material-symbols-outlined text-[16px]">format_list_numbered</span>
+                    </button>
+
+                    <div class="h-4 w-px bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
+
+                    <!-- Highlight Boxes -->
+                    <button type="button" onclick="insertMemoPointBox('tip')" class="px-2 py-1 rounded bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-extrabold flex items-center gap-1 cursor-pointer" title="포인트 안내 박스 삽입">
+                        <span>💡 포인트박스</span>
+                    </button>
+                    <button type="button" onclick="insertMemoPointBox('warn')" class="px-2 py-1 rounded bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 font-extrabold flex items-center gap-1 cursor-pointer" title="주의사항 박스 삽입">
+                        <span>⚠️ 주의박스</span>
+                    </button>
+
+                    <div class="h-4 w-px bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
+
+                    <!-- Emoji Popover Button -->
+                    <div class="relative inline-block">
+                        <button type="button" onclick="toggleMemoEmojiPicker()" class="px-2.5 py-1 rounded bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 font-extrabold flex items-center gap-1 cursor-pointer shadow-2xs">
+                            <span>😀 이모지</span>
+                        </button>
+                        <div id="memo-emoji-picker" class="hidden absolute top-full left-0 mt-1 z-50 bg-white dark:bg-slate-800 p-2.5 rounded-xl shadow-2xl border border-slate-300 dark:border-slate-700 grid grid-cols-7 gap-1.5 w-64 max-h-56 overflow-y-auto">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="h-4 w-px bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
+
+                    <!-- Photo Upload Button -->
+                    <label class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-extrabold flex items-center gap-1 cursor-pointer shadow-2xs">
+                        <span class="material-symbols-outlined text-[15px]">photo_camera</span>
+                        <span>사진 첨부</span>
+                        <input type="file" id="memo-photo-input" accept="image/*" multiple class="hidden" onchange="handleMemoPhotoUpload(this)" />
+                    </label>
+
+                    <!-- Document Upload Button -->
+                    <label class="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold flex items-center gap-1 cursor-pointer shadow-2xs">
+                        <span class="material-symbols-outlined text-[15px]">attach_file</span>
+                        <span>PDF·HWP 첨부</span>
+                        <input type="file" id="memo-doc-input" accept=".pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.zip,application/pdf" multiple class="hidden" onchange="handleMemoDocUpload(this)" />
+                    </label>
+                </div>
+            </div>
+
+            <!-- Content Editable Body -->
+            <div id="edit-memo-editor" contenteditable="true" class="min-h-[220px] max-h-[360px] overflow-y-auto p-4 rounded-b-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#003891]" placeholder="손님께 카톡으로 복사해 보내거나 브리핑 하단에 첨부할 내용을 적어주세요."></div>
+            <textarea id="edit-memo-content" class="hidden"></textarea>
         </div>
+
+        <!-- Attached Photos Preview Grid -->
+        <div id="memo-photos-preview-container" class="hidden space-y-1.5 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
+                <span class="flex items-center gap-1 text-indigo-700 font-extrabold">
+                    <span class="material-symbols-outlined text-[16px]">photo_library</span>
+                    <span>첨부된 사진 (<span id="memo-photos-count">0</span>장)</span>
+                </span>
+                <span class="text-[11px] text-slate-500 font-normal">카드 및 고객 브리핑 화면에 사진 갤러리로 표시됩니다.</span>
+            </div>
+            <div id="memo-photos-grid" class="flex items-center gap-2 overflow-x-auto py-1">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Attached Documents (PDF/HWP) Preview List -->
+        <div id="memo-docs-preview-container" class="hidden space-y-1.5 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
+                <span class="flex items-center gap-1 text-emerald-800 font-extrabold">
+                    <span class="material-symbols-outlined text-[16px]">folder_zip</span>
+                    <span>첨부된 문서 서류 (<span id="memo-docs-count">0</span>건)</span>
+                </span>
+                <span class="text-[11px] text-slate-500 font-normal">PDF, HWP, 엑셀 서류를 고객이 다운로드할 수 있습니다.</span>
+            </div>
+            <div id="memo-docs-list" class="space-y-1.5">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
         <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
             <button type="button" onclick="closeMemoEditorModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs cursor-pointer">취소</button>
             <button type="button" onclick="saveMemoFromModal()" class="px-5 py-2.5 rounded-xl bg-primary text-white font-black text-xs sm:text-sm cursor-pointer shadow-sm">💾 메모 카드 저장</button>
@@ -843,10 +998,10 @@
     <nav class="flex flex-col gap-md font-nav text-nav">
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v239">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v240">매물리스트</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v239">부동산 소식</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v240">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -857,7 +1012,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v239"></script>
+<script src="db.js?v=20260715_v240"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -3003,6 +3158,349 @@ function setMemoCategoryFilter(cat) {
 }
 window.setMemoCategoryFilter = setMemoCategoryFilter;
 
+// =====================================================================
+// Rich Memo Warehouse Editor (Fonts, Sizes, Highlighting, Emoji, Photos & Files)
+// =====================================================================
+let _editingMemoPhotos = [];
+let _editingMemoAttachments = [];
+
+const MEMO_COMMON_EMOJIS = [
+    '📋', '📄', '📑', '🏢', '🏠', '🏬', '🔑',
+    '💰', '💵', '✍️', '📌', '📍', '📞', '🤝',
+    '⚠️', '🚨', '💡', '🔍', '🏷️', '✅', '❌',
+    '🕒', '🚗', '📐', '🏆', '🎯', '📢', '💼'
+];
+
+function formatMemoDoc(cmd, val = null) {
+    const editor = document.getElementById('edit-memo-editor');
+    if (!editor) return;
+    editor.focus();
+    document.execCommand(cmd, false, val);
+}
+window.formatMemoDoc = formatMemoDoc;
+
+function applyMemoFont(fontFamily) {
+    if (!fontFamily) return;
+    formatMemoDoc('fontName', fontFamily);
+}
+window.applyMemoFont = applyMemoFont;
+
+function applyMemoFontSize(sizePx) {
+    if (!sizePx) return;
+    const editor = document.getElementById('edit-memo-editor');
+    if (!editor) return;
+    editor.focus();
+    const sel = window.getSelection();
+    if (!sel || !sel.rangeCount || sel.isCollapsed) return;
+    const range = sel.getRangeAt(0);
+    const span = document.createElement('span');
+    span.style.fontSize = sizePx;
+    try {
+        const frag = range.extractContents();
+        span.appendChild(frag);
+        range.insertNode(span);
+        sel.removeAllRanges();
+        const newR = document.createRange();
+        newR.selectNodeContents(span);
+        sel.addRange(newR);
+    } catch (e) {
+        document.execCommand('fontSize', false, '3');
+    }
+}
+window.applyMemoFontSize = applyMemoFontSize;
+
+function applyMemoColor(colorHex) {
+    if (!colorHex) return;
+    formatMemoDoc('foreColor', colorHex);
+}
+window.applyMemoColor = applyMemoColor;
+
+function applyMemoBgColor(colorHex) {
+    if (!colorHex) return;
+    if (colorHex === 'transparent') {
+        formatMemoDoc('removeFormat');
+    } else {
+        formatMemoDoc('hiliteColor', colorHex);
+    }
+}
+window.applyMemoBgColor = applyMemoBgColor;
+
+function insertMemoPointBox(type = 'tip') {
+    const editor = document.getElementById('edit-memo-editor');
+    if (!editor) return;
+    editor.focus();
+    let boxHtml = '';
+    if (type === 'tip') {
+        boxHtml = `<div style="background-color:#eff6ff; border-left:4px solid #003891; padding:10px 14px; border-radius:8px; margin:8px 0; color:#002766; font-weight:700;">💡 [핵심 포인트] 여기에 강조할 핵심 안내 사항을 작성하세요.</div><p><br></p>`;
+    } else {
+        boxHtml = `<div style="background-color:#fff1f2; border-left:4px solid #e11d48; padding:10px 14px; border-radius:8px; margin:8px 0; color:#881337; font-weight:700;">⚠️ [필수 주의사항] 계약 시 반드시 짚고 넘어가야 할 특약이나 주의점을 작성하세요.</div><p><br></p>`;
+    }
+    document.execCommand('insertHTML', false, boxHtml);
+}
+window.insertMemoPointBox = insertMemoPointBox;
+
+function toggleMemoEmojiPicker() {
+    const picker = document.getElementById('memo-emoji-picker');
+    if (!picker) return;
+    const isHidden = picker.classList.contains('hidden');
+    if (isHidden) {
+        picker.innerHTML = MEMO_COMMON_EMOJIS.map(em => `
+            <button type="button" onclick="insertMemoEmoji('${em}')" class="w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-lg flex items-center justify-center cursor-pointer transition">
+                ${em}
+            </button>
+        `).join('');
+        picker.classList.remove('hidden');
+    } else {
+        picker.classList.add('hidden');
+    }
+}
+window.toggleMemoEmojiPicker = toggleMemoEmojiPicker;
+
+function insertMemoEmoji(emoji) {
+    const editor = document.getElementById('edit-memo-editor');
+    if (!editor) return;
+    editor.focus();
+    document.execCommand('insertText', false, emoji);
+    const picker = document.getElementById('memo-emoji-picker');
+    if (picker) picker.classList.add('hidden');
+}
+window.insertMemoEmoji = insertMemoEmoji;
+
+// Photo Upload Handler
+async function handleMemoPhotoUpload(inputEl) {
+    if (!inputEl || !inputEl.files || inputEl.files.length === 0) return;
+    const files = Array.from(inputEl.files);
+    if (typeof showToast === 'function') {
+        showToast(`📷 사진 ${files.length}장을 업로드하고 있습니다...`);
+    }
+    for (const f of files) {
+        try {
+            const url = await uploadImageFile(f);
+            if (url) {
+                _editingMemoPhotos.push({ url, name: f.name });
+            }
+        } catch (e) {
+            console.error('Memo photo upload error', e);
+        }
+    }
+    inputEl.value = '';
+    renderMemoPhotosPreview();
+    if (typeof showToast === 'function') {
+        showToast('사진 첨부 완료!');
+    }
+}
+window.handleMemoPhotoUpload = handleMemoPhotoUpload;
+
+function removeMemoPhoto(idx) {
+    _editingMemoPhotos.splice(idx, 1);
+    renderMemoPhotosPreview();
+}
+window.removeMemoPhoto = removeMemoPhoto;
+
+function renderMemoPhotosPreview() {
+    const container = document.getElementById('memo-photos-preview-container');
+    const grid = document.getElementById('memo-photos-grid');
+    const countEl = document.getElementById('memo-photos-count');
+    if (!container || !grid) return;
+
+    if (_editingMemoPhotos.length === 0) {
+        container.classList.add('hidden');
+        if (countEl) countEl.textContent = '0';
+        return;
+    }
+
+    container.classList.remove('hidden');
+    if (countEl) countEl.textContent = _editingMemoPhotos.length;
+
+    grid.innerHTML = _editingMemoPhotos.map((p, idx) => `
+        <div class="relative w-16 h-16 rounded-lg overflow-hidden border border-slate-300 bg-white shrink-0 group">
+            <img src="${escAdminHtml(p.url)}" alt="${escAdminHtml(p.name || '사진')}" class="w-full h-full object-cover" />
+            <button type="button" onclick="removeMemoPhoto(${idx})" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs font-black shadow cursor-pointer hover:bg-rose-700" title="사진 삭제">×</button>
+        </div>
+    `).join('');
+}
+
+// Document Upload Handler (PDF, HWP, Excel, Word, etc.)
+async function handleMemoDocUpload(inputEl) {
+    if (!inputEl || !inputEl.files || inputEl.files.length === 0) return;
+    const files = Array.from(inputEl.files);
+    if (typeof showToast === 'function') {
+        showToast(`📎 서류 파일 ${files.length}건을 첨부 업로드하고 있습니다...`);
+    }
+    for (const f of files) {
+        try {
+            const url = await uploadDocFile(f, 'memo_file');
+            const ext = (f.name.split('.').pop() || 'file').toLowerCase();
+            const sizeStr = f.size > 1024 * 1024 ? (f.size / (1024 * 1024)).toFixed(1) + 'MB' : Math.round(f.size / 1024) + 'KB';
+            if (url) {
+                _editingMemoAttachments.push({
+                    name: f.name,
+                    url,
+                    size: sizeStr,
+                    ext
+                });
+            }
+        } catch (e) {
+            console.error('Memo doc upload error', e);
+        }
+    }
+    inputEl.value = '';
+    renderMemoDocsPreview();
+    if (typeof showToast === 'function') {
+        showToast('서류 파일 첨부 완료!');
+    }
+}
+window.handleMemoDocUpload = handleMemoDocUpload;
+
+function removeMemoDoc(idx) {
+    _editingMemoAttachments.splice(idx, 1);
+    renderMemoDocsPreview();
+}
+window.removeMemoDoc = removeMemoDoc;
+
+function renderMemoDocsPreview() {
+    const container = document.getElementById('memo-docs-preview-container');
+    const list = document.getElementById('memo-docs-list');
+    const countEl = document.getElementById('memo-docs-count');
+    if (!container || !list) return;
+
+    if (_editingMemoAttachments.length === 0) {
+        container.classList.add('hidden');
+        if (countEl) countEl.textContent = '0';
+        return;
+    }
+
+    container.classList.remove('hidden');
+    if (countEl) countEl.textContent = _editingMemoAttachments.length;
+
+    list.innerHTML = _editingMemoAttachments.map((doc, idx) => {
+        let badgeColor = 'bg-slate-100 text-slate-700 border-slate-300';
+        if (doc.ext === 'pdf') badgeColor = 'bg-rose-50 text-rose-700 border-rose-200';
+        else if (doc.ext === 'hwp' || doc.ext === 'hwpx') badgeColor = 'bg-blue-50 text-blue-700 border-blue-200';
+        else if (doc.ext === 'xls' || doc.ext === 'xlsx') badgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        else if (doc.ext === 'doc' || doc.ext === 'docx') badgeColor = 'bg-indigo-50 text-indigo-700 border-indigo-200';
+
+        return `
+            <div class="flex items-center justify-between gap-2 p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
+                <div class="flex items-center gap-2 min-w-0">
+                    <span class="px-2 py-0.5 rounded font-black text-[10px] uppercase border ${badgeColor}">${escAdminHtml(doc.ext)}</span>
+                    <span class="font-bold text-slate-800 dark:text-slate-200 truncate" title="${escAdminHtml(doc.name)}">${escAdminHtml(doc.name)}</span>
+                    <span class="text-slate-400 text-[11px] shrink-0">(${escAdminHtml(doc.size || '')})</span>
+                </div>
+                <button type="button" onclick="removeMemoDoc(${idx})" class="p-1 text-slate-400 hover:text-rose-600 rounded cursor-pointer" title="파일 삭제">
+                    <span class="material-symbols-outlined text-[16px]">close</span>
+                </button>
+            </div>
+        `;
+    }).join('');
+}
+
+function openMemoEditorModal(id = '') {
+    const modal = document.getElementById('memo-editor-modal');
+    if (!modal) return;
+
+    _editingMemoPhotos = [];
+    _editingMemoAttachments = [];
+
+    const editor = document.getElementById('edit-memo-editor');
+
+    if (id) {
+        const found = (_briefingStore.memos || []).find(m => String(m.id) === String(id));
+        if (!found) return;
+        document.getElementById('edit-memo-id').value = found.id;
+        document.getElementById('edit-memo-category').value = found.category || '계약서류';
+        document.getElementById('edit-memo-pinned').checked = Boolean(found.isPinned);
+        document.getElementById('edit-memo-title').value = found.title || '';
+
+        // Load content into editor (if plain text with \n, format to html; if already html, keep html)
+        const rawContent = found.content || '';
+        if (/<[a-z][\s\S]*>/i.test(rawContent)) {
+            editor.innerHTML = rawContent;
+        } else {
+            editor.innerHTML = escAdminHtml(rawContent).replace(/\n/g, '<br>');
+        }
+
+        // Photos
+        if (Array.isArray(found.photos)) {
+            _editingMemoPhotos = found.photos.map(p => typeof p === 'string' ? { url: p, name: '사진' } : p);
+        }
+        // Attachments
+        if (Array.isArray(found.attachments)) {
+            _editingMemoAttachments = found.attachments.slice();
+        }
+    } else {
+        document.getElementById('edit-memo-id').value = '';
+        document.getElementById('edit-memo-category').value = '계약서류';
+        document.getElementById('edit-memo-pinned').checked = true;
+        document.getElementById('edit-memo-title').value = '';
+        editor.innerHTML = '';
+    }
+
+    renderMemoPhotosPreview();
+    renderMemoDocsPreview();
+
+    const picker = document.getElementById('memo-emoji-picker');
+    if (picker) picker.classList.add('hidden');
+
+    modal.classList.remove('hidden');
+}
+window.openMemoEditorModal = openMemoEditorModal;
+
+function closeMemoEditorModal() {
+    const modal = document.getElementById('memo-editor-modal');
+    if (modal) modal.classList.add('hidden');
+    _editingMemoPhotos = [];
+    _editingMemoAttachments = [];
+}
+window.closeMemoEditorModal = closeMemoEditorModal;
+
+async function saveMemoFromModal() {
+    const id = (document.getElementById('edit-memo-id').value || '').trim();
+    const category = document.getElementById('edit-memo-category').value || '계약서류';
+    const isPinned = document.getElementById('edit-memo-pinned').checked;
+    const title = (document.getElementById('edit-memo-title').value || '').trim();
+    const editor = document.getElementById('edit-memo-editor');
+    const content = (editor ? editor.innerHTML : '').trim();
+    const plainText = (editor ? editor.innerText : '').trim();
+
+    if (!title || !plainText) {
+        alert('카드 제목과 본문 내용을 모두 입력해 주세요.');
+        return;
+    }
+
+    const memoData = {
+        category,
+        isPinned,
+        title,
+        content,
+        plainText,
+        photos: _editingMemoPhotos.slice(),
+        attachments: _editingMemoAttachments.slice(),
+        updatedAt: Date.now()
+    };
+
+    if (id) {
+        const idx = (_briefingStore.memos || []).findIndex(m => String(m.id) === id);
+        if (idx !== -1) {
+            _briefingStore.memos[idx] = { ..._briefingStore.memos[idx], ...memoData };
+        }
+    } else {
+        _briefingStore.memos.unshift({
+            id: 'memo_' + Date.now().toString(36),
+            ...memoData
+        });
+    }
+
+    closeMemoEditorModal();
+    await saveBriefingData(_briefingStore);
+    renderMemoWarehouseGrid();
+    renderBriefingMemoCheckboxes();
+    if (typeof showToast === 'function') {
+        showToast('✅ 메모창고 카드가 저장되었습니다!');
+    }
+}
+window.saveMemoFromModal = saveMemoFromModal;
+
 function renderMemoWarehouseGrid() {
     const grid = document.getElementById('memo-warehouse-grid');
     if (!grid) return;
@@ -3023,6 +3521,7 @@ function renderMemoWarehouseGrid() {
         list = list.filter(m =>
             (m.title || '').toLowerCase().includes(q) ||
             (m.content || '').toLowerCase().includes(q) ||
+            (m.plainText || '').toLowerCase().includes(q) ||
             (m.category || '').toLowerCase().includes(q)
         );
     }
@@ -3032,127 +3531,129 @@ function renderMemoWarehouseGrid() {
         return;
     }
 
-    grid.innerHTML = list.map(m => `
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-5 border ${m.isPinned ? 'border-amber-400 shadow-sm' : 'border-slate-200 dark:border-slate-700'} flex flex-col justify-between gap-3">
-            <div class="space-y-2.5">
-                <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-1.5">
-                        <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#003891] border border-blue-200 text-[11px] font-black">
-                            ${escAdminHtml(m.category || '일반')}
-                        </span>
-                        <button type="button" onclick="toggleMemoPin('${escAdminHtml(m.id)}')" class="text-xs font-bold ${m.isPinned ? 'text-amber-600' : 'text-slate-400 hover:text-slate-600'} cursor-pointer" title="상단 고정 토글">
-                            ${m.isPinned ? '📌 상단고정됨' : '📍 고정하기'}
-                        </button>
+    grid.innerHTML = list.map(m => {
+        // Content rendering (HTML rich format vs plain text)
+        const isHtml = /<[a-z][\s\S]*>/i.test(m.content || '');
+        const bodyHtml = isHtml ? m.content : escAdminHtml(m.content || '').replace(/\n/g, '<br>');
+
+        // Photos thumbnail bar
+        const photos = Array.isArray(m.photos) ? m.photos : [];
+        const photosHtml = photos.length > 0 ? `
+            <div class="pt-2 border-t border-slate-100 dark:border-slate-700/60">
+                <div class="text-[11px] font-extrabold text-indigo-700 flex items-center gap-1 mb-1">
+                    <span class="material-symbols-outlined text-[14px]">photo_library</span>
+                    <span>첨부 사진 (${photos.length}장)</span>
+                </div>
+                <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                    ${photos.map(p => {
+                        const url = typeof p === 'string' ? p : p.url;
+                        return `
+                            <a href="${escAdminHtml(url)}" target="_blank" class="w-14 h-14 rounded-lg overflow-hidden border border-slate-200 shrink-0 block hover:opacity-80 transition" title="사진 크게 보기">
+                                <img src="${escAdminHtml(url)}" class="w-full h-full object-cover" />
+                            </a>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        ` : '';
+
+        // Attachments (PDF/HWP/Excel) download buttons
+        const attachments = Array.isArray(m.attachments) ? m.attachments : [];
+        const attachmentsHtml = attachments.length > 0 ? `
+            <div class="pt-2 border-t border-slate-100 dark:border-slate-700/60 space-y-1">
+                <div class="text-[11px] font-extrabold text-emerald-800 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">attach_file</span>
+                    <span>첨부 서류 (${attachments.length}건)</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                    ${attachments.map(att => {
+                        let badgeColor = 'bg-slate-100 text-slate-800 border-slate-300';
+                        if (att.ext === 'pdf') badgeColor = 'bg-rose-50 text-rose-700 border-rose-200';
+                        else if (att.ext === 'hwp' || att.ext === 'hwpx') badgeColor = 'bg-blue-50 text-blue-700 border-blue-200';
+                        else if (att.ext === 'xls' || att.ext === 'xlsx') badgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+
+                        return `
+                            <a href="${escAdminHtml(att.url)}" download="${escAdminHtml(att.name)}" target="_blank" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border ${badgeColor} hover:shadow-xs transition" title="${escAdminHtml(att.name)} 다운로드">
+                                <span class="material-symbols-outlined text-[14px]">download</span>
+                                <span class="truncate max-w-[180px]">${escAdminHtml(att.name)}</span>
+                                <span class="text-[10px] opacity-75">(${escAdminHtml(att.size || '')})</span>
+                            </a>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        ` : '';
+
+        return `
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-5 border ${m.isPinned ? 'border-amber-400 shadow-sm' : 'border-slate-200 dark:border-slate-700'} flex flex-col justify-between gap-3">
+                <div class="space-y-2.5">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#003891] border border-blue-200 text-[11px] font-black">
+                                ${escAdminHtml(m.category || '일반')}
+                            </span>
+                            <button type="button" onclick="toggleMemoPin('${escAdminHtml(m.id)}')" class="text-xs font-bold ${m.isPinned ? 'text-amber-600' : 'text-slate-400 hover:text-slate-600'} cursor-pointer" title="상단 고정 토글">
+                                ${m.isPinned ? '📌 상단고정됨' : '📍 고정하기'}
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button type="button" onclick="openMemoEditorModal('${escAdminHtml(m.id)}')" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer">수정</button>
+                            <button type="button" onclick="deleteMemoById('${escAdminHtml(m.id)}')" class="px-2 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold cursor-pointer">삭제</button>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-1">
-                        <button type="button" onclick="openMemoEditorModal('${escAdminHtml(m.id)}')" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer">수정</button>
-                        <button type="button" onclick="deleteMemoById('${escAdminHtml(m.id)}')" class="px-2 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold cursor-pointer">삭제</button>
+
+                    <h4 class="font-black text-sm sm:text-base text-slate-900 dark:text-white">${escAdminHtml(m.title)}</h4>
+                    
+                    <!-- Content Body with Rich Styling -->
+                    <div class="text-xs text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-xl border border-slate-100 dark:border-slate-700 max-h-52 overflow-y-auto leading-relaxed font-medium space-y-1">
+                        ${bodyHtml}
                     </div>
+
+                    ${photosHtml}
+                    ${attachmentsHtml}
                 </div>
 
-                <h4 class="font-black text-sm sm:text-base text-slate-900 dark:text-white">${escAdminHtml(m.title)}</h4>
-                <div class="text-xs text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-100 dark:border-slate-700 whitespace-pre-line max-h-44 overflow-y-auto leading-relaxed font-medium">${escAdminHtml(m.content)}</div>
+                <div class="flex items-center gap-2 pt-1">
+                    <button type="button" onclick="copyMemoFromWarehouse('${escAdminHtml(m.id)}')" class="flex-1 py-2.5 px-3 rounded-xl bg-[#fee500] hover:bg-[#fdd835] text-[#191600] border border-[#d4be00] font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-xs cursor-pointer">
+                        <span class="material-symbols-outlined text-[17px]">content_copy</span>
+                        <span>원클릭 내용 복사 (카톡·문자 전송용)</span>
+                    </button>
+                </div>
             </div>
-
-            <div class="flex items-center gap-2 pt-1">
-                <button type="button" onclick="copyMemoFromWarehouse('${escAdminHtml(m.id)}')" class="flex-1 py-2.5 px-3 rounded-xl bg-[#fee500] hover:bg-[#fdd835] text-[#191600] border border-[#d4be00] font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-xs cursor-pointer">
-                    <span class="material-symbols-outlined text-[17px]">content_copy</span>
-                    <span>원클릭 내용 복사 (카톡·문자 전송용)</span>
-                </button>
-            </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 window.renderMemoWarehouseGrid = renderMemoWarehouseGrid;
 
 function copyMemoFromWarehouse(id) {
     const found = (_briefingStore.memos || []).find(m => String(m.id) === String(id));
     if (!found) return;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(found.content);
-    }
-    if (typeof showToast === 'function') {
-        showToast(`📋 [${found.title}] 전체 내용이 복사되었습니다! 카톡이나 문자에 바로 붙여넣기 하세요.`);
-    }
-}
-window.copyMemoFromWarehouse = copyMemoFromWarehouse;
 
-async function toggleMemoPin(id) {
-    const found = (_briefingStore.memos || []).find(m => String(m.id) === String(id));
-    if (!found) return;
-    found.isPinned = !found.isPinned;
-    await saveBriefingData(_briefingStore);
-    renderMemoWarehouseGrid();
-}
-window.toggleMemoPin = toggleMemoPin;
-
-function openMemoEditorModal(id = '') {
-    const modal = document.getElementById('memo-editor-modal');
-    if (!modal) return;
-
-    if (id) {
-        const found = (_briefingStore.memos || []).find(m => String(m.id) === String(id));
-        if (!found) return;
-        document.getElementById('edit-memo-id').value = found.id;
-        document.getElementById('edit-memo-category').value = found.category || '계약서류';
-        document.getElementById('edit-memo-pinned').checked = Boolean(found.isPinned);
-        document.getElementById('edit-memo-title').value = found.title || '';
-        document.getElementById('edit-memo-content').value = found.content || '';
+    // Build clean plain text for Kakao/SMS (no HTML tags, natural line breaks + download links)
+    let copyText = `[${found.title}]\n\n`;
+    if (found.plainText) {
+        copyText += found.plainText;
     } else {
-        document.getElementById('edit-memo-id').value = '';
-        document.getElementById('edit-memo-category').value = '계약서류';
-        document.getElementById('edit-memo-pinned').checked = true;
-        document.getElementById('edit-memo-title').value = '';
-        document.getElementById('edit-memo-content').value = '';
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = found.content || '';
+        copyText += tempDiv.innerText || tempDiv.textContent || '';
     }
 
-    modal.classList.remove('hidden');
-}
-window.openMemoEditorModal = openMemoEditorModal;
-
-function closeMemoEditorModal() {
-    const modal = document.getElementById('memo-editor-modal');
-    if (modal) modal.classList.add('hidden');
-}
-window.closeMemoEditorModal = closeMemoEditorModal;
-
-async function saveMemoFromModal() {
-    const id = (document.getElementById('edit-memo-id').value || '').trim();
-    const category = document.getElementById('edit-memo-category').value || '계약서류';
-    const isPinned = document.getElementById('edit-memo-pinned').checked;
-    const title = (document.getElementById('edit-memo-title').value || '').trim();
-    const content = (document.getElementById('edit-memo-content').value || '').trim();
-
-    if (!title || !content) {
-        alert('카드 제목과 본문 내용을 모두 입력해 주세요.');
-        return;
-    }
-
-    if (id) {
-        const idx = (_briefingStore.memos || []).findIndex(m => String(m.id) === id);
-        if (idx !== -1) {
-            _briefingStore.memos[idx] = { ..._briefingStore.memos[idx], category, isPinned, title, content, updatedAt: Date.now() };
-        }
-    } else {
-        _briefingStore.memos.unshift({
-            id: 'memo_' + Date.now().toString(36),
-            category,
-            isPinned,
-            title,
-            content,
-            updatedAt: Date.now()
+    if (Array.isArray(found.attachments) && found.attachments.length > 0) {
+        copyText += `\n\n[첨부 서류 다운로드]\n`;
+        found.attachments.forEach(att => {
+            copyText += `• ${att.name}: ${att.url}\n`;
         });
     }
 
-    closeMemoEditorModal();
-    await saveBriefingData(_briefingStore);
-    renderMemoWarehouseGrid();
-    renderBriefingMemoCheckboxes();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(copyText);
+    }
     if (typeof showToast === 'function') {
-        showToast('✅ 메모창고 카드가 저장되었습니다!');
+        showToast(`📋 [${found.title}] 카톡 전송용 텍스트가 복사되었습니다! 바로 붙여넣기 하세요.`);
     }
 }
-window.saveMemoFromModal = saveMemoFromModal;
+window.copyMemoFromWarehouse = copyMemoFromWarehouse;
 
 async function deleteMemoById(id) {
     if (!confirm('이 메모창고 카드를 삭제하시겠습니까?')) return;
