@@ -1,5 +1,5 @@
 {
-  "updatedAt": 1794374017875,
+  "updatedAt": 1794374020002,
   "memos": [
     {
       "id": "memo_doc_rent",
@@ -94,11 +94,11 @@
       "customerPhone": "",
       "title": "수성구 역세권 & 알파시티 무권리 추천 오피스·학원 비교 브리핑",
       "createdAt": "2026. 11. 11",
-      "updatedAt": 1794374017655,
+      "updatedAt": 1794374019771,
       "expiresAt": "",
       "blindAddress": true,
       "showComparisonTable": true,
-      "showMonthlyCost": false,
+      "showMonthlyCost": true,
       "includeVat": true,
       "showYield": true,
       "showMap": true,
