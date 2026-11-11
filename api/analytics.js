@@ -170,7 +170,7 @@ export default async function handler(req, res) {
             method: 'PUT',
             headers: { ...headers, 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              message: `analytics: record ${type} [skip vercel]`,
+              message: `analytics: record ${type} [skip ci] [skip vercel]`,
               content: contentBase64,
               ...(sha ? { sha } : {})
             })
@@ -228,7 +228,7 @@ export default async function handler(req, res) {
             const contentBase64 = Buffer.from(jsonStr, 'utf8').toString('base64');
 
             const body = {
-              message: `analytics: search log ${logObj.query} [skip vercel]`,
+              message: `analytics: search log ${logObj.query} [skip ci] [skip vercel]`,
               content: contentBase64
             };
             if (sha) body.sha = sha;
@@ -272,7 +272,7 @@ export default async function handler(req, res) {
         method: 'PUT',
         headers: { ...headers, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: 'analytics: clear search logs [skip vercel]',
+          message: 'analytics: clear search logs [skip ci] [skip vercel]',
           content: contentBase64,
           sha
         })

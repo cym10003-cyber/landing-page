@@ -78,7 +78,7 @@ export default async function handler(req, res) {
 
         const contentBase64 = Buffer.from(JSON.stringify(dataObj, null, 2), 'utf8').toString('base64');
         const body = {
-          message: commitMessage || 'briefing: update memos and customer briefings [skip vercel]',
+          message: commitMessage || 'briefing: update memos and customer briefings [skip ci] [skip vercel]',
           content: contentBase64,
           branch: 'main'
         };
@@ -126,7 +126,7 @@ export default async function handler(req, res) {
         memos: Array.isArray(body.memos) ? body.memos : current.memos,
         briefings: Array.isArray(body.briefings) ? body.briefings : current.briefings
       };
-      const result = await saveDataToGithub(updated, 'briefing: update memos and briefings [skip vercel]');
+      const result = await saveDataToGithub(updated, 'briefing: update memos and briefings [skip ci] [skip vercel]');
       return res.status(200).json({ ok: result.ok, data: updated });
     }
 
@@ -158,7 +158,7 @@ export default async function handler(req, res) {
           dataObj.briefings[bIdx].customerPicks = dataObj.briefings[bIdx].customerPicks.slice(0, 30);
         }
         dataObj.updatedAt = Date.now();
-        await saveDataToGithub(dataObj, `briefing: customer feedback on ${briefingId} [skip vercel]`);
+        await saveDataToGithub(dataObj, `briefing: customer feedback on ${briefingId} [skip ci] [skip vercel]`);
       }
 
       // Send email alert via FormSubmit so admin gets notified immediately
