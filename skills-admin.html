@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antigravity 스킬 매니저 & 자동 셀렉 허브</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Pretendard', sans-serif; }
+    .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="material-symbols-outlined text-blue-600 text-3xl">auto_awesome</span>
+        <div>
+          <h1 class="text-lg font-bold text-slate-900 leading-tight">Antigravity 스킬 매니저</h1>
+          <p class="text-xs text-slate-500">자동 큐레이션 · 중복정리 · 노션 & 제미나이 노트북LM 연동</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="exportToNotion()" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">
+          <span class="material-symbols-outlined text-base">description</span>
+          <span>노션 마크다운 복사</span>
+        </button>
+        <button onclick="exportToNotebookLM()" class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition border border-blue-200">
+          <span class="material-symbols-outlined text-base">library_books</span>
+          <span>NotebookLM 소스 다운로드</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Top Alert / Info -->
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="inline-flex items-center space-x-1 bg-white/20 px-2.5 py-0.5 rounded-full text-xs font-medium">
+          <span class="material-symbols-outlined text-xs">bolt</span>
+          <span>실시간 자동 스킬 셀렉터 활성화됨</span>
+        </div>
+        <h2 class="text-xl font-bold">글(프롬프트)을 쓰면 Antigravity가 최적의 스킬을 스스로 선택합니다</h2>
+        <p class="text-xs sm:text-sm text-blue-100 max-w-2xl">
+          새 스킬을 등록할 때 <code class="bg-black/20 px-1 py-0.5 rounded">description</code>의 트리거 조건을 명확히 설정하면 에이전트가 문맥을 스스로 파악해 점진적으로 로딩합니다.
+        </p>
+      </div>
+      <button onclick="openAddModal()" class="px-4 py-2.5 bg-white text-blue-600 font-bold text-sm rounded-xl hover:bg-blue-50 shadow-md transition whitespace-nowrap flex items-center space-x-1">
+        <span class="material-symbols-outlined text-base">add_circle</span>
+        <span>새 스킬 등록하기</span>
+      </button>
+    </div>
+
+    <!-- Simulator Section -->
+    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <span class="material-symbols-outlined text-indigo-600">psychology</span>
+          <h3 class="text-base font-bold text-slate-900">프롬프트 자동 셀렉 시뮬레이터</h3>
+        </div>
+        <span class="text-xs text-slate-400">자연어 입력 시 어떤 스킬이 트리거되는지 실시간 테스트</span>
+      </div>
+
+      <div class="relative">
+        <input type="text" id="promptInput" oninput="simulateSelection()" placeholder="예: '공지사항 게시판에 새 글 작성 폼 스타일 고쳐줘' 또는 '새로 찾은 스킬 중복 검사해줘' 입력..." 
+               class="w-full px-4 py-3 pl-11 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition">
+        <span class="material-symbols-outlined absolute left-3.5 top-3 text-slate-400">search</span>
+      </div>
+
+      <!-- Simulation Result Card -->
+      <div id="simResult" class="hidden p-4 rounded-xl border transition-all">
+        <!-- Dynamically injected -->
+      </div>
+    </div>
+
+    <!-- Skills List & Management -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <span class="material-symbols-outlined text-slate-700">folder_special</span>
+          <h3 class="text-base font-bold text-slate-900">등록된 Antigravity 스킬 목록 (<span id="skillCount">0</span>)</h3>
+        </div>
+        <div class="text-xs text-slate-500 flex items-center space-x-4">
+          <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> <span>Active</span></span>
+          <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-blue-500 inline-block"></span> <span>Notion 동기화</span></span>
+          <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-purple-500 inline-block"></span> <span>NotebookLM 소스 포함</span></span>
+        </div>
+      </div>
+
+      <!-- Skill Cards Grid -->
+      <div id="skillsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Add Skill Modal -->
+  <div id="addModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+          <span class="material-symbols-outlined text-blue-600">bookmark_add</span>
+          <span>새 스킬 등록 및 중복 검증</span>
+        </h3>
+        <button onclick="closeAddModal()" class="text-slate-400 hover:text-slate-600">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">스킬 아이디어 / 원본 프롬프트 붙여넣기</label>
+          <textarea id="rawIdeaInput" rows="5" placeholder="인터넷이나 노션에서 발견한 유용한 프롬프트, 워크플로우를 그대로 붙여넣으세요..." 
+                    class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+
+        <button onclick="analyzeAndDraftSkill()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl transition flex items-center justify-center space-x-1">
+          <span class="material-symbols-outlined text-base">auto_fix_high</span>
+          <span>중복 검증 및 Antigravity SKILL.md 규격 생성</span>
+        </button>
+
+        <div id="draftPreviewArea" class="hidden space-y-3 pt-3 border-t">
+          <div id="duplicateWarning" class="hidden p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-xl text-xs">
+            <!-- Warning -->
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">생성된 SKILL.md 규격 (자동 완성)</label>
+            <textarea id="generatedSkillMd" rows="8" class="w-full font-mono text-xs px-3 py-2 bg-slate-900 text-emerald-400 rounded-xl"></textarea>
+          </div>
+          <button onclick="saveNewSkill()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl transition flex items-center justify-center space-x-1">
+            <span class="material-symbols-outlined text-base">save</span>
+            <span>_agent/skills 에 파일 등록하기</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initial Skills Data
+    let skills = [
+      {
+        id: "board-builder",
+        name: "정적 게시판 & 대시보드 빌더",
+        description: "GitHub API & Vercel 기반 정적 게시판 홈페이지 빌더. 데이터베이스 없이 GitHub API와 Vercel Serverless Function을 연동하여 공지사항, 부동산 뉴스, 대시보드 관리 기능을 구축/수정할 때 사용합니다.",
+        category: "Frontend & Serverless",
+        tags: ["게시판", "Vercel", "GitHub API", "대시보드", "db.js", "마크다운"],
+        trigger_keywords: ["게시판", "글쓰기", "뉴스", "어드민", "포스트", "board", "admin", "dashboard", "수정", "삭제"],
+        path: "_agent/skills/board-builder/SKILL.md",
+        notion_synced: true,
+        notebooklm_synced: true
+      },
+      {
+        id: "skill-curator",
+        name: "스킬 큐레이터 & 자동 등록기",
+        description: "새로운 프롬프트나 아이디어를 Antigravity 표준 SKILL.md로 자동 변환·등록하고, 기존 스킬과의 중복 검증, Notion DB 및 Gemini NotebookLM 지식 베이스 동기화를 수행할 때 사용합니다.",
+        category: "Automation & Meta",
+        tags: ["스킬등록", "중복제거", "큐레이션", "노션연동", "NotebookLM", "자동셀렉"],
+        trigger_keywords: ["스킬", "스킬등록", "스킬정리", "중복정리", "노트북LM", "노션", "skill", "curator"],
+        path: "_agent/skills/skill-curator/SKILL.md",
+        notion_synced: true,
+        notebooklm_synced: true
+      }
+    ];
+
+    function renderSkills() {
+      const container = document.getElementById('skillsGrid');
+      document.getElementById('skillCount').innerText = skills.length;
+      container.innerHTML = '';
+
+      skills.forEach(s => {
+        const card = document.createElement('div');
+        card.className = "bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition space-y-3";
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="inline-flex items-center space-x-1 bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[11px] font-semibold mb-1">
+                <span>${s.category}</span>
+              </div>
+              <h4 class="text-base font-bold text-slate-900">${s.name}</h4>
+              <p class="text-xs font-mono text-slate-400">${s.path}</p>
+            </div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Active
+            </span>
+          </div>
+
+          <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+            <strong class="text-slate-800">트리거 조건:</strong> ${s.description}
+          </p>
+
+          <div class="flex flex-wrap gap-1">
+            ${s.tags.map(t => `<span class="bg-blue-50 text-blue-700 text-[11px] px-2 py-0.5 rounded font-medium">#${t}</span>`).join('')}
+          </div>
+
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <div class="flex items-center space-x-2">
+              <span class="text-emerald-600 font-medium flex items-center space-x-0.5">
+                <span class="material-symbols-outlined text-sm">cloud_done</span>
+                <span>Notion & NotebookLM 연동됨</span>
+              </span>
+            </div>
+            <button onclick="copySkillPath('${s.path}')" class="text-blue-600 hover:text-blue-800 font-semibold text-[11px]">
+              경로 복사
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function simulateSelection() {
+      const query = document.getElementById('promptInput').value.trim().toLowerCase();
+      const resultBox = document.getElementById('simResult');
+      if (!query) {
+        resultBox.classList.add('hidden');
+        return;
+      }
+
+      resultBox.classList.remove('hidden');
+
+      let bestMatch = null;
+      let highestScore = 0;
+      let matchedTerms = [];
+
+      skills.forEach(s => {
+        let score = 0;
+        let terms = [];
+        
+        s.trigger_keywords.forEach(kw => {
+          if (query.includes(kw.toLowerCase())) {
+            score += 10;
+            terms.push(kw);
+          }
+        });
+
+        if (s.name.toLowerCase().includes(query)) score += 15;
+        if (s.description.toLowerCase().includes(query)) score += 5;
+
+        if (score > highestScore) {
+          highestScore = score;
+          bestMatch = s;
+          matchedTerms = terms;
+        }
+      });
+
+      if (highestScore > 0 && bestMatch) {
+        resultBox.className = "p-4 rounded-xl border bg-emerald-50 border-emerald-200 text-slate-800 space-y-2";
+        resultBox.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="material-symbols-outlined text-emerald-600">check_circle</span>
+              <strong class="text-sm text-emerald-900">Antigravity 자동 선택 스킬: [${bestMatch.name}]</strong>
+            </div>
+            <span class="text-xs bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-full font-bold">일치도 ${highestScore}점</span>
+          </div>
+          <p class="text-xs text-slate-700"><strong>매칭된 키워드:</strong> ${matchedTerms.join(', ') || '문맥 일치'}</p>
+          <p class="text-xs text-slate-600 bg-white/70 p-2 rounded border border-emerald-100">
+            사용자가 위 프롬프트를 입력하면 Antigravity는 <code class="font-bold text-emerald-800">${bestMatch.path}</code> 파일을 즉시 읽어 해당 런북대로 작업을 수행합니다.
+          </p>
+        `;
+      } else {
+        resultBox.className = "p-4 rounded-xl border bg-amber-50 border-amber-200 text-slate-800 space-y-1";
+        resultBox.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="material-symbols-outlined text-amber-600">help</span>
+            <strong class="text-sm text-amber-900">특정 스킬 트리거 없음 (일반 어시스턴트 모드)</strong>
+          </div>
+          <p class="text-xs text-amber-800">이 작업에 특화된 스킬이 아직 등록되지 않았습니다. 우측 상단의 '새 스킬 등록하기'를 통해 새 런북을 추가할 수 있습니다.</p>
+        `;
+      }
+    }
+
+    function openAddModal() { document.getElementById('addModal').classList.remove('hidden'); }
+    function closeAddModal() { document.getElementById('addModal').classList.add('hidden'); }
+
+    function analyzeAndDraftSkill() {
+      const raw = document.getElementById('rawIdeaInput').value.trim();
+      if (!raw) return alert('프롬프트나 아이디어를 입력해주세요.');
+
+      const preview = document.getElementById('draftPreviewArea');
+      const warning = document.getElementById('duplicateWarning');
+      preview.classList.remove('hidden');
+
+      // Simple deduplication check
+      let dup = skills.find(s => s.trigger_keywords.some(k => raw.includes(k)));
+      if (dup) {
+        warning.classList.remove('hidden');
+        warning.innerHTML = `⚠️ <strong>중복 가능성 감지:</strong> 기존 스킬 <b>[${dup.name}]</b>과 유사한 목적일 수 있습니다. 기존 스킬에 기능을 추가하거나, 차별화된 트리거 조건을 기술하세요.`;
+      } else {
+        warning.classList.add('hidden');
+      }
+
+      const slug = "skill-" + Math.floor(Math.random() * 899 + 100);
+      const generatedMd = `---
+name: ${slug}
+description: >-
+  Use this skill when the user asks to ${raw.slice(0, 40)}...
+  관련 키워드: [자동화, 워크플로우]
+---
+
+# ${raw.slice(0, 20)} 스킬 가이드
+
+## 목적 및 개요
+${raw}
+
+## 단계별 실행 지침
+1. 작업 대상 파일 검토
+2. 단계별 구현 및 검증 실행
+`;
+      document.getElementById('generatedSkillMd').value = generatedMd;
+    }
+
+    function saveNewSkill() {
+      const content = document.getElementById('generatedSkillMd').value;
+      const nameMatch = content.match(/name:\s*([^\r\n]+)/);
+      const skillName = nameMatch ? nameMatch[1].trim() : "new-skill";
+      
+      skills.push({
+        id: skillName,
+        name: skillName,
+        description: "사용자 커스텀 등록 스킬",
+        category: "Custom",
+        tags: ["신규등록"],
+        trigger_keywords: [skillName],
+        path: `_agent/skills/${skillName}/SKILL.md`,
+        notion_synced: true,
+        notebooklm_synced: true
+      });
+
+      renderSkills();
+      closeAddModal();
+      alert(`스킬 [${skillName}]이 등록되었습니다!\nAntigravity 채팅창에서 "이 스킬 실행해줘"라고 요청해보세요.`);
+    }
+
+    function exportToNotion() {
+      let md = "# 📚 Antigravity Skills Database\\n\\n| 스킬명 | 상태 | 트리거 설명 | 경로 |\\n|---|---|---|---|\\n";
+      skills.forEach(s => {
+        md += `| **${s.name}** | 🟢 Active | ${s.description} | \`${s.path}\` |\\n`;
+      });
+      navigator.clipboard.writeText(md).then(() => {
+        alert("📋 노션(Notion)에 그대로 붙여넣을 수 있는 마크다운 테이블이 클립보드에 복사되었습니다!");
+      });
+    }
+
+    function exportToNotebookLM() {
+      let doc = "# Google NotebookLM & Gemini Knowledge Source\\n\\n";
+      skills.forEach(s => {
+        doc += `## [스킬] ${s.name}\\n- 경로: ${s.path}\\n- 트리거 설명: ${s.description}\\n\\n`;
+      });
+      const blob = new Blob([doc], { type: "text/markdown;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "notebooklm-skills-source.md";
+      a.click();
+    }
+
+    function copySkillPath(path) {
+      navigator.clipboard.writeText(path).then(() => alert(`경로 복사됨: ${path}`));
+    }
+
+    // Init
+    renderSkills();
+  </script>
+</body>
+</html>

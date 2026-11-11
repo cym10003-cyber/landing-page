@@ -1,0 +1,26 @@
+[
+  {
+    "id": "board-builder",
+    "name": "정적 게시판 & 대시보드 빌더",
+    "description": "GitHub API & Vercel 기반 정적 게시판 홈페이지 빌더. 데이터베이스 없이 GitHub API와 Vercel Serverless Function을 연동하여 공지사항, 부동산 뉴스, 대시보드 관리 기능을 구축/수정할 때 사용합니다.",
+    "category": "Frontend & Serverless",
+    "tags": ["게시판", "Vercel", "GitHub API", "대시보드", "db.js", "마크다운"],
+    "trigger_keywords": ["게시판", "글쓰기", "뉴스", "어드민", "포스트", "board", "admin"],
+    "path": "_agent/skills/board-builder/SKILL.md",
+    "notion_synced": true,
+    "notebooklm_synced": true,
+    "updated_at": "2026-11-03T09:40:00"
+  },
+  {
+    "id": "skill-curator",
+    "name": "스킬 큐레이터 & 자동 등록기",
+    "description": "새로운 프롬프트나 아이디어를 Antigravity 표준 SKILL.md로 자동 변환·등록하고, 기존 스킬과의 중복 검증, Notion DB 및 Gemini NotebookLM 지식 베이스 동기화를 수행할 때 사용합니다.",
+    "category": "Automation & Meta",
+    "tags": ["스킬등록", "중복제거", "큐레이션", "노션연동", "NotebookLM", "자동셀렉"],
+    "trigger_keywords": ["스킬", "스킬등록", "스킬정리", "중복정리", "노트북LM", "노션", "skill"],
+    "path": "_agent/skills/skill-curator/SKILL.md",
+    "notion_synced": true,
+    "notebooklm_synced": true,
+    "updated_at": "2026-11-03T09:42:00"
+  }
+]

@@ -79,28 +79,28 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen pb-24">
+<body class="bg-[#f4f7fb] text-slate-900 min-h-screen pb-24">
 
-    <!-- Top Sticky Bar (No Print) -->
-    <header class="bg-slate-900 text-white sticky top-0 z-50 border-b border-slate-800 no-print">
+    <!-- Top Sticky Bar (Bright & High-Visibility) -->
+    <header class="bg-white text-slate-900 sticky top-0 z-50 border-b border-slate-200 shadow-xs no-print">
         <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
             <a href="index.html" class="flex items-center gap-2.5 group">
-                <div class="w-9 h-9 rounded-lg bg-[#003891] text-white font-black flex items-center justify-center text-base border border-white/15">최</div>
+                <div class="w-9 h-9 rounded-lg bg-[#003891] text-white font-black flex items-center justify-center text-base shadow-xs">최</div>
                 <div>
-                    <div class="font-extrabold text-sm sm:text-base tracking-tight flex items-center gap-1.5 text-white">
-                        <span>최가네부동산</span>
-                        <span class="text-[11px] font-bold bg-white/10 text-slate-200 px-2 py-0.5 rounded border border-white/15">맞춤 브리핑 보드</span>
+                    <div class="font-extrabold text-sm sm:text-base tracking-tight flex items-center gap-1.5 text-slate-900">
+                        <span class="text-[#003891]">최가네부동산</span>
+                        <span class="text-[11px] font-extrabold bg-[#f0f5ff] text-[#003891] px-2 py-0.5 rounded border border-blue-200">맞춤 브리핑 보드</span>
                     </div>
-                    <div class="text-[11px] text-slate-400">대구 상가·사무실·건물 매매·임대 전문 · 010-3548-4000</div>
+                    <div class="text-[11px] text-slate-600 font-medium">대구 상가·사무실·건물 매매·임대 전문 · 010-3548-4000</div>
                 </div>
             </a>
 
             <div class="flex items-center gap-2">
-                <button type="button" onclick="copyCurrentBriefingLink()" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center gap-1 border border-slate-700 transition cursor-pointer">
+                <button type="button" onclick="copyCurrentBriefingLink()" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold flex items-center gap-1 border border-slate-300 transition cursor-pointer">
                     <span class="material-symbols-outlined text-[16px]">share</span>
                     <span class="hidden sm:inline">링크 복사</span>
                 </button>
-                <button type="button" onclick="window.print()" class="px-3.5 py-2 rounded-lg bg-[#003891] hover:bg-blue-800 text-white text-xs sm:text-sm font-extrabold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
+                <button type="button" onclick="window.print()" class="px-3.5 py-2 rounded-lg bg-[#003891] hover:bg-blue-800 text-white text-xs sm:text-sm font-extrabold flex items-center gap-1.5 shadow-xs transition cursor-pointer">
                     <span class="material-symbols-outlined text-[18px]">print</span>
                     <span>종이 만들기 (A4 인쇄/PDF)</span>
                 </button>
@@ -138,46 +138,46 @@
     <!-- Main Briefing Content -->
     <main id="briefing-main" class="hidden max-w-5xl mx-auto px-3 sm:px-6 pt-5 space-y-6">
 
-        <!-- 1. Executive Report Cover / Header Card -->
-        <section class="bg-slate-900 text-white rounded-2xl p-5 sm:p-7 shadow-sm relative overflow-hidden print-break-inside-avoid border border-slate-800">
+        <!-- 1. Executive Report Cover / Header Card (Bright White & Royal Blue Accent) -->
+        <section class="bg-white text-slate-900 rounded-2xl p-5 sm:p-7 shadow-xs relative overflow-hidden print-break-inside-avoid border-2 border-[#003891]/20">
             <div class="relative z-10 space-y-4">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <div class="flex flex-wrap items-center gap-2">
-                        <span class="bg-[#003891] text-white text-xs font-extrabold px-3 py-1 rounded-md border border-blue-400/30 flex items-center gap-1">
+                        <span class="bg-[#003891] text-white text-xs font-extrabold px-3 py-1 rounded-lg flex items-center gap-1 shadow-xs">
                             <span class="material-symbols-outlined text-[15px]">verified</span>
                             <span id="header-customer-badge">VIP 고객님 전용 맞춤 브리핑</span>
                         </span>
-                        <span id="header-count-badge" class="bg-slate-800 text-slate-200 text-xs font-bold px-2.5 py-1 rounded-md border border-slate-700">
+                        <span id="header-count-badge" class="bg-[#f0f5ff] text-[#003891] text-xs font-extrabold px-3 py-1 rounded-lg border border-blue-200">
                             추천 매물 0건
                         </span>
                     </div>
-                    <div class="text-xs text-slate-400 font-medium" id="header-date">작성일: -</div>
+                    <div class="text-xs text-slate-500 font-bold" id="header-date">작성일: -</div>
                 </div>
 
-                <h1 id="header-title" class="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight leading-snug text-white">
+                <h1 id="header-title" class="text-xl sm:text-2xl md:text-3xl font-black tracking-tight leading-snug text-slate-900">
                     고객님 맞춤 추천 매물 비교 브리핑 리포트
                 </h1>
 
                 <!-- General Summary Comment -->
-                <div id="header-note-box" class="bg-slate-800/90 border border-slate-700 rounded-xl p-4 text-xs sm:text-sm text-slate-100 leading-relaxed space-y-1.5">
-                    <div class="font-bold text-blue-300 flex items-center gap-1.5 text-xs">
-                        <span class="material-symbols-outlined text-[16px]">campaign</span>
+                <div id="header-note-box" class="bg-[#f4f7fc] border border-blue-200 rounded-xl p-4 text-xs sm:text-sm text-slate-800 leading-relaxed space-y-1.5">
+                    <div class="font-extrabold text-[#003891] flex items-center gap-1.5 text-xs sm:text-sm">
+                        <span class="material-symbols-outlined text-[17px]">campaign</span>
                         <span>최가네부동산 종합 브리핑 요약</span>
                     </div>
-                    <p id="header-note-text" class="whitespace-pre-line text-slate-100 font-normal leading-relaxed"></p>
+                    <p id="header-note-text" class="whitespace-pre-line text-slate-800 font-medium leading-relaxed"></p>
                 </div>
 
                 <!-- Agent Contact Bar inside Header -->
-                <div class="pt-2 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-300">
+                <div class="pt-3 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-700">
                     <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
-                        <span class="font-bold text-white">담당: 최가네부동산 공인중개사사무소</span>
-                        <span>대구 수성구 수성동1가 72-3 (대구은행역 2번 출구)</span>
+                        <span class="font-extrabold text-slate-900">담당: 최가네부동산 공인중개사사무소</span>
+                        <span class="text-slate-600 font-medium">대구 수성구 수성동1가 72-3 (대구은행역 2번 출구)</span>
                     </div>
                     <div class="flex items-center gap-2 no-print">
-                        <a href="tel:010-3548-4000" class="px-3.5 py-2 rounded-lg bg-white text-slate-900 font-extrabold text-xs flex items-center gap-1 hover:bg-slate-100 transition">
+                        <a href="tel:010-3548-4000" class="px-3.5 py-2 rounded-lg bg-[#003891] hover:bg-blue-800 text-white font-extrabold text-xs flex items-center gap-1 transition shadow-xs">
                             <span class="material-symbols-outlined text-[15px]">call</span> 010-3548-4000
                         </a>
-                        <button type="button" onclick="openKakaoDirectly()" class="px-3.5 py-2 rounded-lg bg-[#003891] text-white font-extrabold text-xs flex items-center gap-1 hover:bg-blue-800 transition cursor-pointer border border-blue-400/30">
+                        <button type="button" onclick="openKakaoDirectly()" class="px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-900 font-extrabold text-xs flex items-center gap-1 transition cursor-pointer border border-slate-300">
                             <span class="material-symbols-outlined text-[15px]">chat</span> 카톡 바로문의
                         </button>
                     </div>
@@ -235,7 +235,7 @@
                     <span class="material-symbols-outlined text-[#003891]">apartment</span>
                     <span>매물별 상세 브리핑 및 최가네부동산 코멘트</span>
                 </h2>
-                <span class="text-xs text-slate-500 no-print">사진을 클릭하면 크게 볼 수 있습니다</span>
+                <span class="text-xs text-slate-600 font-medium no-print">사진을 클릭하면 좌우 화살표·스와이프로 크게 넘겨볼 수 있습니다</span>
             </div>
 
             <div id="briefing-cards-container" class="space-y-6">
@@ -245,7 +245,7 @@
         <!-- 5. Attached Memo Warehouse Cards -->
         <section id="memo-warehouse-section" class="hidden bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200 space-y-4 print-break-inside-avoid">
             <div class="border-b border-slate-200 pb-3">
-                <span class="inline-block text-[11px] font-extrabold bg-slate-100 text-[#003891] px-2.5 py-0.5 rounded border border-slate-200 mb-1">최가네부동산 필수 체크 안내</span>
+                <span class="inline-block text-[11px] font-extrabold bg-[#f0f5ff] text-[#003891] px-2.5 py-0.5 rounded border border-blue-200 mb-1">최가네부동산 필수 체크 안내</span>
                 <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-[#003891]">fact_check</span>
                     <span>계약 전 꼭 확인하세요! (준비서류 · 필수특약 · 세무 안내)</span>
@@ -257,17 +257,17 @@
             </div>
         </section>
 
-        <!-- 6. Print-Only Footer Business Card -->
-        <footer class="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 print-break-inside-avoid">
+        <!-- 6. Footer Business Card (Bright & Clear) -->
+        <footer class="bg-white text-slate-800 rounded-2xl p-5 sm:p-6 border border-slate-300 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 print-break-inside-avoid">
             <div class="space-y-1">
-                <div class="font-extrabold text-base sm:text-lg text-white">최가네부동산공인중개사사무소</div>
-                <div class="text-xs text-slate-300">대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구) | 등록번호: 27260-2024-00085</div>
-                <div class="text-xs text-slate-400">상가 · 사무실 · 상가건물 · 상가주택 임대 및 매매 전문 파트너</div>
+                <div class="font-black text-base sm:text-lg text-[#003891]">최가네부동산공인중개사사무소</div>
+                <div class="text-xs text-slate-700 font-medium">대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구) | 등록번호: 27260-2024-00085</div>
+                <div class="text-xs text-slate-500">대구 전 지역 상가 · 사무실 · 상가건물 · 상가주택 임대 및 매매 전문 파트너</div>
             </div>
             <div class="text-left sm:text-right">
-                <div class="text-xs text-slate-300 font-bold">직통 상담 및 조건 조율 문의</div>
-                <div class="text-lg sm:text-xl font-black text-white">010-3548-4000</div>
-                <div class="text-[11px] text-slate-400">홈페이지: www.choi114.com</div>
+                <div class="text-xs text-slate-600 font-bold">직통 상담 및 조건 조율 문의</div>
+                <div class="text-lg sm:text-xl font-black text-[#003891]">010-3548-4000</div>
+                <div class="text-[11px] text-slate-500">홈페이지: www.choi114.com</div>
             </div>
         </footer>
 
@@ -281,11 +281,11 @@
                 <div class="text-[11px] text-slate-500">[1순위 찜 / 재방문·조건협의 요청]을 누르시면 최가네부동산에 바로 전달됩니다.</div>
             </div>
             <div class="flex items-center gap-2 w-full sm:w-auto">
-                <a href="tel:010-3548-4000" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-slate-900 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5">
+                <a href="tel:010-3548-4000" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5">
                     <span class="material-symbols-outlined text-[17px]">call</span>
                     <span>전화 상담</span>
                 </a>
-                <button type="button" onclick="openPickModal('전체 매물 조건 협의 문의', '')" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-[#003891] hover:bg-blue-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+                <button type="button" onclick="openPickModal('전체 매물 조건 협의 문의', '')" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-[#003891] hover:bg-blue-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
                     <span class="material-symbols-outlined text-[17px]">thumb_up</span>
                     <span>1순위 매물 선택 / 조건협의 요청</span>
                 </button>
@@ -293,12 +293,39 @@
         </div>
     </div>
 
-    <!-- Photo Lightbox Modal -->
-    <div id="photo-lightbox" class="fixed inset-0 bg-black/90 z-[9999] hidden flex items-center justify-center p-4 no-print" onclick="closePhotoLightbox()">
-        <button type="button" class="absolute top-4 right-4 text-white bg-white/10 hover:bg-white/20 rounded-full p-2 cursor-pointer">
-            <span class="material-symbols-outlined text-2xl">close</span>
-        </button>
-        <img id="lightbox-img" src="" alt="매물 현장 사진" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl" />
+    <!-- Photo Gallery Lightbox Modal (PC Left/Right Arrows + Keyboard + Mobile/Tablet Touch Swipe) -->
+    <div id="photo-lightbox" class="fixed inset-0 bg-slate-950/90 backdrop-blur-xs z-[9999] hidden flex flex-col justify-between p-3 sm:p-6 no-print select-none" onclick="handleLightboxBackdropClick(event)">
+        <!-- Top Bar -->
+        <div class="max-w-5xl w-full mx-auto flex items-center justify-between gap-3 text-white z-20" onclick="event.stopPropagation()">
+            <div class="flex items-center gap-2 min-w-0">
+                <span id="lightbox-counter" class="bg-[#003891] text-white text-xs sm:text-sm font-extrabold px-3 py-1 rounded-lg border border-blue-400/30 shrink-0">1 / 1</span>
+                <span id="lightbox-caption" class="text-xs sm:text-sm font-bold text-slate-200 truncate">매물 현장 사진</span>
+            </div>
+            <button type="button" onclick="closePhotoLightbox()" class="text-white bg-white/15 hover:bg-white/25 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition shrink-0" title="닫기 (ESC)">
+                <span class="material-symbols-outlined text-2xl">close</span>
+            </button>
+        </div>
+
+        <!-- Center Image & Prev/Next Arrows -->
+        <div id="lightbox-touch-area" class="relative flex-1 flex items-center justify-center w-full max-w-6xl mx-auto my-2 overflow-hidden">
+            <!-- Prev Arrow Button -->
+            <button type="button" id="lightbox-prev-btn" onclick="event.stopPropagation(); stepLightboxPhoto(-1)" class="absolute left-1 sm:left-4 z-20 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-lg flex items-center justify-center cursor-pointer transition active:scale-95" title="이전 사진">
+                <span class="material-symbols-outlined text-2xl sm:text-3xl font-bold">chevron_left</span>
+            </button>
+
+            <img id="lightbox-img" src="" alt="매물 현장 사진" onclick="event.stopPropagation()" class="max-w-full max-h-[75vh] sm:max-h-[78vh] object-contain rounded-xl shadow-2xl transition-transform duration-200" />
+
+            <!-- Next Arrow Button -->
+            <button type="button" id="lightbox-next-btn" onclick="event.stopPropagation(); stepLightboxPhoto(1)" class="absolute right-1 sm:right-4 z-20 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-lg flex items-center justify-center cursor-pointer transition active:scale-95" title="다음 사진">
+                <span class="material-symbols-outlined text-2xl sm:text-3xl font-bold">chevron_right</span>
+            </button>
+        </div>
+
+        <!-- Bottom Thumbnails & Swipe Guide -->
+        <div class="max-w-4xl w-full mx-auto flex flex-col items-center gap-2 z-20" onclick="event.stopPropagation()">
+            <div id="lightbox-thumbs" class="flex items-center gap-2 overflow-x-auto max-w-full py-1 px-2"></div>
+            <div class="text-[11px] text-slate-300 font-medium">PC: 좌우 화살표 클릭 또는 키보드(←/→) · 모바일/태블릿: 사진을 좌우로 스와이프(밀기)</div>
+        </div>
     </div>
 
     <!-- Customer Pick / Feedback Modal -->
@@ -315,7 +342,7 @@
             </div>
 
             <div class="space-y-3 text-xs sm:text-sm">
-                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-[#003891]" id="pick-modal-target-label">
+                <div class="bg-[#f0f5ff] border border-blue-200 rounded-xl p-3 font-bold text-[#003891]" id="pick-modal-target-label">
                     선택 매물: -
                 </div>
 
@@ -345,13 +372,20 @@
         </div>
     </div>
 
-    <script src="db.js?v=20260715_v233"></script>
+    <script src="db.js?v=20260715_v234"></script>
     <script>
         let _briefing = null;
         let _attachedMemos = [];
         let _mapInstance = null;
         let _selectedPickPropNo = '';
         let _selectedPickTitle = '';
+
+        // Lightbox Gallery State
+        let _lightboxPhotos = [];
+        let _lightboxIndex = 0;
+        let _lightboxTitle = '';
+        let _touchStartX = 0;
+        let _touchStartY = 0;
 
         function escHtml(str) {
             if (!str) return '';
@@ -416,7 +450,8 @@
             const isPreview = params.get('preview') === 'admin';
 
             try {
-                const store = await getBriefingData();
+                // getBriefingData(true) automatically syncs items with the latest homepage posts!
+                const store = await getBriefingData(true);
                 const found = (store.briefings || []).find(b => String(b.id) === String(briefingId));
 
                 if (!found) {
@@ -521,13 +556,13 @@
                 const thead = document.getElementById('comparison-thead');
                 if (thead) {
                     thead.innerHTML = `
-                        <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-extrabold text-xs">
+                        <tr class="bg-[#f4f7fc] text-slate-800 border-b border-slate-200 font-extrabold text-xs">
                             <th class="py-3 px-3 rounded-tl-xl">추천 순번 / 소재지</th>
-                            <th class="py-3 px-3">해당층 / 총층 / 면적</th>
+                            <th class="py-3 px-3">면적(평수) / 해당층 · 총층</th>
                             <th class="py-3 px-3">기본 임대·매매 조건</th>
                             <th class="py-3 px-3">권리금(시설비)</th>
-                            <th class="py-3 px-3 bg-slate-100 text-[#003891] ${showMonthlyCost ? '' : 'rounded-tr-xl'}">초기 필요자금 합계</th>
-                            ${showMonthlyCost ? `<th class="py-3 px-3 bg-slate-100 text-slate-900 rounded-tr-xl">월 실제 고정비 합계</th>` : ''}
+                            <th class="py-3 px-3 bg-[#f0f5ff] text-[#003891] ${showMonthlyCost ? '' : 'rounded-tr-xl'}">초기 필요자금 합계</th>
+                            ${showMonthlyCost ? `<th class="py-3 px-3 bg-[#f4f7fc] text-slate-900 rounded-tr-xl">월 실제 고정비 합계</th>` : ''}
                         </tr>
                     `;
                 }
@@ -578,11 +613,12 @@
                             ? '매매 건'
                             : (prem > 0 ? formatManwon(prem) : (item.premiumText || '무권리'));
 
+                        // Deposit & Rent with identical font size and weight (Request 4)
                         const basicCond = isSale
-                            ? `<div class="font-extrabold text-slate-900">매매가 ${formatManwon(saleP)}</div>
-                               <div class="text-xs text-slate-600">기보증금 ${formatManwon(dep)} / 월세 ${formatManwon(rent)}</div>`
-                            : `<div class="font-extrabold text-slate-900">보증금 ${formatManwon(dep)}</div>
-                               <div class="text-xs text-slate-700 font-bold">월세 ${formatManwon(rent)} <span class="text-slate-500 font-normal">(공용관리비 ${maint > 0 ? formatManwon(maint) : '별도/없음'})</span></div>`;
+                            ? `<div class="text-xs sm:text-sm font-extrabold text-slate-900">매매가 ${formatManwon(saleP)}</div>
+                               <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5">기보증금 ${formatManwon(dep)} / 월세 ${formatManwon(rent)}</div>`
+                            : `<div class="text-xs sm:text-sm font-extrabold text-slate-900">보증금 ${formatManwon(dep)}</div>
+                               <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5">월세 ${formatManwon(rent)} <span class="text-xs text-slate-500 font-medium">(공용관리비 ${maint > 0 ? formatManwon(maint) : '별도/없음'})</span></div>`;
 
                         return `
                             <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="scrollToCard('prop-card-${idx}')">
@@ -590,24 +626,24 @@
                                     <div class="flex items-center gap-2.5">
                                         <span class="w-6 h-6 rounded-md bg-[#003891] text-white font-black text-xs flex items-center justify-center shrink-0">${num}</span>
                                         <div>
-                                            <div class="font-extrabold text-slate-900 hover:text-[#003891] transition">${escHtml(addr)}</div>
+                                            <div class="font-extrabold text-slate-900 hover:text-[#003891] transition text-xs sm:text-sm">${escHtml(addr)}</div>
                                             <div class="text-[11px] text-slate-500">매물번호: ${escHtml(item.propNo || '-')}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="py-3.5 px-3 align-middle">
-                                    <div class="font-bold text-slate-800">해당층: ${escHtml(floors.currentFloor)}</div>
-                                    <div class="text-xs text-slate-500">총층: ${escHtml(floors.totalFloor)} · ${escHtml(item.area || '-')}</div>
+                                    <div class="font-extrabold text-slate-900 text-xs sm:text-sm">${escHtml(item.area || '-')}</div>
+                                    <div class="text-xs text-slate-600 font-medium mt-0.5">해당층: ${escHtml(floors.currentFloor)} · 총층: ${escHtml(floors.totalFloor)}</div>
                                 </td>
                                 <td class="py-3.5 px-3 align-middle">${basicCond}</td>
-                                <td class="py-3.5 px-3 align-middle font-bold text-slate-800">${escHtml(premDisplay)}</td>
-                                <td class="py-3.5 px-3 align-middle bg-slate-50/70">
-                                    <div class="font-black text-[#003891] text-sm">${initCapitalText}</div>
+                                <td class="py-3.5 px-3 align-middle font-extrabold text-slate-800 text-xs sm:text-sm">${escHtml(premDisplay)}</td>
+                                <td class="py-3.5 px-3 align-middle bg-[#f8faff]">
+                                    <div class="font-black text-[#003891] text-xs sm:text-sm">${initCapitalText}</div>
                                     <div class="text-[11px] text-slate-500">${initSubText}</div>
                                 </td>
                                 ${showMonthlyCost ? `
-                                <td class="py-3.5 px-3 align-middle bg-slate-50/70">
-                                    <div class="font-black text-slate-900 text-sm">${monthlyText}</div>
+                                <td class="py-3.5 px-3 align-middle bg-slate-50/80">
+                                    <div class="font-black text-slate-900 text-xs sm:text-sm">${monthlyText}</div>
                                     <div class="text-[11px] text-slate-500">${monthlySub}</div>
                                 </td>
                                 ` : ''}
@@ -641,18 +677,21 @@
                 if (isSale && showYield && saleP > 0 && rent > 0 && (saleP - dep) > 0) {
                     const annualYield = (((rent * 12) / (saleP - dep)) * 100).toFixed(2);
                     yieldBadgeHtml = `
-                        <div class="bg-slate-800 border border-slate-700 text-white px-3 py-1 rounded-md text-xs font-extrabold flex items-center gap-1">
+                        <div class="bg-[#003891] text-white px-3 py-1 rounded-lg text-xs font-extrabold flex items-center gap-1 shadow-xs">
                             <span>예상 연 수익률 ${annualYield}%</span>
                         </div>
                     `;
                 }
 
-                // Photos Grid (supports unlimited photos cleanly)
+                // Photos Grid (clicking opens interactive gallery slider at (idx, pIdx))
                 const photos = (item.photos && item.photos.length > 0) ? item.photos : ['https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'];
                 const photosHtml = photos.map((url, pIdx) => `
-                    <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 cursor-pointer group" onclick="openPhotoLightbox('${escHtml(url)}')">
+                    <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 cursor-pointer group" onclick="openPhotoLightbox(${idx}, ${pIdx})">
                         <img src="${escHtml(url)}" alt="${escHtml(title)} 사진 ${pIdx + 1}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'" />
-                        <span class="absolute bottom-2 right-2 bg-black/65 text-white text-[10px] font-bold px-2 py-0.5 rounded no-print">사진 ${pIdx + 1}</span>
+                        <span class="absolute bottom-2 right-2 bg-slate-900/75 text-white text-[11px] font-bold px-2 py-0.5 rounded-md no-print flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">zoom_in</span>
+                            <span>사진 ${pIdx + 1}/${photos.length}</span>
+                        </span>
                     </div>
                 `).join('');
 
@@ -660,16 +699,16 @@
                 const badges = Array.isArray(item.badges) ? item.badges.map(cleanBadgeText).filter(Boolean) : [];
                 const badgesHtml = badges.length > 0 ? `
                     <div class="flex flex-wrap gap-1.5 pt-1">
-                        ${badges.map(bg => `<span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 border border-slate-200 text-xs font-bold">✓ ${escHtml(bg)}</span>`).join('')}
+                        ${badges.map(bg => `<span class="px-2.5 py-1 rounded-lg bg-[#f4f7fc] text-slate-800 border border-slate-200 text-xs font-bold">✓ ${escHtml(bg)}</span>`).join('')}
                     </div>
                 ` : '';
 
                 // Agent Comment
                 const cleanComment = (item.agentComment || '').trim().replace(/최이명\s*(대표)?소장(님)?/g, '최가네부동산');
                 const commentHtml = cleanComment ? `
-                    <div class="bg-slate-50 border-l-4 border-[#003891] border-t border-r border-b border-slate-200 rounded-r-xl p-4 space-y-1.5">
-                        <div class="text-xs font-extrabold text-[#003891] flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[16px]">rate_review</span>
+                    <div class="bg-[#f4f7fc] border-l-4 border-[#003891] border-t border-r border-b border-blue-200 rounded-r-xl p-4 space-y-1.5">
+                        <div class="text-xs sm:text-sm font-extrabold text-[#003891] flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[17px]">rate_review</span>
                             <span>최가네부동산 현장 브리핑 코멘트</span>
                         </div>
                         <p class="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed whitespace-pre-line">${escHtml(cleanComment)}</p>
@@ -680,78 +719,80 @@
 
                 return `
                     <article id="prop-card-${idx}" class="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden print-break-inside-avoid">
-                        <!-- Card Header Bar -->
-                        <div class="bg-slate-900 text-white px-5 py-4 flex flex-wrap items-center justify-between gap-2">
-                            <div class="flex items-center gap-2.5">
-                                <span class="bg-[#003891] text-white font-black text-xs sm:text-sm px-3 py-1 rounded-md border border-blue-400/30">${num}번 추천 매물</span>
-                                <span class="text-xs bg-slate-800 text-slate-200 px-2.5 py-1 rounded-md font-bold border border-slate-700">매물번호: ${escHtml(item.propNo || '-')}</span>
-                                <span class="text-xs text-slate-300 font-semibold">${isSale ? '매매' : '임대'}</span>
+                        <!-- Card Header Bar (Bright Soft-Blue for High Visibility) -->
+                        <div class="bg-[#f0f5ff] border-b border-blue-200 px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="bg-[#003891] text-white font-black text-xs sm:text-sm px-3.5 py-1 rounded-lg shadow-xs">${num}번 추천 매물</span>
+                                <span class="text-xs bg-white text-slate-800 px-2.5 py-1 rounded-lg font-extrabold border border-slate-300">매물번호: ${escHtml(item.propNo || '-')}</span>
+                                <span class="text-xs bg-white text-[#003891] px-2.5 py-1 rounded-lg font-extrabold border border-blue-200">${isSale ? '매매' : '임대'}</span>
                             </div>
                             ${yieldBadgeHtml}
                         </div>
 
                         <div class="p-5 sm:p-6 space-y-5">
-                            <!-- Title & Location & Specs -->
+                            <!-- Title & Location & Specs (Request 2 & 3: 주소 -> 평수(강조) -> 해당층 -> 총층) -->
                             <div class="space-y-2">
-                                <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-bold text-[#003891]">
-                                    <span class="material-symbols-outlined text-[17px]">location_on</span>
-                                    <span>${escHtml(addr)}</span>
+                                <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+                                    <span class="inline-flex items-center gap-1 font-extrabold text-[#003891]">
+                                        <span class="material-symbols-outlined text-[17px]">location_on</span>
+                                        <span>${escHtml(addr)}</span>
+                                    </span>
                                     <span class="text-slate-300">|</span>
-                                    <span class="text-slate-700">해당층: ${escHtml(floors.currentFloor)}</span>
+                                    <span class="font-black text-slate-900 bg-[#f0f5ff] px-2.5 py-0.5 rounded-md border border-blue-200">${escHtml(item.area || '-')}</span>
+                                    <span class="text-slate-300">|</span>
+                                    <span class="text-slate-700 font-bold">해당층: ${escHtml(floors.currentFloor)}</span>
                                     <span class="text-slate-300">·</span>
-                                    <span class="text-slate-600">총층: ${escHtml(floors.totalFloor)}</span>
-                                    <span class="text-slate-300">|</span>
-                                    <span class="text-slate-900 font-extrabold">${escHtml(item.area || '-')}</span>
+                                    <span class="text-slate-600 font-semibold">총층: ${escHtml(floors.totalFloor)}</span>
                                 </div>
                                 <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">${escHtml(title)}</h3>
                                 ${badgesHtml}
                             </div>
 
-                            <!-- Financial Summary Grid -->
+                            <!-- Financial Summary Grid (Request 4: Deposit & Rent identical font size) -->
                             <div class="grid ${gridColsClass} gap-2.5">
                                 ${isSale ? `
-                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                        <div class="text-[11px] text-slate-500 font-bold">매매가</div>
-                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">${formatManwon(saleP)}</div>
+                                    <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200">
+                                        <div class="text-xs text-slate-600 font-bold">매매가</div>
+                                        <div class="text-base sm:text-lg font-black text-slate-900 mt-0.5">${formatManwon(saleP)}</div>
                                     </div>
-                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                        <div class="text-[11px] text-slate-500 font-bold">기보증금</div>
-                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">${formatManwon(dep)}</div>
+                                    <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200">
+                                        <div class="text-xs text-slate-600 font-bold">기보증금</div>
+                                        <div class="text-base sm:text-lg font-black text-slate-900 mt-0.5">${formatManwon(dep)}</div>
                                     </div>
-                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                        <div class="text-[11px] text-slate-500 font-bold">월 임대수익</div>
-                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">${formatManwon(rent)}</div>
+                                    <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200">
+                                        <div class="text-xs text-slate-600 font-bold">월 임대수익</div>
+                                        <div class="text-base sm:text-lg font-black text-slate-900 mt-0.5">${formatManwon(rent)}</div>
                                     </div>
-                                    <div class="bg-slate-100 rounded-xl p-3 border border-slate-300">
-                                        <div class="text-[11px] text-[#003891] font-extrabold">실투자금 (매매-보증금)</div>
-                                        <div class="text-sm sm:text-base font-black text-[#003891] mt-0.5">${formatManwon(totalInit)}</div>
+                                    <div class="bg-[#f0f5ff] rounded-xl p-3.5 border border-blue-200">
+                                        <div class="text-xs text-[#003891] font-extrabold">실투자금 (매매-보증금)</div>
+                                        <div class="text-base sm:text-lg font-black text-[#003891] mt-0.5">${formatManwon(totalInit)}</div>
                                     </div>
                                 ` : `
-                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                        <div class="text-[11px] text-slate-500 font-bold">보증금</div>
-                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">${formatManwon(dep)}</div>
+                                    <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200">
+                                        <div class="text-xs text-slate-600 font-bold">보증금</div>
+                                        <div class="text-base sm:text-lg font-black text-slate-900 mt-0.5">${formatManwon(dep)}</div>
                                     </div>
-                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                        <div class="text-[11px] text-slate-500 font-bold">월세 (임대료)</div>
-                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">${formatManwon(rent)}</div>
+                                    <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200">
+                                        <div class="text-xs text-slate-600 font-bold">월세 (임대료)</div>
+                                        <div class="text-base sm:text-lg font-black text-slate-900 mt-0.5">${formatManwon(rent)}</div>
                                     </div>
-                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                        <div class="text-[11px] text-slate-500 font-bold">공용관리비 / 권리금</div>
+                                    <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200">
+                                        <div class="text-xs text-slate-600 font-bold">공용관리비 / 권리금</div>
                                         <div class="text-xs sm:text-sm font-extrabold text-slate-800 mt-0.5">
                                             공용관리비 ${maint > 0 ? formatManwon(maint) : '없음/별도'}<br/>
                                             <span class="text-slate-700">권리금: ${prem > 0 ? formatManwon(prem) : escHtml(item.premiumText || '무권리')}</span>
                                         </div>
                                     </div>
-                                    <div class="bg-slate-100 rounded-xl p-3 border border-slate-300">
-                                        <div class="text-[11px] text-[#003891] font-extrabold">초기 필요자금 합계</div>
-                                        <div class="text-sm sm:text-base font-black text-[#003891] mt-0.5">${formatManwon(totalInit)}</div>
-                                        <div class="text-[10px] text-slate-500">보증금 + 권리금</div>
+                                    <div class="bg-[#f0f5ff] rounded-xl p-3.5 border border-blue-200">
+                                        <div class="text-xs text-[#003891] font-extrabold">초기 필요자금 합계</div>
+                                        <div class="text-base sm:text-lg font-black text-[#003891] mt-0.5">${formatManwon(totalInit)}</div>
+                                        <div class="text-[11px] text-slate-500">보증금 + 권리금</div>
                                     </div>
                                     ${showMonthlyCost ? `
-                                    <div class="bg-slate-100 rounded-xl p-3 border border-slate-300 col-span-2 sm:col-span-1">
-                                        <div class="text-[11px] text-slate-800 font-extrabold">월 실제 고정비 ${includeVat ? '(VAT포함)' : '(VAT별도)'}</div>
-                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">월 ${formatManwon(totalMonthly)}</div>
-                                        <div class="text-[10px] text-slate-500">월세${includeVat ? '+부가세10%' : ''}+공용관리비</div>
+                                    <div class="bg-slate-100 rounded-xl p-3.5 border border-slate-300 col-span-2 sm:col-span-1">
+                                        <div class="text-xs text-slate-800 font-extrabold">월 실제 고정비 ${includeVat ? '(VAT포함)' : '(VAT별도)'}</div>
+                                        <div class="text-base sm:text-lg font-black text-slate-900 mt-0.5">월 ${formatManwon(totalMonthly)}</div>
+                                        <div class="text-[11px] text-slate-500">월세${includeVat ? '+부가세10%' : ''}+공용관리비</div>
                                     </div>
                                     ` : ''}
                                 `}
@@ -819,7 +860,7 @@
                 scrollWheelZoom: false
             });
 
-            // OpenStreetMap Standard Tile Layer (No API key required, works everywhere)
+            // OpenStreetMap Standard Tile Layer
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors',
                 maxZoom: 19
@@ -829,14 +870,12 @@
             const jumpBtns = document.getElementById('map-jump-buttons');
             jumpBtns.innerHTML = '';
 
-            // De-overlap coordinates when multiple properties are in the same or adjacent building
             const placedCoords = [];
 
             validItems.forEach(({ item, idx }) => {
                 let lat = Number(item.coordinates[0]);
                 let lng = Number(item.coordinates[1]);
 
-                // Check if another marker is within ~20 meters
                 let overlapCount = 0;
                 placedCoords.forEach(pc => {
                     if (Math.abs(pc[0] - lat) < 0.0002 && Math.abs(pc[1] - lng) < 0.0002) {
@@ -853,10 +892,10 @@
 
                 const num = idx + 1;
                 const addr = maskTextBlind(item.address, b.blindAddress !== false);
+                const floors = getFloorParts(item);
 
                 bounds.push([lat, lng]);
 
-                // Approximate zone circle
                 L.circle([lat, lng], {
                     color: '#003891',
                     fillColor: '#003891',
@@ -865,7 +904,6 @@
                     radius: 110
                 }).addTo(_mapInstance);
 
-                // Numbered Pin Marker
                 const icon = L.divIcon({
                     className: 'briefing-marker-pin',
                     html: `<span>${num}</span>`,
@@ -875,10 +913,11 @@
 
                 const marker = L.marker([lat, lng], { icon }).addTo(_mapInstance);
                 marker.bindPopup(`
-                    <div style="font-family:Pretendard,sans-serif; min-width:170px;">
+                    <div style="font-family:Pretendard,sans-serif; min-width:180px;">
                         <div style="font-weight:800; color:#003891; font-size:12px;">${num}번 추천 매물 (번호: ${escHtml(item.propNo || '-')})</div>
-                        <div style="font-weight:700; font-size:13px; margin-top:2px; color:#0f172a;">${escHtml(addr)}</div>
-                        <div style="font-size:11px; color:#475569; margin-top:2px;">해당층: ${escHtml(getFloorParts(item).currentFloor)} · ${escHtml(item.area || '')}</div>
+                        <div style="font-weight:800; font-size:13px; margin-top:2px; color:#0f172a;">${escHtml(addr)}</div>
+                        <div style="font-weight:800; font-size:12px; color:#003891; margin-top:3px;">${escHtml(item.area || '-')}</div>
+                        <div style="font-size:11px; color:#475569; margin-top:1px;">해당층: ${escHtml(floors.currentFloor)} · 총층: ${escHtml(floors.totalFloor)}</div>
                     </div>
                 `);
 
@@ -919,7 +958,7 @@
                 <div class="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200 flex flex-col justify-between gap-3 print-break-inside-avoid">
                     <div class="space-y-2.5">
                         <div class="flex items-center justify-between gap-2">
-                            <span class="px-2.5 py-0.5 rounded bg-slate-200 text-slate-800 text-[11px] font-extrabold">
+                            <span class="px-2.5 py-0.5 rounded bg-[#f0f5ff] text-[#003891] border border-blue-200 text-[11px] font-extrabold">
                                 ${escHtml(m.category || '필수 안내')}
                             </span>
                             <button type="button" onclick="copyMemoCardText('${escHtml(m.id)}')" class="text-xs font-bold text-[#003891] hover:underline flex items-center gap-0.5 cursor-pointer no-print">
@@ -965,16 +1004,113 @@
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        function openPhotoLightbox(url) {
-            const modal = document.getElementById('photo-lightbox');
+        // =====================================================================
+        // Interactive Photo Lightbox Slider (PC Arrows + Keyboard + Touch Swipe)
+        // =====================================================================
+        function openPhotoLightbox(itemIdx, photoIdx = 0) {
+            if (!_briefing || !Array.isArray(_briefing.items)) return;
+            const item = _briefing.items[itemIdx];
+            if (!item) return;
+            const photos = (Array.isArray(item.photos) && item.photos.length > 0)
+                ? item.photos
+                : ['https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'];
+
+            _lightboxPhotos = photos;
+            _lightboxIndex = Math.max(0, Math.min(photoIdx, photos.length - 1));
+            const isBlind = _briefing.blindAddress !== false;
+            _lightboxTitle = `${itemIdx + 1}번 추천 매물 (${maskTextBlind(item.address, isBlind)} · ${item.area || ''})`;
+
+            updateLightboxView();
+            document.getElementById('photo-lightbox').classList.remove('hidden');
+        }
+
+        function updateLightboxView() {
+            const total = _lightboxPhotos.length;
             const img = document.getElementById('lightbox-img');
-            img.src = url;
-            modal.classList.remove('hidden');
+            const counter = document.getElementById('lightbox-counter');
+            const caption = document.getElementById('lightbox-caption');
+            const prevBtn = document.getElementById('lightbox-prev-btn');
+            const nextBtn = document.getElementById('lightbox-next-btn');
+            const thumbs = document.getElementById('lightbox-thumbs');
+
+            if (img) img.src = _lightboxPhotos[_lightboxIndex] || '';
+            if (counter) counter.textContent = `${_lightboxIndex + 1} / ${total}`;
+            if (caption) caption.textContent = _lightboxTitle;
+
+            if (prevBtn) prevBtn.style.display = total > 1 ? 'flex' : 'none';
+            if (nextBtn) nextBtn.style.display = total > 1 ? 'flex' : 'none';
+
+            if (thumbs) {
+                if (total <= 1) {
+                    thumbs.innerHTML = '';
+                } else {
+                    thumbs.innerHTML = _lightboxPhotos.map((u, idx) => `
+                        <button type="button" onclick="goToLightboxPhoto(${idx})" class="w-14 h-11 rounded-lg overflow-hidden border-2 transition shrink-0 cursor-pointer ${idx === _lightboxIndex ? 'border-white scale-105 shadow-md' : 'border-transparent opacity-55 hover:opacity-90'}">
+                            <img src="${escHtml(u)}" alt="" class="w-full h-full object-cover" />
+                        </button>
+                    `).join('');
+                }
+            }
+        }
+
+        function stepLightboxPhoto(delta) {
+            if (!_lightboxPhotos || _lightboxPhotos.length <= 1) return;
+            _lightboxIndex = (_lightboxIndex + delta + _lightboxPhotos.length) % _lightboxPhotos.length;
+            updateLightboxView();
+        }
+
+        function goToLightboxPhoto(idx) {
+            if (!_lightboxPhotos || idx < 0 || idx >= _lightboxPhotos.length) return;
+            _lightboxIndex = idx;
+            updateLightboxView();
+        }
+
+        function handleLightboxBackdropClick(e) {
+            if (e.target && (e.target.id === 'photo-lightbox' || e.target.id === 'lightbox-touch-area')) {
+                closePhotoLightbox();
+            }
         }
 
         function closePhotoLightbox() {
             document.getElementById('photo-lightbox').classList.add('hidden');
         }
+
+        // Keyboard ArrowLeft / ArrowRight / Escape support for PC
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('photo-lightbox');
+            if (!modal || modal.classList.contains('hidden')) return;
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                stepLightboxPhoto(-1);
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                stepLightboxPhoto(1);
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                closePhotoLightbox();
+            }
+        });
+
+        // Mobile & Tablet Touch Swipe support
+        (function initLightboxSwipe() {
+            const modal = document.getElementById('photo-lightbox');
+            if (!modal) return;
+            modal.addEventListener('touchstart', (e) => {
+                if (!e.touches || e.touches.length === 0) return;
+                _touchStartX = e.touches[0].clientX;
+                _touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            modal.addEventListener('touchend', (e) => {
+                if (!e.changedTouches || e.changedTouches.length === 0) return;
+                const dx = e.changedTouches[0].clientX - _touchStartX;
+                const dy = e.changedTouches[0].clientY - _touchStartY;
+                if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+                    if (dx < 0) stepLightboxPhoto(1); // Swipe left -> next photo
+                    else stepLightboxPhoto(-1);       // Swipe right -> prev photo
+                }
+            }, { passive: true });
+        })();
 
         function openPickModal(propNo, title) {
             _selectedPickPropNo = propNo;

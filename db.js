@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v233");
+console.log("Antigravity db.js version: 20260715_v234");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v233";
+const APP_VERSION = "20260715_v234";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.removeItem('choi_briefings_cache');
@@ -325,6 +325,13 @@ async function savePost(postData) {
       console.warn("GitHub save failed after 3 attempts, saved to local cache:", lastErr);
     }
   }
+
+  // Auto-sync updated post conditions (보증금, 월세, 공용관리비, 권리금, 매매가, 면적, 층수 등) to existing briefings
+  try {
+    if (typeof syncUpdatedPostToBriefings === 'function' && updatedPost) {
+      await syncUpdatedPostToBriefings(updatedPost);
+    }
+  } catch (e) {}
 
   return updatedPost;
 }
@@ -3016,7 +3023,85 @@ function parsePostToBriefingItem(post) {
 }
 window.parsePostToBriefingItem = parsePostToBriefingItem;
 
-async function getBriefingData() {
+function syncBriefingItemsWithPosts(briefingsList, postsList) {
+    if (!Array.isArray(briefingsList) || !Array.isArray(postsList) || postsList.length === 0) return false;
+    let anyChanged = false;
+
+    const postById = new Map();
+    const postByPropNo = new Map();
+    postsList.forEach(p => {
+        if (!p) return;
+        if (p.id) postById.set(String(p.id), p);
+        const pNo = typeof getPropertyDisplayNumber === 'function' ? getPropertyDisplayNumber(p) : '';
+        if (pNo) postByPropNo.set(String(pNo).trim(), p);
+    });
+
+    briefingsList.forEach(b => {
+        if (!b || !Array.isArray(b.items)) return;
+        b.items.forEach(item => {
+            if (!item || item.autoSyncPost === false) return;
+            let matchedPost = null;
+            if (item.postId && postById.has(String(item.postId))) {
+                matchedPost = postById.get(String(item.postId));
+            } else if (item.propNo && postByPropNo.has(String(item.propNo).trim())) {
+                matchedPost = postByPropNo.get(String(item.propNo).trim());
+            }
+            if (!matchedPost) return;
+
+            const latest = parsePostToBriefingItem(matchedPost);
+            if (!latest) return;
+
+            // Sync financial & spec conditions if post has valid parsed numbers
+            if (latest.deposit > 0 || latest.rent > 0 || latest.salePrice > 0) {
+                if (item.deposit !== latest.deposit) { item.deposit = latest.deposit; anyChanged = true; }
+                if (item.rent !== latest.rent) { item.rent = latest.rent; anyChanged = true; }
+                if (item.managementFee !== latest.managementFee) { item.managementFee = latest.managementFee; anyChanged = true; }
+                if (item.premium !== latest.premium) { item.premium = latest.premium; anyChanged = true; }
+                if (latest.premiumText && item.premiumText !== latest.premiumText) { item.premiumText = latest.premiumText; anyChanged = true; }
+                if (item.salePrice !== latest.salePrice) { item.salePrice = latest.salePrice; anyChanged = true; }
+                if (item.tradeType !== latest.tradeType) { item.tradeType = latest.tradeType; anyChanged = true; }
+            }
+            if (latest.area && latest.area !== '-' && item.area !== latest.area) {
+                // Keep supply area if item already had supply area and latest only parsed jeonyong, unless base pyeong changed
+                const curPy = (item.area || '').match(/\d+(?:\.\d+)?/);
+                const newPy = (latest.area || '').match(/\d+(?:\.\d+)?/);
+                if (!curPy || !newPy || curPy[0] !== newPy[0]) {
+                    item.area = latest.area;
+                    anyChanged = true;
+                }
+            }
+            if (latest.currentFloor && latest.currentFloor !== '-' && item.currentFloor !== latest.currentFloor) {
+                item.currentFloor = latest.currentFloor;
+                anyChanged = true;
+            }
+            if (latest.totalFloor && latest.totalFloor !== '-' && (!item.totalFloor || item.totalFloor === '-')) {
+                item.totalFloor = latest.totalFloor;
+                anyChanged = true;
+            }
+            if (Array.isArray(latest.coordinates) && latest.coordinates.length === 2) {
+                item.coordinates = latest.coordinates;
+            }
+        });
+    });
+
+    return anyChanged;
+}
+window.syncBriefingItemsWithPosts = syncBriefingItemsWithPosts;
+
+async function syncUpdatedPostToBriefings(updatedPost) {
+    if (!updatedPost) return;
+    try {
+        const store = await getBriefingData(false);
+        if (!store || !Array.isArray(store.briefings)) return;
+        const changed = syncBriefingItemsWithPosts(store.briefings, [updatedPost]);
+        if (changed) {
+            await saveBriefingData(store);
+        }
+    } catch (e) {}
+}
+window.syncUpdatedPostToBriefings = syncUpdatedPostToBriefings;
+
+async function getBriefingData(autoSyncWithPosts = true) {
     let remoteData = null;
 
     // 1. Try serverless API /api/briefing (zero cache)
@@ -3083,6 +3168,16 @@ async function getBriefingData() {
     }
     if (!Array.isArray(remoteData.memos)) remoteData.memos = [];
     if (!Array.isArray(remoteData.briefings)) remoteData.briefings = [];
+
+    // Automatically sync briefing items with latest homepage posts (보증금, 월세, 공용관리비, 권리금, 매매가, 면적, 층수 등)
+    if (autoSyncWithPosts) {
+        try {
+            const posts = await getPosts();
+            if (Array.isArray(posts) && posts.length > 0) {
+                syncBriefingItemsWithPosts(remoteData.briefings, posts);
+            }
+        } catch (e) {}
+    }
 
     try {
         localStorage.setItem('choi_briefings_cache', JSON.stringify(remoteData));
