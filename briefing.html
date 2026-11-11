@@ -1,1133 +1,1045 @@
 <!DOCTYPE html>
-<html class="light" lang="ko">
+<html lang="ko">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-<meta name="robots" content="noindex, nofollow" />
-<title>고객 맞춤형 매물 비교 브리핑 보드 | 최가네부동산공인중개사사무소</title>
-<meta name="description" content="최가네부동산 최이명 대표소장이 고객님을 위해 엄선한 상가·사무실·건물 맞춤형 비교 브리핑 리포트입니다." />
-<meta property="og:type" content="website" />
-<meta property="og:title" content="📋 [최가네부동산] 고객 맞춤형 매물 비교 브리핑 리포트" />
-<meta property="og:description" content="현장에서 함께 보신 매물의 사진, 초기 필요자금·월 고정비 비교표, 위치 지도, 소장님 코멘트를 한눈에 확인하세요." />
-<meta property="og:image" content="https://www.choi114.com/og-image.png" />
-
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script>
-tailwind.config = {
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        primary: "#003891",
-        "navy-deep": "#0b1739",
-        "blue-mid": "#1d56b5"
-      },
-      fontFamily: {
-        sans: ["Pretendard", "-apple-system", "BlinkMacSystemFont", "sans-serif"]
-      }
-    }
-  }
-};
-</script>
-
-<style>
-  body {
-    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: #f4f6fa;
-    color: #0f172a;
-    word-break: keep-all;
-  }
-  .material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
-  }
-  .num-marker {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 9999px;
-    background: linear-gradient(135deg, #003891 0%, #1d56b5 100%);
-    color: #ffffff;
-    font-weight: 900;
-    font-size: 15px;
-    border: 2.5px solid #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 56, 145, 0.45);
-  }
-
-  /* A4 Print / PDF Mode ("종이 만들기") */
-  @media print {
-    @page {
-      size: A4 portrait;
-      margin: 10mm;
-    }
-    body {
-      background: #ffffff !important;
-      color: #000000 !important;
-      font-size: 11pt;
-    }
-    .no-print,
-    #floating-quick-bar,
-    #mobile-bottom-bar,
-    #feedback-modal,
-    #lightbox-modal {
-      display: none !important;
-    }
-    .print-only {
-      display: block !important;
-    }
-    .print-break-avoid {
-      break-inside: avoid;
-      page-break-inside: avoid;
-    }
-    .print-shadow-none {
-      box-shadow: none !important;
-      border: 1px solid #cbd5e1 !important;
-    }
-    #briefing-map-section {
-      break-inside: avoid;
-      page-break-inside: avoid;
-    }
-  }
-</style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>고객 전용 맞춤 매물 브리핑 보드 | 최가네부동산</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#003891",
+                        "primary-dark": "#002766",
+                        navy: "#0f172a",
+                        surface: "#f8fafc",
+                        ink: "#0f172a"
+                    },
+                    fontFamily: {
+                        sans: ['"Pretendard Variable"', 'Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', '"Malgun Gothic"', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        html, body, input, select, textarea, button, table {
+            font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Malgun Gothic", sans-serif !important;
+            letter-spacing: -0.02em;
+        }
+        /* A4 Print Executive Report Mode */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+            body {
+                background: #ffffff !important;
+                color: #0f172a !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .print-break-inside-avoid {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl {
+                box-shadow: none !important;
+            }
+            #floating-quick-bar, #scroll-nav-up-down {
+                display: none !important;
+            }
+        }
+        #floating-quick-bar, #scroll-nav-up-down {
+            display: none !important;
+        }
+        .briefing-marker-pin {
+            background: #003891;
+            color: #ffffff;
+            border: 2.5px solid #ffffff;
+            border-radius: 9999px;
+            font-weight: 800;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.35);
+        }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col pb-20 md:pb-12">
+<body class="bg-slate-50 text-slate-900 min-h-screen pb-24">
 
-<!-- Top Sticky Bar (Web Only) -->
-<header class="sticky top-0 z-40 bg-[#0b1739]/95 backdrop-blur-md text-white border-b border-blue-900/60 shadow-lg no-print">
-  <div class="max-w-5xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
-    <a href="index.html" class="flex items-center gap-2.5 no-underline text-white group">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 text-slate-950 flex items-center justify-center font-black text-lg shadow-sm">
-        최
-      </div>
-      <div>
-        <div class="text-sm sm:text-base font-black tracking-tight flex items-center gap-1.5">
-          <span>최가네부동산</span>
-          <span class="hidden sm:inline-block text-[11px] bg-blue-500/30 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded-full font-bold">맞춤 브리핑 보드</span>
-        </div>
-        <div class="text-[11px] text-slate-300 font-medium">대표소장 최이명 · 010-3548-4000</div>
-      </div>
-    </a>
-
-    <div class="flex items-center gap-1.5 sm:gap-2">
-      <button onclick="copyBriefingLink()" class="px-2.5 sm:px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-1 transition cursor-pointer border border-white/15">
-        <span class="material-symbols-outlined text-[16px] text-amber-300">link</span>
-        <span>링크 복사</span>
-      </button>
-      <button onclick="window.print()" class="px-3 sm:px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs sm:text-sm font-black flex items-center gap-1.5 shadow-md transition cursor-pointer">
-        <span class="material-symbols-outlined text-[18px]">print</span>
-        <span>종이 만들기 (A4 인쇄/PDF)</span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<!-- Print-Only Official Report Header -->
-<div class="hidden print-only max-w-5xl mx-auto w-full mb-4 pb-3 border-b-2 border-slate-900">
-  <div class="flex items-center justify-between">
-    <div>
-      <div class="text-xs font-bold text-blue-800">대구·경산 상가·사무실·건물 임대·매매 전문</div>
-      <h1 class="text-xl font-black text-slate-900">최가네부동산 고객 맞춤형 매물 비교 브리핑 보고서</h1>
-    </div>
-    <div class="text-right text-xs text-slate-700 leading-snug">
-      <div class="font-black text-slate-900 text-sm">최가네부동산공인중개사사무소 | 대표소장 최이명</div>
-      <div>직통: 010-3548-4000 / 사무실: 053-746-7114 | 등록번호: 27260-2024-00085</div>
-      <div>대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구) | www.choi114.com</div>
-    </div>
-  </div>
-</div>
-
-<!-- Main Container -->
-<main class="max-w-5xl mx-auto w-full px-3 sm:px-6 pt-5 sm:pt-8 space-y-6 flex-1" id="briefing-main-container">
-  <!-- Loading State -->
-  <div id="briefing-loading" class="bg-white rounded-3xl p-12 text-center shadow-sm border border-slate-200 my-8">
-    <div class="w-12 h-12 rounded-full border-4 border-blue-600 border-t-transparent animate-spin mx-auto mb-4"></div>
-    <h2 class="text-lg font-extrabold text-slate-800">맞춤 매물 브리핑 데이터를 불러오는 중입니다...</h2>
-    <p class="text-xs text-slate-500 mt-1">최가네부동산 실시간 브리핑 서버와 동기화하고 있습니다.</p>
-  </div>
-</main>
-
-<!-- Photo Lightbox Modal -->
-<div id="lightbox-modal" class="fixed inset-0 z-[9999] bg-black/90 hidden items-center justify-center p-3 sm:p-6 no-print" onclick="if(event.target===this) closeLightbox()">
-  <button onclick="closeLightbox()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center cursor-pointer">
-    <span class="material-symbols-outlined text-2xl">close</span>
-  </button>
-  <button onclick="stepLightbox(-1)" class="absolute left-3 sm:left-6 w-11 h-11 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center cursor-pointer">
-    <span class="material-symbols-outlined text-2xl">chevron_left</span>
-  </button>
-  <img id="lightbox-img" src="" alt="매물 확대 사진" class="max-w-full max-h-[85vh] rounded-xl object-contain shadow-2xl" />
-  <button onclick="stepLightbox(1)" class="absolute right-3 sm:right-6 w-11 h-11 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center cursor-pointer">
-    <span class="material-symbols-outlined text-2xl">chevron_right</span>
-  </button>
-  <div id="lightbox-caption" class="absolute bottom-5 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs sm:text-sm font-bold px-4 py-1.5 rounded-full border border-white/20"></div>
-</div>
-
-<!-- Customer Feedback / 1순위 픽 & 재임장 신청 Modal (Rec 5) -->
-<div id="feedback-modal" class="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-xs hidden items-center justify-center p-4 no-print" onclick="if(event.target===this) closeFeedbackModal()">
-  <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-slate-200">
-    <div class="bg-gradient-to-r from-[#0b1739] to-[#003891] text-white p-5 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-amber-300 text-2xl" id="fb-modal-icon">favorite</span>
-        <h3 class="font-black text-base sm:text-lg" id="fb-modal-title">1순위 조건 협의 요청</h3>
-      </div>
-      <button onclick="closeFeedbackModal()" class="text-white/80 hover:text-white cursor-pointer">
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
-    <div class="p-5 space-y-4">
-      <div class="bg-blue-50/80 border border-blue-200 rounded-2xl p-3.5 text-xs sm:text-sm">
-        <div class="font-black text-[#003891] mb-0.5" id="fb-modal-prop-label">선택 매물</div>
-        <div class="text-slate-700 font-bold" id="fb-modal-prop-title"></div>
-      </div>
-
-      <div>
-        <label class="block text-xs font-extrabold text-slate-700 mb-1.5">
-          💬 최이명 소장님께 전달할 추가 요청사항 (선택)
-        </label>
-        <textarea id="fb-customer-memo" rows="3" placeholder="예: 렌트프리 1개월 더 가능한지 궁금합니다 / 내일 오후 3시에 한 번 더 보고 싶습니다 / 보증금 조절 가능할까요?" class="w-full rounded-xl border-slate-300 text-xs sm:text-sm p-3 focus:ring-blue-600 focus:border-blue-600"></textarea>
-      </div>
-
-      <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 leading-relaxed">
-        ✨ 아래 버튼을 누르시면 <b>최이명 대표소장에게 실시간 알림이 접수</b>되며, 카카오톡 또는 전화로 즉시 연결됩니다.
-      </div>
-
-      <div class="flex flex-col gap-2 pt-1">
-        <button type="button" onclick="confirmCustomerFeedback('kakao')" class="w-full py-3.5 px-4 rounded-xl bg-[#fee500] hover:bg-[#fdd835] text-[#191600] font-black text-sm flex items-center justify-center gap-2 shadow-md cursor-pointer border border-[#d4be00]">
-          <span class="material-symbols-outlined text-[20px]">chat</span>
-          <span>요청 접수 + 카카오톡으로 내용 바로 보내기</span>
-        </button>
-        <button type="button" onclick="confirmCustomerFeedback('call')" class="w-full py-3 px-4 rounded-xl bg-[#003891] hover:bg-blue-800 text-white font-black text-sm flex items-center justify-center gap-2 shadow-md cursor-pointer">
-          <span class="material-symbols-outlined text-[19px] text-amber-300">call</span>
-          <span>요청 접수 + 소장님께 바로 전화걸기 (010-3548-4000)</span>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script src="db.js?v=20260715_v232"></script>
-<script>
-let _currentBriefing = null;
-let _attachedMemos = [];
-let _includeVat = true;
-let _briefingMap = null;
-let _mapMarkers = [];
-let _lightboxPhotos = [];
-let _lightboxIndex = 0;
-let _pendingFeedback = null;
-
-// Number circled symbols
-const CIRCLED_NUMS = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩','⑪','⑫','⑬','⑭','⑮'];
-function getCircledNum(idx) {
-  return CIRCLED_NUMS[idx] || `(${idx + 1})`;
-}
-
-// Format Man-won (만원) into Korean currency string (예: 10000 -> "1억", 49000 -> "4억 9,000만", 510 -> "510만")
-function formatManwon(val, zeroText = '-') {
-  const num = parseFloat(val);
-  if (isNaN(num) || num <= 0) return zeroText;
-  const eok = Math.floor(num / 10000);
-  const rem = Math.round((num % 10000) * 10) / 10;
-  if (eok > 0 && rem > 0) {
-    return `${eok}억 ${rem.toLocaleString()}만 원`;
-  } else if (eok > 0) {
-    return `${eok}억 원`;
-  } else {
-    return `${rem.toLocaleString()}만 원`;
-  }
-}
-
-// Blind Mode address masking (Rec 2: 상세 지번/호수 가림막)
-function maskTextBlind(str, isBlind) {
-  if (!str) return '';
-  if (!isBlind) return str;
-  return String(str)
-    .replace(/\d+(?:-\d+)?\s*번지/g, '(상세지번 문의🔒)')
-    .replace(/([가-힣]+[동읍면리])\s+\d+(?:-\d+)?/g, '$1 (상세지번 문의🔒)')
-    .replace(/\d+호/g, '(호수 문의🔒)');
-}
-
-function escapeHtml(s) {
-  if (!s) return '';
-  return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-async function initBriefingPage() {
-  const params = new URLSearchParams(window.location.search);
-  const id = (params.get('id') || 'sample_vip_01').trim();
-  const isAdminPreview = params.get('preview') === 'admin' || (typeof isAdmin === 'function' && isAdmin());
-
-  let data = null;
-
-  // 1. Check localStorage cache first if updated within last 15 min (instant preview for admin)
-  try {
-    const localRaw = localStorage.getItem('choi_briefings_cache');
-    if (localRaw) {
-      const localObj = JSON.parse(localRaw);
-      if (localObj && Array.isArray(localObj.briefings)) {
-        const found = localObj.briefings.find(b => String(b.id) === id);
-        if (found && localObj.updatedAt && (Date.now() - localObj.updatedAt < 900000)) {
-          const attachedIds = Array.isArray(found.attachedMemoIds) ? found.attachedMemoIds : [];
-          const attachedMemos = (localObj.memos || []).filter(m => attachedIds.includes(m.id));
-          data = { briefing: found, attachedMemos };
-        }
-      }
-    }
-  } catch (e) {}
-
-  // 2. Fetch real-time from serverless API /api/briefing
-  try {
-    const apiRes = await fetch(`/api/briefing?id=${encodeURIComponent(id)}&t=${Date.now()}`, { cache: 'no-store' });
-    if (apiRes.ok) {
-      const remote = await apiRes.json();
-      if (remote && remote.briefing) {
-        if (!data || (remote.briefing.updatedAt || 0) >= (data.briefing.updatedAt || 0)) {
-          data = remote;
-        }
-      }
-    }
-  } catch (e) {}
-
-  // 3. Fallback to data/briefings.json directly
-  if (!data) {
-    try {
-      const fileRes = await fetch(`data/briefings.json?t=${Date.now()}`);
-      if (fileRes.ok) {
-        const fileObj = await fileRes.json();
-        const found = (fileObj.briefings || []).find(b => String(b.id) === id);
-        if (found) {
-          const attachedIds = Array.isArray(found.attachedMemoIds) ? found.attachedMemoIds : [];
-          const attachedMemos = (fileObj.memos || []).filter(m => attachedIds.includes(m.id));
-          data = { briefing: found, attachedMemos };
-        }
-      }
-    } catch (e) {}
-  }
-
-  const mainContainer = document.getElementById('briefing-main-container');
-  if (!data || !data.briefing) {
-    mainContainer.innerHTML = `
-      <div class="bg-white rounded-3xl p-10 text-center shadow-sm border border-slate-200 my-8 max-w-lg mx-auto space-y-4">
-        <div class="w-16 h-16 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto">
-          <span class="material-symbols-outlined text-4xl">find_in_page</span>
-        </div>
-        <h2 class="text-xl font-black text-slate-900">요청하신 브리핑 리포트를 찾을 수 없습니다</h2>
-        <p class="text-sm text-slate-600 leading-relaxed">
-          링크 주소가 잘못되었거나 삭제된 브리핑입니다.<br/>최가네부동산 최이명 대표소장에게 문의해 주시면 즉시 새 브리핑 링크를 보내드립니다.
-        </p>
-        <div class="pt-2 flex flex-col sm:flex-row gap-2 justify-center">
-          <a href="tel:010-3548-4000" class="px-5 py-3 rounded-xl bg-[#003891] text-white font-black text-sm no-underline flex items-center justify-center gap-1.5">
-            <span class="material-symbols-outlined text-lg text-amber-300">call</span> 010-3548-4000 전화문의
-          </a>
-          <a href="index.html" class="px-5 py-3 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm no-underline flex items-center justify-center">
-            홈페이지 메인으로
-          </a>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  const b = data.briefing;
-
-  // Check expiration date (Rec 2: 링크 열람 만료일 잠금)
-  if (b.expiresAt && !isAdminPreview) {
-    const expTime = new Date(b.expiresAt + 'T23:59:59+09:00').getTime();
-    if (!isNaN(expTime) && Date.now() > expTime) {
-      mainContainer.innerHTML = `
-        <div class="bg-white rounded-3xl p-10 text-center shadow-sm border border-amber-200 my-8 max-w-lg mx-auto space-y-4">
-          <div class="w-16 h-16 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
-            <span class="material-symbols-outlined text-4xl">lock_clock</span>
-          </div>
-          <span class="inline-block bg-amber-100 text-amber-800 text-xs font-black px-3 py-1 rounded-full">열람 기간 만료 (${escapeHtml(b.expiresAt)})</span>
-          <h2 class="text-xl font-black text-slate-900">${escapeHtml(b.customerName || '고객')}님 전용 브리핑 열람 기간이 만료되었습니다</h2>
-          <p class="text-sm text-slate-600 leading-relaxed">
-            실시간 상가·사무실 거래 특성상 매물 보안을 위해 설정된 열람 유효기간이 지났습니다.<br/>
-            <b>최이명 대표소장(010-3548-4000)</b>에게 연락 주시면 현재 거래 가능한 최신 상태로 즉시 열람 기간을 연장해 드립니다!
-          </p>
-          <div class="pt-2 flex flex-col sm:flex-row gap-2 justify-center">
-            <a href="tel:010-3548-4000" class="px-5 py-3 rounded-xl bg-[#003891] text-white font-black text-sm no-underline flex items-center justify-center gap-1.5">
-              <span class="material-symbols-outlined text-lg text-amber-300">call</span> 소장님께 열람 연장 요청하기
+    <!-- Top Sticky Bar (No Print) -->
+    <header class="bg-slate-900 text-white sticky top-0 z-50 border-b border-slate-800 no-print">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+            <a href="index.html" class="flex items-center gap-2.5 group">
+                <div class="w-9 h-9 rounded-lg bg-[#003891] text-white font-black flex items-center justify-center text-base border border-white/15">최</div>
+                <div>
+                    <div class="font-extrabold text-sm sm:text-base tracking-tight flex items-center gap-1.5 text-white">
+                        <span>최가네부동산</span>
+                        <span class="text-[11px] font-bold bg-white/10 text-slate-200 px-2 py-0.5 rounded border border-white/15">맞춤 브리핑 보드</span>
+                    </div>
+                    <div class="text-[11px] text-slate-400">대구 상가·사무실·건물 매매·임대 전문 · 010-3548-4000</div>
+                </div>
             </a>
-            <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" class="px-5 py-3 rounded-xl bg-[#fee500] text-[#191600] font-black text-sm no-underline flex items-center justify-center gap-1.5">
-              <span class="material-symbols-outlined text-lg">chat</span> 카카오톡 문의하기
-            </a>
-          </div>
-        </div>
-      `;
-      return;
-    }
-  }
 
-  _currentBriefing = b;
-  _attachedMemos = data.attachedMemos || [];
-  _includeVat = b.includeVat !== false;
-
-  document.title = `[${b.customerName || 'VIP 고객'} 전용] ${b.title || '맞춤 매물 브리핑'} | 최가네부동산`;
-
-  renderBriefingContent();
-}
-
-function toggleVatOption(checked) {
-  _includeVat = checked;
-  renderBriefingContent();
-}
-
-function renderBriefingContent() {
-  const b = _currentBriefing;
-  if (!b) return;
-  const items = Array.isArray(b.items) ? b.items : [];
-  const isBlind = b.blindAddress === true;
-  const showYield = b.showYield !== false;
-
-  const mainContainer = document.getElementById('briefing-main-container');
-
-  // 1. Hero Header Card
-  const heroHtml = `
-    <section class="bg-gradient-to-br from-[#0b1739] via-[#0f2557] to-[#003891] text-white rounded-3xl p-5 sm:p-8 shadow-xl border border-blue-800/60 print-shadow-none print-break-avoid relative overflow-hidden">
-      <div class="relative z-10 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="bg-amber-400 text-slate-950 text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-xs flex items-center gap-1">
-              <span class="material-symbols-outlined text-[16px]">verified</span>
-              ${escapeHtml(b.customerName || 'VIP 고객님')} 전용 맞춤 브리핑
-            </span>
-            <span class="bg-white/15 text-blue-100 text-xs font-bold px-3 py-1 rounded-full border border-white/20">
-              추천 매물 총 ${items.length}건
-            </span>
-            ${isBlind ? `
-              <span class="bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-                <span class="material-symbols-outlined text-[14px]">shield_lock</span> 상세 지번 보호 모드 적용 중
-              </span>
-            ` : ''}
-          </div>
-          <div class="text-xs text-blue-200 font-medium">
-            작성·업데이트: ${escapeHtml(b.createdAt || new Date().toLocaleDateString('ko-KR'))}
-            ${b.expiresAt ? ` · 열람기한: ${escapeHtml(b.expiresAt)}까지` : ''}
-          </div>
-        </div>
-
-        <h1 class="text-xl sm:text-3xl font-black tracking-tight leading-snug text-white">
-          ${escapeHtml(b.title || '최가네부동산 맞춤형 매물 비교 브리핑 리포트')}
-        </h1>
-
-        ${b.generalNote ? `
-          <div class="bg-white/10 backdrop-blur-xs border border-white/20 rounded-2xl p-4 sm:p-5 text-xs sm:text-sm text-blue-50 leading-relaxed space-y-1.5">
-            <div class="font-black text-amber-300 flex items-center gap-1.5 text-sm">
-              <span class="material-symbols-outlined text-[18px]">campaign</span>
-              <span>최이명 대표소장의 종합 브리핑 요약</span>
+            <div class="flex items-center gap-2">
+                <button type="button" onclick="copyCurrentBriefingLink()" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center gap-1 border border-slate-700 transition cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">share</span>
+                    <span class="hidden sm:inline">링크 복사</span>
+                </button>
+                <button type="button" onclick="window.print()" class="px-3.5 py-2 rounded-lg bg-[#003891] hover:bg-blue-800 text-white text-xs sm:text-sm font-extrabold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
+                    <span class="material-symbols-outlined text-[18px]">print</span>
+                    <span>종이 만들기 (A4 인쇄/PDF)</span>
+                </button>
             </div>
-            <p class="whitespace-pre-line text-white/95 font-medium">${escapeHtml(b.generalNote)}</p>
-          </div>
-        ` : ''}
-
-        <!-- Broker Quick Contact Strip -->
-        <div class="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-white/15 text-xs">
-          <div class="flex items-center gap-2 text-blue-100">
-            <span class="font-extrabold text-white">담당: 최가네부동산 대표소장 최이명</span>
-            <span class="hidden sm:inline text-white/40">|</span>
-            <span>대구 수성구 수성동1가 72-3 (대구은행역 2번 출구)</span>
-          </div>
-          <div class="flex items-center gap-2 no-print">
-            <a href="tel:010-3548-4000" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black flex items-center gap-1 no-underline shadow-xs">
-              <span class="material-symbols-outlined text-[15px]">call</span> 010-3548-4000
-            </a>
-            <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" class="px-3 py-1.5 rounded-xl bg-[#fee500] hover:bg-[#fdd835] text-[#191600] font-black flex items-center gap-1 no-underline shadow-xs">
-              <span class="material-symbols-outlined text-[15px]">chat</span> 카톡 바로문의
-            </a>
-          </div>
         </div>
-      </div>
-    </section>
-  `;
+    </header>
 
-  // 2. Rec 1: Side-by-Side Automatic Financial Comparison Table (초기 필요자금 & 월 실제 고정비 비교표)
-  let comparisonHtml = '';
-  if (items.length > 0) {
-    const rowsHtml = items.map((item, idx) => {
-      const numBadge = getCircledNum(idx);
-      const isSale = item.tradeType === 'sale' || (Number(item.salePrice) > 0 && Number(item.rent) === 0);
-      const dep = Number(item.deposit) || 0;
-      const rent = Number(item.rent) || 0;
-      const maint = Number(item.managementFee) || 0;
-      const prem = Number(item.premium) || 0;
-      const saleP = Number(item.salePrice) || 0;
+    <!-- Loading Skeleton -->
+    <div id="briefing-loading" class="max-w-5xl mx-auto px-4 py-20 text-center">
+        <div class="inline-block w-10 h-10 border-4 border-[#003891] border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p class="text-slate-600 font-bold text-sm">고객님 전용 매물 브리핑 보드를 불러오고 있습니다...</p>
+    </div>
 
-      // Initial capital:
-      // For rent: deposit + premium
-      // For sale: salePrice - deposit (실투자금)
-      const initialCap = isSale ? Math.max(saleP - dep, 0) : (dep + prem);
-      const vatAmt = (_includeVat && rent > 0) ? Math.round(rent * 0.1 * 10) / 10 : 0;
-      const monthlyTotal = rent + vatAmt + maint;
-
-      // Yield calculation (Rec 6)
-      let yieldStr = '';
-      if (showYield && saleP > 0 && rent > 0 && (saleP - dep) > 0) {
-        const y = ((rent * 12) / (saleP - dep)) * 100;
-        yieldStr = `<span class="inline-block mt-0.5 bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] font-black px-2 py-0.5 rounded-full">📈 연 수익률 ${y.toFixed(1)}%</span>`;
-      }
-
-      const maskedAddr = maskTextBlind(item.address || '', isBlind);
-      const maskedTitle = maskTextBlind(item.title || '', isBlind);
-      const premDisplay = item.premiumText ? item.premiumText : (prem > 0 ? formatManwon(prem) : '무권리');
-
-      return `
-        <tr class="hover:bg-blue-50/50 transition border-b border-slate-200 last:border-b-0">
-          <td class="p-3 font-black text-slate-900 whitespace-nowrap">
-            <a href="#prop-card-${idx}" class="flex items-center gap-1.5 text-[#003891] hover:underline no-underline">
-              <span class="w-6 h-6 rounded-full bg-[#003891] text-white text-xs font-black flex items-center justify-center shrink-0">${idx + 1}</span>
-              <div>
-                <div class="text-xs sm:text-sm font-black">${escapeHtml(maskedAddr || maskedTitle)}</div>
-                <div class="text-[11px] text-slate-500 font-bold">매물번호: ${escapeHtml(item.propNo || '-')}</div>
-              </div>
-            </a>
-          </td>
-          <td class="p-3 text-xs sm:text-sm font-bold text-slate-700">
-            <div>${escapeHtml(item.floor || '-')}</div>
-            <div class="text-xs text-blue-700 font-extrabold">${escapeHtml(item.area || '-')}</div>
-          </td>
-          <td class="p-3 text-xs sm:text-sm">
-            ${isSale ? `
-              <div class="font-black text-purple-800">매매 ${formatManwon(saleP)}</div>
-              ${dep > 0 || rent > 0 ? `<div class="text-[11px] text-slate-600">기보증금 ${formatManwon(dep, '0원')} / 월세 ${formatManwon(rent, '0원')}</div>` : ''}
-              ${yieldStr}
-            ` : `
-              <div class="font-bold text-slate-800">보증금 <span class="font-black text-[#003891]">${formatManwon(dep, '0원')}</span></div>
-              <div class="font-bold text-slate-800">월세 <span class="font-black text-rose-600">${formatManwon(rent, '0원')}</span> <span class="text-[11px] text-slate-500">(관리비 ${maint > 0 ? formatManwon(maint) : '없음'})</span></div>
-            `}
-          </td>
-          <td class="p-3 text-center text-xs sm:text-sm font-extrabold ${prem === 0 && (!item.premiumText || item.premiumText.includes('무권리')) ? 'text-emerald-600' : 'text-amber-700'}">
-            ${isSale ? '<span class="text-xs text-slate-400">매매건</span>' : escapeHtml(premDisplay)}
-          </td>
-          <td class="p-3 text-right bg-blue-50/60">
-            <div class="text-xs sm:text-sm font-black text-[#003891]">
-              ${formatManwon(initialCap, '문의')}
-            </div>
-            <div class="text-[10px] text-slate-500 font-semibold">
-              ${isSale ? '(매매가 - 기보증금)' : `(보증금 + ${prem > 0 ? '권리금' : '무권리'})`}
-            </div>
-          </td>
-          <td class="p-3 text-right bg-emerald-50/60">
-            ${isSale && rent > 0 ? `
-              <div class="text-xs sm:text-sm font-black text-emerald-700">월 +${formatManwon(rent)}</div>
-              <div class="text-[10px] text-slate-500 font-semibold">(예상 월 임대수익)</div>
-            ` : `
-              <div class="text-xs sm:text-sm font-black text-rose-600">
-                월 ${formatManwon(monthlyTotal, '0원')}
-              </div>
-              <div class="text-[10px] text-slate-500 font-semibold">
-                (월세${_includeVat ? '+부가세10%' : ''}${maint > 0 ? '+관리비' : ''})
-              </div>
-            `}
-          </td>
-        </tr>
-      `;
-    }).join('');
-
-    comparisonHtml = `
-      <section class="bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 print-shadow-none print-break-avoid space-y-3">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100">
-          <div>
-            <h2 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[#003891]">analytics</span>
-              <span>한눈에 보는 초기 필요자금 & 월 실제 고정비 비교표</span>
-            </h2>
-            <p class="text-xs text-slate-500">매물명을 클릭하시면 아래 상세 사진 및 소장님 코멘트로 바로 이동합니다.</p>
-          </div>
-          <label class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-xl text-xs font-extrabold text-slate-800 cursor-pointer self-start sm:self-auto no-print select-none">
-            <input type="checkbox" ${_includeVat ? 'checked' : ''} onchange="toggleVatOption(this.checked)" class="w-4 h-4 rounded text-[#003891] focus:ring-[#003891]" />
-            <span>월세 부가세(VAT 10%) 포함 계산</span>
-          </label>
-        </div>
-
-        <div class="overflow-x-auto -mx-2 px-2">
-          <table class="w-full text-left border-collapse min-w-[640px]">
-            <thead>
-              <tr class="bg-slate-100 text-slate-700 text-xs font-extrabold border-y border-slate-200">
-                <th class="p-3">추천 순번 / 위치</th>
-                <th class="p-3">층수 / 면적</th>
-                <th class="p-3">기본 임대·매매 조건</th>
-                <th class="p-3 text-center">권리금(시설비)</th>
-                <th class="p-3 text-right bg-blue-100/60 text-[#003891]">💰 초기 필요자금 합계</th>
-                <th class="p-3 text-right bg-emerald-100/60 text-emerald-900">💳 월 실제 고정비 합계</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
-        </div>
-      </section>
-    `;
-  }
-
-  // 3. Rec 3: Mini Map Section (오늘 본 매물 ①·②·③ 한눈에 보는 미니 지도)
-  const validCoordsItems = items.filter(it => Array.isArray(it.coordinates) && it.coordinates.length === 2 && !isNaN(Number(it.coordinates[0])));
-  let mapSectionHtml = '';
-  if (validCoordsItems.length > 0) {
-    const mapBtns = items.map((it, idx) => {
-      if (!Array.isArray(it.coordinates) || it.coordinates.length < 2) return '';
-      return `
-        <button type="button" onclick="focusBriefingMarker(${idx})" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-[#003891] hover:text-white text-slate-800 text-xs font-extrabold transition cursor-pointer flex items-center gap-1">
-          <span>${getCircledNum(idx)}</span>
-          <span>${escapeHtml(maskTextBlind(it.address || it.propNo || '매물', isBlind))}</span>
-        </button>
-      `;
-    }).join('');
-
-    mapSectionHtml = `
-      <section id="briefing-map-section" class="bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 print-shadow-none space-y-3">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            <h2 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[#003891]">map</span>
-              <span>오늘 본 매물 ${items.map((_, i) => getCircledNum(i)).join('·')}번 위치 비교 미니 지도</span>
-            </h2>
-            <p class="text-xs text-slate-500">
-              ${isBlind ? '🔒 매물 보호를 위해 지번이 가려진 대략적 권역 위치로 표시됩니다.' : '마커를 클릭하시면 매물 요약 정보를 확인하실 수 있습니다.'}
+    <!-- Expired or Not Found View -->
+    <div id="briefing-error" class="hidden max-w-lg mx-auto px-4 py-20 text-center">
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 space-y-4">
+            <span class="material-symbols-outlined text-5xl text-slate-400">lock_clock</span>
+            <h1 id="error-title" class="text-xl font-black text-slate-900">브리핑 열람 기간이 만료되었거나 존재하지 않는 링크입니다.</h1>
+            <p id="error-desc" class="text-sm text-slate-600 leading-relaxed">
+                상가·사무실 매물 특성상 실시간 거래 및 보안을 위해 열람 기간이 설정되어 있습니다.<br/>
+                최가네부동산으로 연락 주시면 최신 매물 현황으로 즉시 재발송해 드리겠습니다.
             </p>
-          </div>
-          <div class="flex flex-wrap gap-1.5 no-print">
-            ${mapBtns}
-            <button type="button" onclick="fitAllBriefingMarkers()" class="px-3 py-1.5 rounded-xl bg-blue-50 text-[#003891] border border-blue-200 text-xs font-extrabold cursor-pointer">
-              전체 한눈에 보기
-            </button>
-          </div>
-        </div>
-        <div id="briefing-leaflet-map" class="w-full h-64 sm:h-80 rounded-2xl border border-slate-200 overflow-hidden z-10"></div>
-      </section>
-    `;
-  }
-
-  // 4. Detailed Property Briefing Cards (Core 1, Rec 4, Rec 5, Rec 6)
-  const cardsHtml = items.map((item, idx) => {
-    const numSym = getCircledNum(idx);
-    const isSale = item.tradeType === 'sale' || (Number(item.salePrice) > 0 && Number(item.rent) === 0);
-    const dep = Number(item.deposit) || 0;
-    const rent = Number(item.rent) || 0;
-    const maint = Number(item.managementFee) || 0;
-    const prem = Number(item.premium) || 0;
-    const saleP = Number(item.salePrice) || 0;
-
-    const initialCap = isSale ? Math.max(saleP - dep, 0) : (dep + prem);
-    const vatAmt = (_includeVat && rent > 0) ? Math.round(rent * 0.1 * 10) / 10 : 0;
-    const monthlyTotal = rent + vatAmt + maint;
-    const premDisplay = item.premiumText ? item.premiumText : (prem > 0 ? formatManwon(prem) : '무권리');
-
-    const maskedTitle = maskTextBlind(item.title || '추천 매물', isBlind);
-    const maskedAddr = maskTextBlind(item.address || '-', isBlind);
-
-    // Yield Badge (Rec 6)
-    let yieldBadgeHtml = '';
-    if (showYield && saleP > 0 && rent > 0 && (saleP - dep) > 0) {
-      const y = ((rent * 12) / (saleP - dep)) * 100;
-      yieldBadgeHtml = `
-        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-3.5 py-2 rounded-2xl flex flex-wrap items-center justify-between gap-2 shadow-sm">
-          <div class="flex items-center gap-1.5 font-black text-xs sm:text-sm">
-            <span class="material-symbols-outlined text-[18px]">trending_up</span>
-            <span>예상 연 임대수익률: 연 ${y.toFixed(2)}%</span>
-          </div>
-          <div class="text-[11px] text-emerald-100 font-bold">
-            실투자금 ${formatManwon(saleP - dep)} 기준 · 연 임대수익 ${formatManwon(rent * 12)}
-          </div>
-        </div>
-      `;
-    }
-
-    // Photos Gallery
-    const photos = (Array.isArray(item.photos) && item.photos.length > 0)
-      ? item.photos
-      : ['https://www.choi114.com/og-image.png'];
-    const mainPhoto = photos[0];
-
-    const thumbsHtml = photos.length > 1 ? `
-      <div class="grid grid-cols-4 sm:grid-cols-6 gap-2 mt-2 no-print">
-        ${photos.slice(0, 6).map((pUrl, pIdx) => `
-          <button type="button" onclick="switchCardMainPhoto(${idx}, ${pIdx}, '${escapeHtml(pUrl)}')" class="relative aspect-[4/3] rounded-xl overflow-hidden border-2 ${pIdx === 0 ? 'border-[#003891]' : 'border-transparent'} hover:border-blue-500 transition cursor-pointer group" id="thumb-${idx}-${pIdx}">
-            <img src="${escapeHtml(pUrl)}" alt="매물 사진 ${pIdx + 1}" class="w-full h-full object-cover" onerror="handlePostImgError(this, '${item.postId || idx}')" loading="lazy" />
-          </button>
-        `).join('')}
-      </div>
-    ` : '';
-
-    // Print-only secondary photo so A4 printout shows 2 photos side by side
-    const printSecondPhoto = photos.length > 1 ? `
-      <img src="${escapeHtml(photos[1])}" alt="매물 사진 2" class="hidden print-only w-full h-48 object-cover rounded-2xl border border-slate-200" onerror="this.style.display='none'" />
-    ` : '';
-
-    // Badges (Rec 4)
-    const badges = Array.isArray(item.badges) ? item.badges : [];
-    const badgesHtml = badges.length > 0 ? `
-      <div class="flex flex-wrap gap-1.5">
-        ${badges.map(bg => `
-          <span class="px-2.5 py-1 rounded-full bg-blue-50 text-[#003891] border border-blue-200 text-xs font-extrabold">
-            ${escapeHtml(bg)}
-          </span>
-        `).join('')}
-      </div>
-    ` : '';
-
-    return `
-      <article id="prop-card-${idx}" class="bg-white rounded-3xl overflow-hidden shadow-md border border-slate-200 print-shadow-none print-break-avoid">
-        <!-- Top Title Bar -->
-        <div class="bg-slate-900 text-white px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-2">
-          <div class="flex items-center gap-2.5">
-            <span class="px-3 py-1 rounded-full bg-amber-400 text-slate-950 font-black text-xs sm:text-sm shadow-xs">
-              ${numSym}번 추천 매물
-            </span>
-            <span class="px-2.5 py-0.5 rounded-lg bg-white/15 text-white font-bold text-xs border border-white/20">
-              매물번호: ${escapeHtml(item.propNo || '-')}
-            </span>
-            <span class="px-2.5 py-0.5 rounded-lg ${isSale ? 'bg-purple-500/30 text-purple-200 border-purple-400/40' : 'bg-blue-500/30 text-blue-200 border-blue-400/40'} font-bold text-xs border">
-              ${isSale ? '매매' : '임대(월세)'}
-            </span>
-          </div>
-          ${item.postId ? `
-            <a href="news-detail.html?id=${encodeURIComponent(item.postId)}" target="_blank" class="text-xs font-bold text-amber-300 hover:underline flex items-center gap-1 no-print">
-              <span>홈페이지 원문 상세 보기</span>
-              <span class="material-symbols-outlined text-[15px]">open_in_new</span>
-            </a>
-          ` : ''}
-        </div>
-
-        <div class="p-4 sm:p-6 space-y-5">
-          <!-- Property Title & Address -->
-          <div>
-            <h3 class="text-lg sm:text-2xl font-black text-slate-900 leading-snug">
-              ${escapeHtml(maskedTitle)}
-            </h3>
-            <div class="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-slate-600 font-bold">
-              <span class="flex items-center gap-1 text-slate-800">
-                <span class="material-symbols-outlined text-[17px] text-[#003891]">location_on</span>
-                소재지: ${escapeHtml(maskedAddr)}
-              </span>
-              <span class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-[17px] text-[#003891]">layers</span>
-                층수: ${escapeHtml(item.floor || '-')}
-              </span>
-              <span class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-[17px] text-[#003891]">square_foot</span>
-                면적: ${escapeHtml(item.area || '-')}
-              </span>
+            <div class="pt-3 flex flex-col sm:flex-row gap-2 justify-center">
+                <a href="tel:010-3548-4000" class="px-5 py-3 rounded-xl bg-[#003891] text-white font-bold text-sm flex items-center justify-center gap-1.5">
+                    <span class="material-symbols-outlined text-[18px]">call</span>
+                    010-3548-4000 전화 문의
+                </a>
+                <a href="index.html" class="px-5 py-3 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm flex items-center justify-center">
+                    최가네부동산 홈으로
+                </a>
             </div>
-          </div>
+        </div>
+    </div>
 
-          <!-- Rec 4: Commercial Key Spec Badges -->
-          ${badgesHtml}
+    <!-- Main Briefing Content -->
+    <main id="briefing-main" class="hidden max-w-5xl mx-auto px-3 sm:px-6 pt-5 space-y-6">
 
-          <!-- Rec 6: Yield Badge for Sale Properties -->
-          ${yieldBadgeHtml}
-
-          <!-- Photo Gallery + Key Financial Grid -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            <!-- Left: Photos (7 cols) -->
-            <div class="lg:col-span-7">
-              <div class="relative aspect-[16/10] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 cursor-pointer group" onclick="openLightbox(${idx}, 0)">
-                <img id="main-photo-${idx}" src="${escapeHtml(mainPhoto)}" alt="${escapeHtml(maskedTitle)}" class="w-full h-full object-cover group-hover:scale-102 transition duration-300" onerror="handlePostImgError(this, '${item.postId || idx}')" />
-                <div class="absolute bottom-3 right-3 bg-black/70 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 no-print">
-                  <span class="material-symbols-outlined text-[15px]">zoom_in</span>
-                  <span>사진 크게 보기 (${photos.length}장)</span>
+        <!-- 1. Executive Report Cover / Header Card -->
+        <section class="bg-slate-900 text-white rounded-2xl p-5 sm:p-7 shadow-sm relative overflow-hidden print-break-inside-avoid border border-slate-800">
+            <div class="relative z-10 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="bg-[#003891] text-white text-xs font-extrabold px-3 py-1 rounded-md border border-blue-400/30 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[15px]">verified</span>
+                            <span id="header-customer-badge">VIP 고객님 전용 맞춤 브리핑</span>
+                        </span>
+                        <span id="header-count-badge" class="bg-slate-800 text-slate-200 text-xs font-bold px-2.5 py-1 rounded-md border border-slate-700">
+                            추천 매물 0건
+                        </span>
+                    </div>
+                    <div class="text-xs text-slate-400 font-medium" id="header-date">작성일: -</div>
                 </div>
-              </div>
-              ${thumbsHtml}
-              ${printSecondPhoto}
+
+                <h1 id="header-title" class="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight leading-snug text-white">
+                    고객님 맞춤 추천 매물 비교 브리핑 리포트
+                </h1>
+
+                <!-- General Summary Comment -->
+                <div id="header-note-box" class="bg-slate-800/90 border border-slate-700 rounded-xl p-4 text-xs sm:text-sm text-slate-100 leading-relaxed space-y-1.5">
+                    <div class="font-bold text-blue-300 flex items-center gap-1.5 text-xs">
+                        <span class="material-symbols-outlined text-[16px]">campaign</span>
+                        <span>최가네부동산 종합 브리핑 요약</span>
+                    </div>
+                    <p id="header-note-text" class="whitespace-pre-line text-slate-100 font-normal leading-relaxed"></p>
+                </div>
+
+                <!-- Agent Contact Bar inside Header -->
+                <div class="pt-2 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-300">
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+                        <span class="font-bold text-white">담당: 최가네부동산 공인중개사사무소</span>
+                        <span>대구 수성구 수성동1가 72-3 (대구은행역 2번 출구)</span>
+                    </div>
+                    <div class="flex items-center gap-2 no-print">
+                        <a href="tel:010-3548-4000" class="px-3.5 py-2 rounded-lg bg-white text-slate-900 font-extrabold text-xs flex items-center gap-1 hover:bg-slate-100 transition">
+                            <span class="material-symbols-outlined text-[15px]">call</span> 010-3548-4000
+                        </a>
+                        <button type="button" onclick="openKakaoDirectly()" class="px-3.5 py-2 rounded-lg bg-[#003891] text-white font-extrabold text-xs flex items-center gap-1 hover:bg-blue-800 transition cursor-pointer border border-blue-400/30">
+                            <span class="material-symbols-outlined text-[15px]">chat</span> 카톡 바로문의
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Top Comparison Table -->
+        <section id="comparison-table-section" class="bg-white rounded-2xl p-4 sm:p-6 shadow-xs border border-slate-200 space-y-4 print-break-inside-avoid">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                <div>
+                    <h2 id="comparison-table-heading" class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[#003891]">table_chart</span>
+                        <span>한눈에 보는 추천 매물 비교표</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-0.5">매물명을 클릭하시면 아래 상세 사진 및 최가네부동산 브리핑 코멘트로 바로 이동합니다.</p>
+                </div>
+                <div id="vat-toggle-wrapper" class="flex items-center gap-2 no-print">
+                    <label class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 cursor-pointer">
+                        <input type="checkbox" id="toggle-vat-calc" class="rounded text-[#003891] focus:ring-[#003891] w-4 h-4" onchange="reRenderComparisonAndCards()" />
+                        <span>월세 부가세(VAT 10%) 포함 계산</span>
+                    </label>
+                </div>
             </div>
 
-            <!-- Right: Financial Breakdown & Agent Comment (5 cols) -->
-            <div class="lg:col-span-5 space-y-4">
-              <!-- Financial Spec Card -->
-              <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-3">
-                <div class="text-xs font-black text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2">
-                  📊 매물 가격 및 비용 상세 브리핑
-                </div>
+            <div class="overflow-x-auto -mx-2 px-2">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm min-w-[640px]">
+                    <thead id="comparison-thead">
+                    </thead>
+                    <tbody id="comparison-tbody" class="divide-y divide-slate-200">
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-                <div class="grid grid-cols-2 gap-2.5 text-xs sm:text-sm">
-                  ${isSale ? `
-                    <div class="bg-white p-3 rounded-xl border border-slate-200 col-span-2">
-                      <div class="text-xs text-slate-500 font-bold">매매가</div>
-                      <div class="text-lg font-black text-purple-800">${formatManwon(saleP)}</div>
-                    </div>
-                    <div class="bg-white p-3 rounded-xl border border-slate-200">
-                      <div class="text-xs text-slate-500 font-bold">기보증금 합계</div>
-                      <div class="text-sm font-black text-slate-800">${formatManwon(dep, '0원')}</div>
-                    </div>
-                    <div class="bg-white p-3 rounded-xl border border-slate-200">
-                      <div class="text-xs text-slate-500 font-bold">월 임대수익 합계</div>
-                      <div class="text-sm font-black text-emerald-700">${formatManwon(rent, '0원')}</div>
-                    </div>
-                  ` : `
-                    <div class="bg-white p-3 rounded-xl border border-slate-200">
-                      <div class="text-xs text-slate-500 font-bold">보증금</div>
-                      <div class="text-base font-black text-[#003891]">${formatManwon(dep, '0원')}</div>
-                    </div>
-                    <div class="bg-white p-3 rounded-xl border border-slate-200">
-                      <div class="text-xs text-slate-500 font-bold">월세 (VAT별도)</div>
-                      <div class="text-base font-black text-rose-600">${formatManwon(rent, '0원')}</div>
-                    </div>
-                    <div class="bg-white p-3 rounded-xl border border-slate-200">
-                      <div class="text-xs text-slate-500 font-bold">공용 관리비</div>
-                      <div class="text-sm font-black text-slate-800">${maint > 0 ? formatManwon(maint) : '없음/실비'}</div>
-                    </div>
-                    <div class="bg-white p-3 rounded-xl border border-slate-200">
-                      <div class="text-xs text-slate-500 font-bold">권리금 (시설비)</div>
-                      <div class="text-sm font-black ${prem === 0 ? 'text-emerald-600' : 'text-amber-700'}">${escapeHtml(premDisplay)}</div>
-                    </div>
-                  `}
+        <!-- 3. Mini Map Comparing Briefed Properties -->
+        <section id="map-section" class="bg-white rounded-2xl p-4 sm:p-6 shadow-xs border border-slate-200 space-y-3 no-print">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[#003891]">map</span>
+                        <span>오늘 본 매물 위치 비교 지도</span>
+                    </h2>
                 </div>
-
-                <!-- Highlighted Totals -->
-                <div class="pt-1 space-y-2">
-                  <div class="bg-blue-900 text-white p-3 rounded-xl flex items-center justify-between">
-                    <span class="text-xs font-bold text-blue-200">${isSale ? '💰 예상 실투자금' : '💰 초기 필요자금 합계'}</span>
-                    <span class="text-base font-black text-amber-300">${formatManwon(initialCap, '문의')}</span>
-                  </div>
-                  ${!isSale ? `
-                    <div class="bg-rose-50 border border-rose-200 text-rose-900 p-3 rounded-xl flex items-center justify-between">
-                      <span class="text-xs font-extrabold">💳 월 실제 고정비 (${_includeVat ? 'VAT 10%·관리비 포함' : '관리비 포함'})</span>
-                      <span class="text-base font-black text-rose-600">월 ${formatManwon(monthlyTotal, '0원')}</span>
-                    </div>
-                  ` : ''}
+                <div id="map-jump-buttons" class="flex flex-wrap gap-1.5">
                 </div>
-              </div>
+            </div>
+            <div id="briefing-map" class="w-full h-64 sm:h-80 rounded-xl border border-slate-200 z-10 overflow-hidden bg-slate-100"></div>
+        </section>
 
-              <!-- Core 1: 최이명 소장님의 현장 브리핑 노트 -->
-              ${item.agentComment ? `
-                <div class="bg-amber-50/90 border-2 border-amber-300 rounded-2xl p-4 space-y-1.5 shadow-xs">
-                  <div class="flex items-center gap-1.5 text-xs sm:text-sm font-black text-amber-950">
-                    <span class="material-symbols-outlined text-[19px] text-amber-600">sticky_note_2</span>
-                    <span>최이명 소장님의 현장 브리핑 코멘트</span>
-                  </div>
-                  <p class="text-xs sm:text-sm text-slate-800 font-semibold leading-relaxed whitespace-pre-line">${escapeHtml(item.agentComment)}</p>
-                </div>
-              ` : ''}
+        <!-- 4. Detailed Property Briefing Cards -->
+        <section class="space-y-5">
+            <div class="flex items-center justify-between px-1">
+                <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[#003891]">apartment</span>
+                    <span>매물별 상세 브리핑 및 최가네부동산 코멘트</span>
+                </h2>
+                <span class="text-xs text-slate-500 no-print">사진을 클릭하면 크게 볼 수 있습니다</span>
+            </div>
 
-              <!-- Rec 5: Customer Interactive Pick & Re-visit Request Buttons -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 no-print">
-                <button type="button" onclick="openFeedbackModal(${idx}, '1순위 조건 협의 요청')" class="py-3 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-sm transition cursor-pointer">
-                  <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">favorite</span>
-                  <span>1순위 조건 협의 요청</span>
+            <div id="briefing-cards-container" class="space-y-6">
+            </div>
+        </section>
+
+        <!-- 5. Attached Memo Warehouse Cards -->
+        <section id="memo-warehouse-section" class="hidden bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200 space-y-4 print-break-inside-avoid">
+            <div class="border-b border-slate-200 pb-3">
+                <span class="inline-block text-[11px] font-extrabold bg-slate-100 text-[#003891] px-2.5 py-0.5 rounded border border-slate-200 mb-1">최가네부동산 필수 체크 안내</span>
+                <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[#003891]">fact_check</span>
+                    <span>계약 전 꼭 확인하세요! (준비서류 · 필수특약 · 세무 안내)</span>
+                </h2>
+                <p class="text-xs text-slate-500 mt-0.5">안전하고 신속한 계약 진행을 위해 최가네부동산에서 함께 챙겨드리는 핵심 안내사항입니다.</p>
+            </div>
+
+            <div id="attached-memos-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            </div>
+        </section>
+
+        <!-- 6. Print-Only Footer Business Card -->
+        <footer class="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 print-break-inside-avoid">
+            <div class="space-y-1">
+                <div class="font-extrabold text-base sm:text-lg text-white">최가네부동산공인중개사사무소</div>
+                <div class="text-xs text-slate-300">대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구) | 등록번호: 27260-2024-00085</div>
+                <div class="text-xs text-slate-400">상가 · 사무실 · 상가건물 · 상가주택 임대 및 매매 전문 파트너</div>
+            </div>
+            <div class="text-left sm:text-right">
+                <div class="text-xs text-slate-300 font-bold">직통 상담 및 조건 조율 문의</div>
+                <div class="text-lg sm:text-xl font-black text-white">010-3548-4000</div>
+                <div class="text-[11px] text-slate-400">홈페이지: www.choi114.com</div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Bottom Sticky Bar for Mobile Customer Action (No Print) -->
+    <div id="mobile-bottom-cta" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2.5 z-40 no-print shadow-lg">
+        <div class="max-w-5xl mx-auto flex items-center justify-between gap-2">
+            <div class="hidden sm:block">
+                <div class="text-xs font-extrabold text-slate-900">마음에 드는 매물이 있으신가요?</div>
+                <div class="text-[11px] text-slate-500">[1순위 찜 / 재방문·조건협의 요청]을 누르시면 최가네부동산에 바로 전달됩니다.</div>
+            </div>
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+                <a href="tel:010-3548-4000" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-slate-900 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5">
+                    <span class="material-symbols-outlined text-[17px]">call</span>
+                    <span>전화 상담</span>
+                </a>
+                <button type="button" onclick="openPickModal('전체 매물 조건 협의 문의', '')" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-[#003891] hover:bg-blue-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+                    <span class="material-symbols-outlined text-[17px]">thumb_up</span>
+                    <span>1순위 매물 선택 / 조건협의 요청</span>
                 </button>
-                <button type="button" onclick="openFeedbackModal(${idx}, '현장 다시 보기(재임장) 신청')" class="py-3 px-3 rounded-xl bg-[#003891] hover:bg-blue-800 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-sm transition cursor-pointer">
-                  <span class="material-symbols-outlined text-[18px]">tour</span>
-                  <span>현장 다시 보기 신청</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Lightbox Modal -->
+    <div id="photo-lightbox" class="fixed inset-0 bg-black/90 z-[9999] hidden flex items-center justify-center p-4 no-print" onclick="closePhotoLightbox()">
+        <button type="button" class="absolute top-4 right-4 text-white bg-white/10 hover:bg-white/20 rounded-full p-2 cursor-pointer">
+            <span class="material-symbols-outlined text-2xl">close</span>
+        </button>
+        <img id="lightbox-img" src="" alt="매물 현장 사진" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl" />
+    </div>
+
+    <!-- Customer Pick / Feedback Modal -->
+    <div id="customer-pick-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-[9998] hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 border border-slate-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[#003891]">how_to_vote</span>
+                    <span>최가네부동산에 매물 의사 전달하기</span>
+                </h3>
+                <button type="button" onclick="closePickModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+                    <span class="material-symbols-outlined">close</span>
                 </button>
-              </div>
             </div>
-          </div>
-        </div>
-      </article>
-    `;
-  }).join('');
 
-  // 5. Core 4: Attached Memo Cards from 『메모창고』
-  let memosHtml = '';
-  if (_attachedMemos && _attachedMemos.length > 0) {
-    memosHtml = `
-      <section class="space-y-4 pt-2 print-break-avoid">
-        <div class="flex items-center justify-between">
-          <div>
-            <h2 class="text-base sm:text-xl font-black text-slate-900 flex items-center gap-2">
-              <span class="material-symbols-outlined text-[#003891]">inventory_2</span>
-              <span>계약 전 꼭 확인하세요! 고객님 맞춤 안내 카드 (메모창고)</span>
-            </h2>
-            <p class="text-xs text-slate-500">최가네부동산이 고객님의 원활한 계약 및 사업 준비를 위해 함께 첨부한 필수 체크리스트입니다.</p>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          ${_attachedMemos.map(m => `
-            <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200 print-shadow-none print-break-avoid flex flex-col justify-between gap-3">
-              <div class="space-y-2.5">
-                <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
-                  <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#003891] border border-blue-200 text-[11px] font-black">
-                    ${escapeHtml(m.category || '필수안내')}
-                  </span>
-                  <button type="button" onclick="copyMemoCardText('${escapeHtml(m.id)}')" class="text-xs font-bold text-slate-500 hover:text-[#003891] flex items-center gap-1 cursor-pointer no-print">
-                    <span class="material-symbols-outlined text-[15px]">content_copy</span> 내용 복사
-                  </button>
+            <div class="space-y-3 text-xs sm:text-sm">
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-[#003891]" id="pick-modal-target-label">
+                    선택 매물: -
                 </div>
-                <h3 class="text-sm sm:text-base font-black text-slate-900">${escapeHtml(m.title)}</h3>
-                <div class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line bg-slate-50 p-3.5 rounded-2xl border border-slate-100 font-medium">${escapeHtml(m.content)}</div>
-              </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">요청 구분</label>
+                    <select id="pick-modal-type" class="w-full rounded-xl border-slate-300 text-xs sm:text-sm font-bold focus:ring-[#003891] focus:border-[#003891]">
+                        <option value="1순위 마음에 듦 (조건 협의 희망)">1순위 마음에 듦 (임대료·렌트프리 조율 희망)</option>
+                        <option value="재방문(2차 현장투어) 희망">공동대표·가족과 재방문(2차 투어) 희망</option>
+                        <option value="가계약/계약 진행 절차 문의">가계약 / 본계약 진행 절차 문의</option>
+                        <option value="기타 추가 문의">기타 추가 문의</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">남기실 말씀 (희망 보증금/월세, 렌트프리, 입주시기 등)</label>
+                    <textarea id="pick-modal-memo" rows="3" placeholder="예: 1번 노변동 매물 월세 조금만 더 조정되면 바로 계약하고 싶습니다. / 내일 오후 3시에 한 번 더 보고 싶습니다." class="w-full rounded-xl border-slate-300 text-xs sm:text-sm focus:ring-[#003891] focus:border-[#003891]"></textarea>
+                </div>
             </div>
-          `).join('')}
+
+            <div class="flex items-center justify-end gap-2 pt-2">
+                <button type="button" onclick="closePickModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs cursor-pointer">취소</button>
+                <button type="button" id="pick-submit-btn" onclick="submitCustomerPick()" class="px-5 py-2.5 rounded-xl bg-[#003891] hover:bg-blue-800 text-white font-extrabold text-xs sm:text-sm flex items-center gap-1 cursor-pointer shadow-sm">
+                    <span class="material-symbols-outlined text-[16px]">send</span>
+                    <span>최가네부동산에 바로 전달하기</span>
+                </button>
+            </div>
         </div>
-      </section>
-    `;
-  }
+    </div>
 
-  // 6. Official Broker Footer Card
-  const footerHtml = `
-    <section class="bg-white rounded-3xl p-5 sm:p-7 shadow-sm border border-slate-200 print-shadow-none print-break-avoid mt-6">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div class="space-y-1">
-          <div class="text-xs font-extrabold text-[#003891]">대구 전 지역 · 경산 상가·사무실·건물 임대·매매 전문</div>
-          <h3 class="text-base sm:text-lg font-black text-slate-900">최가네부동산공인중개사사무소 | 대표소장 최이명</h3>
-          <p class="text-xs text-slate-600">
-            소재지: 대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구) · 중개등록번호: 제27260-2024-00085호
-          </p>
-        </div>
-        <div class="flex flex-wrap gap-2 no-print">
-          <a href="tel:010-3548-4000" class="px-4 py-2.5 rounded-xl bg-[#003891] text-white font-black text-xs sm:text-sm flex items-center gap-1.5 no-underline shadow-sm">
-            <span class="material-symbols-outlined text-[18px] text-amber-300">call</span> 전화 문의 (010-3548-4000)
-          </a>
-          <a href="card.html" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm flex items-center gap-1.5 no-underline">
-            <span class="material-symbols-outlined text-[18px]">badge</span> 소장 디지털 명함 보기
-          </a>
-        </div>
-      </div>
-    </section>
-  `;
+    <script src="db.js?v=20260715_v233"></script>
+    <script>
+        let _briefing = null;
+        let _attachedMemos = [];
+        let _mapInstance = null;
+        let _selectedPickPropNo = '';
+        let _selectedPickTitle = '';
 
-  mainContainer.innerHTML = heroHtml + comparisonHtml + mapSectionHtml + `<div class="space-y-6">${cardsHtml}</div>` + memosHtml + footerHtml;
+        function escHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
 
-  // Initialize Leaflet Map if valid coordinates exist
-  if (validCoordsItems.length > 0) {
-    setTimeout(() => initBriefingLeafletMap(items, isBlind), 80);
-  }
-}
+        // Silently mask detailed lot numbers (번지) and room numbers (호) when blindAddress is ON
+        function maskTextBlind(str, isBlind) {
+            if (!str) return '';
+            let s = String(str);
+            if (!isBlind) return s;
+            s = s.replace(/\s*\d+(?:-\d+)?\s*번지/g, '');
+            s = s.replace(/\s+\d{1,4}(?:-\d{1,4})\b/g, '');
+            s = s.replace(/\s*\d{2,4}\s*호/g, '');
+            s = s.replace(/\(상세지번[^)]*\)/g, '');
+            return s.replace(/\s+/g, ' ').trim();
+        }
 
-function initBriefingLeafletMap(items, isBlind) {
-  const mapEl = document.getElementById('briefing-leaflet-map');
-  if (!mapEl || typeof L === 'undefined') return;
+        function formatManwon(val) {
+            const n = parseFloat(val);
+            if (isNaN(n) || n <= 0) return '-';
+            const eok = Math.floor(n / 10000);
+            const rem = Math.round((n % 10000) * 10) / 10;
+            if (eok > 0 && rem > 0) return `${eok}억 ${rem.toLocaleString()}만 원`;
+            if (eok > 0) return `${eok}억 원`;
+            return `${rem.toLocaleString()}만 원`;
+        }
 
-  if (_briefingMap) {
-    try { _briefingMap.remove(); } catch (e) {}
-    _briefingMap = null;
-  }
+        function getFloorParts(item) {
+            let cur = String(item.currentFloor || '').trim();
+            let tot = String(item.totalFloor || '').trim();
+            if ((!cur || cur === '-') && item.floor) {
+                const rawF = String(item.floor).trim();
+                const m = rawF.match(/^(.*?)\s*(?:\(|\/)\s*총\s*([^)]+)\)?$/);
+                if (m) {
+                    cur = m[1].trim();
+                    tot = m[2].trim();
+                } else {
+                    cur = rawF;
+                }
+            }
+            return {
+                currentFloor: cur || '-',
+                totalFloor: tot || '-'
+            };
+        }
 
-  _briefingMap = L.map(mapEl, { scrollWheelZoom: false });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap',
-    maxZoom: 18
-  }).addTo(_briefingMap);
+        function cleanBadgeText(b) {
+            if (typeof window.normalizeBriefingBadgeLabel === 'function') {
+                return window.normalizeBriefingBadgeLabel(b);
+            }
+            return String(b || '').replace(/^[🚗🛗🚻🎁✨🔨⚡🛣️❄️🔥💧🏢☀️]\s*/u, '').trim();
+        }
 
-  _mapMarkers = [];
-  const bounds = [];
+        async function initCustomerBriefingPage() {
+            const params = new URLSearchParams(window.location.search);
+            const briefingId = params.get('id') || 'sample_vip_01';
+            const isPreview = params.get('preview') === 'admin';
 
-  items.forEach((item, idx) => {
-    if (!Array.isArray(item.coordinates) || item.coordinates.length < 2) return;
-    const lat = Number(item.coordinates[0]);
-    const lng = Number(item.coordinates[1]);
-    if (isNaN(lat) || isNaN(lng)) return;
+            try {
+                const store = await getBriefingData();
+                const found = (store.briefings || []).find(b => String(b.id) === String(briefingId));
 
-    const icon = L.divIcon({
-      className: '',
-      html: `<div class="num-marker">${idx + 1}</div>`,
-      iconSize: [34, 34],
-      iconAnchor: [17, 17]
-    });
+                if (!found) {
+                    showErrorState('존재하지 않는 브리핑 링크입니다.', '링크 주소가 정확한지 다시 확인해 주시거나 최가네부동산(010-3548-4000)으로 문의해 주세요.');
+                    return;
+                }
 
-    const maskedAddr = maskTextBlind(item.address || '', isBlind);
-    const maskedTitle = maskTextBlind(item.title || '', isBlind);
+                // Check Expiry Date unless admin preview
+                if (found.expiresAt && !isPreview) {
+                    const expEnd = new Date(found.expiresAt + 'T23:59:59').getTime();
+                    if (!isNaN(expEnd) && Date.now() > expEnd) {
+                        showErrorState(
+                            '브리핑 보드 열람 유효기간이 만료되었습니다.',
+                            `본 브리핑 리포트는 보안 및 실시간 거래 현황 반영을 위해 [${found.expiresAt}]까지 열람 가능하도록 설정되었습니다. 최가네부동산으로 연락 주시면 최신 매물 조건으로 즉시 연장해 드리겠습니다.`
+                        );
+                        return;
+                    }
+                }
 
-    const marker = L.marker([lat, lng], { icon }).addTo(_briefingMap);
-    marker.bindPopup(`
-      <div style="font-family:Pretendard,sans-serif; min-width:180px;">
-        <div style="font-weight:900; color:#003891; font-size:13px;">${getCircledNum(idx)}번 매물 [No.${escapeHtml(item.propNo || '-')}]</div>
-        <div style="font-weight:700; font-size:12px; margin-top:2px;">${escapeHtml(maskedTitle)}</div>
-        <div style="font-size:11px; color:#475569; margin-top:2px;">${escapeHtml(maskedAddr)} · ${escapeHtml(item.area || '')}</div>
-        <a href="#prop-card-${idx}" style="display:inline-block; margin-top:6px; font-size:11px; font-weight:800; color:#1d56b5;">👇 아래 상세 카드로 이동</a>
-      </div>
-    `);
+                _briefing = found;
+                const memoMap = new Map((store.memos || []).map(m => [String(m.id), m]));
+                _attachedMemos = (found.attachedMemoIds || []).map(id => memoMap.get(String(id))).filter(Boolean);
 
-    if (isBlind) {
-      L.circle([lat, lng], {
-        color: '#003891',
-        fillColor: '#1d56b5',
-        fillOpacity: 0.12,
-        radius: 140,
-        weight: 1.5
-      }).addTo(_briefingMap);
-    }
+                const vatCheckbox = document.getElementById('toggle-vat-calc');
+                if (vatCheckbox) {
+                    vatCheckbox.checked = found.includeVat !== false;
+                }
 
-    _mapMarkers[idx] = { marker, lat, lng };
-    bounds.push([lat, lng]);
-  });
+                renderHeaderSection();
+                reRenderComparisonAndCards();
+                renderMiniMap();
+                renderAttachedMemos();
 
-  if (bounds.length === 1) {
-    _briefingMap.setView(bounds[0], 15);
-  } else if (bounds.length > 1) {
-    _briefingMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 16 });
-  }
-}
+                document.getElementById('briefing-loading').classList.add('hidden');
+                document.getElementById('briefing-main').classList.remove('hidden');
 
-function focusBriefingMarker(idx) {
-  const mObj = _mapMarkers[idx];
-  if (!_briefingMap || !mObj) return;
-  _briefingMap.setView([mObj.lat, mObj.lng], 16, { animate: true });
-  mObj.marker.openPopup();
-}
+                if (_mapInstance) {
+                    setTimeout(() => {
+                        try { _mapInstance.invalidateSize(); } catch (e) {}
+                    }, 250);
+                }
+            } catch (e) {
+                console.error(e);
+                showErrorState('브리핑 데이터를 불러오는 중 오류가 발생했습니다.', '잠시 후 다시 시도해 주시거나 010-3548-4000으로 문의해 주세요.');
+            }
+        }
 
-function fitAllBriefingMarkers() {
-  if (!_briefingMap) return;
-  const pts = _mapMarkers.filter(Boolean).map(m => [m.lat, m.lng]);
-  if (pts.length === 1) _briefingMap.setView(pts[0], 15);
-  else if (pts.length > 1) _briefingMap.fitBounds(pts, { padding: [40, 40], maxZoom: 16 });
-}
+        function showErrorState(title, desc) {
+            document.getElementById('briefing-loading').classList.add('hidden');
+            document.getElementById('error-title').textContent = title;
+            document.getElementById('error-desc').textContent = desc;
+            document.getElementById('briefing-error').classList.remove('hidden');
+        }
 
-function switchCardMainPhoto(cardIdx, photoIdx, photoUrl) {
-  const mainImg = document.getElementById(`main-photo-${cardIdx}`);
-  if (mainImg) {
-    mainImg.src = photoUrl;
-    mainImg.parentElement.setAttribute('onclick', `openLightbox(${cardIdx}, ${photoIdx})`);
-  }
-  for (let i = 0; i < 8; i++) {
-    const th = document.getElementById(`thumb-${cardIdx}-${i}`);
-    if (th) {
-      if (i === photoIdx) {
-        th.classList.add('border-[#003891]');
-        th.classList.remove('border-transparent');
-      } else {
-        th.classList.remove('border-[#003891]');
-        th.classList.add('border-transparent');
-      }
-    }
-  }
-}
+        function renderHeaderSection() {
+            const b = _briefing;
+            document.title = `${b.customerName || '고객님'} 맞춤 매물 브리핑 | 최가네부동산`;
+            document.getElementById('header-customer-badge').textContent = `${b.customerName || 'VIP 고객님'} 전용 맞춤 브리핑`;
+            document.getElementById('header-count-badge').textContent = `추천 매물 총 ${(b.items || []).length}건`;
+            document.getElementById('header-date').textContent = `작성·업데이트: ${b.createdAt || '-'}`;
+            document.getElementById('header-title').textContent = b.title || `${b.customerName || '고객님'} 맞춤 매물 비교 브리핑`;
 
-function openLightbox(cardIdx, photoIdx) {
-  if (!_currentBriefing || !_currentBriefing.items || !_currentBriefing.items[cardIdx]) return;
-  const item = _currentBriefing.items[cardIdx];
-  _lightboxPhotos = (Array.isArray(item.photos) && item.photos.length > 0) ? item.photos : ['https://www.choi114.com/og-image.png'];
-  _lightboxIndex = photoIdx || 0;
-  updateLightboxView();
-  const modal = document.getElementById('lightbox-modal');
-  if (modal) {
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-  }
-}
+            const noteBox = document.getElementById('header-note-box');
+            const noteText = document.getElementById('header-note-text');
+            if (b.generalNote && b.generalNote.trim()) {
+                noteText.textContent = b.generalNote.trim().replace(/최이명\s*(대표)?소장(님)?/g, '최가네부동산');
+                noteBox.classList.remove('hidden');
+            } else {
+                noteBox.classList.add('hidden');
+            }
+        }
 
-function updateLightboxView() {
-  const img = document.getElementById('lightbox-img');
-  const cap = document.getElementById('lightbox-caption');
-  if (img && _lightboxPhotos[_lightboxIndex]) {
-    img.src = _lightboxPhotos[_lightboxIndex];
-  }
-  if (cap) {
-    cap.textContent = `${_lightboxIndex + 1} / ${_lightboxPhotos.length}`;
-  }
-}
+        function reRenderComparisonAndCards() {
+            const b = _briefing;
+            if (!b) return;
+            const isBlind = b.blindAddress !== false;
+            const showTable = b.showComparisonTable !== false;
+            const showMonthlyCost = b.showMonthlyCost !== false;
+            const vatEl = document.getElementById('toggle-vat-calc');
+            const includeVat = vatEl ? vatEl.checked : (b.includeVat !== false);
+            const showYield = b.showYield !== false;
+            const items = b.items || [];
 
-function stepLightbox(dir) {
-  if (!_lightboxPhotos.length) return;
-  _lightboxIndex = (_lightboxIndex + dir + _lightboxPhotos.length) % _lightboxPhotos.length;
-  updateLightboxView();
-}
+            // 1. Comparison Table Visibility & Rendering
+            const tableSection = document.getElementById('comparison-table-section');
+            const vatToggleWrapper = document.getElementById('vat-toggle-wrapper');
+            const tableHeading = document.getElementById('comparison-table-heading');
 
-function closeLightbox() {
-  const modal = document.getElementById('lightbox-modal');
-  if (modal) {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-  }
-}
+            if (!showTable || items.length === 0) {
+                if (tableSection) tableSection.classList.add('hidden');
+            } else {
+                if (tableSection) tableSection.classList.remove('hidden');
+                if (vatToggleWrapper) {
+                    vatToggleWrapper.classList.toggle('hidden', !showMonthlyCost);
+                }
+                if (tableHeading) {
+                    tableHeading.innerHTML = showMonthlyCost
+                        ? `<span class="material-symbols-outlined text-[#003891]">table_chart</span><span>한눈에 보는 초기 필요자금 &amp; 월 실제 고정비 비교표</span>`
+                        : `<span class="material-symbols-outlined text-[#003891]">table_chart</span><span>한눈에 보는 추천 매물 및 초기 필요자금 비교표</span>`;
+                }
 
-function copyBriefingLink() {
-  const url = window.location.href.split('&preview=')[0];
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(url);
-  }
-  if (typeof showToast === 'function') {
-    showToast('🔗 브리핑 보드 링크가 복사되었습니다!');
-  } else {
-    alert('브리핑 링크가 복사되었습니다: ' + url);
-  }
-}
+                const thead = document.getElementById('comparison-thead');
+                if (thead) {
+                    thead.innerHTML = `
+                        <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-extrabold text-xs">
+                            <th class="py-3 px-3 rounded-tl-xl">추천 순번 / 소재지</th>
+                            <th class="py-3 px-3">해당층 / 총층 / 면적</th>
+                            <th class="py-3 px-3">기본 임대·매매 조건</th>
+                            <th class="py-3 px-3">권리금(시설비)</th>
+                            <th class="py-3 px-3 bg-slate-100 text-[#003891] ${showMonthlyCost ? '' : 'rounded-tr-xl'}">초기 필요자금 합계</th>
+                            ${showMonthlyCost ? `<th class="py-3 px-3 bg-slate-100 text-slate-900 rounded-tr-xl">월 실제 고정비 합계</th>` : ''}
+                        </tr>
+                    `;
+                }
 
-function copyMemoCardText(memoId) {
-  const found = (_attachedMemos || []).find(m => String(m.id) === String(memoId));
-  if (!found) return;
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(found.content);
-  }
-  if (typeof showToast === 'function') {
-    showToast(`📋 [${found.title}] 안내문이 복사되었습니다!`);
-  }
-}
+                const tbody = document.getElementById('comparison-tbody');
+                if (tbody) {
+                    tbody.innerHTML = items.map((item, idx) => {
+                        const num = idx + 1;
+                        const addr = maskTextBlind(item.address, isBlind);
+                        const isSale = item.tradeType === 'sale' || (Number(item.salePrice) > 0 && Number(item.rent) === 0);
 
-// Rec 5: Customer Interactive Pick & Re-visit Request Modal
-function openFeedbackModal(cardIdx, pickType) {
-  if (!_currentBriefing || !_currentBriefing.items || !_currentBriefing.items[cardIdx]) return;
-  const item = _currentBriefing.items[cardIdx];
-  _pendingFeedback = {
-    cardIdx,
-    item,
-    pickType
-  };
-  document.getElementById('fb-modal-title').textContent = pickType;
-  document.getElementById('fb-modal-icon').textContent = pickType.includes('1순위') ? 'favorite' : 'tour';
-  document.getElementById('fb-modal-prop-label').textContent = `${getCircledNum(cardIdx)}번 추천 매물 [매물번호: ${item.propNo || '-'}]`;
-  document.getElementById('fb-modal-prop-title').textContent = maskTextBlind(item.title || '', _currentBriefing.blindAddress === true);
-  document.getElementById('fb-customer-memo').value = '';
+                        const dep = Number(item.deposit) || 0;
+                        const rent = Number(item.rent) || 0;
+                        const maint = Number(item.managementFee) || 0;
+                        const prem = Number(item.premium) || 0;
+                        const saleP = Number(item.salePrice) || 0;
+                        const floors = getFloorParts(item);
 
-  const modal = document.getElementById('feedback-modal');
-  modal.classList.remove('hidden');
-  modal.classList.add('flex');
-}
+                        // Initial Required Capital
+                        let initCapitalText = '-';
+                        let initSubText = '';
+                        if (isSale) {
+                            const netSale = Math.max(saleP - dep, 0);
+                            initCapitalText = formatManwon(netSale);
+                            initSubText = dep > 0 ? `(매매가 ${formatManwon(saleP)} - 보증금 ${formatManwon(dep)})` : `(매매가 기준)`;
+                        } else {
+                            const totalInit = dep + prem;
+                            initCapitalText = formatManwon(totalInit);
+                            initSubText = prem > 0 ? `(보증금 + 권리금)` : `(보증금 · 무권리)`;
+                        }
 
-function closeFeedbackModal() {
-  const modal = document.getElementById('feedback-modal');
-  if (modal) {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-  }
-}
+                        // Monthly Out-of-pocket Fixed Cost
+                        const vatAmount = includeVat ? Math.round(rent * 0.1 * 10) / 10 : 0;
+                        const totalMonthly = Math.round((rent + vatAmount + maint) * 10) / 10;
+                        let monthlyText = rent > 0 ? `월 ${formatManwon(totalMonthly)}` : '-';
+                        let monthlySub = '';
+                        if (rent > 0) {
+                            monthlySub = includeVat
+                                ? `(월세+부가세10%+공용관리비)`
+                                : `(월세+공용관리비 · 부가세별도)`;
+                        }
+                        if (isSale && rent > 0) {
+                            monthlyText = `월 임대수익 ${formatManwon(rent)}`;
+                            monthlySub = `(현재 임대 수익 기준)`;
+                        }
 
-async function confirmCustomerFeedback(channel) {
-  if (!_pendingFeedback || !_currentBriefing) return;
-  const { cardIdx, item, pickType } = _pendingFeedback;
-  const customerMemo = (document.getElementById('fb-customer-memo').value || '').trim();
-  const cName = _currentBriefing.customerName || '고객';
+                        const premDisplay = isSale
+                            ? '매매 건'
+                            : (prem > 0 ? formatManwon(prem) : (item.premiumText || '무권리'));
 
-  const msg = `[최가네부동산 맞춤 브리핑 상담 요청]\n• 고객명: ${cName}\n• 요청구분: ${pickType}\n• 선택매물: ${getCircledNum(cardIdx)}번 [매물번호: ${item.propNo || '-'}] ${item.title || ''}\n${customerMemo ? `• 추가요청: ${customerMemo}\n` : ''}\n위 매물에 대해 우선 상담 부탁드립니다!`;
+                        const basicCond = isSale
+                            ? `<div class="font-extrabold text-slate-900">매매가 ${formatManwon(saleP)}</div>
+                               <div class="text-xs text-slate-600">기보증금 ${formatManwon(dep)} / 월세 ${formatManwon(rent)}</div>`
+                            : `<div class="font-extrabold text-slate-900">보증금 ${formatManwon(dep)}</div>
+                               <div class="text-xs text-slate-700 font-bold">월세 ${formatManwon(rent)} <span class="text-slate-500 font-normal">(공용관리비 ${maint > 0 ? formatManwon(maint) : '별도/없음'})</span></div>`;
 
-  try {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(msg);
-    }
-  } catch (e) {}
+                        return `
+                            <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="scrollToCard('prop-card-${idx}')">
+                                <td class="py-3.5 px-3 align-middle">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="w-6 h-6 rounded-md bg-[#003891] text-white font-black text-xs flex items-center justify-center shrink-0">${num}</span>
+                                        <div>
+                                            <div class="font-extrabold text-slate-900 hover:text-[#003891] transition">${escHtml(addr)}</div>
+                                            <div class="text-[11px] text-slate-500">매물번호: ${escHtml(item.propNo || '-')}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3.5 px-3 align-middle">
+                                    <div class="font-bold text-slate-800">해당층: ${escHtml(floors.currentFloor)}</div>
+                                    <div class="text-xs text-slate-500">총층: ${escHtml(floors.totalFloor)} · ${escHtml(item.area || '-')}</div>
+                                </td>
+                                <td class="py-3.5 px-3 align-middle">${basicCond}</td>
+                                <td class="py-3.5 px-3 align-middle font-bold text-slate-800">${escHtml(premDisplay)}</td>
+                                <td class="py-3.5 px-3 align-middle bg-slate-50/70">
+                                    <div class="font-black text-[#003891] text-sm">${initCapitalText}</div>
+                                    <div class="text-[11px] text-slate-500">${initSubText}</div>
+                                </td>
+                                ${showMonthlyCost ? `
+                                <td class="py-3.5 px-3 align-middle bg-slate-50/70">
+                                    <div class="font-black text-slate-900 text-sm">${monthlyText}</div>
+                                    <div class="text-[11px] text-slate-500">${monthlySub}</div>
+                                </td>
+                                ` : ''}
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
 
-  // Send feedback to /api/briefing in background
-  fetch('/api/briefing', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      action: 'customer_feedback',
-      briefingId: _currentBriefing.id,
-      itemId: item.itemId || '',
-      propNo: item.propNo || '',
-      itemTitle: item.title || '',
-      pickType,
-      customerMemo
-    })
-  }).catch(() => {});
+            // 2. Render Property Detail Cards
+            const cardsContainer = document.getElementById('briefing-cards-container');
+            cardsContainer.innerHTML = items.map((item, idx) => {
+                const num = idx + 1;
+                const addr = maskTextBlind(item.address, isBlind);
+                const title = maskTextBlind(item.title, isBlind);
+                const isSale = item.tradeType === 'sale' || (Number(item.salePrice) > 0 && Number(item.rent) === 0);
 
-  closeFeedbackModal();
+                const dep = Number(item.deposit) || 0;
+                const rent = Number(item.rent) || 0;
+                const maint = Number(item.managementFee) || 0;
+                const prem = Number(item.premium) || 0;
+                const saleP = Number(item.salePrice) || 0;
+                const floors = getFloorParts(item);
 
-  if (channel === 'kakao') {
-    if (typeof showToast === 'function') {
-      showToast('📋 요청 내용이 복사되었습니다! 열리는 카톡창에 [붙여넣기] 해주세요.');
-    }
-    window.open('https://open.kakao.com/o/smt2j0Ri', '_blank');
-  } else {
-    window.location.href = 'tel:010-3548-4000';
-  }
-}
+                const totalInit = isSale ? Math.max(saleP - dep, 0) : (dep + prem);
+                const vatAmount = includeVat ? Math.round(rent * 0.1 * 10) / 10 : 0;
+                const totalMonthly = Math.round((rent + vatAmount + maint) * 10) / 10;
 
-document.addEventListener('DOMContentLoaded', initBriefingPage);
-</script>
+                // Annual Yield Calculation for Sale Properties
+                let yieldBadgeHtml = '';
+                if (isSale && showYield && saleP > 0 && rent > 0 && (saleP - dep) > 0) {
+                    const annualYield = (((rent * 12) / (saleP - dep)) * 100).toFixed(2);
+                    yieldBadgeHtml = `
+                        <div class="bg-slate-800 border border-slate-700 text-white px-3 py-1 rounded-md text-xs font-extrabold flex items-center gap-1">
+                            <span>예상 연 수익률 ${annualYield}%</span>
+                        </div>
+                    `;
+                }
+
+                // Photos Grid (supports unlimited photos cleanly)
+                const photos = (item.photos && item.photos.length > 0) ? item.photos : ['https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'];
+                const photosHtml = photos.map((url, pIdx) => `
+                    <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 cursor-pointer group" onclick="openPhotoLightbox('${escHtml(url)}')">
+                        <img src="${escHtml(url)}" alt="${escHtml(title)} 사진 ${pIdx + 1}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'" />
+                        <span class="absolute bottom-2 right-2 bg-black/65 text-white text-[10px] font-bold px-2 py-0.5 rounded no-print">사진 ${pIdx + 1}</span>
+                    </div>
+                `).join('');
+
+                // Clean Commercial Spec Badges
+                const badges = Array.isArray(item.badges) ? item.badges.map(cleanBadgeText).filter(Boolean) : [];
+                const badgesHtml = badges.length > 0 ? `
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        ${badges.map(bg => `<span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 border border-slate-200 text-xs font-bold">✓ ${escHtml(bg)}</span>`).join('')}
+                    </div>
+                ` : '';
+
+                // Agent Comment
+                const cleanComment = (item.agentComment || '').trim().replace(/최이명\s*(대표)?소장(님)?/g, '최가네부동산');
+                const commentHtml = cleanComment ? `
+                    <div class="bg-slate-50 border-l-4 border-[#003891] border-t border-r border-b border-slate-200 rounded-r-xl p-4 space-y-1.5">
+                        <div class="text-xs font-extrabold text-[#003891] flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">rate_review</span>
+                            <span>최가네부동산 현장 브리핑 코멘트</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed whitespace-pre-line">${escHtml(cleanComment)}</p>
+                    </div>
+                ` : '';
+
+                const gridColsClass = (showMonthlyCost && !isSale) ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-2 sm:grid-cols-4';
+
+                return `
+                    <article id="prop-card-${idx}" class="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden print-break-inside-avoid">
+                        <!-- Card Header Bar -->
+                        <div class="bg-slate-900 text-white px-5 py-4 flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <span class="bg-[#003891] text-white font-black text-xs sm:text-sm px-3 py-1 rounded-md border border-blue-400/30">${num}번 추천 매물</span>
+                                <span class="text-xs bg-slate-800 text-slate-200 px-2.5 py-1 rounded-md font-bold border border-slate-700">매물번호: ${escHtml(item.propNo || '-')}</span>
+                                <span class="text-xs text-slate-300 font-semibold">${isSale ? '매매' : '임대'}</span>
+                            </div>
+                            ${yieldBadgeHtml}
+                        </div>
+
+                        <div class="p-5 sm:p-6 space-y-5">
+                            <!-- Title & Location & Specs -->
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-bold text-[#003891]">
+                                    <span class="material-symbols-outlined text-[17px]">location_on</span>
+                                    <span>${escHtml(addr)}</span>
+                                    <span class="text-slate-300">|</span>
+                                    <span class="text-slate-700">해당층: ${escHtml(floors.currentFloor)}</span>
+                                    <span class="text-slate-300">·</span>
+                                    <span class="text-slate-600">총층: ${escHtml(floors.totalFloor)}</span>
+                                    <span class="text-slate-300">|</span>
+                                    <span class="text-slate-900 font-extrabold">${escHtml(item.area || '-')}</span>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">${escHtml(title)}</h3>
+                                ${badgesHtml}
+                            </div>
+
+                            <!-- Financial Summary Grid -->
+                            <div class="grid ${gridColsClass} gap-2.5">
+                                ${isSale ? `
+                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
+                                        <div class="text-[11px] text-slate-500 font-bold">매매가</div>
+                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">${formatManwon(saleP)}</div>
+                                    </div>
+                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
+                                        <div class="text-[11px] text-slate-500 font-bold">기보증금</div>
+                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">${formatManwon(dep)}</div>
+                                    </div>
+                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
+                                        <div class="text-[11px] text-slate-500 font-bold">월 임대수익</div>
+                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">${formatManwon(rent)}</div>
+                                    </div>
+                                    <div class="bg-slate-100 rounded-xl p-3 border border-slate-300">
+                                        <div class="text-[11px] text-[#003891] font-extrabold">실투자금 (매매-보증금)</div>
+                                        <div class="text-sm sm:text-base font-black text-[#003891] mt-0.5">${formatManwon(totalInit)}</div>
+                                    </div>
+                                ` : `
+                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
+                                        <div class="text-[11px] text-slate-500 font-bold">보증금</div>
+                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">${formatManwon(dep)}</div>
+                                    </div>
+                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
+                                        <div class="text-[11px] text-slate-500 font-bold">월세 (임대료)</div>
+                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">${formatManwon(rent)}</div>
+                                    </div>
+                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
+                                        <div class="text-[11px] text-slate-500 font-bold">공용관리비 / 권리금</div>
+                                        <div class="text-xs sm:text-sm font-extrabold text-slate-800 mt-0.5">
+                                            공용관리비 ${maint > 0 ? formatManwon(maint) : '없음/별도'}<br/>
+                                            <span class="text-slate-700">권리금: ${prem > 0 ? formatManwon(prem) : escHtml(item.premiumText || '무권리')}</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-slate-100 rounded-xl p-3 border border-slate-300">
+                                        <div class="text-[11px] text-[#003891] font-extrabold">초기 필요자금 합계</div>
+                                        <div class="text-sm sm:text-base font-black text-[#003891] mt-0.5">${formatManwon(totalInit)}</div>
+                                        <div class="text-[10px] text-slate-500">보증금 + 권리금</div>
+                                    </div>
+                                    ${showMonthlyCost ? `
+                                    <div class="bg-slate-100 rounded-xl p-3 border border-slate-300 col-span-2 sm:col-span-1">
+                                        <div class="text-[11px] text-slate-800 font-extrabold">월 실제 고정비 ${includeVat ? '(VAT포함)' : '(VAT별도)'}</div>
+                                        <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5">월 ${formatManwon(totalMonthly)}</div>
+                                        <div class="text-[10px] text-slate-500">월세${includeVat ? '+부가세10%' : ''}+공용관리비</div>
+                                    </div>
+                                    ` : ''}
+                                `}
+                            </div>
+
+                            <!-- Agent 1-Line / Field Comment -->
+                            ${commentHtml}
+
+                            <!-- Field Photos Grid -->
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                                ${photosHtml}
+                            </div>
+
+                            <!-- Customer Interactive Action Buttons (No Print) -->
+                            <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 no-print">
+                                <div class="text-xs text-slate-500">
+                                    이 매물이 마음에 드시거나 조건 조율이 필요하신가요?
+                                </div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    ${item.postId && !b.blindAddress ? `
+                                        <a href="news-detail.html?id=${encodeURIComponent(item.postId)}" target="_blank" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1 transition">
+                                            <span class="material-symbols-outlined text-[15px]">open_in_new</span> 홈페이지 원문 보기
+                                        </a>
+                                    ` : ''}
+                                    <button type="button" onclick="openPickModal('${escHtml(item.propNo || String(num))}', '${escHtml(title)}')" class="px-4 py-2 rounded-xl bg-[#003891] hover:bg-blue-800 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+                                        <span class="material-symbols-outlined text-[16px]">favorite</span>
+                                        <span>${num}번 매물 1순위 찜 / 재방문·협의 요청</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderMiniMap() {
+            const b = _briefing;
+            const mapSection = document.getElementById('map-section');
+            if (!b || b.showMap === false) {
+                if (mapSection) mapSection.classList.add('hidden');
+                return;
+            }
+            const items = b.items || [];
+            const validItems = items
+                .map((it, idx) => ({ item: it, idx }))
+                .filter(x => Array.isArray(x.item.coordinates) && x.item.coordinates.length === 2 && !isNaN(x.item.coordinates[0]) && !isNaN(x.item.coordinates[1]));
+
+            if (validItems.length === 0) {
+                if (mapSection) mapSection.classList.add('hidden');
+                return;
+            }
+
+            if (mapSection) mapSection.classList.remove('hidden');
+
+            if (_mapInstance) {
+                _mapInstance.remove();
+                _mapInstance = null;
+            }
+
+            const firstCoord = validItems[0].item.coordinates;
+            _mapInstance = L.map('briefing-map', {
+                center: [firstCoord[0], firstCoord[1]],
+                zoom: 14,
+                scrollWheelZoom: false
+            });
+
+            // OpenStreetMap Standard Tile Layer (No API key required, works everywhere)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(_mapInstance);
+
+            const bounds = [];
+            const jumpBtns = document.getElementById('map-jump-buttons');
+            jumpBtns.innerHTML = '';
+
+            // De-overlap coordinates when multiple properties are in the same or adjacent building
+            const placedCoords = [];
+
+            validItems.forEach(({ item, idx }) => {
+                let lat = Number(item.coordinates[0]);
+                let lng = Number(item.coordinates[1]);
+
+                // Check if another marker is within ~20 meters
+                let overlapCount = 0;
+                placedCoords.forEach(pc => {
+                    if (Math.abs(pc[0] - lat) < 0.0002 && Math.abs(pc[1] - lng) < 0.0002) {
+                        overlapCount++;
+                    }
+                });
+                placedCoords.push([lat, lng]);
+
+                if (overlapCount > 0) {
+                    const angle = (overlapCount * 2.1);
+                    lat += Math.cos(angle) * 0.00022 * overlapCount;
+                    lng += Math.sin(angle) * 0.00028 * overlapCount;
+                }
+
+                const num = idx + 1;
+                const addr = maskTextBlind(item.address, b.blindAddress !== false);
+
+                bounds.push([lat, lng]);
+
+                // Approximate zone circle
+                L.circle([lat, lng], {
+                    color: '#003891',
+                    fillColor: '#003891',
+                    fillOpacity: 0.10,
+                    weight: 1.5,
+                    radius: 110
+                }).addTo(_mapInstance);
+
+                // Numbered Pin Marker
+                const icon = L.divIcon({
+                    className: 'briefing-marker-pin',
+                    html: `<span>${num}</span>`,
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+
+                const marker = L.marker([lat, lng], { icon }).addTo(_mapInstance);
+                marker.bindPopup(`
+                    <div style="font-family:Pretendard,sans-serif; min-width:170px;">
+                        <div style="font-weight:800; color:#003891; font-size:12px;">${num}번 추천 매물 (번호: ${escHtml(item.propNo || '-')})</div>
+                        <div style="font-weight:700; font-size:13px; margin-top:2px; color:#0f172a;">${escHtml(addr)}</div>
+                        <div style="font-size:11px; color:#475569; margin-top:2px;">해당층: ${escHtml(getFloorParts(item).currentFloor)} · ${escHtml(item.area || '')}</div>
+                    </div>
+                `);
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-[#003891] hover:text-white text-slate-800 text-xs font-extrabold transition cursor-pointer border border-slate-200';
+                btn.textContent = `${num}번 ${addr}`;
+                btn.onclick = () => {
+                    _mapInstance.setView([lat, lng], 16, { animate: true });
+                    marker.openPopup();
+                };
+                jumpBtns.appendChild(btn);
+            });
+
+            if (bounds.length > 1) {
+                _mapInstance.fitBounds(bounds, { padding: [45, 45], maxZoom: 16 });
+                const allBtn = document.createElement('button');
+                allBtn.type = 'button';
+                allBtn.className = 'px-2.5 py-1 rounded-lg bg-[#003891] text-white text-xs font-extrabold transition cursor-pointer';
+                allBtn.textContent = '전체 한눈에 보기';
+                allBtn.onclick = () => _mapInstance.fitBounds(bounds, { padding: [45, 45], maxZoom: 16 });
+                jumpBtns.appendChild(allBtn);
+            }
+        }
+
+        function renderAttachedMemos() {
+            const section = document.getElementById('memo-warehouse-section');
+            const grid = document.getElementById('attached-memos-grid');
+            if (!_attachedMemos || _attachedMemos.length === 0) {
+                section.classList.add('hidden');
+                return;
+            }
+            section.classList.remove('hidden');
+
+            grid.innerHTML = _attachedMemos.map(m => {
+                const cleanContent = String(m.content || '').replace(/최이명\s*(대표)?소장(님)?/g, '최가네부동산');
+                return `
+                <div class="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200 flex flex-col justify-between gap-3 print-break-inside-avoid">
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="px-2.5 py-0.5 rounded bg-slate-200 text-slate-800 text-[11px] font-extrabold">
+                                ${escHtml(m.category || '필수 안내')}
+                            </span>
+                            <button type="button" onclick="copyMemoCardText('${escHtml(m.id)}')" class="text-xs font-bold text-[#003891] hover:underline flex items-center gap-0.5 cursor-pointer no-print">
+                                <span class="material-symbols-outlined text-[14px]">content_copy</span> 내용 복사
+                            </button>
+                        </div>
+                        <h3 class="font-extrabold text-sm sm:text-base text-slate-900">${escHtml(m.title)}</h3>
+                        <div class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line bg-white p-3.5 rounded-lg border border-slate-200">${escHtml(cleanContent)}</div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function copyMemoCardText(memoId) {
+            const found = _attachedMemos.find(m => String(m.id) === String(memoId));
+            if (!found) return;
+            const cleanContent = String(found.content || '').replace(/최이명\s*(대표)?소장(님)?/g, '최가네부동산');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(cleanContent);
+            }
+            if (typeof showToast === 'function') {
+                showToast('안내문 내용이 클립보드에 복사되었습니다.');
+            } else {
+                alert('안내문 내용이 복사되었습니다.');
+            }
+        }
+
+        function copyCurrentBriefingLink() {
+            const url = window.location.origin + window.location.pathname + '?id=' + encodeURIComponent(_briefing ? _briefing.id : 'sample_vip_01');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url);
+            }
+            if (typeof showToast === 'function') {
+                showToast('브리핑 보드 링크가 복사되었습니다. 카카오톡 등에 붙여넣기 하세요!');
+            } else {
+                alert('브리핑 링크가 복사되었습니다:\n' + url);
+            }
+        }
+
+        function scrollToCard(cardId) {
+            const el = document.getElementById(cardId);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function openPhotoLightbox(url) {
+            const modal = document.getElementById('photo-lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.src = url;
+            modal.classList.remove('hidden');
+        }
+
+        function closePhotoLightbox() {
+            document.getElementById('photo-lightbox').classList.add('hidden');
+        }
+
+        function openPickModal(propNo, title) {
+            _selectedPickPropNo = propNo;
+            _selectedPickTitle = title;
+            const label = document.getElementById('pick-modal-target-label');
+            if (title) {
+                label.textContent = `선택 매물: [매물번호 ${propNo}] ${title}`;
+            } else {
+                label.textContent = `선택 구분: ${propNo}`;
+            }
+            document.getElementById('pick-modal-memo').value = '';
+            document.getElementById('customer-pick-modal').classList.remove('hidden');
+        }
+
+        function closePickModal() {
+            document.getElementById('customer-pick-modal').classList.add('hidden');
+        }
+
+        async function submitCustomerPick() {
+            const btn = document.getElementById('pick-submit-btn');
+            const pickType = document.getElementById('pick-modal-type').value;
+            const customerMemo = document.getElementById('pick-modal-memo').value.trim();
+
+            btn.disabled = true;
+            btn.textContent = '전송 중...';
+
+            try {
+                await fetch('/api/briefing', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'customer_pick',
+                        briefingId: _briefing ? _briefing.id : 'sample_vip_01',
+                        propNo: _selectedPickPropNo,
+                        pickType,
+                        customerMemo
+                    })
+                });
+
+                await fetch('/api/submit-lead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: 'buyer',
+                        name: (_briefing ? _briefing.customerName : '브리핑고객') + ' (브리핑픽)',
+                        phone: (_briefing && _briefing.customerPhone) ? _briefing.customerPhone : '브리핑보드접수',
+                        propertyType: '상가/사무실 브리핑픽',
+                        area: `[매물:${_selectedPickPropNo}] ${_selectedPickTitle}`,
+                        price: pickType,
+                        memo: customerMemo || '브리핑 보드에서 1순위 찜/협의 요청을 남기셨습니다.'
+                    })
+                }).catch(() => {});
+
+                closePickModal();
+                alert('최가네부동산에 고객님의 매물 선택 및 요청사항이 정상 전달되었습니다!\n최우선으로 조건을 조율하여 빠르게 연락드리겠습니다.');
+            } catch (e) {
+                alert('전달 완료되었습니다. 급하신 용무는 010-3548-4000으로 전화 주시면 즉시 안내해 드리겠습니다.');
+                closePickModal();
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">send</span><span>최가네부동산에 바로 전달하기</span>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initCustomerBriefingPage);
+    </script>
 </body>
 </html>

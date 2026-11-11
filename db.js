@@ -1,8 +1,9 @@
-console.log("Antigravity db.js version: 20260715_v232");
+console.log("Antigravity db.js version: 20260715_v233");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v232";
+const APP_VERSION = "20260715_v233";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
+  localStorage.removeItem('choi_briefings_cache');
   localStorage.setItem('app_version', APP_VERSION);
 }
 let _config = null;
@@ -1859,7 +1860,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v232`;
+        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v233`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
@@ -2431,7 +2432,7 @@ function renderQuickBarFavorites() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     매물 사진 우측 상단의 하트(♥)를 누르면 관심 매물에 쏙 담아 한 번에 비교 상담받으실 수 있습니다!
                 </p>
-                <a href="property-news.html?v=20260715_v232" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v233" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -2500,7 +2501,7 @@ function renderQuickBarRecents() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     관심 있는 매물 상세페이지를 방문하시면 이곳에 자동으로 최근 본 목록이 기록됩니다!
                 </p>
-                <a href="property-news.html?v=20260715_v232" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="property-news.html?v=20260715_v233" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -2815,134 +2816,203 @@ function extractAllPostImages(post, maxCount = 8) {
 }
 window.extractAllPostImages = extractAllPostImages;
 
+function normalizeBriefingBadgeLabel(raw) {
+    if (!raw) return '';
+    let s = String(raw).replace(/^[🚗🛗🚻🎁✨🔨⚡🛣️❄️🔥💧🏢☀️]\s*/u, '').trim();
+    if (s === '즉시입주') s = '즉시입주 가능';
+    if (s === '대로변/역세권') s = '대로변/코너';
+    return s;
+}
+window.normalizeBriefingBadgeLabel = normalizeBriefingBadgeLabel;
+
 function parsePostToBriefingItem(post) {
     if (!post) return null;
-    const content = (post.content || '').normalize('NFC');
-    const title = (post.title || '').normalize('NFC');
-    const propNo = getPropertyDisplayNumber(post) || String(post.id || '').slice(-4);
+    try {
+        const content = String(post.content || '').normalize('NFC');
+        const title = String(post.title || '').normalize('NFC');
+        const propNo = (typeof getPropertyDisplayNumber === 'function' ? getPropertyDisplayNumber(post) : '') || String(post.id || '').slice(-4);
 
-    const getLineVal = (labelPattern) => {
-        const re = new RegExp(`(?:✅|•|-)?\\s*${labelPattern}\\s*[:：]\\s*([^\\n\\r]+)`, 'i');
-        const m = content.match(re);
-        return m ? m[1].trim() : '';
-    };
+        const getLineVal = (labelPattern) => {
+            try {
+                const re = new RegExp(`(?:✅|•|-)?\\s*(?:${labelPattern})\\s*[:：]\\s*([^\\n\\r]+)`, 'i');
+                const m = content.match(re);
+                return (m && m[1]) ? m[1].trim() : '';
+            } catch (e) {
+                return '';
+            }
+        };
 
-    const locLine = getLineVal('위치|소재지') || post.address || '';
-    const jeonyongLine = getLineVal('전용면적');
-    const gonggeupLine = getLineVal('공급면적');
-    const generalAreaLine = getLineVal('면적');
-    const daejiLine = getLineVal('대지면적');
-    const yeonLine = getLineVal('연면적');
+        const locLine = getLineVal('위치|소재지') || post.address || '';
+        const jeonyongLine = getLineVal('전용면적');
+        const gonggeupLine = getLineVal('공급면적');
+        const generalAreaLine = getLineVal('면적');
+        const daejiLine = getLineVal('대지면적');
+        const yeonLine = getLineVal('연면적');
 
-    let areaStr = '';
-    if (jeonyongLine) {
-        const py = jeonyongLine.match(/약?\s*\d+(?:\.\d+)?\s*평/);
-        areaStr = py ? `전용 ${py[0]}` : jeonyongLine.split('(')[0].trim();
-    } else if (daejiLine || yeonLine) {
-        const dPy = daejiLine.match(/약?\s*\d+(?:\.\d+)?\s*평/);
-        const yPy = yeonLine.match(/약?\s*\d+(?:\.\d+)?\s*평/);
-        areaStr = [dPy ? `대지 ${dPy[0]}` : '', yPy ? `연면적 ${yPy[0]}` : ''].filter(Boolean).join(' / ');
-    } else if (generalAreaLine) {
-        const py = generalAreaLine.match(/약?\s*\d+(?:\.\d+)?\s*평/);
-        areaStr = py ? py[0] : generalAreaLine.split('(')[0].trim();
-    } else if (gonggeupLine) {
-        areaStr = gonggeupLine.split('(')[0].trim();
-    }
+        let areaStr = '';
+        if (jeonyongLine) {
+            const py = jeonyongLine.match(/약?\s*\d+(?:\.\d+)?\s*평/);
+            areaStr = py ? `전용 ${py[0]}` : jeonyongLine.split('(')[0].trim();
+        } else if (daejiLine || yeonLine) {
+            const dPy = daejiLine ? daejiLine.match(/약?\s*\d+(?:\.\d+)?\s*평/) : null;
+            const yPy = yeonLine ? yeonLine.match(/약?\s*\d+(?:\.\d+)?\s*평/) : null;
+            areaStr = [dPy ? `대지 ${dPy[0]}` : '', yPy ? `연면적 ${yPy[0]}` : ''].filter(Boolean).join(' / ');
+        } else if (generalAreaLine) {
+            const py = generalAreaLine.match(/약?\s*\d+(?:\.\d+)?\s*평/);
+            areaStr = py ? py[0] : generalAreaLine.split('(')[0].trim();
+        } else if (gonggeupLine) {
+            areaStr = gonggeupLine.split('(')[0].trim();
+        }
 
-    const curFloor = getLineVal('해당\\s*층수');
-    const totFloor = getLineVal('총\\s*층수');
-    let floorStr = curFloor || totFloor || '';
-    if (curFloor && totFloor && curFloor !== totFloor) {
-        floorStr = `${curFloor} (총 ${totFloor})`;
-    }
+        const curFloor = getLineVal('해당\\s*층수|해당층');
+        const totFloor = getLineVal('총\\s*층수|총층');
+        let floorStr = curFloor || totFloor || '';
+        if (curFloor && totFloor && curFloor !== totFloor) {
+            floorStr = `${curFloor} / 총 ${totFloor}`;
+        }
 
-    const depLine = getLineVal('보증금');
-    const rentLine = getLineVal('월세|임대료');
-    const maintLine = getLineVal('공용관리비|관리비');
-    const premLine = getLineVal('권리금(?:\\(시설비\\))?');
-    const saleLine = getLineVal('매매가|매매금액');
-    const tradeLine = getLineVal('거래형태');
+        const depLine = getLineVal('보증금');
+        const rentLine = getLineVal('월세|임대료');
+        const maintLine = getLineVal('공용관리비|관리비');
+        const premLine = getLineVal('권리금(?:\\(시설비\\))?');
+        const saleLine = getLineVal('매매가|매매금액');
+        const tradeLine = getLineVal('거래형태');
 
-    const isSale = (tradeLine && tradeLine.includes('매매')) || title.includes('매매') || Boolean(saleLine);
-    const deposit = parseKoreanMoneyToManwon(depLine);
-    const rent = parseKoreanMoneyToManwon(rentLine);
-    const managementFee = parseKoreanMoneyToManwon(maintLine);
-    const premium = parseKoreanMoneyToManwon(premLine);
-    const salePrice = parseKoreanMoneyToManwon(saleLine);
+        const isSale = (tradeLine && tradeLine.includes('매매')) || title.includes('매매') || Boolean(saleLine);
+        const deposit = parseKoreanMoneyToManwon(depLine);
+        const rent = parseKoreanMoneyToManwon(rentLine);
+        const managementFee = parseKoreanMoneyToManwon(maintLine);
+        const premium = parseKoreanMoneyToManwon(premLine);
+        const salePrice = parseKoreanMoneyToManwon(saleLine);
 
-    let premiumText = '무권리';
-    if (premLine) {
-        if (premLine.includes('무권리') || premLine.includes('없음')) premiumText = '무권리';
-        else if (premium > 0) premiumText = '';
-        else premiumText = premLine;
-    }
+        let premiumText = '무권리';
+        if (premLine) {
+            if (premLine.includes('무권리') || premLine.includes('없음')) premiumText = '무권리';
+            else if (premium > 0) premiumText = '';
+            else premiumText = premLine;
+        }
 
-    // Auto-detect commercial badges (Rec 4)
-    const badges = [];
-    const fullText = title + '\n' + content;
-    if (fullText.includes('주차편리') || fullText.includes('주차 매우') || fullText.includes('고정주차') || /[5-9]\d대|[1-9]\d\d대/.test(getLineVal('주차'))) {
-        badges.push('🚗 주차 편함');
-    }
-    const elevLine = getLineVal('엘리베이터');
-    if (elevLine && !elevLine.toLowerCase().includes('x') && !elevLine.includes('없음')) {
-        badges.push('🛗 엘리베이터 유');
-    }
-    if (fullText.includes('내부화장실')) {
-        badges.push('🚻 내부화장실');
-    }
-    if (fullText.includes('렌트프리')) {
-        badges.push('🎁 렌트프리 협의');
-    }
-    if (fullText.includes('무권리') || premium === 0) {
-        if (!isSale) badges.push('✨ 무권리');
-    }
-    if (fullText.includes('인테리어') || fullText.includes('시설완비') || fullText.includes('천장형')) {
-        badges.push('🔨 인테리어 완비');
-    }
-    if (fullText.includes('즉시 입주') || fullText.includes('즉시입주')) {
-        badges.push('⚡ 즉시입주');
-    }
-    if (fullText.includes('대로변') || fullText.includes('초역세권') || fullText.includes('코너')) {
-        badges.push('🛣️ 대로변/역세권');
-    }
+        // Auto-detect commercial badges (expanded 18 items)
+        const badges = [];
+        const fullText = title + '\n' + content;
+        const parkLine = getLineVal('주차');
+        if (fullText.includes('주차편리') || fullText.includes('주차 매우') || fullText.includes('고정주차') || /[5-9]\d대|[1-9]\d\d대/.test(parkLine)) {
+            badges.push('주차 편함');
+        }
+        const elevLine = getLineVal('엘리베이터');
+        if ((elevLine && !elevLine.toLowerCase().includes('x') && !elevLine.includes('없음')) || fullText.includes('엘리베이터 완비') || fullText.includes('승강기 유')) {
+            badges.push('엘리베이터 유');
+        }
+        const bathLine = getLineVal('화장실');
+        if (fullText.includes('내부화장실') || (bathLine && bathLine.includes('내부'))) {
+            badges.push('내부화장실');
+        } else if (fullText.includes('외부화장실') || (bathLine && (bathLine.includes('외부') || bathLine.includes('복도')))) {
+            badges.push('외부화장실');
+        }
+        if (fullText.includes('냉난방') || fullText.includes('에어컨') || fullText.includes('천장형')) {
+            badges.push('냉난방기 있음');
+        }
+        if (fullText.includes('무권리') || premium === 0) {
+            if (!isSale) badges.push('무권리');
+        }
+        if (fullText.includes('렌트프리')) {
+            badges.push('렌트프리 협의');
+        }
+        if (fullText.includes('인테리어') || fullText.includes('시설완비')) {
+            badges.push('인테리어 완비');
+        }
+        if (fullText.includes('룸') || fullText.includes('칸막이') || fullText.includes('강의실') || fullText.includes('원장실')) {
+            badges.push('룸/칸막이 완비');
+        }
+        if (fullText.includes('탕비실') || fullText.includes('싱크대')) {
+            badges.push('탕비실/싱크대');
+        }
+        if (fullText.includes('즉시 입주') || fullText.includes('즉시입주') || fullText.includes('공실')) {
+            badges.push('즉시입주 가능');
+        }
+        if (fullText.includes('대로변') || fullText.includes('코너')) {
+            badges.push('대로변/코너');
+        }
+        if (fullText.includes('역세권') || fullText.includes('출구')) {
+            badges.push('역세권');
+        }
+        if (curFloor.includes('1층') || title.includes('1층')) {
+            badges.push('1층 상가');
+        }
+        if (fullText.includes('층고') || fullText.includes('노출천장')) {
+            badges.push('높은 층고/노출천장');
+        }
+        if (fullText.includes('테라스') || fullText.includes('베란다')) {
+            badges.push('테라스/베란다');
+        }
+        if (fullText.includes('무상철거') || fullText.includes('원상복구')) {
+            badges.push('무상철거/원상복구 협의');
+        }
 
-    // Extract clean summary comment from ⭐매물특징⭐
-    let autoComment = '';
-    const featMatch = content.match(/⭐매물특징⭐([\s\S]*?)(?:📢|🏢|💼|$)/);
-    if (featMatch && featMatch[1]) {
-        const lines = featMatch[1]
-            .split('\n')
-            .map(l => l.replace(/🔎/g, '•').trim())
-            .filter(l => l && !l.includes('편하게 연락주시면'));
-        autoComment = lines.slice(0, 3).join('\n');
+        // Extract clean summary comment from ⭐매물특징⭐
+        let autoComment = '';
+        const featMatch = content.match(/⭐매물특징⭐([\s\S]*?)(?:📢|🏢|💼|$)/);
+        if (featMatch && featMatch[1]) {
+            const lines = featMatch[1]
+                .split('\n')
+                .map(l => l.replace(/🔎/g, '•').trim())
+                .filter(l => l && !l.includes('편하게 연락주시면'));
+            autoComment = lines.slice(0, 3).join('\n');
+        }
+
+        const cleanTitle = title
+            .replace(/매물번호\s*[:：]?\s*\d+/gi, '')
+            .replace(/대구(상가|사무실|건물|상가주택)(임대|매매)/g, '')
+            .replace(/\s+/g, ' ')
+            .trim() || title;
+
+        return {
+            itemId: 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+            postId: String(post.id || ''),
+            propNo: String(propNo || ''),
+            tradeType: isSale ? 'sale' : 'rent',
+            title: cleanTitle,
+            address: locLine || post.address || '대구광역시',
+            currentFloor: curFloor || '-',
+            totalFloor: totFloor || '-',
+            floor: floorStr || '-',
+            area: areaStr || '-',
+            deposit,
+            rent,
+            managementFee,
+            premium,
+            premiumText,
+            salePrice,
+            badges,
+            agentComment: autoComment,
+            photos: extractAllPostImages(post, 15),
+            coordinates: Array.isArray(post.coordinates) ? post.coordinates : []
+        };
+    } catch (err) {
+        console.error('parsePostToBriefingItem fallback:', err);
+        return {
+            itemId: 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+            postId: String(post.id || ''),
+            propNo: String(post.id || '').slice(-4),
+            tradeType: (post.title || '').includes('매매') ? 'sale' : 'rent',
+            title: String(post.title || '추천 매물'),
+            address: String(post.address || '대구광역시'),
+            currentFloor: '-',
+            totalFloor: '-',
+            floor: '-',
+            area: '-',
+            deposit: 0,
+            rent: 0,
+            managementFee: 0,
+            premium: 0,
+            premiumText: '무권리',
+            salePrice: 0,
+            badges: [],
+            agentComment: '',
+            photos: extractAllPostImages(post, 15),
+            coordinates: Array.isArray(post.coordinates) ? post.coordinates : []
+        };
     }
-
-    const cleanTitle = title
-        .replace(/매물번호\s*[:：]?\s*\d+/gi, '')
-        .replace(/대구(상가|사무실|건물|상가주택)(임대|매매)/g, '')
-        .replace(/\s+/g, ' ')
-        .trim() || title;
-
-    return {
-        itemId: 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-        postId: String(post.id || ''),
-        propNo: String(propNo || ''),
-        tradeType: isSale ? 'sale' : 'rent',
-        title: cleanTitle,
-        address: locLine || post.address || '대구광역시',
-        floor: floorStr || '-',
-        area: areaStr || '-',
-        deposit,
-        rent,
-        managementFee,
-        premium,
-        premiumText,
-        salePrice,
-        badges,
-        agentComment: autoComment,
-        photos: extractAllPostImages(post, 6),
-        coordinates: Array.isArray(post.coordinates) ? post.coordinates : []
-    };
 }
 window.parsePostToBriefingItem = parsePostToBriefingItem;
 
