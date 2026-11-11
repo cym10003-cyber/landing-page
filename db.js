@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v235");
+console.log("Antigravity db.js version: 20260715_v236");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v235";
+const APP_VERSION = "20260715_v236";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.removeItem('choi_briefings_cache');
@@ -1021,10 +1021,14 @@ window.uploadDocFile = uploadDocFile;
 const OFFICIAL_DOC_CATEGORIES = [
   '건축물대장',
   '토지대장',
+  '토지이용계획확인원',
   '지적도등본',
-  '도면',
   '등기부등본(건물)',
-  '등기부등본(토지)'
+  '등기부등본(토지)',
+  '도면',
+  '임대차현황표(렌트롤)',
+  '실거래가·상권분석',
+  '인허가·시설확인서'
 ];
 window.OFFICIAL_DOC_CATEGORIES = OFFICIAL_DOC_CATEGORIES;
 

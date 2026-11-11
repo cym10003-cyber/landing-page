@@ -303,44 +303,52 @@
         </div>
     </div>
 
-    <!-- Photo Gallery Lightbox Modal (PC Left/Right Arrows + Keyboard + Mobile/Tablet Touch Swipe) -->
-    <div id="photo-lightbox" class="fixed inset-0 bg-slate-950/90 backdrop-blur-xs z-[9999] hidden flex flex-col justify-between p-3 sm:p-6 no-print select-none" onclick="handleLightboxBackdropClick(event)">
+    <!-- Photo & Official Document Gallery Lightbox Modal (PC Left/Right Arrows + Zoom + Mobile Touch Swipe) -->
+    <div id="photo-lightbox" class="fixed inset-0 bg-slate-950/92 backdrop-blur-xs z-[9999] hidden flex flex-col justify-between p-2 sm:p-5 no-print select-none" onclick="handleLightboxBackdropClick(event)">
         <!-- Top Bar -->
-        <div class="max-w-5xl w-full mx-auto flex items-center justify-between gap-3 text-white z-20" onclick="event.stopPropagation()">
+        <div class="max-w-6xl w-full mx-auto flex flex-wrap items-center justify-between gap-2 text-white z-20 px-1" onclick="event.stopPropagation()">
             <div class="flex items-center gap-2 min-w-0">
                 <span id="lightbox-counter" class="bg-[#003891] text-white text-xs sm:text-sm font-extrabold px-3 py-1 rounded-lg border border-blue-400/30 shrink-0">1 / 1</span>
-                <span id="lightbox-caption" class="text-xs sm:text-sm font-bold text-slate-200 truncate">매물 현장 사진</span>
+                <span id="lightbox-caption" class="text-xs sm:text-sm font-bold text-slate-100 truncate">매물 현장 사진</span>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+                <!-- Zoom Controls -->
+                <div class="inline-flex items-center bg-white/10 rounded-lg p-0.5 border border-white/20 text-xs font-extrabold">
+                    <button type="button" onclick="setLightboxZoom(1)" id="zoom-btn-100" class="px-2.5 py-1 rounded-md bg-white text-slate-900 cursor-pointer transition">기본크기</button>
+                    <button type="button" onclick="setLightboxZoom(1.5)" id="zoom-btn-150" class="px-2.5 py-1 rounded-md text-white hover:bg-white/20 cursor-pointer transition">150% 확대</button>
+                    <button type="button" onclick="setLightboxZoom(2.1)" id="zoom-btn-210" class="px-2.5 py-1 rounded-md text-white hover:bg-white/20 cursor-pointer transition">200% 초근접</button>
+                </div>
                 <button type="button" id="lightbox-download-btn" onclick="triggerLightboxDocDownload()" class="hidden px-3 py-1.5 rounded-lg bg-[#003891] hover:bg-blue-700 text-white text-xs font-extrabold items-center gap-1 cursor-pointer border border-blue-400/40 shadow-sm">
                     <span class="material-symbols-outlined text-[16px]">download</span>
                     <span>PDF 원본 다운로드</span>
                 </button>
-                <button type="button" onclick="closePhotoLightbox()" class="text-white bg-white/15 hover:bg-white/25 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition shrink-0" title="닫기 (ESC)">
+                <button type="button" onclick="closePhotoLightbox()" class="text-white bg-white/15 hover:bg-white/25 rounded-full w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer transition shrink-0" title="닫기 (ESC)">
                     <span class="material-symbols-outlined text-2xl">close</span>
                 </button>
             </div>
         </div>
 
-        <!-- Center Image & Prev/Next Arrows -->
-        <div id="lightbox-touch-area" class="relative flex-1 flex items-center justify-center w-full max-w-6xl mx-auto my-2 overflow-hidden">
+        <!-- Center Image / Document Scroll Viewport & Prev/Next Arrows -->
+        <div id="lightbox-touch-area" class="relative flex-1 flex items-center justify-center w-full max-w-7xl mx-auto my-1.5 overflow-hidden">
             <!-- Prev Arrow Button -->
-            <button type="button" id="lightbox-prev-btn" onclick="event.stopPropagation(); stepLightboxPhoto(-1)" class="absolute left-1 sm:left-4 z-20 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-lg flex items-center justify-center cursor-pointer transition active:scale-95" title="이전 사진">
+            <button type="button" id="lightbox-prev-btn" onclick="event.stopPropagation(); stepLightboxPhoto(-1)" class="absolute left-1 sm:left-3 z-30 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white/95 hover:bg-white text-slate-900 shadow-xl border border-slate-200 flex items-center justify-center cursor-pointer transition active:scale-95" title="이전 페이지/사진">
                 <span class="material-symbols-outlined text-2xl sm:text-3xl font-bold">chevron_left</span>
             </button>
 
-            <img id="lightbox-img" src="" alt="매물 현장 사진" onclick="event.stopPropagation()" class="max-w-full max-h-[75vh] sm:max-h-[78vh] object-contain rounded-xl shadow-2xl transition-transform duration-200" />
+            <div id="lightbox-scroll-box" class="w-full h-full max-h-[82vh] overflow-auto flex items-center justify-center p-1 sm:p-2" onclick="handleLightboxBackdropClick(event)">
+                <img id="lightbox-img" src="" alt="매물 상세 이미지" onclick="event.stopPropagation(); toggleLightboxClickZoom()" class="max-w-full max-h-[78vh] object-contain rounded-xl shadow-2xl transition-all duration-150 cursor-zoom-in" style="image-rendering: -webkit-optimize-contrast;" />
+            </div>
 
             <!-- Next Arrow Button -->
-            <button type="button" id="lightbox-next-btn" onclick="event.stopPropagation(); stepLightboxPhoto(1)" class="absolute right-1 sm:right-4 z-20 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-lg flex items-center justify-center cursor-pointer transition active:scale-95" title="다음 사진">
+            <button type="button" id="lightbox-next-btn" onclick="event.stopPropagation(); stepLightboxPhoto(1)" class="absolute right-1 sm:right-3 z-30 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white/95 hover:bg-white text-slate-900 shadow-xl border border-slate-200 flex items-center justify-center cursor-pointer transition active:scale-95" title="다음 페이지/사진">
                 <span class="material-symbols-outlined text-2xl sm:text-3xl font-bold">chevron_right</span>
             </button>
         </div>
 
         <!-- Bottom Thumbnails & Swipe Guide -->
-        <div class="max-w-4xl w-full mx-auto flex flex-col items-center gap-2 z-20" onclick="event.stopPropagation()">
+        <div class="max-w-4xl w-full mx-auto flex flex-col items-center gap-1.5 z-20" onclick="event.stopPropagation()">
             <div id="lightbox-thumbs" class="flex items-center gap-2 overflow-x-auto max-w-full py-1 px-2"></div>
-            <div class="text-[11px] text-slate-300 font-medium">PC: 좌우 화살표 클릭 또는 키보드(←/→) · 모바일/태블릿: 사진을 좌우로 스와이프(밀기)</div>
+            <div class="text-[11px] text-slate-300 font-medium text-center">PC: 좌우 화살표(←/→) · 이미지를 클릭하거나 상단 [150% 확대]를 누르면 작은 글씨도 초고화질로 크게 볼 수 있습니다</div>
         </div>
     </div>
 
@@ -388,7 +396,7 @@
         </div>
     </div>
 
-    <script src="db.js?v=20260715_v235"></script>
+    <script src="db.js?v=20260715_v236"></script>
     <script>
         let _briefing = null;
         let _attachedMemos = [];
@@ -402,6 +410,7 @@
         let _lightboxIndex = 0;
         let _lightboxTitle = '';
         let _lightboxDocDownloadInfo = null;
+        let _lightboxZoomLevel = 1;
         let _touchStartX = 0;
         let _touchStartY = 0;
 
@@ -1121,9 +1130,9 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                         <div class="text-xs sm:text-sm font-extrabold text-[#003891] flex items-center gap-1.5">
                             <span class="material-symbols-outlined text-[18px]">description</span>
-                            <span>공적장부 및 도면 확인 (건축물대장 · 토지대장 · 지적도등본 · 도면 · 등기부등본)</span>
+                            <span>공적장부 · 도면 · 중개 확인서류 (건축물대장 · 토지대장 · 토지이용계획 · 등기부등본 · 도면 · 렌트롤 등)</span>
                         </div>
-                        <span class="text-[11px] text-slate-600 font-medium no-print">모바일에서도 별도 뷰어 없이 [사진으로 크게 보기]를 눌러 바로 넘겨보거나 [PDF 원본 다운]을 받으실 수 있습니다.</span>
+                        <span class="text-[11px] text-slate-600 font-medium no-print">[사진으로 크게 보기]를 누르면 300DPI 초고화질로 확대 열람하거나 [PDF 원본 다운]을 받으실 수 있습니다.</span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         ${cardsHtml}
@@ -1137,20 +1146,24 @@
             const loadingTask = window.pdfjsLib.getDocument({
                 url: pdfUrl,
                 cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
-                cMapPacked: true
+                cMapPacked: true,
+                standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/'
             });
             const pdf = await loadingTask.promise;
             const maxPages = Math.min(pdf.numPages, 15);
             const dataUrls = [];
             for (let p = 1; p <= maxPages; p++) {
                 const page = await pdf.getPage(p);
-                const viewport = page.getViewport({ scale: 2.0 });
+                // Render at 3.4x scale in lossless PNG for ultra-crisp text on PC & Mobile
+                const viewport = page.getViewport({ scale: 3.4 });
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
+                canvas.width = Math.round(viewport.width);
+                canvas.height = Math.round(viewport.height);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
                 await page.render({ canvasContext: ctx, viewport }).promise;
-                dataUrls.push(canvas.toDataURL('image/jpeg', 0.9));
+                dataUrls.push(canvas.toDataURL('image/png'));
             }
             return dataUrls;
         }
@@ -1163,14 +1176,32 @@
             if (!doc) return;
 
             let pages = Array.isArray(doc.pageImages) ? doc.pageImages.filter(Boolean) : [];
-            if (pages.length === 0 && doc.pdfUrl) {
+            const hasLegacyJpg = pages.some(u => /\.jpg($|\?)/i.test(u));
+
+            // If original PDF URL exists and either pages are missing OR pages were older 2x JPGs, render Ultra-HD 3.4x lossless PNGs!
+            if (doc.pdfUrl && (pages.length === 0 || (hasLegacyJpg && !doc._ultraHdUpgraded))) {
+                if (pages.length > 0) {
+                    // Show immediate preview while upgrading to 3.4x PNG in background (< 0.4s)
+                    _lightboxPhotos = pages;
+                    _lightboxIndex = Math.max(0, Math.min(startPageIdx, pages.length - 1));
+                    _lightboxTitle = `[${doc.docType || '공적장부'}] ${itemIdx + 1}번 매물 (${doc.fileName || ''}) · 초고화질 렌더링 중...`;
+                    _lightboxDocDownloadInfo = { itemIdx, docIdx };
+                    _lightboxZoomLevel = 1;
+                    updateLightboxView();
+                    document.getElementById('photo-lightbox').classList.remove('hidden');
+                }
                 try {
-                    if (typeof showToast === 'function') showToast('PDF 문서를 고화질 사진으로 변환하고 있습니다...');
-                    pages = await renderPdfUrlToImagesClientSide(doc.pdfUrl);
-                    doc.pageImages = pages;
+                    const hdPages = await renderPdfUrlToImagesClientSide(doc.pdfUrl);
+                    if (hdPages && hdPages.length > 0) {
+                        doc.pageImages = hdPages;
+                        doc._ultraHdUpgraded = true;
+                        pages = hdPages;
+                    }
                 } catch (e) {
-                    window.open(doc.pdfUrl, '_blank');
-                    return;
+                    if (pages.length === 0) {
+                        window.open(doc.pdfUrl, '_blank');
+                        return;
+                    }
                 }
             }
             if (pages.length === 0) return;
@@ -1179,6 +1210,7 @@
             _lightboxIndex = Math.max(0, Math.min(startPageIdx, pages.length - 1));
             _lightboxTitle = `[${doc.docType || '공적장부'}] ${itemIdx + 1}번 매물 (${doc.fileName || ''})`;
             _lightboxDocDownloadInfo = { itemIdx, docIdx };
+            _lightboxZoomLevel = 1;
 
             updateLightboxView();
             document.getElementById('photo-lightbox').classList.remove('hidden');
@@ -1247,9 +1279,70 @@
             const isBlind = _briefing.blindAddress !== false;
             _lightboxTitle = `${itemIdx + 1}번 추천 매물 (${maskTextBlind(item.address, isBlind)} · ${item.area || ''})`;
             _lightboxDocDownloadInfo = null;
+            _lightboxZoomLevel = 1;
 
             updateLightboxView();
             document.getElementById('photo-lightbox').classList.remove('hidden');
+        }
+
+        function setLightboxZoom(level) {
+            _lightboxZoomLevel = level || 1;
+            applyLightboxZoomStyle();
+        }
+        window.setLightboxZoom = setLightboxZoom;
+
+        function toggleLightboxClickZoom() {
+            if (_lightboxZoomLevel === 1) {
+                setLightboxZoom(1.5);
+            } else if (_lightboxZoomLevel === 1.5) {
+                setLightboxZoom(2.1);
+            } else {
+                setLightboxZoom(1);
+            }
+        }
+        window.toggleLightboxClickZoom = toggleLightboxClickZoom;
+
+        function applyLightboxZoomStyle() {
+            const img = document.getElementById('lightbox-img');
+            const scrollBox = document.getElementById('lightbox-scroll-box');
+            const b100 = document.getElementById('zoom-btn-100');
+            const b150 = document.getElementById('zoom-btn-150');
+            const b210 = document.getElementById('zoom-btn-210');
+
+            [
+                { el: b100, lv: 1 },
+                { el: b150, lv: 1.5 },
+                { el: b210, lv: 2.1 }
+            ].forEach(({ el, lv }) => {
+                if (!el) return;
+                if (Math.abs(_lightboxZoomLevel - lv) < 0.05) {
+                    el.className = 'px-2.5 py-1 rounded-md bg-white text-slate-900 cursor-pointer transition';
+                } else {
+                    el.className = 'px-2.5 py-1 rounded-md text-white hover:bg-white/20 cursor-pointer transition';
+                }
+            });
+
+            if (!img || !scrollBox) return;
+            const isDoc = Boolean(_lightboxDocDownloadInfo);
+
+            if (_lightboxZoomLevel > 1) {
+                scrollBox.className = 'w-full h-full max-h-[83vh] overflow-auto flex items-start justify-center p-2 bg-slate-900/50 rounded-xl';
+                const pct = Math.round(_lightboxZoomLevel * 100);
+                img.className = 'max-w-none h-auto rounded-lg shadow-2xl cursor-zoom-out bg-white';
+                img.style.width = isDoc ? `${Math.round(1050 * _lightboxZoomLevel)}px` : `${pct}%`;
+                img.style.maxHeight = 'none';
+            } else if (isDoc) {
+                // For official documents at 100% default on PC: fit cleanly with full sharpness up to 84vh or 1150px wide
+                scrollBox.className = 'w-full h-full max-h-[84vh] overflow-auto flex items-center justify-center p-1 sm:p-2';
+                img.className = 'max-w-full max-h-[83vh] object-contain rounded-lg shadow-2xl cursor-zoom-in bg-white';
+                img.style.width = 'auto';
+                img.style.maxHeight = '83vh';
+            } else {
+                scrollBox.className = 'w-full h-full max-h-[82vh] overflow-auto flex items-center justify-center p-1 sm:p-2';
+                img.className = 'max-w-full max-h-[78vh] object-contain rounded-xl shadow-2xl cursor-zoom-in';
+                img.style.width = '';
+                img.style.maxHeight = '';
+            }
         }
 
         function updateLightboxView() {
@@ -1274,6 +1367,7 @@
                     dlBtn.classList.remove('inline-flex');
                 }
             }
+            applyLightboxZoomStyle();
 
             if (prevBtn) prevBtn.style.display = total > 1 ? 'flex' : 'none';
             if (nextBtn) nextBtn.style.display = total > 1 ? 'flex' : 'none';
@@ -1304,7 +1398,7 @@
         }
 
         function handleLightboxBackdropClick(e) {
-            if (e.target && (e.target.id === 'photo-lightbox' || e.target.id === 'lightbox-touch-area')) {
+            if (e.target && (e.target.id === 'photo-lightbox' || e.target.id === 'lightbox-touch-area' || e.target.id === 'lightbox-scroll-box')) {
                 closePhotoLightbox();
             }
         }
@@ -1340,6 +1434,7 @@
             }, { passive: true });
 
             modal.addEventListener('touchend', (e) => {
+                if (_lightboxZoomLevel > 1) return;
                 if (!e.changedTouches || e.changedTouches.length === 0) return;
                 const dx = e.changedTouches[0].clientX - _touchStartX;
                 const dy = e.changedTouches[0].clientY - _touchStartY;
