@@ -1,5 +1,5 @@
 {
-  "updatedAt": 1794368000000,
+  "updatedAt": 1794369654286,
   "memos": [
     {
       "id": "memo_doc_rent",
@@ -73,10 +73,10 @@
       "customerPhone": "",
       "title": "수성구 역세권 & 알파시티 무권리 추천 오피스·학원 비교 브리핑",
       "createdAt": "2026. 11. 11",
-      "updatedAt": 1794368000000,
+      "updatedAt": 1794369654138,
       "expiresAt": "",
       "blindAddress": true,
-      "includeVat": true,
+      "includeVat": false,
       "showYield": true,
       "generalNote": "오늘 함께 둘러보신 수성구 핵심 권역(신매역 달구벌대로변 / 수성알파시티) 무권리 추천 매물 3곳 비교 리포트입니다. 모든 매물이 100% 무권리이며 주차 여건과 인테리어 가성비가 검증된 알짜 호실입니다. 1순위 매물을 선택해 주시면 렌트프리 및 임대 조건을 최우선으로 조율해 드리겠습니다.",
       "attachedMemoIds": [
