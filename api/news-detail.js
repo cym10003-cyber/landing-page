@@ -148,12 +148,21 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   if (trade === '임대') {
     kwList.push('대구상가임대');
     kwList.push('대구사무실임대');
+    if (guStr === '수성구') { kwList.push('수성구상가임대'); kwList.push('수성구사무실임대'); }
+    if (guStr === '달서구') { kwList.push('달서구상가임대'); kwList.push('달서구사무실임대'); }
+    if (guStr === '동구') { kwList.push('대구동구상가임대'); }
+    kwList.push('대구상가월세');
   } else {
     if (mainCategory === '공장') {
       kwList.push('대구공장매매');
     } else {
       kwList.push('대구상가매매');
       kwList.push('대구사무실매매');
+      kwList.push('대구건물매매');
+      kwList.push('대구상가건물매매');
+      if (title.includes('상가주택') || content.includes('상가주택')) { kwList.push('대구상가주택매매'); }
+      if (guStr === '수성구') { kwList.push('수성구상가매매'); }
+      if (cleanLoc.includes('경산') || title.includes('경산')) { kwList.push('경산상가매매'); }
     }
   }
 
@@ -204,7 +213,15 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
             '@type': 'RealEstateAgent',
             'name': '최가네부동산공인중개사사무소',
             'telephone': '010-3548-4000',
-            'image': `${baseUrl}/og_home.jpg`
+            'image': `${baseUrl}/og_home.jpg`,
+            'knowsAbout': [
+              '대구 상가 임대', '대구 사무실 임대', '대구 상가 매매', '대구 사무실 매매',
+              '대구 건물 매매', '대구 상가건물 매매', '대구 상가주택 매매', '대구 부동산 매매',
+              '수성구 상가 임대', '수성구 사무실 임대', '수성구 상가 매매',
+              '달서구 상가 임대', '달서구 사무실 임대', '대구 동구 상가 임대',
+              '범어동 사무실 임대', '달구벌대로 상가', '경산 상가 매매',
+              '대구 상가 월세', '대구 상가 전문 부동산'
+            ]
           }
         },
         'itemOffered': {
