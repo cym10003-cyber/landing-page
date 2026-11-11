@@ -35,11 +35,33 @@
         };
     </script>
     <style>
-        html, body, input, select, textarea, button, table, th, td, div, span, p, h1, h2, h3, h4 {
-            font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Malgun Gothic", sans-serif !important;
+        body {
+            font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Malgun Gothic", sans-serif;
             letter-spacing: -0.02em;
             word-break: keep-all;
             overflow-wrap: break-word;
+        }
+        input, select, textarea, button, table, th, td, div, p, h1, h2, h3, h4 {
+            font-family: inherit;
+            letter-spacing: -0.02em;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        /* Material Symbols Icon Font Protection */
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined' !important;
+            font-weight: normal !important;
+            font-style: normal !important;
+            line-height: 1 !important;
+            letter-spacing: normal !important;
+            text-transform: none !important;
+            display: inline-block !important;
+            white-space: nowrap !important;
+            word-wrap: normal !important;
+            direction: ltr !important;
+            -webkit-font-feature-settings: 'liga' !important;
+            font-feature-settings: 'liga' !important;
+            -webkit-font-smoothing: antialiased !important;
         }
         /* A4 Print Executive Report Mode */
         @media print {
@@ -399,7 +421,7 @@
         </div>
     </div>
 
-    <script src="db.js?v=20260715_v237"></script>
+    <script src="db.js?v=20260715_v238"></script>
     <script>
         let _briefing = null;
         let _attachedMemos = [];
