@@ -1,5 +1,5 @@
 {
-  "updatedAt": 1794372100000,
+  "updatedAt": 1794372886917,
   "memos": [
     {
       "id": "memo_doc_rent",
@@ -68,12 +68,33 @@
   ],
   "briefings": [
     {
+      "id": "br_mwbn5kl2",
+      "customerName": "VIP 고객님",
+      "customerPhone": "",
+      "title": "VIP 고객님 맞춤 매물 비교 브리핑",
+      "createdAt": "2026. 11. 11",
+      "updatedAt": 1794372694858,
+      "expiresAt": "",
+      "blindAddress": true,
+      "showComparisonTable": true,
+      "showMonthlyCost": true,
+      "includeVat": true,
+      "showYield": true,
+      "showMap": true,
+      "generalNote": "오늘 최가네부동산과 함께 현장에서 둘러보신 추천 매물 비교 리포트입니다. 초기 필요자금과 임대·매매 조건을 한눈에 비교해 보시고, 가장 마음에 드시는 1순위 매물을 선택해 주시면 렌트프리 및 세부 조건을 최우선으로 조율해 드리겠습니다.",
+      "attachedMemoIds": [
+        "memo_special_terms_rent"
+      ],
+      "customerPicks": [],
+      "items": []
+    },
+    {
       "id": "sample_vip_01",
       "customerName": "김OO 대표님",
       "customerPhone": "",
       "title": "수성구 역세권 & 알파시티 무권리 추천 오피스·학원 비교 브리핑",
       "createdAt": "2026. 11. 11",
-      "updatedAt": 1794372100000,
+      "updatedAt": 1794372886635,
       "expiresAt": "",
       "blindAddress": true,
       "showComparisonTable": true,
