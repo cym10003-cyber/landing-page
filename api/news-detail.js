@@ -120,14 +120,14 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   else if (post.category && post.category !== '매물리스트') fullType = `${post.category} ${trade}`;
 
   const fullLocText = cleanLoc + ' ' + title + ' ' + content;
-  const mGu = fullLocText.match(/([가-힣]+(?:구|군))/);
+  const mGu = fullLocText.match(/((?:수성|달서|중|동|서|남|북)구|(?:달성|칠곡)군|경산시)/);
   const mDong = fullLocText.match(/([가-힣]{2,6}(?:동[0-9]*가?|읍|면))/);
   const guStr = mGu ? mGu[1] : '';
   const dongStr = mDong ? mDong[1] : '';
 
   let mainCategory = '상가';
-  if (/상가/i.test(title)) mainCategory = '상가';
-  else if (/사무실/i.test(title)) mainCategory = '사무실';
+  if (/사무실/i.test(title)) mainCategory = '사무실';
+  else if (/상가/i.test(title)) mainCategory = '상가';
   else if (/공장/i.test(title) || /공장/i.test(content)) mainCategory = '공장';
   else if (/병의원|병원|의원/i.test(title) || /병의원|병원|의원/i.test(content)) mainCategory = '병의원';
   else if (/사무실/i.test(content)) mainCategory = '사무실';
@@ -171,10 +171,12 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   }
 
   const uniqueKws = [...new Set(kwList)];
-  const targetKw = uniqueKws.join(' ');
+  const titleKw = uniqueKws.slice(0, 3).join(' ');
+  const descKw = uniqueKws.slice(0, 4).join(' ');
+  const metaKeywords = uniqueKws.slice(0, 10).join(', ') + ', 최가네부동산';
 
-  // Clean Professional High-Ranking Title Format
-  let metaTitle = `${targetKw} | ${cleanLoc} ${fullType}`;
+  // Clean Professional High-Ranking Title Format (Concise & Spam-Free: max 3 core keywords)
+  let metaTitle = `${titleKw} | ${cleanLoc} ${fullType}`;
   const detailParts = [];
   if (specStr) detailParts.push(specStr);
   if (priceStr) detailParts.push(priceStr);
@@ -185,14 +187,14 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   metaTitle += ' - 최가네부동산';
 
   // Clean Professional Description Format
-  const descParts = [`${targetKw}`, `${cleanLoc} ${fullType}`];
+  const descParts = [`${descKw}`, `${cleanLoc} ${fullType}`];
   if (specStr) descParts.push(specStr);
   if (priceStr) descParts.push(`가격: ${priceStr}`);
 
   const mFeat = [...content.matchAll(/(?:🔎|O|▶)\s*([^\n]+)/g)].map(m => m[1].trim());
   if (mFeat.length > 0) descParts.push(mFeat.slice(0, 2).join(', '));
 
-  const metaDesc = descParts.join(' | ') + ' | 대구 상가·사무실 위치기반 전문! (대표소장 최이명)';
+  const metaDesc = descParts.join(' | ') + ' | 대구 전 지역 상가·사무실 임대·매매 전문 최가네부동산 (대표소장 최이명)';
 
   // RealEstateListing JSON-LD Schema Markup
   const dateStr = post.id ? new Date(Number(post.id)).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
@@ -270,7 +272,7 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
     ]
   };
 
-  return { metaTitle, metaDesc, ogImage, postUrl, schemaJsonLd, cleanLoc, coords };
+  return { metaTitle, metaDesc, metaKeywords, ogImage, postUrl, schemaJsonLd, cleanLoc, coords };
 }
 
 export default async function handler(req, res) {
@@ -358,7 +360,7 @@ export default async function handler(req, res) {
           const baseUrl = `${protocol}://${host}`;
 
           const pid = post.id;
-          const { metaTitle, metaDesc, ogImage, postUrl, schemaJsonLd, cleanLoc, coords } = parsePostMeta(post, baseUrl);
+          const { metaTitle, metaDesc, metaKeywords, ogImage, postUrl, schemaJsonLd, cleanLoc, coords } = parsePostMeta(post, baseUrl);
 
           // Compile escaped values
           const titleEscaped = metaTitle.replace(/"/g, '&quot;');
@@ -369,10 +371,15 @@ export default async function handler(req, res) {
           // JSON-LD Script tag string
           const jsonLdScript = `\n<script type="application/ld+json" id="schema-jsonld">\n${JSON.stringify(schemaJsonLd, null, 2)}\n</script>\n`;
 
-          // Inject initial post object script tag string into <head> for 0ms instant client rendering
+          // Inject initial post object script tag string and meta keywords into <head>
+          const keywordsEscaped = (metaKeywords || '').replace(/"/g, '&quot;');
+          const keywordsMeta = `\n<meta name="keywords" content="${keywordsEscaped}" />\n`;
           const initialPostScript = `\n<script>\nwindow.__INITIAL_POST__ = ${JSON.stringify(post)};\n</script>\n`;
-          const geoMeta = `\n<meta name="geo.region" content="KR-27" />\n<meta name="geo.placename" content="${cleanLoc}" />\n<meta name="geo.position" content="${coords[0] || 35.8599};${coords[1] || 128.6146}" />\n<meta name="ICBM" content="${coords[0] || 35.8599}, ${coords[1] || 128.6146}" />\n`;
-          html = html.replace('</head>', `${jsonLdScript}${initialPostScript}${geoMeta}</head>`);
+          html = html
+            .replace(/<meta name="geo\.placename" content="[^"]*"\s*\/?>/i, `<meta name="geo.placename" content="${cleanLoc.replace(/"/g, '&quot;')}" />`)
+            .replace(/<meta name="geo\.position" content="[^"]*"\s*\/?>/i, `<meta name="geo.position" content="${coords[0] || 35.8599};${coords[1] || 128.6146}" />`)
+            .replace(/<meta name="ICBM" content="[^"]*"\s*\/?>/i, `<meta name="ICBM" content="${coords[0] || 35.8599}, ${coords[1] || 128.6146}" />`)
+            .replace('</head>', `${keywordsMeta}${jsonLdScript}${initialPostScript}</head>`);
 
           // Replace meta and title tags dynamically for OpenGraph crawlers
           html = html
