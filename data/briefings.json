@@ -1,5 +1,5 @@
 {
-  "updatedAt": 1794372685442,
+  "updatedAt": 1794372694917,
   "memos": [
     {
       "id": "memo_doc_rent",
@@ -73,7 +73,7 @@
       "customerPhone": "",
       "title": "VIP 고객님 맞춤 매물 비교 브리핑",
       "createdAt": "2026. 11. 11",
-      "updatedAt": 1794372685250,
+      "updatedAt": 1794372694858,
       "expiresAt": "",
       "blindAddress": true,
       "showComparisonTable": true,
@@ -83,44 +83,10 @@
       "showMap": true,
       "generalNote": "오늘 최가네부동산과 함께 현장에서 둘러보신 추천 매물 비교 리포트입니다. 초기 필요자금과 임대·매매 조건을 한눈에 비교해 보시고, 가장 마음에 드시는 1순위 매물을 선택해 주시면 렌트프리 및 세부 조건을 최우선으로 조율해 드리겠습니다.",
       "attachedMemoIds": [
-        "memo_doc_rent",
         "memo_special_terms_rent"
       ],
       "customerPicks": [],
-      "items": [
-        {
-          "itemId": "item_1794372685247_rh8e",
-          "postId": "1794279049378",
-          "propNo": "5556",
-          "tradeType": "sale",
-          "title": "남구 대명동 계명대학교 인근 코너건물 주차편리",
-          "address": "대구광역시 남구 대명동 2240-4번지",
-          "currentFloor": "지하 1층~지상 3층",
-          "totalFloor": "지하 1층~지상 3층",
-          "floor": "지하 1층~지상 3층",
-          "area": "대지 약 39.8평 / 연면적 약 84.74평",
-          "deposit": 0,
-          "rent": 0,
-          "managementFee": 0,
-          "premium": 0,
-          "premiumText": "무권리",
-          "salePrice": 49000,
-          "badges": [
-            "주차 편함",
-            "즉시입주 가능",
-            "대로변/코너",
-            "1층 상가"
-          ],
-          "agentComment": "• 계명대학교 대명캠퍼스 인근 코너에 위치한 상가주택 매매\n• 3층 주인세대 방3개, 화장실1개로 명도 가능합니다.\n• 1층도 명도 원할시에 명도 가능합니다.",
-          "photos": [
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794288475191_v7y3_KakaoTalk_20261110_141440545.jpg"
-          ],
-          "coordinates": [
-            35.85264828752031,
-            128.5788318514824
-          ]
-        }
-      ]
+      "items": []
     },
     {
       "id": "sample_vip_01",
