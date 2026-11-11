@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v234");
+console.log("Antigravity db.js version: 20260715_v235");
 // Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v234";
+const APP_VERSION = "20260715_v235";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.removeItem('choi_briefings_cache');
@@ -946,6 +946,88 @@ async function uploadVideoFile(file) {
   });
 }
 
+async function uploadDocFile(file, prefix = 'doc') {
+  const config = await loadConfig();
+  const hasGit = config.github_token && config.github_owner && config.github_repo;
+
+  if (file.size > 40 * 1024 * 1024) {
+    throw new Error("파일 크기가 너무 큽니다. 40MB 이하의 PDF/문서 파일만 업로드할 수 있습니다.");
+  }
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = reader.result;
+
+      if (hasGit) {
+        const base64Content = dataUrl.split(',')[1];
+        const rand = Math.random().toString(36).substring(2, 6);
+        const extMatch = (file.name || 'document.pdf').match(/\.[a-zA-Z0-9]+$/);
+        const ext = extMatch ? extMatch[0].toLowerCase() : '.pdf';
+        const safePrefix = String(prefix || 'doc').replace(/[^a-zA-Z0-9_-]/g, '_');
+        const filename = `${safePrefix}_${Date.now()}_${rand}${ext}`;
+        const url = `https://api.github.com/repos/${config.github_owner}/landing-page-assets/contents/docs/${filename}`;
+
+        const bodyStr = JSON.stringify({
+          message: `feat: upload document ${filename} [skip ci]`,
+          content: base64Content,
+          branch: 'main'
+        });
+
+        const headers = {
+          'Authorization': `token ${config.github_token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        };
+
+        let lastErr = null;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            const putRes = await fetch(url, {
+              method: 'PUT',
+              headers: headers,
+              body: bodyStr
+            });
+
+            if (putRes.ok) {
+              const result = await putRes.json();
+              const commitSha = (result.commit && result.commit.sha) ? result.commit.sha : 'main';
+              const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@${commitSha}/docs/${filename}`;
+              return resolve(rawUrl);
+            } else {
+              const errorMsg = await putRes.text();
+              lastErr = new Error(`GitHub Doc Upload Failed (${putRes.status}): ${errorMsg}`);
+            }
+          } catch (err) {
+            lastErr = err;
+          }
+          if (attempt < 3) {
+            await new Promise(r => setTimeout(r, 800));
+          }
+        }
+
+        console.warn('GitHub doc upload failed after 3 attempts, using resilient base64 fallback:', lastErr);
+        resolve(dataUrl);
+      } else {
+        resolve(dataUrl);
+      }
+    };
+    reader.onerror = () => resolve(URL.createObjectURL(file));
+    reader.readAsDataURL(file);
+  });
+}
+window.uploadDocFile = uploadDocFile;
+
+const OFFICIAL_DOC_CATEGORIES = [
+  '건축물대장',
+  '토지대장',
+  '지적도등본',
+  '도면',
+  '등기부등본(건물)',
+  '등기부등본(토지)'
+];
+window.OFFICIAL_DOC_CATEGORIES = OFFICIAL_DOC_CATEGORIES;
+
 // --- Analytics & Logging Helpers ---
 function getReferrerSource() {
     const ref = document.referrer || '';
@@ -1441,7 +1523,7 @@ async function pushAnalyticsToGithub(config, analyticsObj) {
         const contentBase64 = btoa(binary);
 
         const body = {
-            message: 'stat: sync multi-device analytics data',
+            message: 'stat: sync multi-device analytics data [skip ci] [skip vercel]',
             content: contentBase64
         };
         if (sha) body.sha = sha;
@@ -2892,6 +2974,8 @@ function parsePostToBriefingItem(post) {
         const premium = parseKoreanMoneyToManwon(premLine);
         const salePrice = parseKoreanMoneyToManwon(saleLine);
 
+        const isMaintVat = maintLine.includes('부가세') || maintLine.includes('VAT') || maintLine.includes('별도');
+
         let premiumText = '무권리';
         if (premLine) {
             if (premLine.includes('무권리') || premLine.includes('없음')) premiumText = '무권리';
@@ -2987,12 +3071,14 @@ function parsePostToBriefingItem(post) {
             deposit,
             rent,
             managementFee,
+            maintVat: Boolean(isMaintVat),
             premium,
             premiumText,
             salePrice,
             badges,
             agentComment: autoComment,
             photos: extractAllPostImages(post, 15),
+            officialDocs: Array.isArray(post.officialDocs) ? post.officialDocs : [],
             coordinates: Array.isArray(post.coordinates) ? post.coordinates : []
         };
     } catch (err) {
@@ -3227,7 +3313,7 @@ async function saveBriefingData(dataObj) {
                     sha = gd.sha || null;
                 }
                 const body = {
-                    message: 'briefing: update memos and customer briefings [skip vercel]',
+                    message: 'briefing: update memos and customer briefings [skip ci] [skip vercel]',
                     content: utf8ToBase64(JSON.stringify(dataObj, null, 2)),
                     branch: 'main'
                 };

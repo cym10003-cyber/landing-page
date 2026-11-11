@@ -9,6 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        if (window.pdfjsLib) {
+            window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+    </script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
         tailwind.config = {
@@ -195,10 +201,14 @@
                     </h2>
                     <p class="text-xs text-slate-500 mt-0.5">매물명을 클릭하시면 아래 상세 사진 및 최가네부동산 브리핑 코멘트로 바로 이동합니다.</p>
                 </div>
-                <div id="vat-toggle-wrapper" class="flex items-center gap-2 no-print">
-                    <label class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 cursor-pointer">
+                <div id="vat-toggle-wrapper" class="flex flex-wrap items-center gap-2 no-print">
+                    <label class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-200/70 transition">
                         <input type="checkbox" id="toggle-vat-calc" class="rounded text-[#003891] focus:ring-[#003891] w-4 h-4" onchange="reRenderComparisonAndCards()" />
                         <span>월세 부가세(VAT 10%) 포함 계산</span>
+                    </label>
+                    <label class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-200/70 transition">
+                        <input type="checkbox" id="toggle-maint-vat-calc" class="rounded text-[#003891] focus:ring-[#003891] w-4 h-4" onchange="onClientMaintVatToggle()" />
+                        <span>공용관리비 부가세(VAT 10%) 포함 계산</span>
                     </label>
                 </div>
             </div>
@@ -301,9 +311,15 @@
                 <span id="lightbox-counter" class="bg-[#003891] text-white text-xs sm:text-sm font-extrabold px-3 py-1 rounded-lg border border-blue-400/30 shrink-0">1 / 1</span>
                 <span id="lightbox-caption" class="text-xs sm:text-sm font-bold text-slate-200 truncate">매물 현장 사진</span>
             </div>
-            <button type="button" onclick="closePhotoLightbox()" class="text-white bg-white/15 hover:bg-white/25 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition shrink-0" title="닫기 (ESC)">
-                <span class="material-symbols-outlined text-2xl">close</span>
-            </button>
+            <div class="flex items-center gap-2 shrink-0">
+                <button type="button" id="lightbox-download-btn" onclick="triggerLightboxDocDownload()" class="hidden px-3 py-1.5 rounded-lg bg-[#003891] hover:bg-blue-700 text-white text-xs font-extrabold items-center gap-1 cursor-pointer border border-blue-400/40 shadow-sm">
+                    <span class="material-symbols-outlined text-[16px]">download</span>
+                    <span>PDF 원본 다운로드</span>
+                </button>
+                <button type="button" onclick="closePhotoLightbox()" class="text-white bg-white/15 hover:bg-white/25 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition shrink-0" title="닫기 (ESC)">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
         </div>
 
         <!-- Center Image & Prev/Next Arrows -->
@@ -372,18 +388,20 @@
         </div>
     </div>
 
-    <script src="db.js?v=20260715_v234"></script>
+    <script src="db.js?v=20260715_v235"></script>
     <script>
         let _briefing = null;
         let _attachedMemos = [];
         let _mapInstance = null;
         let _selectedPickPropNo = '';
         let _selectedPickTitle = '';
+        let _userToggledMaintVat = false;
 
         // Lightbox Gallery State
         let _lightboxPhotos = [];
         let _lightboxIndex = 0;
         let _lightboxTitle = '';
+        let _lightboxDocDownloadInfo = null;
         let _touchStartX = 0;
         let _touchStartY = 0;
 
@@ -479,6 +497,11 @@
                 if (vatCheckbox) {
                     vatCheckbox.checked = found.includeVat !== false;
                 }
+                const maintVatCheckbox = document.getElementById('toggle-maint-vat-calc');
+                if (maintVatCheckbox) {
+                    const anyItemMaintVat = Array.isArray(found.items) && found.items.some(it => it && it.maintVat === true);
+                    maintVatCheckbox.checked = Boolean(found.includeMaintVat) || (found.includeMaintVat === undefined && anyItemMaintVat);
+                }
 
                 renderHeaderSection();
                 reRenderComparisonAndCards();
@@ -524,6 +547,12 @@
             }
         }
 
+        function onClientMaintVatToggle() {
+            _userToggledMaintVat = true;
+            reRenderComparisonAndCards();
+        }
+        window.onClientMaintVatToggle = onClientMaintVatToggle;
+
         function reRenderComparisonAndCards() {
             const b = _briefing;
             if (!b) return;
@@ -532,6 +561,8 @@
             const showMonthlyCost = b.showMonthlyCost !== false;
             const vatEl = document.getElementById('toggle-vat-calc');
             const includeVat = vatEl ? vatEl.checked : (b.includeVat !== false);
+            const maintVatEl = document.getElementById('toggle-maint-vat-calc');
+            const includeMaintVat = maintVatEl ? maintVatEl.checked : Boolean(b.includeMaintVat);
             const showYield = b.showYield !== false;
             const items = b.items || [];
 
@@ -581,6 +612,8 @@
                         const saleP = Number(item.salePrice) || 0;
                         const floors = getFloorParts(item);
 
+                        const hasMaintVat = _userToggledMaintVat ? includeMaintVat : (includeMaintVat || Boolean(item.maintVat));
+
                         // Initial Required Capital
                         let initCapitalText = '-';
                         let initSubText = '';
@@ -594,15 +627,22 @@
                             initSubText = prem > 0 ? `(보증금 + 권리금)` : `(보증금 · 무권리)`;
                         }
 
-                        // Monthly Out-of-pocket Fixed Cost
-                        const vatAmount = includeVat ? Math.round(rent * 0.1 * 10) / 10 : 0;
-                        const totalMonthly = Math.round((rent + vatAmount + maint) * 10) / 10;
+                        // Monthly Out-of-pocket Fixed Cost (Rent VAT + Maintenance VAT support)
+                        const rentVatAmount = includeVat ? Math.round(rent * 0.1 * 10) / 10 : 0;
+                        const maintVatAmount = (hasMaintVat && maint > 0) ? Math.round(maint * 0.1 * 10) / 10 : 0;
+                        const totalMonthly = Math.round((rent + rentVatAmount + maint + maintVatAmount) * 10) / 10;
                         let monthlyText = rent > 0 ? `월 ${formatManwon(totalMonthly)}` : '-';
                         let monthlySub = '';
                         if (rent > 0) {
-                            monthlySub = includeVat
-                                ? `(월세+부가세10%+공용관리비)`
-                                : `(월세+공용관리비 · 부가세별도)`;
+                            if (includeVat && hasMaintVat && maint > 0) {
+                                monthlySub = `(월세+부가세10% + 공용관리비+부가세10%)`;
+                            } else if (includeVat) {
+                                monthlySub = `(월세+부가세10% + 공용관리비)`;
+                            } else if (hasMaintVat && maint > 0) {
+                                monthlySub = `(월세 + 공용관리비+부가세10%)`;
+                            } else {
+                                monthlySub = `(월세+공용관리비 · 부가세별도)`;
+                            }
                         }
                         if (isSale && rent > 0) {
                             monthlyText = `월 임대수익 ${formatManwon(rent)}`;
@@ -613,12 +653,18 @@
                             ? '매매 건'
                             : (prem > 0 ? formatManwon(prem) : (item.premiumText || '무권리'));
 
+                        const maintSubText = maint > 0
+                            ? `공용관리비 ${formatManwon(maint)}${hasMaintVat ? ` (VAT 10% 별도)` : ''}`
+                            : '공용관리비 별도/없음';
+
                         // Deposit & Rent with identical font size and weight (Request 4)
                         const basicCond = isSale
                             ? `<div class="text-xs sm:text-sm font-extrabold text-slate-900">매매가 ${formatManwon(saleP)}</div>
                                <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5">기보증금 ${formatManwon(dep)} / 월세 ${formatManwon(rent)}</div>`
                             : `<div class="text-xs sm:text-sm font-extrabold text-slate-900">보증금 ${formatManwon(dep)}</div>
-                               <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5">월세 ${formatManwon(rent)} <span class="text-xs text-slate-500 font-medium">(공용관리비 ${maint > 0 ? formatManwon(maint) : '별도/없음'})</span></div>`;
+                               <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5">월세 ${formatManwon(rent)} <span class="text-xs text-slate-500 font-medium">(${maintSubText})</span></div>`;
+
+                        const docCount = Array.isArray(item.officialDocs) ? item.officialDocs.length : 0;
 
                         return `
                             <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="scrollToCard('prop-card-${idx}')">
@@ -627,7 +673,10 @@
                                         <span class="w-6 h-6 rounded-md bg-[#003891] text-white font-black text-xs flex items-center justify-center shrink-0">${num}</span>
                                         <div>
                                             <div class="font-extrabold text-slate-900 hover:text-[#003891] transition text-xs sm:text-sm">${escHtml(addr)}</div>
-                                            <div class="text-[11px] text-slate-500">매물번호: ${escHtml(item.propNo || '-')}</div>
+                                            <div class="text-[11px] text-slate-500 flex flex-wrap items-center gap-1.5">
+                                                <span>매물번호: ${escHtml(item.propNo || '-')}</span>
+                                                ${docCount > 0 ? `<span class="px-1.5 py-0.2 rounded bg-blue-50 text-[#003891] border border-blue-200 font-bold text-[10px]">공부·도면 ${docCount}건</span>` : ''}
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -668,9 +717,11 @@
                 const saleP = Number(item.salePrice) || 0;
                 const floors = getFloorParts(item);
 
+                const hasMaintVat = _userToggledMaintVat ? includeMaintVat : (includeMaintVat || Boolean(item.maintVat));
                 const totalInit = isSale ? Math.max(saleP - dep, 0) : (dep + prem);
-                const vatAmount = includeVat ? Math.round(rent * 0.1 * 10) / 10 : 0;
-                const totalMonthly = Math.round((rent + vatAmount + maint) * 10) / 10;
+                const rentVatAmount = includeVat ? Math.round(rent * 0.1 * 10) / 10 : 0;
+                const maintVatAmount = (hasMaintVat && maint > 0) ? Math.round(maint * 0.1 * 10) / 10 : 0;
+                const totalMonthly = Math.round((rent + rentVatAmount + maint + maintVatAmount) * 10) / 10;
 
                 // Annual Yield Calculation for Sale Properties
                 let yieldBadgeHtml = '';
@@ -779,7 +830,7 @@
                                     <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200">
                                         <div class="text-xs text-slate-600 font-bold">공용관리비 / 권리금</div>
                                         <div class="text-xs sm:text-sm font-extrabold text-slate-800 mt-0.5">
-                                            공용관리비 ${maint > 0 ? formatManwon(maint) : '없음/별도'}<br/>
+                                            공용관리비 ${maint > 0 ? formatManwon(maint) + (hasMaintVat ? ` <span class="text-[11px] text-[#003891] font-bold">(+VAT ${formatManwon(maintVatAmount)})</span>` : '') : '없음/별도'}<br/>
                                             <span class="text-slate-700">권리금: ${prem > 0 ? formatManwon(prem) : escHtml(item.premiumText || '무권리')}</span>
                                         </div>
                                     </div>
@@ -790,9 +841,9 @@
                                     </div>
                                     ${showMonthlyCost ? `
                                     <div class="bg-slate-100 rounded-xl p-3.5 border border-slate-300 col-span-2 sm:col-span-1">
-                                        <div class="text-xs text-slate-800 font-extrabold">월 실제 고정비 ${includeVat ? '(VAT포함)' : '(VAT별도)'}</div>
+                                        <div class="text-xs text-slate-800 font-extrabold">월 실제 고정비 ${(includeVat || (hasMaintVat && maint > 0)) ? '(VAT포함)' : '(VAT별도)'}</div>
                                         <div class="text-base sm:text-lg font-black text-slate-900 mt-0.5">월 ${formatManwon(totalMonthly)}</div>
-                                        <div class="text-[11px] text-slate-500">월세${includeVat ? '+부가세10%' : ''}+공용관리비</div>
+                                        <div class="text-[11px] text-slate-500">월세${includeVat ? '+부가세10%' : ''}+관리비${(hasMaintVat && maint > 0) ? '+부가세10%' : ''}</div>
                                     </div>
                                     ` : ''}
                                 `}
@@ -805,6 +856,9 @@
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                                 ${photosHtml}
                             </div>
+
+                            <!-- Official Public Records & Floor Plans (건축물대장, 토지대장, 지적도등본, 도면, 등기부등본(건물/토지)) -->
+                            ${renderOfficialDocsSectionHtml(item, idx)}
 
                             <!-- Customer Interactive Action Buttons (No Print) -->
                             <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 no-print">
@@ -1005,6 +1059,179 @@
         }
 
         // =====================================================================
+        // Official Public Records & Floor Plans (건축물대장, 토지대장, 지적도등본, 도면, 등기부등본(건물/토지))
+        // =====================================================================
+        function renderOfficialDocsSectionHtml(item, itemIdx) {
+            const docs = Array.isArray(item.officialDocs) ? item.officialDocs : [];
+            if (docs.length === 0) return '';
+
+            const cardsHtml = docs.map((doc, docIdx) => {
+                const docType = doc.docType || '공적장부/도면';
+                const fileName = doc.fileName || `${docType}.pdf`;
+                const pages = Array.isArray(doc.pageImages) ? doc.pageImages : [];
+                const pageCount = pages.length || doc.pageCount || 1;
+                const firstThumb = pages[0] || '';
+                const hasPdf = Boolean(doc.pdfUrl);
+
+                const thumbsPreviewHtml = pages.length > 0 ? `
+                    <div class="flex items-center gap-1.5 overflow-x-auto py-1">
+                        ${pages.slice(0, 6).map((pUrl, pIdx) => `
+                            <div onclick="openOfficialDocLightbox(${itemIdx}, ${docIdx}, ${pIdx})" class="relative w-14 h-18 rounded-lg overflow-hidden border border-slate-300 bg-white shrink-0 cursor-pointer hover:border-[#003891] transition group" title="${escHtml(docType)} ${pIdx + 1}페이지 사진으로 크게 보기">
+                                <img src="${escHtml(pUrl)}" alt="${escHtml(docType)} ${pIdx + 1}p" class="w-full h-16 object-cover group-hover:scale-105 transition" />
+                                <span class="block text-center text-[10px] font-bold bg-slate-800 text-white py-0.5">${pIdx + 1}P</span>
+                            </div>
+                        `).join('')}
+                        ${pages.length > 6 ? `<span class="text-[11px] font-bold text-slate-500 px-1">+${pages.length - 6}장 더보기</span>` : ''}
+                    </div>
+                ` : '';
+
+                return `
+                    <div class="bg-white rounded-xl p-3.5 border border-blue-200 shadow-2xs flex flex-col justify-between gap-2.5">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="px-2.5 py-0.5 rounded-md bg-[#003891] text-white text-xs font-extrabold">${escHtml(docType)}</span>
+                                <span class="text-[11px] font-bold text-slate-500">${pages.length > 0 ? `총 ${pageCount}장 사진 변환됨` : 'PDF 원본 첨부'}</span>
+                            </div>
+                            <div class="text-xs font-bold text-slate-800 truncate" title="${escHtml(fileName)}">${escHtml(fileName)}</div>
+                            ${thumbsPreviewHtml}
+                        </div>
+                        <div class="flex flex-wrap items-center gap-1.5 pt-1 border-t border-slate-100 no-print">
+                            <button type="button" onclick="openOfficialDocLightbox(${itemIdx}, ${docIdx}, 0)" class="flex-1 px-3 py-2 rounded-lg bg-[#f0f5ff] hover:bg-[#003891] text-[#003891] hover:text-white border border-blue-200 font-extrabold text-xs flex items-center justify-center gap-1 transition cursor-pointer">
+                                <span class="material-symbols-outlined text-[15px]">photo_library</span>
+                                <span>사진으로 크게 보기 (${pageCount}장)</span>
+                            </button>
+                            ${hasPdf ? `
+                            <button type="button" onclick="downloadOfficialDocFile(${itemIdx}, ${docIdx})" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center gap-1 transition cursor-pointer" title="PDF 원본 파일 다운로드">
+                                <span class="material-symbols-outlined text-[15px]">download</span>
+                                <span>PDF 원본 다운</span>
+                            </button>
+                            ` : (firstThumb ? `
+                            <button type="button" onclick="downloadOfficialDocFile(${itemIdx}, ${docIdx})" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center gap-1 transition cursor-pointer" title="원본 파일 다운로드">
+                                <span class="material-symbols-outlined text-[15px]">download</span>
+                                <span>원본 다운</span>
+                            </button>
+                            ` : '')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="bg-[#f4f7fc] rounded-2xl p-4 sm:p-5 border border-blue-200 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                        <div class="text-xs sm:text-sm font-extrabold text-[#003891] flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[18px]">description</span>
+                            <span>공적장부 및 도면 확인 (건축물대장 · 토지대장 · 지적도등본 · 도면 · 등기부등본)</span>
+                        </div>
+                        <span class="text-[11px] text-slate-600 font-medium no-print">모바일에서도 별도 뷰어 없이 [사진으로 크게 보기]를 눌러 바로 넘겨보거나 [PDF 원본 다운]을 받으실 수 있습니다.</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        ${cardsHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        async function renderPdfUrlToImagesClientSide(pdfUrl) {
+            if (!window.pdfjsLib) throw new Error('PDF.js not loaded');
+            const loadingTask = window.pdfjsLib.getDocument({
+                url: pdfUrl,
+                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+                cMapPacked: true
+            });
+            const pdf = await loadingTask.promise;
+            const maxPages = Math.min(pdf.numPages, 15);
+            const dataUrls = [];
+            for (let p = 1; p <= maxPages; p++) {
+                const page = await pdf.getPage(p);
+                const viewport = page.getViewport({ scale: 2.0 });
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: ctx, viewport }).promise;
+                dataUrls.push(canvas.toDataURL('image/jpeg', 0.9));
+            }
+            return dataUrls;
+        }
+
+        async function openOfficialDocLightbox(itemIdx, docIdx, startPageIdx = 0) {
+            if (!_briefing || !Array.isArray(_briefing.items)) return;
+            const item = _briefing.items[itemIdx];
+            if (!item || !Array.isArray(item.officialDocs)) return;
+            const doc = item.officialDocs[docIdx];
+            if (!doc) return;
+
+            let pages = Array.isArray(doc.pageImages) ? doc.pageImages.filter(Boolean) : [];
+            if (pages.length === 0 && doc.pdfUrl) {
+                try {
+                    if (typeof showToast === 'function') showToast('PDF 문서를 고화질 사진으로 변환하고 있습니다...');
+                    pages = await renderPdfUrlToImagesClientSide(doc.pdfUrl);
+                    doc.pageImages = pages;
+                } catch (e) {
+                    window.open(doc.pdfUrl, '_blank');
+                    return;
+                }
+            }
+            if (pages.length === 0) return;
+
+            _lightboxPhotos = pages;
+            _lightboxIndex = Math.max(0, Math.min(startPageIdx, pages.length - 1));
+            _lightboxTitle = `[${doc.docType || '공적장부'}] ${itemIdx + 1}번 매물 (${doc.fileName || ''})`;
+            _lightboxDocDownloadInfo = { itemIdx, docIdx };
+
+            updateLightboxView();
+            document.getElementById('photo-lightbox').classList.remove('hidden');
+        }
+        window.openOfficialDocLightbox = openOfficialDocLightbox;
+
+        async function downloadOfficialDocFile(itemIdx, docIdx) {
+            if (!_briefing || !Array.isArray(_briefing.items)) return;
+            const item = _briefing.items[itemIdx];
+            if (!item || !Array.isArray(item.officialDocs)) return;
+            const doc = item.officialDocs[docIdx];
+            if (!doc) return;
+
+            const targetUrl = doc.pdfUrl || (Array.isArray(doc.pageImages) && doc.pageImages[0]) || '';
+            if (!targetUrl) return;
+
+            const ext = doc.pdfUrl ? '.pdf' : '.jpg';
+            const rawName = doc.fileName || `${doc.docType || '공적장부'}_매물${item.propNo || (itemIdx + 1)}${ext}`;
+            const downloadName = rawName.endsWith(ext) ? rawName : (rawName + ext);
+
+            try {
+                const res = await fetch(targetUrl);
+                if (!res.ok) throw new Error('Fetch failed');
+                const blob = await res.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = downloadName;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(blobUrl);
+                }, 1000);
+            } catch (e) {
+                const a = document.createElement('a');
+                a.href = targetUrl;
+                a.download = downloadName;
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        }
+        window.downloadOfficialDocFile = downloadOfficialDocFile;
+
+        function triggerLightboxDocDownload() {
+            if (!_lightboxDocDownloadInfo) return;
+            downloadOfficialDocFile(_lightboxDocDownloadInfo.itemIdx, _lightboxDocDownloadInfo.docIdx);
+        }
+        window.triggerLightboxDocDownload = triggerLightboxDocDownload;
+
+        // =====================================================================
         // Interactive Photo Lightbox Slider (PC Arrows + Keyboard + Touch Swipe)
         // =====================================================================
         function openPhotoLightbox(itemIdx, photoIdx = 0) {
@@ -1019,6 +1246,7 @@
             _lightboxIndex = Math.max(0, Math.min(photoIdx, photos.length - 1));
             const isBlind = _briefing.blindAddress !== false;
             _lightboxTitle = `${itemIdx + 1}번 추천 매물 (${maskTextBlind(item.address, isBlind)} · ${item.area || ''})`;
+            _lightboxDocDownloadInfo = null;
 
             updateLightboxView();
             document.getElementById('photo-lightbox').classList.remove('hidden');
@@ -1032,10 +1260,20 @@
             const prevBtn = document.getElementById('lightbox-prev-btn');
             const nextBtn = document.getElementById('lightbox-next-btn');
             const thumbs = document.getElementById('lightbox-thumbs');
+            const dlBtn = document.getElementById('lightbox-download-btn');
 
             if (img) img.src = _lightboxPhotos[_lightboxIndex] || '';
             if (counter) counter.textContent = `${_lightboxIndex + 1} / ${total}`;
             if (caption) caption.textContent = _lightboxTitle;
+            if (dlBtn) {
+                if (_lightboxDocDownloadInfo) {
+                    dlBtn.classList.remove('hidden');
+                    dlBtn.classList.add('inline-flex');
+                } else {
+                    dlBtn.classList.add('hidden');
+                    dlBtn.classList.remove('inline-flex');
+                }
+            }
 
             if (prevBtn) prevBtn.style.display = total > 1 ? 'flex' : 'none';
             if (nextBtn) nextBtn.style.display = total > 1 ? 'flex' : 'none';
