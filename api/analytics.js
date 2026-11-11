@@ -11,7 +11,8 @@ export default async function handler(req, res) {
   }
 
   const owner = 'cym10003-cyber';
-  const repo = 'landing-page';
+  const repo = 'landing-page-assets';
+  const legacyRepo = 'landing-page';
   const searchLogsPath = 'data/search_logs.json';
   const analyticsPath = 'data/analytics.json';
   const token = (process.env.GITHUB_TOKEN || '').trim();
@@ -20,21 +21,23 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     const type = req.query?.type || 'search';
     const targetPath = type === 'analytics' ? analyticsPath : searchLogsPath;
-    try {
-      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${targetPath}`;
-      const headers = { 'Accept': 'application/vnd.github.v3+json' };
-      if (token) headers['Authorization'] = `Bearer ${token}`;
+    for (const rName of [repo, legacyRepo]) {
+      try {
+        const url = `https://api.github.com/repos/${owner}/${rName}/contents/${targetPath}`;
+        const headers = { 'Accept': 'application/vnd.github.v3+json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
 
-      const ghRes = await fetch(`${url}?t=${Date.now()}`, { headers });
-      if (ghRes.ok) {
-        const data = await ghRes.json();
-        if (data && data.content) {
-          const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
-          const parsed = JSON.parse(contentStr);
-          return res.status(200).json(parsed);
+        const ghRes = await fetch(`${url}?t=${Date.now()}`, { headers });
+        if (ghRes.ok) {
+          const data = await ghRes.json();
+          if (data && data.content) {
+            const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
+            const parsed = JSON.parse(contentStr);
+            return res.status(200).json(parsed);
+          }
         }
-      }
-    } catch(e) {}
+      } catch(e) {}
+    }
 
     // Fallback to local filesystem if GitHub API fetch fails or token is missing
     try {

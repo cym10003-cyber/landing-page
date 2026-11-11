@@ -1502,7 +1502,7 @@ async function syncAnalyticsWithRemote() {
 async function pushAnalyticsToGithub(config, analyticsObj) {
     try {
         const path = 'data/analytics.json';
-        const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${path}`;
+        const url = `https://api.github.com/repos/${config.github_owner}/landing-page-assets/contents/${path}`;
         const headers = {
             'Accept': 'application/vnd.github.v3+json',
             'Authorization': `token ${config.github_token}`

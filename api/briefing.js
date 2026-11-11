@@ -9,7 +9,8 @@ export default async function handler(req, res) {
   }
 
   const owner = 'cym10003-cyber';
-  const repo = 'landing-page';
+  const repo = 'landing-page-assets';
+  const legacyRepo = 'landing-page';
   const path = 'data/briefings.json';
   const token = (process.env.GITHUB_TOKEN || '').trim();
 
@@ -18,33 +19,39 @@ export default async function handler(req, res) {
     let dataObj = null;
 
     if (token) {
-      try {
-        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?t=${Date.now()}`;
-        const ghRes = await fetch(url, {
-          headers: {
-            'Accept': 'application/vnd.github.v3+json',
-            'Authorization': `Bearer ${token}`,
-            'Cache-Control': 'no-cache'
+      for (const rName of [repo, legacyRepo]) {
+        try {
+          const url = `https://api.github.com/repos/${owner}/${rName}/contents/${path}?t=${Date.now()}`;
+          const ghRes = await fetch(url, {
+            headers: {
+              'Accept': 'application/vnd.github.v3+json',
+              'Authorization': `Bearer ${token}`,
+              'Cache-Control': 'no-cache'
+            }
+          });
+          if (ghRes.ok) {
+            const json = await ghRes.json();
+            if (rName === repo) sha = json.sha || null;
+            if (json.content) {
+              const contentStr = Buffer.from(json.content, 'base64').toString('utf8');
+              dataObj = JSON.parse(contentStr);
+              break;
+            }
           }
-        });
-        if (ghRes.ok) {
-          const json = await ghRes.json();
-          sha = json.sha || null;
-          if (json.content) {
-            const contentStr = Buffer.from(json.content, 'base64').toString('utf8');
-            dataObj = JSON.parse(contentStr);
-          }
-        }
-      } catch (e) {}
+        } catch (e) {}
+      }
     }
 
     if (!dataObj) {
-      try {
-        const rawRes = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${path}?t=${Date.now()}`);
-        if (rawRes.ok) {
-          dataObj = await rawRes.json();
-        }
-      } catch (e) {}
+      for (const rName of [repo, legacyRepo]) {
+        try {
+          const rawRes = await fetch(`https://raw.githubusercontent.com/${owner}/${rName}/main/${path}?t=${Date.now()}`);
+          if (rawRes.ok) {
+            dataObj = await rawRes.json();
+            break;
+          }
+        } catch (e) {}
+      }
     }
 
     if (!dataObj || typeof dataObj !== 'object') {
