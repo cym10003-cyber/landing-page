@@ -192,8 +192,26 @@
             #broker-footer-card {
                 break-inside: avoid !important;
                 page-break-inside: avoid !important;
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                padding: 14px 18px !important;
+                gap: 16px !important;
             }
-        }
+            #broker-footer-card .footer-contact-box {
+                white-space: nowrap !important;
+                flex-shrink: 0 !important;
+                text-align: right !important;
+                min-width: 170px !important;
+            }
+            #broker-footer-phone {
+                white-space: nowrap !important;
+                word-break: keep-all !important;
+                font-size: 20px !important;
+                line-height: 1.2 !important;
+                display: block !important;
+            }
         }
         #floating-quick-bar, #scroll-nav-up-down, #mobile-bottom-nav {
             display: none !important;
@@ -418,15 +436,19 @@
 
         <!-- 6. Footer Business Card (Bright & Clear) -->
         <footer id="broker-footer-card" class="bg-white text-slate-800 rounded-2xl p-5 sm:p-6 border border-slate-300 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 print-break-inside-avoid">
-            <div class="space-y-1">
+            <div class="space-y-1 min-w-0">
                 <div class="font-black text-base sm:text-lg text-[#003891]">최가네부동산공인중개사사무소</div>
-                <div class="text-xs text-slate-700 font-medium">대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구) | 등록번호: 27260-2024-00085</div>
+                <div class="text-xs text-slate-700 font-medium">대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구)</div>
+                <div class="text-xs text-slate-700 font-medium flex items-center gap-1.5 flex-wrap">
+                    <span class="text-slate-500">중개사무소 등록번호:</span>
+                    <span class="font-bold text-slate-800 whitespace-nowrap">27260-2024-00085</span>
+                </div>
                 <div class="text-xs text-slate-500">대구 전 지역 상가 · 사무실 · 상가건물 · 상가주택 임대 및 매매 전문 파트너</div>
             </div>
-            <div class="text-left sm:text-right">
-                <div class="text-xs text-slate-600 font-bold">직통 상담 및 조건 조율 문의</div>
-                <div class="text-lg sm:text-xl font-black text-[#003891]">010-3548-4000</div>
-                <div class="text-[11px] text-slate-500">홈페이지: www.choi114.com</div>
+            <div class="footer-contact-box text-left sm:text-right shrink-0 whitespace-nowrap min-w-[190px]">
+                <div class="text-xs text-slate-600 font-bold whitespace-nowrap">직통 상담 및 조건 조율 문의</div>
+                <div id="broker-footer-phone" class="text-lg sm:text-2xl font-black text-[#003891] whitespace-nowrap leading-tight mt-0.5 tracking-tight">010-3548-4000</div>
+                <div class="text-[11px] text-slate-500 whitespace-nowrap mt-0.5">홈페이지: www.choi114.com</div>
             </div>
         </footer>
 
