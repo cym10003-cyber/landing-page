@@ -1012,7 +1012,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20260715_v240"></script>
+<script src="db.js?v=20260715_v242"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -1599,7 +1599,14 @@ async function handleDelete(id) {
                 
                 const leadsMap = new Map();
                 (remoteLeads || []).forEach(l => { if (l && l.id && !deletedIds.has(String(l.id))) leadsMap.set(String(l.id), l); });
-                (localLeads || []).forEach(l => { if (l && l.id && !deletedIds.has(String(l.id))) leadsMap.set(String(l.id), l); });
+                (localLeads || []).forEach(l => { 
+                    if (l && l.id && !deletedIds.has(String(l.id))) {
+                        const existing = leadsMap.get(String(l.id));
+                        if (!existing || (!existing.notes && l.notes)) {
+                            leadsMap.set(String(l.id), l);
+                        }
+                    }
+                });
 
                 const mergedLeads = Array.from(leadsMap.values());
                 mergedLeads.sort((a, b) => (b.id || 0) - (a.id || 0));
@@ -1616,11 +1623,19 @@ async function handleDelete(id) {
                     if (mergedLeads.length === 0) {
                         mobileContainer.innerHTML = '<div class="text-center py-8 text-muted text-sm bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">접수된 매물 의뢰가 없습니다.</div>';
                     } else {
-                        mobileContainer.innerHTML = mergedLeads.map(l => `
+                        mobileContainer.innerHTML = mergedLeads.map(l => {
+                            const isBriefing = l.type === 'briefing' || (l.category && l.category.includes('브리핑')) || (l.name && l.name.includes('브리핑'));
+                            const typeBadgeClass = isBriefing 
+                                ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300' 
+                                : (l.type === 'seller' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300');
+                            const typeLabel = isBriefing ? '🎯 브리핑픽' : (l.type === 'seller' ? '🏢 매물내놓기' : '🔍 매물구함');
+                            const memoText = l.notes || l.memo || '';
+
+                            return `
                             <div class="bg-white dark:bg-slate-800 p-3.5 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2.5">
                                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-2">
-                                    <span class="px-2.5 py-1 rounded-full text-xs font-extrabold ${l.type === 'seller' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}">
-                                        ${l.type === 'seller' ? '🏢 매물내놓기' : '🔍 매물구함'}
+                                    <span class="px-2.5 py-1 rounded-full text-xs font-extrabold ${typeBadgeClass}">
+                                        ${typeLabel}
                                     </span>
                                     <span class="text-[11px] text-slate-400 font-mono">${l.date || '-'}</span>
                                 </div>
@@ -1636,21 +1651,21 @@ async function handleDelete(id) {
 
                                 <div class="grid grid-cols-1 gap-1.5 text-xs bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-700/60">
                                     <div>
-                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• 매물종류/업종:</span>
-                                        <span class="font-extrabold text-slate-800 dark:text-slate-200 ml-1">${l.category || '-'}</span>
+                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• ${isBriefing ? '의뢰 구분:' : '매물종류/업종:'}</span>
+                                        <span class="font-extrabold text-slate-800 dark:text-slate-200 ml-1">${l.category || (isBriefing ? '🎯 브리핑 1순위 픽/상담' : '-')}</span>
                                     </div>
                                     <div>
-                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• 위치/층수/평수:</span>
-                                        <span class="font-extrabold text-slate-800 dark:text-slate-200 ml-1">${l.location || '-'} <span class="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/40 px-1 py-0.5 rounded">${l.floor || '전체층'}</span> ${l.pyeong ? '(' + l.pyeong + ')' : ''}</span>
+                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• ${isBriefing ? '선택 매물:' : '위치/층수/평수:'}</span>
+                                        <span class="font-extrabold text-slate-800 dark:text-slate-200 ml-1">${l.location || '-'} ${l.floor && l.floor !== '-' ? `<span class="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/40 px-1 py-0.5 rounded">${l.floor}</span>` : ''} ${l.pyeong && l.pyeong !== '-' ? '(' + l.pyeong + ')' : ''}</span>
                                     </div>
                                     <div>
-                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• 예산/임대료:</span>
-                                        <span class="font-extrabold text-emerald-600 dark:text-emerald-400 ml-1">${l.budget || '-'}</span>
+                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• ${isBriefing ? '요청 구분:' : '예산/임대료:'}</span>
+                                        <span class="font-extrabold ${isBriefing ? 'text-blue-700 dark:text-blue-300' : 'text-emerald-600 dark:text-emerald-400'} ml-1">${l.budget || '-'}</span>
                                     </div>
-                                    ${l.notes ? `
+                                    ${memoText ? `
                                     <div>
-                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• 요청 메모:</span>
-                                        <span class="font-bold text-slate-700 dark:text-slate-300 ml-1 line-clamp-1">${l.notes}</span>
+                                        <span class="text-slate-500 dark:text-slate-400 font-bold">• 상담 메모:</span>
+                                        <span class="font-bold text-slate-700 dark:text-slate-300 ml-1 line-clamp-1">${memoText}</span>
                                     </div>
                                     ` : ''}
                                 </div>
@@ -1664,7 +1679,8 @@ async function handleDelete(id) {
                                     </button>
                                 </div>
                             </div>
-                        `).join('');
+                            `;
+                        }).join('');
                     }
                 }
 
@@ -1673,19 +1689,27 @@ async function handleDelete(id) {
                     if (mergedLeads.length === 0) {
                         tbody.innerHTML = '<tr><td colspan="9" class="text-center py-8 text-muted">접수된 매물 의뢰가 없습니다.</td></tr>';
                     } else {
-                        tbody.innerHTML = mergedLeads.map(l => `
+                        tbody.innerHTML = mergedLeads.map(l => {
+                            const isBriefing = l.type === 'briefing' || (l.category && l.category.includes('브리핑')) || (l.name && l.name.includes('브리핑'));
+                            const typeColorClass = isBriefing 
+                                ? 'text-amber-700 dark:text-amber-400 font-extrabold' 
+                                : (l.type === 'seller' ? 'text-purple-600' : 'text-blue-600');
+                            const typeLabel = isBriefing ? '🎯 브리핑픽' : (l.type === 'seller' ? '🏢 매물내놓기' : '🔍 매물구함');
+                            const memoText = l.notes || l.memo || '-';
+
+                            return `
                             <tr class="hover:bg-surface-container-low transition text-xs">
-                                <td class="px-1.5 py-3 font-semibold whitespace-nowrap w-24 ${l.type === 'seller' ? 'text-purple-600' : 'text-blue-600'}">
-                                    ${l.type === 'seller' ? '🏢 매물내놓기' : '🔍 매물구함'}
+                                <td class="px-1.5 py-3 font-semibold whitespace-nowrap w-24 ${typeColorClass}">
+                                    ${typeLabel}
                                 </td>
                                 <td class="px-1.5 py-3 font-bold text-ink whitespace-nowrap w-20 truncate" title="${l.name || ''}">${l.name || '-'}</td>
                                 <td class="px-1.5 py-3 font-mono font-bold text-primary whitespace-nowrap w-28">${l.phone || '-'}</td>
-                                <td class="px-1.5 py-3 font-medium whitespace-nowrap w-20 truncate" title="${l.category || ''}">${l.category || '-'}</td>
+                                <td class="px-1.5 py-3 font-medium whitespace-nowrap w-20 truncate" title="${l.category || ''}">${l.category || (isBriefing ? '🎯 브리핑픽' : '-')}</td>
                                 <td class="px-2 py-3 leading-tight break-words w-auto">
-                                    ${l.location || '-'} <span class="text-[11px] text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/40 px-1 py-0.5 rounded font-semibold inline-block">${l.floor || '전체층'}</span> ${l.pyeong ? '(' + l.pyeong + ')' : ''}
+                                    ${l.location || '-'} ${l.floor && l.floor !== '-' ? `<span class="text-[11px] text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/40 px-1 py-0.5 rounded font-semibold inline-block">${l.floor}</span>` : ''} ${l.pyeong && l.pyeong !== '-' ? '(' + l.pyeong + ')' : ''}
                                 </td>
-                                <td class="px-1.5 py-3 font-semibold text-emerald-700 whitespace-nowrap w-20 truncate" title="${l.budget || ''}">${l.budget || '-'}</td>
-                                <td class="px-1.5 py-3 text-xs text-slate-700 max-w-[110px] truncate cursor-pointer font-medium hover:text-blue-600 w-28" onclick="openLeadDetail('${l.id}')" title="클릭시 상세보기">${l.notes || '-'}</td>
+                                <td class="px-1.5 py-3 font-semibold ${isBriefing ? 'text-blue-700 dark:text-blue-300 font-bold' : 'text-emerald-700'} whitespace-nowrap w-28 truncate" title="${l.budget || ''}">${l.budget || '-'}</td>
+                                <td class="px-1.5 py-3 text-xs text-slate-700 dark:text-slate-300 max-w-[130px] truncate cursor-pointer font-medium hover:text-blue-600 w-32" onclick="openLeadDetail('${l.id}')" title="${escAdminHtml(memoText)}">${memoText}</td>
                                 <td class="px-1.5 py-3 text-[11px] text-muted leading-tight w-24">${(l.date || '-').replace(' ', '<br>')}</td>
                                 <td class="px-1 py-3 text-center whitespace-nowrap w-36">
                                     <div class="flex items-center justify-center gap-1 flex-nowrap">
@@ -1701,7 +1725,8 @@ async function handleDelete(id) {
                                     </div>
                                 </td>
                             </tr>
-                        `).join('');
+                            `;
+                        }).join('');
                     }
                 }
             } catch(e) {}
@@ -1721,10 +1746,15 @@ async function handleDelete(id) {
             if (deleteBtn) deleteBtn.onclick = () => { closeLeadDetailModal(); deleteSingleLead(lead.id); };
 
             if (body) {
+                const isBriefing = lead.type === 'briefing' || (lead.category && lead.category.includes('브리핑')) || (lead.name && lead.name.includes('브리핑'));
                 const isSeller = lead.type === 'seller';
-                const typeBadge = isSeller 
-                    ? '<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">🏢 건물주/임차인 매물내놓기</span>'
-                    : '<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">🔍 손님 매물구함</span>';
+                const typeBadge = isBriefing
+                    ? '<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">🎯 VIP 브리핑 1순위 픽 / 조건협의 접수</span>'
+                    : (isSeller 
+                        ? '<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">🏢 건물주/임차인 매물내놓기</span>'
+                        : '<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">🔍 손님 매물구함</span>');
+
+                const memoContent = lead.notes || lead.memo || '상담 요청 메모가 없습니다.';
 
                 body.innerHTML = `
                     <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700">
@@ -1742,23 +1772,23 @@ async function handleDelete(id) {
                             <a href="tel:${lead.phone}" class="text-sm font-extrabold text-blue-600 dark:text-blue-400 hover:underline">${lead.phone || '-'}</a>
                         </div>
                         <div>
-                            <span class="text-xs text-slate-500 font-bold block mb-0.5">• ${isSeller ? '매물 종류' : '희망 업종 / 매물종류'}</span>
-                            <span class="font-extrabold text-slate-800 dark:text-slate-200">${lead.category || '-'}</span>
+                            <span class="text-xs text-slate-500 font-bold block mb-0.5">• ${isBriefing ? '의뢰 구분' : (isSeller ? '매물 종류' : '희망 업종 / 매물종류')}</span>
+                            <span class="font-extrabold text-slate-800 dark:text-slate-200">${lead.category || (isBriefing ? '🎯 브리핑 1순위 픽/상담' : '-')}</span>
                         </div>
                         <div>
-                            <span class="text-xs text-slate-500 font-bold block mb-0.5">• 위치 / 층수 / 평수</span>
-                            <span class="font-extrabold text-slate-800 dark:text-slate-200">${lead.location || '-'} <span class="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/40 px-1.5 py-0.5 rounded text-xs">${lead.floor || '전체층'}</span> ${lead.pyeong ? '(' + lead.pyeong + ')' : ''}</span>
+                            <span class="text-xs text-slate-500 font-bold block mb-0.5">• ${isBriefing ? '선택 매물 / 위치' : '위치 / 층수 / 평수'}</span>
+                            <span class="font-extrabold text-slate-800 dark:text-slate-200">${lead.location || '-'} ${lead.floor && lead.floor !== '-' ? `<span class="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/40 px-1.5 py-0.5 rounded text-xs">${lead.floor}</span>` : ''} ${lead.pyeong && lead.pyeong !== '-' ? '(' + lead.pyeong + ')' : ''}</span>
                         </div>
                         <div class="col-span-2 border-t border-slate-200/50 dark:border-slate-700/50 pt-2">
-                            <span class="text-xs text-slate-500 font-bold block mb-0.5">• ${isSeller ? '임대.매매조건 / 권리금 등' : '희망 예산 / 임대조건'}</span>
-                            <span class="font-extrabold text-emerald-600 dark:text-emerald-400 text-base">${lead.budget || '-'}</span>
+                            <span class="text-xs text-slate-500 font-bold block mb-0.5">• ${isBriefing ? '고객 요청 구분' : (isSeller ? '임대.매매조건 / 권리금 등' : '희망 예산 / 임대조건')}</span>
+                            <span class="font-extrabold ${isBriefing ? 'text-blue-700 dark:text-blue-300' : 'text-emerald-600 dark:text-emerald-400'} text-base">${lead.budget || '-'}</span>
                         </div>
                     </div>
 
                     <div class="space-y-1">
                         <span class="text-xs text-slate-500 font-bold block">• 상담 요청 메모 (전체 내용)</span>
                         <div class="bg-amber-50/80 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 p-3.5 rounded-xl border border-amber-200/60 dark:border-slate-700 whitespace-pre-wrap leading-relaxed text-xs sm:text-sm font-medium max-h-60 overflow-y-auto">
-                            ${lead.notes || '상담 요청 메모가 없습니다.'}
+                            ${memoContent}
                         </div>
                     </div>
                 `;

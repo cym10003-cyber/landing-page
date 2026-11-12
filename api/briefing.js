@@ -137,8 +137,8 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: result.ok, data: updated });
     }
 
-    if (action === 'customer_feedback') {
-      const { briefingId, itemId, propNo, itemTitle, pickType, customerMemo } = body;
+    if (action === 'customer_feedback' || action === 'customer_pick') {
+      const { briefingId, itemId, propNo, itemTitle, pickType, customerMemo, customerPhone } = body;
       const { dataObj } = await fetchCurrentData();
       const bIdx = dataObj.briefings.findIndex(b => String(b.id) === String(briefingId));
 
@@ -150,13 +150,16 @@ export default async function handler(req, res) {
         itemTitle: itemTitle || '',
         pickType: pickType || '1순위 조건 협의 요청',
         customerMemo: customerMemo || '',
+        customerPhone: customerPhone || '',
         date: nowStr,
         timestamp: Date.now()
       };
 
       let customerName = '브리핑 고객';
+      let phone = customerPhone || '';
       if (bIdx !== -1) {
         customerName = dataObj.briefings[bIdx].customerName || '브리핑 고객';
+        if (!phone) phone = dataObj.briefings[bIdx].customerPhone || '';
         if (!Array.isArray(dataObj.briefings[bIdx].customerPicks)) {
           dataObj.briefings[bIdx].customerPicks = [];
         }
@@ -179,13 +182,14 @@ export default async function handler(req, res) {
             'Referer': 'https://www.choi114.com/'
           },
           body: JSON.stringify({
-            "_subject": `🔥 [최가네 브리핑 피드백] ${customerName}님이 [매물 ${propNo}] ${pickType}!`,
+            "_subject": `🔥 [최가네 브리핑 픽] ${customerName}님이 [매물 ${propNo || '전체'}] ${pickType}!`,
             "고객명": customerName,
+            "연락처": phone || '브리핑보드접수',
             "브리핑ID": briefingId || '-',
-            "선택구분": pickType || '-',
+            "선택구분_요청": pickType || '-',
             "매물번호": propNo || '-',
             "매물제목": itemTitle || '-',
-            "고객요청메모": customerMemo || '-',
+            "고객남기실말씀": customerMemo || '-',
             "선택일시": nowStr,
             "_template": "table",
             "_captcha": "false"

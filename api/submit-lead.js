@@ -47,42 +47,67 @@ export default async function handler(req, res) {
   // POST: Submit a new lead
   if (req.method === 'POST') {
     try {
-      const { type, name, phone, category, location, floor, pyeong, budget, notes } = req.body || {};
-      if (!name || !phone) {
-        return res.status(400).json({ error: 'Name and phone required' });
+      const body = req.body || {};
+      const rawType = body.type || 'buyer';
+      const name = String(body.name || body.customerName || '고객').trim();
+      const phone = String(body.phone || body.customerPhone || '연락처 미기재').trim();
+      if (!name) {
+        return res.status(400).json({ error: 'Name is required' });
       }
+
+      const isBriefing = rawType === 'briefing' || 
+        (body.category && body.category.includes('브리핑')) || 
+        (body.propertyType && body.propertyType.includes('브리핑')) || 
+        (name && name.includes('브리핑'));
+
+      const type = isBriefing ? 'briefing' : rawType;
+      const category = String(body.category || body.propertyType || body.propType || (isBriefing ? '🎯 브리핑 1순위 픽/상담' : '상가/사무실')).trim();
+      const location = String(body.location || body.area || body.propTitle || body.address || '-').trim();
+      const floor = String(body.floor || (isBriefing ? '-' : '전체층')).trim();
+      const pyeong = String(body.pyeong || '-').trim();
+      const budget = String(body.budget || body.price || body.pickType || '-').trim();
+      const notes = String(body.notes || body.memo || body.consultMemo || body.customerMemo || body.message || '').trim();
 
       const leadObj = {
         id: Date.now(),
-        type: type || 'buyer',
-        name: String(name).trim(),
-        phone: String(phone).trim(),
-        category: String(category || ''),
-        location: String(location || ''),
-        floor: String(floor || '전체층'),
-        pyeong: String(pyeong || ''),
-        budget: String(budget || ''),
-        notes: String(notes || ''),
+        type,
+        name,
+        phone,
+        category,
+        location,
+        floor,
+        pyeong,
+        budget,
+        notes,
         date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
       };
 
       // Send Email Notification to cym10003@naver.com & Telegram Notification
       try {
         const targetEmail = process.env.ADMIN_NOTIFY_EMAIL || 'cym10003@naver.com';
-        const leadTypeStr = leadObj.type === 'seller' ? '🏢 [건물주/임차인] 매물내놓기' : '🔍 [손님] 매물구함';
-        const emailSubject = `🔔 [최가네부동산] 새 ${leadObj.type === 'seller' ? '매물내놓기' : '매물구함'} 접수! (${leadObj.name || '고객'}님)`;
+        const leadTypeStr = isBriefing 
+          ? '🎯 [VIP 브리핑] 1순위 픽 & 조건협의 접수' 
+          : (leadObj.type === 'seller' ? '🏢 [건물주/임차인] 매물내놓기' : '🔍 [손님] 매물구함');
+        
+        const emailSubject = isBriefing
+          ? `🔥 [최가네 브리핑 픽] ${leadObj.name}님이 [${leadObj.budget || '1순위 픽'}] 요청을 남기셨습니다!`
+          : `🔔 [최가네부동산] 새 ${leadObj.type === 'seller' ? '매물내놓기' : '매물구함'} 접수! (${leadObj.name || '고객'}님)`;
         
         const htmlBody = `
           <div style="font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; max-width: 580px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff;">
-            <div style="text-align: center; padding-bottom: 16px; border-bottom: 2px solid #2563eb;">
-              <h2 style="color: #1e3a8a; margin: 0; font-size: 20px;">🔔 [최가네부동산] 실시간 매물 의뢰 접수</h2>
-              <p style="color: #64748b; font-size: 13px; margin-top: 4px;">홈페이지를 통해 손님이 새로 접수한 매물 의뢰 내역입니다.</p>
+            <div style="text-align: center; padding-bottom: 16px; border-bottom: 2px solid ${isBriefing ? '#d97706' : '#2563eb'};">
+              <h2 style="color: ${isBriefing ? '#b45309' : '#1e3a8a'}; margin: 0; font-size: 20px;">
+                ${isBriefing ? '🎯 [최가네 VIP 브리핑] 실시간 1순위 픽 & 조건협의 접수' : '🔔 [최가네부동산] 실시간 매물 의뢰 접수'}
+              </h2>
+              <p style="color: #64748b; font-size: 13px; margin-top: 4px;">
+                ${isBriefing ? 'VIP 고객님이 전용 브리핑 보드를 확인하고 매물 선택 및 협의 사항을 남기셨습니다. 최우선 응대 바랍니다!' : '홈페이지를 통해 손님이 새로 접수한 매물 의뢰 내역입니다.'}
+              </p>
             </div>
             
             <table style="width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px;">
               <tr style="background-color: #f8fafc;">
                 <td style="padding: 12px; font-weight: bold; width: 32%; border-bottom: 1px solid #e2e8f0; color: #475569;">의뢰 구분</td>
-                <td style="padding: 12px; font-weight: bold; color: ${leadObj.type === 'seller' ? '#7c3aed' : '#2563eb'}; border-bottom: 1px solid #e2e8f0;">${leadTypeStr}</td>
+                <td style="padding: 12px; font-weight: bold; color: ${isBriefing ? '#d97706' : (leadObj.type === 'seller' ? '#7c3aed' : '#2563eb')}; border-bottom: 1px solid #e2e8f0;">${leadTypeStr}</td>
               </tr>
               <tr>
                 <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">성함 / 상호</td>
@@ -95,20 +120,20 @@ export default async function handler(req, res) {
                 </td>
               </tr>
               <tr>
-                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">매물종류 / 업종</td>
+                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">${isBriefing ? '의뢰 구분' : '매물종류 / 업종'}</td>
                 <td style="padding: 12px; font-weight: bold; color: #0f172a; border-bottom: 1px solid #e2e8f0;">${leadObj.category || '-'}</td>
               </tr>
               <tr style="background-color: #f8fafc;">
-                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">위치 / 층수 / 평수</td>
-                <td style="padding: 12px; color: #0f172a; border-bottom: 1px solid #e2e8f0;">${leadObj.location || '-'} (${leadObj.floor || '전체층'}, ${leadObj.pyeong || '-'})</td>
+                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">${isBriefing ? '선택 매물' : '위치 / 층수 / 평수'}</td>
+                <td style="padding: 12px; color: #0f172a; border-bottom: 1px solid #e2e8f0;">${leadObj.location || '-'} ${leadObj.floor !== '-' ? `(${leadObj.floor}, ${leadObj.pyeong})` : ''}</td>
               </tr>
               <tr>
-                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">예산 / 조건 / 권리금</td>
+                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #475569;">${isBriefing ? '요청 구분' : '예산 / 조건 / 권리금'}</td>
                 <td style="padding: 12px; font-weight: bold; color: #059669; border-bottom: 1px solid #e2e8f0;">${leadObj.budget || '-'}</td>
               </tr>
               <tr style="background-color: #fffbeb;">
-                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #92400e;">상담 요청 메모</td>
-                <td style="padding: 12px; color: #1e293b; border-bottom: 1px solid #e2e8f0; white-space: pre-wrap;">${leadObj.notes || '-'}</td>
+                <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; color: #92400e;">고객 남기실 말씀 (상담 메모)</td>
+                <td style="padding: 12px; color: #1e293b; border-bottom: 1px solid #e2e8f0; white-space: pre-wrap; font-weight: 500;">${leadObj.notes || '남기신 말씀 없음'}</td>
               </tr>
               <tr>
                 <td style="padding: 12px; font-weight: bold; color: #475569;">접수 일시</td>
@@ -139,8 +164,8 @@ export default async function handler(req, res) {
             "성함_상호": leadObj.name || '-',
             "연락처": leadObj.phone || '-',
             "매물종류_업종": leadObj.category || '-',
-            "위치_층수_평수": `${leadObj.location || '-'} (${leadObj.floor || '전체층'}, ${leadObj.pyeong || '-'})`,
-            "예산_조건_권리금": leadObj.budget || '-',
+            "선택매물_위치": `${leadObj.location || '-'} ${leadObj.floor !== '-' ? `(${leadObj.floor}, ${leadObj.pyeong})` : ''}`,
+            "요청구분_예산": leadObj.budget || '-',
             "상담요청메모": leadObj.notes || '-',
             "접수일시": leadObj.date || new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
             "_template": "table",
@@ -167,18 +192,27 @@ export default async function handler(req, res) {
         }
 
         // Also Telegram Notification (if token is available)
-        const text = `🔔 [최가네부동산] 실시간 매물 의뢰 접수!\n\n` +
-          `• 구분: ${leadTypeStr}\n` +
-          `• 성함/상호: ${leadObj.name}\n` +
-          `• 연락처: ${leadObj.phone}\n` +
-          `• 매물종류/업종: ${leadObj.category}\n` +
-          `• 위치/소재지: ${leadObj.location}\n` +
-          `• 층수: ${leadObj.floor || '전체층'}\n` +
-          `• 평수: ${leadObj.pyeong}\n` +
-          `• 조건/권리금: ${leadObj.budget}\n` +
-          `• 요청사항: ${leadObj.notes || '-'}\n\n` +
-          `📞 바로 전화걸기: ${leadObj.phone}\n` +
-          `🌐 대시보드: https://www.choi114.com/admin.html`;
+        const text = isBriefing
+          ? `🔥 [최가네부동산] VIP 브리핑 1순위 픽 접수!\n\n` +
+            `• 고객명: ${leadObj.name}\n` +
+            `• 연락처: ${leadObj.phone}\n` +
+            `• 요청구분: ${leadObj.budget}\n` +
+            `• 선택매물: ${leadObj.location}\n` +
+            `• 남기실 말씀:\n${leadObj.notes || '-'}\n\n` +
+            `📞 바로 전화걸기: ${leadObj.phone}\n` +
+            `🌐 관리자 대시보드: https://www.choi114.com/admin.html`
+          : `🔔 [최가네부동산] 실시간 매물 의뢰 접수!\n\n` +
+            `• 구분: ${leadTypeStr}\n` +
+            `• 성함/상호: ${leadObj.name}\n` +
+            `• 연락처: ${leadObj.phone}\n` +
+            `• 매물종류/업종: ${leadObj.category}\n` +
+            `• 위치/소재지: ${leadObj.location}\n` +
+            `• 층수: ${leadObj.floor || '전체층'}\n` +
+            `• 평수: ${leadObj.pyeong}\n` +
+            `• 조건/권리금: ${leadObj.budget}\n` +
+            `• 요청사항: ${leadObj.notes || '-'}\n\n` +
+            `📞 바로 전화걸기: ${leadObj.phone}\n` +
+            `🌐 대시보드: https://www.choi114.com/admin.html`;
 
         const botToken = process.env.TELEGRAM_BOT_TOKEN;
         const chatId = process.env.TELEGRAM_CHAT_ID || '8970218844';
