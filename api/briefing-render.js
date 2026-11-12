@@ -47,7 +47,7 @@ export default async function handler(req, res) {
   const baseUrl = 'https://www.choi114.com';
   let ogTitle = '🏢 [VIP 고객 맞춤] 상가·사무실 비교 브리핑 리포트 | 최가네부동산';
   let ogDesc = '엄선된 추천 매물 상세 분석 · 초기 필요자금 및 월 실제 고정비 비교 · 공적장부·도면 · 현장 실사진을 전용 브리핑 보드에서 한눈에 확인하세요. (최가네부동산 010-3548-4000)';
-  let ogImage = `${baseUrl}/og_briefing.jpg`;
+  let ogImage = `${baseUrl}/og_briefing.jpg?v=2`;
   let pageTitle = '고객 전용 맞춤 매물 브리핑 보드 | 최가네부동산';
   const ogUrl = `${baseUrl}/briefing?id=${encodeURIComponent(id)}`;
 
