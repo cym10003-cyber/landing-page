@@ -45,43 +45,18 @@ export default async function handler(req, res) {
   }
 
   const baseUrl = 'https://www.choi114.com';
-  let ogTitle = '🏢 [VIP 고객 맞춤] 상가·사무실 비교 브리핑 리포트 | 최가네부동산';
-  let ogDesc = '엄선된 추천 매물 상세 분석 · 초기 필요자금 및 월 실제 고정비 비교 · 공적장부·도면 · 현장 실사진을 전용 브리핑 보드에서 한눈에 확인하세요. (최가네부동산 010-3548-4000)';
-  let ogImage = `${baseUrl}/og_briefing.jpg?v=2`;
-  let pageTitle = '고객 전용 맞춤 매물 브리핑 보드 | 최가네부동산';
+  let ogTitle = '매물 브리핑 자료ㅣ최가네부동산';
+  let ogDesc = '최가네부동산 맞춤 매물 리포트 (010-3548-4000)';
+  let ogImage = `${baseUrl}/og_briefing.jpg?v=3`;
+  let pageTitle = '매물 브리핑 자료ㅣ최가네부동산';
   const ogUrl = `${baseUrl}/briefing?id=${encodeURIComponent(id)}`;
 
   if (briefing) {
     const cName = (briefing.customerName || 'VIP 고객님').trim();
-    const bTitle = (briefing.title || '추천 오피스·상가 맞춤 브리핑').trim();
-    const items = Array.isArray(briefing.items) ? briefing.items : [];
-    const count = items.length;
-
-    pageTitle = `[VIP 맞춤 브리핑] ${cName} 전용 매물 리포트 | 최가네부동산`;
-    ogTitle = `🏢 [VIP 맞춤 브리핑] ${cName} 전용 매물 비교 리포트`;
-
-    // Extract first item photo or best photo
-    let bestPhoto = '';
-    for (const it of items) {
-      if (Array.isArray(it.photos) && it.photos.length > 0 && it.photos[0]) {
-        bestPhoto = it.photos[0];
-        break;
-      }
-    }
-    if (bestPhoto) {
-      ogImage = bestPhoto;
-    }
-
-    const firstItem = items[0] || {};
-    const firstArea = firstItem.area || '';
-
-    const summaryParts = [bTitle];
-    if (count > 0) summaryParts.push(`추천 매물 ${count}건`);
-    if (firstArea) summaryParts.push(firstArea);
-    summaryParts.push('초기자금·월고정비·실사진·공부 완비');
-    summaryParts.push('최가네부동산 010-3548-4000');
-
-    ogDesc = summaryParts.join(' · ');
+    pageTitle = '매물 브리핑 자료ㅣ최가네부동산';
+    ogTitle = '매물 브리핑 자료ㅣ최가네부동산';
+    ogDesc = `${cName} 전용 맞춤 매물 리포트 (최가네부동산 010-3548-4000)`;
+    ogImage = `${baseUrl}/og_briefing.jpg?v=3`;
   }
 
   function esc(str) {
