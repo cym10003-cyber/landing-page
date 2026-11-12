@@ -97,22 +97,30 @@ export default async function handler(req, res) {
     <!-- Dynamic Open Graph & Social Preview Tags for SMS / KakaoTalk / iMessage -->
     <title>${esc(pageTitle)}</title>
     <meta name="description" content="${esc(ogDesc)}" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="최가네부동산 VIP 맞춤 브리핑" />
     <meta property="og:url" content="${esc(ogUrl)}" />
     <meta property="og:title" content="${esc(ogTitle)}" />
     <meta property="og:description" content="${esc(ogDesc)}" />
     <meta property="og:image" content="${esc(ogImage)}" />
+    <meta property="og:image:secure_url" content="${esc(ogImage)}" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="${esc(ogTitle)}" />
+    <link rel="image_src" href="${esc(ogImage)}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${esc(ogTitle)}" />
     <meta name="twitter:description" content="${esc(ogDesc)}" />
     <meta name="twitter:image" content="${esc(ogImage)}" />
   `;
 
-  // Replace or inject into <head>
+  // Remove any legacy tags before injecting fresh ones
+  html = html.replace(/<meta\s+name=["']robots["'][^>]*>/gi, '');
+  html = html.replace(/<meta\s+property=["']og:[^"']+["'][^>]*>/gi, '');
+  html = html.replace(/<meta\s+name=["']twitter:[^"']+["'][^>]*>/gi, '');
+  html = html.replace(/<link\s+rel=["']image_src["'][^>]*>/gi, '');
   if (html.includes('<title>')) {
     html = html.replace(/<title>[\s\S]*?<\/title>/i, ogTagsHtml.trim());
   } else {
