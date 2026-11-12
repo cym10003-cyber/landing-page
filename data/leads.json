@@ -1,5 +1,18 @@
 [
   {
+    "id": 1794465326123,
+    "type": "buyer",
+    "name": "김OO 대표님 (브리핑픽)",
+    "phone": "브리핑보드접수",
+    "category": "",
+    "location": "",
+    "floor": "전체층",
+    "pyeong": "",
+    "budget": "",
+    "notes": "",
+    "date": "2026. 11. 12. 오후 3:35:26"
+  },
+  {
     "id": 1793168105835,
     "type": "seller",
     "name": "신은현",
