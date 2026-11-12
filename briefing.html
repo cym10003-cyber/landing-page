@@ -67,13 +67,14 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 10mm;
+                margin: 8mm 10mm;
             }
             body {
                 background: #ffffff !important;
                 color: #0f172a !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
+                font-size: 11.5px !important;
             }
             .no-print {
                 display: none !important;
@@ -82,15 +83,117 @@
                 display: block !important;
             }
             .print-break-inside-avoid {
-                break-inside: avoid;
-                page-break-inside: avoid;
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
             }
-            .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl {
+            .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .shadow-xs, .shadow-2xs {
                 box-shadow: none !important;
             }
-            #floating-quick-bar, #scroll-nav-up-down, #mobile-bottom-nav {
+            #floating-quick-bar, #scroll-nav-up-down, #mobile-bottom-nav, #mobile-bottom-cta, #mobile-comparison-toggle-bar {
                 display: none !important;
             }
+
+            /* 1. Comparison Table 100% Full-Width Fitting in Print (Zero horizontal cutoff) */
+            #comparison-table-section {
+                padding: 14px 16px !important;
+                border-radius: 12px !important;
+                border: 1.5px solid #cbd5e1 !important;
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+                margin-bottom: 0 !important;
+            }
+            #comparison-mobile-cards {
+                display: none !important;
+            }
+            #comparison-table-wrapper {
+                display: block !important;
+                overflow: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+            #comparison-table {
+                display: table !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                table-layout: fixed !important;
+                border-collapse: collapse !important;
+                font-size: 10.5px !important;
+            }
+            #comparison-table th,
+            #comparison-table td {
+                white-space: normal !important;
+                word-break: keep-all !important;
+                overflow-wrap: break-word !important;
+                line-height: 1.35 !important;
+            }
+            #comparison-table th {
+                padding: 6px 4px !important;
+                font-size: 10.5px !important;
+            }
+            #comparison-table td {
+                padding: 7px 4px !important;
+                font-size: 10.5px !important;
+            }
+            #comparison-table td .whitespace-nowrap,
+            #comparison-table th .whitespace-nowrap {
+                white-space: normal !important;
+            }
+
+            /* Fixed Column Proportions for Print Table (6 columns) */
+            .comp-col-rank-addr { width: 22% !important; }
+            .comp-col-area-floor { width: 17% !important; }
+            .comp-col-basic-cond { width: 21% !important; }
+            .comp-col-premium { width: 12% !important; }
+            .comp-col-init-capital { width: 14% !important; }
+            .comp-col-monthly-cost { width: 14% !important; }
+
+            /* Fixed Column Proportions for Print Table (5 columns without monthly cost) */
+            .comp-5col .comp-col-rank-addr { width: 26% !important; }
+            .comp-5col .comp-col-area-floor { width: 20% !important; }
+            .comp-5col .comp-col-basic-cond { width: 25% !important; }
+            .comp-5col .comp-col-premium { width: 14% !important; }
+            .comp-5col .comp-col-init-capital { width: 15% !important; }
+
+            /* 2. Page Break Rules: Executive Summary Page 1 ends cleanly after Comparison Table */
+            #detailed-briefing-section {
+                break-before: page !important;
+                page-break-before: always !important;
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+            }
+            /* Hide the orphaned heading on Page 1 */
+            #detailed-briefing-header {
+                display: none !important;
+            }
+
+            /* Each property card is its own page in print! */
+            .briefing-card {
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+                border-radius: 12px !important;
+                border: 1.5px solid #cbd5e1 !important;
+                margin-bottom: 0 !important;
+            }
+            .briefing-card:not(:last-child) {
+                break-after: page !important;
+                page-break-after: always !important;
+            }
+
+            /* Attached Memo Warehouse Section starts on a fresh page */
+            #memo-warehouse-section {
+                break-before: page !important;
+                page-break-before: always !important;
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
+
+            /* Broker Official Info Card */
+            #broker-footer-card {
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
+        }
         }
         #floating-quick-bar, #scroll-nav-up-down, #mobile-bottom-nav {
             display: none !important;
@@ -238,8 +341,29 @@
                 </div>
             </div>
 
-            <div class="overflow-x-auto -mx-2 px-2">
-                <table class="w-full text-left border-collapse text-xs sm:text-sm min-w-[780px]">
+            <!-- Mobile View Mode Switcher (Visible on Mobile only, hidden in desktop & print) -->
+            <div id="mobile-comparison-toggle-bar" class="flex items-center justify-between gap-2 md:hidden no-print pt-0.5 pb-0.5">
+                <span class="text-[11px] font-bold text-slate-600 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[15px] text-[#003891]">view_agenda</span>
+                    <span>스와이프 없이 한눈에 보기</span>
+                </span>
+                <div class="inline-flex p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-extrabold">
+                    <button type="button" id="btn-comp-view-cards" onclick="setComparisonMobileView('cards')" class="px-2.5 py-1 rounded-md bg-[#003891] text-white shadow-xs transition cursor-pointer">
+                        카드형 (추천)
+                    </button>
+                    <button type="button" id="btn-comp-view-table" onclick="setComparisonMobileView('table')" class="px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition cursor-pointer">
+                        표형 (스크롤)
+                    </button>
+                </div>
+            </div>
+
+            <!-- 1) Mobile Comparison Cards: Clean Stacked Cards with Zero Horizontal Swiping (Visible on Mobile by default) -->
+            <div id="comparison-mobile-cards" class="md:hidden space-y-3 no-print">
+            </div>
+
+            <!-- 2) Desktop & Print Comparison Table (Hidden on mobile when cards view is active; always shown on md+ and print) -->
+            <div id="comparison-table-wrapper" class="overflow-x-auto -mx-2 px-2 hidden md:block">
+                <table id="comparison-table" class="w-full text-left border-collapse text-xs sm:text-sm min-w-[780px]">
                     <thead id="comparison-thead">
                     </thead>
                     <tbody id="comparison-tbody" class="divide-y divide-slate-200">
@@ -264,8 +388,8 @@
         </section>
 
         <!-- 4. Detailed Property Briefing Cards -->
-        <section class="space-y-4 sm:space-y-5">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 px-1">
+        <section id="detailed-briefing-section" class="space-y-4 sm:space-y-5">
+            <div id="detailed-briefing-header" class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 px-1">
                 <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-[#003891] shrink-0">apartment</span>
                     <span>매물별 상세 브리핑 및 최가네부동산 코멘트</span>
@@ -293,7 +417,7 @@
         </section>
 
         <!-- 6. Footer Business Card (Bright & Clear) -->
-        <footer class="bg-white text-slate-800 rounded-2xl p-5 sm:p-6 border border-slate-300 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 print-break-inside-avoid">
+        <footer id="broker-footer-card" class="bg-white text-slate-800 rounded-2xl p-5 sm:p-6 border border-slate-300 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 print-break-inside-avoid">
             <div class="space-y-1">
                 <div class="font-black text-base sm:text-lg text-[#003891]">최가네부동산공인중개사사무소</div>
                 <div class="text-xs text-slate-700 font-medium">대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구) | 등록번호: 27260-2024-00085</div>
@@ -421,7 +545,7 @@
         </div>
     </div>
 
-    <script src="db.js?v=20260715_v240"></script>
+    <script src="db.js?v=20260715_v241"></script>
     <script>
         let _briefing = null;
         let _attachedMemos = [];
@@ -587,6 +711,44 @@
         }
         window.onClientMaintVatToggle = onClientMaintVatToggle;
 
+                let _compMobileView = 'cards';
+        function setComparisonMobileView(mode) {
+            _compMobileView = mode;
+            const cardsEl = document.getElementById('comparison-mobile-cards');
+            const tableWrapper = document.getElementById('comparison-table-wrapper');
+            const btnCards = document.getElementById('btn-comp-view-cards');
+            const btnTable = document.getElementById('btn-comp-view-table');
+
+            if (mode === 'table') {
+                if (cardsEl) cardsEl.classList.add('hidden');
+                if (tableWrapper) {
+                    tableWrapper.classList.remove('hidden');
+                    tableWrapper.classList.remove('md:block');
+                    tableWrapper.classList.add('block');
+                }
+                if (btnCards) {
+                    btnCards.className = "px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition cursor-pointer";
+                }
+                if (btnTable) {
+                    btnTable.className = "px-2.5 py-1 rounded-md bg-[#003891] text-white shadow-xs transition cursor-pointer";
+                }
+            } else {
+                if (cardsEl) cardsEl.classList.remove('hidden');
+                if (tableWrapper) {
+                    tableWrapper.classList.remove('block');
+                    tableWrapper.classList.add('hidden');
+                    tableWrapper.classList.add('md:block');
+                }
+                if (btnCards) {
+                    btnCards.className = "px-2.5 py-1 rounded-md bg-[#003891] text-white shadow-xs transition cursor-pointer";
+                }
+                if (btnTable) {
+                    btnTable.className = "px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition cursor-pointer";
+                }
+            }
+        }
+        window.setComparisonMobileView = setComparisonMobileView;
+
         function reRenderComparisonAndCards() {
             const b = _briefing;
             if (!b) return;
@@ -618,16 +780,21 @@
                         : `<span class="material-symbols-outlined text-[#003891]">table_chart</span><span>한눈에 보는 추천 매물 및 초기 필요자금 비교표</span>`;
                 }
 
+                const tableEl = document.getElementById('comparison-table');
+                if (tableEl) {
+                    tableEl.classList.toggle('comp-5col', !showMonthlyCost);
+                }
+
                 const thead = document.getElementById('comparison-thead');
                 if (thead) {
                     thead.innerHTML = `
                         <tr class="bg-[#f4f7fc] text-slate-800 border-b border-slate-200 font-extrabold text-xs whitespace-nowrap">
-                            <th class="py-3 px-3.5 rounded-tl-xl whitespace-nowrap">추천 순번 / 소재지</th>
-                            <th class="py-3 px-3.5 whitespace-nowrap">면적(평수) / 해당층 · 총층</th>
-                            <th class="py-3 px-3.5 whitespace-nowrap">기본 임대·매매 조건</th>
-                            <th class="py-3 px-3.5 whitespace-nowrap">권리금(시설비)</th>
-                            <th class="py-3 px-3.5 bg-[#f0f5ff] text-[#003891] whitespace-nowrap ${showMonthlyCost ? '' : 'rounded-tr-xl'}">초기 필요자금 합계</th>
-                            ${showMonthlyCost ? `<th class="py-3 px-3.5 bg-[#f4f7fc] text-slate-900 rounded-tr-xl whitespace-nowrap">월 실제 고정비 합계</th>` : ''}
+                            <th class="comp-col-rank-addr py-3 px-3.5 rounded-tl-xl whitespace-nowrap">추천 순번 / 소재지</th>
+                            <th class="comp-col-area-floor py-3 px-3.5 whitespace-nowrap">면적(평수) / 해당층 · 총층</th>
+                            <th class="comp-col-basic-cond py-3 px-3.5 whitespace-nowrap">기본 임대·매매 조건</th>
+                            <th class="comp-col-premium py-3 px-3.5 whitespace-nowrap">권리금(시설비)</th>
+                            <th class="comp-col-init-capital py-3 px-3.5 bg-[#f0f5ff] text-[#003891] whitespace-nowrap ${showMonthlyCost ? '' : 'rounded-tr-xl'}">초기 필요자금 합계</th>
+                            ${showMonthlyCost ? `<th class="comp-col-monthly-cost py-3 px-3.5 bg-[#f4f7fc] text-slate-900 rounded-tr-xl whitespace-nowrap">월 실제 고정비 합계</th>` : ''}
                         </tr>
                     `;
                 }
@@ -702,9 +869,9 @@
 
                         return `
                             <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="scrollToCard('prop-card-${idx}')">
-                                <td class="py-3.5 px-3.5 align-middle whitespace-nowrap">
+                                <td class="comp-col-rank-addr py-3.5 px-3.5 align-middle whitespace-nowrap">
                                     <div class="flex items-center gap-2.5">
-                                        <span class="w-6 h-6 rounded-md bg-[#003891] text-white font-black text-xs flex items-center justify-center shrink-0">${num}</span>
+                                        <span class="w-6 h-6 rounded-md bg-[#003891] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">${num}</span>
                                         <div class="min-w-0">
                                             <div class="font-extrabold text-slate-900 hover:text-[#003891] transition text-xs sm:text-sm whitespace-nowrap">${escHtml(addr)}</div>
                                             <div class="text-[11px] text-slate-500 flex items-center gap-1.5 mt-0.5 whitespace-nowrap">
@@ -714,23 +881,131 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-3.5 px-3.5 align-middle whitespace-nowrap">
+                                <td class="comp-col-area-floor py-3.5 px-3.5 align-middle whitespace-nowrap">
                                     <div class="font-extrabold text-slate-900 text-xs sm:text-sm whitespace-nowrap">${escHtml(item.area || '-')}</div>
                                     <div class="text-xs text-slate-600 font-medium mt-0.5 whitespace-nowrap">해당층: ${escHtml(floors.currentFloor)} · 총층: ${escHtml(floors.totalFloor)}</div>
                                 </td>
-                                <td class="py-3.5 px-3.5 align-middle whitespace-nowrap">${basicCond}</td>
-                                <td class="py-3.5 px-3.5 align-middle font-extrabold text-slate-800 text-xs sm:text-sm whitespace-nowrap">${escHtml(premDisplay)}</td>
-                                <td class="py-3.5 px-3.5 align-middle bg-[#f8faff] whitespace-nowrap">
+                                <td class="comp-col-basic-cond py-3.5 px-3.5 align-middle whitespace-nowrap">${basicCond}</td>
+                                <td class="comp-col-premium py-3.5 px-3.5 align-middle font-extrabold text-slate-800 text-xs sm:text-sm whitespace-nowrap">${escHtml(premDisplay)}</td>
+                                <td class="comp-col-init-capital py-3.5 px-3.5 align-middle bg-[#f8faff] whitespace-nowrap">
                                     <div class="font-black text-[#003891] text-xs sm:text-sm whitespace-nowrap">${initCapitalText}</div>
                                     <div class="text-[11px] text-slate-500 whitespace-nowrap">${initSubText}</div>
                                 </td>
                                 ${showMonthlyCost ? `
-                                <td class="py-3.5 px-3.5 align-middle bg-slate-50/80 whitespace-nowrap">
+                                <td class="comp-col-monthly-cost py-3.5 px-3.5 align-middle bg-slate-50/80 whitespace-nowrap">
                                     <div class="font-black text-slate-900 text-xs sm:text-sm whitespace-nowrap">${monthlyText}</div>
                                     <div class="text-[11px] text-slate-500 whitespace-nowrap">${monthlySub}</div>
                                 </td>
                                 ` : ''}
                             </tr>
+                        `;
+                    }).join('');
+                }
+
+                // Render Mobile Zero-Swiping Comparison Cards
+                const mobileCardsContainer = document.getElementById('comparison-mobile-cards');
+                if (mobileCardsContainer) {
+                    mobileCardsContainer.innerHTML = items.map((item, idx) => {
+                        const num = idx + 1;
+                        const addr = maskTextBlind(item.address, isBlind);
+                        const isSale = item.tradeType === 'sale' || (Number(item.salePrice) > 0 && Number(item.rent) === 0);
+
+                        const dep = Number(item.deposit) || 0;
+                        const rent = Number(item.rent) || 0;
+                        const maint = Number(item.managementFee) || 0;
+                        const prem = Number(item.premium) || 0;
+                        const saleP = Number(item.salePrice) || 0;
+                        const floors = getFloorParts(item);
+
+                        const hasMaintVat = _userToggledMaintVat ? includeMaintVat : (includeMaintVat || Boolean(item.maintVat));
+
+                        // Initial Capital
+                        let initCapitalText = '-';
+                        let initSubText = '';
+                        if (isSale) {
+                            const netSale = Math.max(saleP - dep, 0);
+                            initCapitalText = formatManwon(netSale);
+                            initSubText = dep > 0 ? `(매매가 ${formatManwon(saleP)} - 보증금 ${formatManwon(dep)})` : `(매매가 기준)`;
+                        } else {
+                            const totalInit = dep + prem;
+                            initCapitalText = formatManwon(totalInit);
+                            initSubText = prem > 0 ? `(보증금 + 권리금)` : `(보증금 · 무권리)`;
+                        }
+
+                        // Monthly Cost
+                        const rentVatAmount = includeVat ? Math.round(rent * 0.1 * 10) / 10 : 0;
+                        const maintVatAmount = (hasMaintVat && maint > 0) ? Math.round(maint * 0.1 * 10) / 10 : 0;
+                        const totalMonthly = Math.round((rent + rentVatAmount + maint + maintVatAmount) * 10) / 10;
+                        let monthlyText = rent > 0 ? `월 ${formatManwon(totalMonthly)}` : '-';
+                        let monthlySub = '';
+                        if (rent > 0) {
+                            if (includeVat && hasMaintVat && maint > 0) {
+                                monthlySub = `(월세+VAT10% + 관리비+VAT10%)`;
+                            } else if (includeVat) {
+                                monthlySub = `(월세+VAT10% + 관리비)`;
+                            } else if (hasMaintVat && maint > 0) {
+                                monthlySub = `(월세 + 관리비+VAT10%)`;
+                            } else {
+                                monthlySub = `(월세+관리비 · VAT별도)`;
+                            }
+                        }
+                        if (isSale && rent > 0) {
+                            monthlyText = `월 임대수익 ${formatManwon(rent)}`;
+                            monthlySub = `(현재 임대수익 기준)`;
+                        }
+
+                        const premDisplay = isSale
+                            ? '매매 건'
+                            : (prem > 0 ? formatManwon(prem) : (item.premiumText || '무권리'));
+
+                        const docCount = Array.isArray(item.officialDocs) ? item.officialDocs.length : 0;
+
+                        return `
+                            <div class="bg-white rounded-xl border border-slate-200 p-3.5 shadow-xs space-y-2.5 cursor-pointer hover:border-[#003891] transition" onclick="scrollToCard('prop-card-${idx}')">
+                                <div class="flex items-start justify-between gap-2 border-b border-slate-100 pb-2">
+                                    <div class="flex items-center gap-2 min-w-0">
+                                        <span class="w-6 h-6 rounded-md bg-[#003891] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">${num}</span>
+                                        <div class="min-w-0">
+                                            <div class="font-extrabold text-slate-900 text-sm hover:text-[#003891] transition leading-tight truncate">${escHtml(addr)}</div>
+                                            <div class="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1.5 flex-wrap">
+                                                <span>매물번호: ${escHtml(item.propNo || '-')}</span>
+                                                ${docCount > 0 ? `<span class="px-1.5 py-0.2 rounded bg-blue-50 text-[#003891] border border-blue-200 font-bold text-[10px] leading-none">공부·도면 ${docCount}건</span>` : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="text-[11px] font-extrabold text-[#003891] bg-[#f0f5ff] px-2 py-0.5 rounded-md border border-blue-200 shrink-0 flex items-center gap-0.5">
+                                        상세보기 ↓
+                                    </span>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 text-xs">
+                                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200/80">
+                                        <div class="text-[10px] font-bold text-slate-500 mb-0.5">면적 / 층수</div>
+                                        <div class="font-black text-slate-900 text-xs">${escHtml(item.area || '-')}</div>
+                                        <div class="text-[11px] text-slate-600 mt-0.5 font-medium">${escHtml(floors.currentFloor)} · 총 ${escHtml(floors.totalFloor)}</div>
+                                    </div>
+                                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200/80">
+                                        <div class="text-[10px] font-bold text-slate-500 mb-0.5">기본 조건 / 권리금</div>
+                                        <div class="font-extrabold text-slate-900 text-xs">${isSale ? `매매 ${formatManwon(saleP)}` : `보증금 ${formatManwon(dep)}`}</div>
+                                        <div class="text-[11px] text-slate-700 font-bold mt-0.5">${isSale ? `보 ${formatManwon(dep)} / 월 ${formatManwon(rent)}` : `월세 ${formatManwon(rent)} (${escHtml(premDisplay)})`}</div>
+                                    </div>
+                                </div>
+
+                                <div class="grid ${showMonthlyCost ? 'grid-cols-2' : 'grid-cols-1'} gap-2 pt-0.5">
+                                    <div class="bg-[#f0f5ff] border border-blue-200 rounded-lg p-2.5">
+                                        <div class="text-[10px] font-extrabold text-[#003891] mb-0.5">💰 초기 필요자금 합계</div>
+                                        <div class="font-black text-[#003891] text-sm sm:text-base leading-snug">${initCapitalText}</div>
+                                        <div class="text-[10px] text-blue-700/80 font-medium truncate mt-0.5">${initSubText}</div>
+                                    </div>
+                                    ${showMonthlyCost ? `
+                                    <div class="bg-slate-100 border border-slate-200 rounded-lg p-2.5">
+                                        <div class="text-[10px] font-extrabold text-slate-700 mb-0.5">📅 월 실제 고정비</div>
+                                        <div class="font-black text-slate-900 text-sm sm:text-base leading-snug">${monthlyText}</div>
+                                        <div class="text-[10px] text-slate-500 font-medium truncate mt-0.5">${monthlySub}</div>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
                         `;
                     }).join('');
                 }
@@ -803,7 +1078,7 @@
                 const gridColsClass = (showMonthlyCost && !isSale) ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-2 sm:grid-cols-4';
 
                 return `
-                    <article id="prop-card-${idx}" class="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden print-break-inside-avoid">
+                    <article id="prop-card-${idx}" class="briefing-card bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden print-break-inside-avoid">
                         <!-- Card Header Bar (Bright Soft-Blue for High Visibility) -->
                         <div class="bg-[#f0f5ff] border-b border-blue-200 px-4 sm:px-5 py-3 sm:py-3.5 flex flex-wrap items-center justify-between gap-2">
                             <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
@@ -817,18 +1092,18 @@
                         <div class="p-4 sm:p-6 space-y-4 sm:space-y-5">
                             <!-- Title & Location & Specs (Request 2 & 3: 주소 -> 평수(강조) -> 해당층 -> 총층, Clean alignment on PC & Mobile) -->
                             <div class="space-y-2">
-                                <div class="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs sm:text-sm">
-                                    <span class="inline-flex items-center gap-1 font-extrabold text-[#003891] whitespace-nowrap">
-                                        <span class="material-symbols-outlined text-[17px] shrink-0">location_on</span>
+                                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+                                    <span class="inline-flex items-center gap-1 font-extrabold text-[#003891] bg-blue-50/70 border border-blue-200/60 px-2.5 py-1 rounded-lg whitespace-nowrap">
+                                        <span class="material-symbols-outlined text-[16px] shrink-0 text-[#003891]">location_on</span>
                                         <span>${escHtml(addr)}</span>
                                     </span>
-                                    <span class="hidden sm:inline text-slate-300">|</span>
-                                    <span class="font-black text-slate-900 bg-[#f0f5ff] px-2.5 py-0.5 rounded-md border border-blue-200 whitespace-nowrap">${escHtml(item.area || '-')}</span>
-                                    <span class="hidden sm:inline text-slate-300">|</span>
-                                    <span class="inline-flex items-center gap-1.5 text-slate-700 font-bold whitespace-nowrap">
+                                    <span class="font-black text-slate-900 bg-[#f0f5ff] px-2.5 py-1 rounded-lg border border-blue-200 whitespace-nowrap">
+                                        ${escHtml(item.area || '-')}
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 text-slate-700 font-bold bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg whitespace-nowrap">
                                         <span>해당층: ${escHtml(floors.currentFloor)}</span>
-                                        <span class="text-slate-300">·</span>
-                                        <span class="text-slate-600 font-semibold">총층: ${escHtml(floors.totalFloor)}</span>
+                                        <span class="text-slate-400">·</span>
+                                        <span class="text-slate-600 font-medium">총층: ${escHtml(floors.totalFloor)}</span>
                                     </span>
                                 </div>
                                 <h3 class="text-base sm:text-xl font-extrabold text-slate-900 leading-snug">${escHtml(title)}</h3>
