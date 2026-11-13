@@ -47,7 +47,7 @@ export default async function handler(req, res) {
   const baseUrl = 'https://www.choi114.com';
   let ogTitle = '매물 브리핑 자료ㅣ최가네부동산';
   let ogDesc = '최가네부동산 맞춤 매물 리포트 (010-3548-4000)';
-  let ogImage = `${baseUrl}/og_briefing.jpg?v=3`;
+  let ogImage = `${baseUrl}/og_briefing.jpg?v=4`;
   let pageTitle = '매물 브리핑 자료ㅣ최가네부동산';
   const ogUrl = `${baseUrl}/briefing?id=${encodeURIComponent(id)}`;
 
@@ -56,7 +56,7 @@ export default async function handler(req, res) {
     pageTitle = '매물 브리핑 자료ㅣ최가네부동산';
     ogTitle = '매물 브리핑 자료ㅣ최가네부동산';
     ogDesc = `${cName} 전용 맞춤 매물 리포트 (최가네부동산 010-3548-4000)`;
-    ogImage = `${baseUrl}/og_briefing.jpg?v=3`;
+    ogImage = `${baseUrl}/og_briefing.jpg?v=4`;
   }
 
   function esc(str) {
