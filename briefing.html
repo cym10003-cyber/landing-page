@@ -81,6 +81,32 @@
             font-feature-settings: 'liga' !important;
             -webkit-font-smoothing: antialiased !important;
         }
+        /* Screen & Print Zero-Swipe Full-Fit Comparison Table */
+        #comparison-table {
+            width: 100%;
+            table-layout: fixed;
+        }
+        #comparison-table th,
+        #comparison-table td {
+            white-space: normal;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        /* 6-Column Proportions (with Monthly Cost) */
+        .comp-col-rank-addr { width: 25%; }
+        .comp-col-area-floor { width: 19%; }
+        .comp-col-basic-cond { width: 22%; }
+        .comp-col-premium { width: 10%; }
+        .comp-col-init-capital { width: 12%; }
+        .comp-col-monthly-cost { width: 12%; }
+
+        /* 5-Column Proportions (without Monthly Cost) */
+        .comp-5col .comp-col-rank-addr { width: 29%; }
+        .comp-5col .comp-col-area-floor { width: 22%; }
+        .comp-5col .comp-col-basic-cond { width: 23%; }
+        .comp-5col .comp-col-premium { width: 12%; }
+        .comp-5col .comp-col-init-capital { width: 14%; }
+
         /* A4 Print Executive Report Mode */
         @media print {
             @page {
@@ -398,8 +424,8 @@
             </div>
 
             <!-- 2) Desktop & Print Comparison Table (Hidden on mobile when cards view is active; always shown on md+ and print) -->
-            <div id="comparison-table-wrapper" class="overflow-x-auto -mx-2 px-2 hidden md:block">
-                <table id="comparison-table" class="w-full text-left border-collapse text-xs sm:text-sm min-w-[780px]">
+            <div id="comparison-table-wrapper" class="w-full overflow-hidden hidden md:block">
+                <table id="comparison-table" class="w-full text-left border-collapse text-xs sm:text-sm">
                     <thead id="comparison-thead">
                     </thead>
                     <tbody id="comparison-tbody" class="divide-y divide-slate-200">
@@ -838,13 +864,13 @@
                 const thead = document.getElementById('comparison-thead');
                 if (thead) {
                     thead.innerHTML = `
-                        <tr class="bg-[#f4f7fc] text-slate-800 border-b border-slate-200 font-extrabold text-xs whitespace-nowrap">
-                            <th class="comp-col-rank-addr py-3 px-3.5 rounded-tl-xl whitespace-nowrap">추천 순번 / 소재지</th>
-                            <th class="comp-col-area-floor py-3 px-3.5 whitespace-nowrap">면적(평수) / 해당층 · 총층</th>
-                            <th class="comp-col-basic-cond py-3 px-3.5 whitespace-nowrap">기본 임대·매매 조건</th>
-                            <th class="comp-col-premium py-3 px-3.5 whitespace-nowrap">권리금(시설비)</th>
-                            <th class="comp-col-init-capital py-3 px-3.5 bg-[#f0f5ff] text-[#003891] whitespace-nowrap ${showMonthlyCost ? '' : 'rounded-tr-xl'}">초기 필요자금 합계</th>
-                            ${showMonthlyCost ? `<th class="comp-col-monthly-cost py-3 px-3.5 bg-[#f4f7fc] text-slate-900 rounded-tr-xl whitespace-nowrap">월 실제 고정비 합계</th>` : ''}
+                        <tr class="bg-[#f4f7fc] text-slate-800 border-b border-slate-200 font-extrabold text-xs">
+                            <th class="comp-col-rank-addr py-3 px-2.5 sm:px-3 rounded-tl-xl">추천 순번 / 소재지</th>
+                            <th class="comp-col-area-floor py-3 px-2.5 sm:px-3">면적(평수) / 해당층 · 총층</th>
+                            <th class="comp-col-basic-cond py-3 px-2.5 sm:px-3">기본 임대·매매 조건</th>
+                            <th class="comp-col-premium py-3 px-2.5 sm:px-3">권리금(시설비)</th>
+                            <th class="comp-col-init-capital py-3 px-2.5 sm:px-3 bg-[#f0f5ff] text-[#003891] ${showMonthlyCost ? '' : 'rounded-tr-xl'}">초기 필요자금 합계</th>
+                            ${showMonthlyCost ? `<th class="comp-col-monthly-cost py-3 px-2.5 sm:px-3 bg-[#f4f7fc] text-slate-900 rounded-tr-xl">월 실제 고정비 합계</th>` : ''}
                         </tr>
                     `;
                 }
@@ -912,43 +938,44 @@
                             ? `공용관리비 ${formatManwon(maint)}${hasMaintVat ? `·부가세별도` : ''}`
                             : '공용관리비 별도/없음';
 
-                        // Deposit & Rent with identical font size and weight, kept single-line per row
+                        // Deposit, Rent & Maintenance stacked cleanly so zero horizontal scrolling is ever needed
                         const basicCond = isSale
-                            ? `<div class="text-xs sm:text-sm font-extrabold text-slate-900 whitespace-nowrap">매매가 ${formatManwon(saleP)}</div>
-                               <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5 whitespace-nowrap">기보증금 ${formatManwon(dep)} / 월세 ${formatManwon(rent)}</div>`
-                            : `<div class="text-xs sm:text-sm font-extrabold text-slate-900 whitespace-nowrap">보증금 ${formatManwon(dep)}</div>
-                               <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5 whitespace-nowrap">월세 ${formatManwon(rent)}${hasRentVat && rent > 0 ? `<span class="text-xs text-[#003891] font-bold">·부가세별도</span>` : ''} <span class="text-xs text-slate-500 font-medium whitespace-nowrap">(${maintSubText})</span></div>`;
+                            ? `<div class="text-xs sm:text-sm font-extrabold text-slate-900">매매가 ${formatManwon(saleP)}</div>
+                               <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5">기보증금 ${formatManwon(dep)} / 월세 ${formatManwon(rent)}</div>`
+                            : `<div class="text-xs sm:text-sm font-extrabold text-slate-900">보증금 ${formatManwon(dep)}</div>
+                               <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5">월세 ${formatManwon(rent)}${hasRentVat && rent > 0 ? `<span class="text-xs text-[#003891] font-bold">·부가세별도</span>` : ''}</div>
+                               <div class="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">${maintSubText}</div>`;
 
                         const docCount = Array.isArray(item.officialDocs) ? item.officialDocs.length : 0;
 
                         return `
                             <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="scrollToCard('prop-card-${idx}')">
-                                <td class="comp-col-rank-addr py-3.5 px-3.5 align-middle whitespace-nowrap">
-                                    <div class="flex items-center gap-2.5">
+                                <td class="comp-col-rank-addr py-3 px-2.5 sm:px-3 align-middle">
+                                    <div class="flex items-center gap-2">
                                         <span class="w-6 h-6 rounded-md bg-[#003891] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">${num}</span>
                                         <div class="min-w-0">
-                                            <div class="font-extrabold text-slate-900 hover:text-[#003891] transition text-xs sm:text-sm whitespace-nowrap">${escHtml(addr)}</div>
-                                            <div class="text-[11px] text-slate-500 flex items-center gap-1.5 mt-0.5 whitespace-nowrap">
+                                            <div class="font-extrabold text-slate-900 hover:text-[#003891] transition text-xs sm:text-sm leading-snug">${escHtml(addr)}</div>
+                                            <div class="text-[11px] text-slate-500 flex flex-wrap items-center gap-1.5 mt-0.5">
                                                 <span>매물번호: ${escHtml(item.propNo || '-')}</span>
-                                                ${docCount > 0 ? `<span class="px-1.5 py-0.5 rounded bg-blue-50 text-[#003891] border border-blue-200 font-bold text-[10px] leading-none whitespace-nowrap">공부·도면 ${docCount}건</span>` : ''}
+                                                ${docCount > 0 ? `<span class="px-1.5 py-0.5 rounded bg-blue-50 text-[#003891] border border-blue-200 font-bold text-[10px] leading-none">공부·도면 ${docCount}건</span>` : ''}
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="comp-col-area-floor py-3.5 px-3.5 align-middle whitespace-nowrap">
-                                    <div class="font-extrabold text-slate-900 text-xs sm:text-sm whitespace-nowrap">${escHtml(item.area || '-')}</div>
-                                    <div class="text-xs text-slate-600 font-medium mt-0.5 whitespace-nowrap">해당층: ${escHtml(floors.currentFloor)} · 총층: ${escHtml(floors.totalFloor)}</div>
+                                <td class="comp-col-area-floor py-3 px-2.5 sm:px-3 align-middle">
+                                    <div class="font-extrabold text-slate-900 text-xs sm:text-sm">${escHtml(item.area || '-')}</div>
+                                    <div class="text-xs text-slate-600 font-medium mt-0.5 leading-snug">해당층: ${escHtml(floors.currentFloor)} · 총층: ${escHtml(floors.totalFloor)}</div>
                                 </td>
-                                <td class="comp-col-basic-cond py-3.5 px-3.5 align-middle whitespace-nowrap">${basicCond}</td>
-                                <td class="comp-col-premium py-3.5 px-3.5 align-middle font-extrabold text-slate-800 text-xs sm:text-sm whitespace-nowrap">${escHtml(premDisplay)}</td>
-                                <td class="comp-col-init-capital py-3.5 px-3.5 align-middle bg-[#f8faff] whitespace-nowrap">
-                                    <div class="font-black text-[#003891] text-xs sm:text-sm whitespace-nowrap">${initCapitalText}</div>
-                                    <div class="text-[11px] text-slate-500 whitespace-nowrap">${initSubText}</div>
+                                <td class="comp-col-basic-cond py-3 px-2.5 sm:px-3 align-middle">${basicCond}</td>
+                                <td class="comp-col-premium py-3 px-2.5 sm:px-3 align-middle font-extrabold text-slate-800 text-xs sm:text-sm">${escHtml(premDisplay)}</td>
+                                <td class="comp-col-init-capital py-3 px-2.5 sm:px-3 align-middle bg-[#f8faff]">
+                                    <div class="font-black text-[#003891] text-xs sm:text-sm">${initCapitalText}</div>
+                                    <div class="text-[11px] text-slate-500 mt-0.5">${initSubText}</div>
                                 </td>
                                 ${showMonthlyCost ? `
-                                <td class="comp-col-monthly-cost py-3.5 px-3.5 align-middle bg-slate-50/80 whitespace-nowrap">
-                                    <div class="font-black text-slate-900 text-xs sm:text-sm whitespace-nowrap">${monthlyText}</div>
-                                    <div class="text-[11px] text-slate-500 whitespace-nowrap">${monthlySub}</div>
+                                <td class="comp-col-monthly-cost py-3 px-2.5 sm:px-3 align-middle bg-slate-50/80">
+                                    <div class="font-black text-slate-900 text-xs sm:text-sm">${monthlyText}</div>
+                                    <div class="text-[11px] text-slate-500 mt-0.5">${monthlySub}</div>
                                 </td>
                                 ` : ''}
                             </tr>
