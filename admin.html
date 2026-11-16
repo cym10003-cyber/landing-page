@@ -1012,7 +1012,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261116_v246"></script>
+<script src="db.js?v=20261116_v247"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -2459,7 +2459,9 @@ function addStealthBriefingItem() {
         area: '전용 약 30평',
         deposit: 3000,
         rent: 200,
+        rentVat: true,
         managementFee: 10,
+        maintVat: false,
         premium: 0,
         premiumText: '무권리',
         salePrice: 0,
@@ -2517,6 +2519,9 @@ function syncEditorInputsToMemory() {
 
         const rent = getVal('rent');
         if (rent !== null) item.rent = parseFloat(rent) || 0;
+
+        const rentVatEl = document.getElementById(`bf-item-${idx}-rentVat`);
+        if (rentVatEl) item.rentVat = Boolean(rentVatEl.checked);
 
         const managementFee = getVal('managementFee');
         if (managementFee !== null) item.managementFee = parseFloat(managementFee) || 0;
@@ -2817,10 +2822,11 @@ function renderBriefingEditorItems() {
         const maint = Number(item.managementFee) || 0;
         const prem = Number(item.premium) || 0;
         const saleP = Number(item.salePrice) || 0;
+        const hasRentVat = item.rentVat !== false;
         const hasMaintVat = includeMaintVatOpt || Boolean(item.maintVat);
 
         const initCap = isSale ? Math.max(saleP - dep, 0) : (dep + prem);
-        const rentVatAmt = includeVatOpt ? Math.round(rent * 0.1 * 10) / 10 : 0;
+        const rentVatAmt = (includeVatOpt && hasRentVat) ? Math.round(rent * 0.1 * 10) / 10 : 0;
         const maintVatAmt = (hasMaintVat && maint > 0) ? Math.round(maint * 0.1 * 10) / 10 : 0;
         const monthlyTotal = Math.round((rent + rentVatAmt + maint + maintVatAmt) * 10) / 10;
         const yieldPct = (saleP > 0 && rent > 0 && (saleP - dep) > 0)
@@ -2975,13 +2981,17 @@ function renderBriefingEditorItems() {
                         <div>
                             <label class="block font-extrabold text-slate-800 mb-1">월세 (만원)</label>
                             <input type="number" step="any" id="bf-item-${idx}-rent" value="${rent}" oninput="syncEditorInputsToMemory()" class="w-full rounded-lg border-slate-300 text-xs font-extrabold p-2 text-slate-900" />
+                            <label class="inline-flex items-center gap-1 mt-1.5 cursor-pointer select-none text-[11px] font-extrabold text-[#003891]">
+                                <input type="checkbox" id="bf-item-${idx}-rentVat" ${hasRentVat ? 'checked' : ''} onchange="syncEditorInputsToMemory(); renderBriefingEditorItems();" class="w-3.5 h-3.5 rounded text-[#003891]" />
+                                <span>월세 부가세 별도</span>
+                            </label>
                         </div>
                         <div>
                             <label class="block font-extrabold text-slate-800 mb-1">공용관리비 (만원)</label>
                             <input type="number" step="any" id="bf-item-${idx}-managementFee" value="${maint}" oninput="syncEditorInputsToMemory()" class="w-full rounded-lg border-slate-300 text-xs font-extrabold p-2 text-slate-900" />
                             <label class="inline-flex items-center gap-1 mt-1.5 cursor-pointer select-none text-[11px] font-extrabold text-[#003891]">
                                 <input type="checkbox" id="bf-item-${idx}-maintVat" ${item.maintVat ? 'checked' : ''} onchange="syncEditorInputsToMemory(); renderBriefingEditorItems();" class="w-3.5 h-3.5 rounded text-[#003891]" />
-                                <span>공용관리비 VAT 10% 별도</span>
+                                <span>공용관리비 부가세 별도</span>
                             </label>
                         </div>
                         <div>
@@ -2997,7 +3007,7 @@ function renderBriefingEditorItems() {
                             <input type="number" step="any" id="bf-item-${idx}-salePrice" value="${saleP}" oninput="syncEditorInputsToMemory()" class="w-full rounded-lg border-slate-300 text-xs font-extrabold p-2 text-slate-900" />
                         </div>
                         <div class="col-span-2 sm:col-span-6 flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px] font-bold text-slate-600">
-                            <span>자동 계산 미리보기: 초기 필요자금 <b class="text-[#003891]">${fmtAdminManwon(initCap)}원</b> ${showMonthlyOpt ? `· 월 실제 고정비(월세${includeVatOpt ? '+VAT' : ''}+공용관리비${hasMaintVat && maint > 0 ? '+VAT' : ''}) <b class="text-slate-900">월 ${fmtAdminManwon(monthlyTotal)}원</b>` : '· (월 고정비 합계 표시 해제됨)'}</span>
+                            <span>자동 계산 미리보기: 초기 필요자금 <b class="text-[#003891]">${fmtAdminManwon(initCap)}원</b> ${showMonthlyOpt ? `· 월 실제 고정비(월세${includeVatOpt && hasRentVat ? '+부가세' : ''}+공용관리비${hasMaintVat && maint > 0 ? '+부가세' : ''}) <b class="text-slate-900">월 ${fmtAdminManwon(monthlyTotal)}원</b>` : '· (월 고정비 합계 표시 해제됨)'}</span>
                             ${yieldPct ? `<span class="bg-slate-200 text-slate-800 px-2.5 py-0.5 rounded-md font-extrabold">예상 연 수익률: ${yieldPct}%</span>` : ''}
                         </div>
                     </div>

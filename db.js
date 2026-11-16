@@ -2978,6 +2978,7 @@ function parsePostToBriefingItem(post) {
         const premium = parseKoreanMoneyToManwon(premLine);
         const salePrice = parseKoreanMoneyToManwon(saleLine);
 
+        const isRentVat = !rentLine || (!rentLine.includes('부가세포함') && !rentLine.includes('VAT포함'));
         const isMaintVat = maintLine.includes('부가세') || maintLine.includes('VAT') || maintLine.includes('별도');
 
         let premiumText = '무권리';
@@ -3074,6 +3075,7 @@ function parsePostToBriefingItem(post) {
             area: areaStr || '-',
             deposit,
             rent,
+            rentVat: Boolean(isRentVat),
             managementFee,
             maintVat: Boolean(isMaintVat),
             premium,

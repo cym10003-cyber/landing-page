@@ -368,11 +368,11 @@
                 <div id="vat-toggle-wrapper" class="flex flex-wrap items-center gap-1.5 sm:gap-2 no-print">
                     <label class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100 px-2.5 sm:px-3 py-1.5 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-200/70 transition whitespace-nowrap">
                         <input type="checkbox" id="toggle-vat-calc" class="rounded text-[#003891] focus:ring-[#003891] w-4 h-4" onchange="reRenderComparisonAndCards()" />
-                        <span>월세 부가세(VAT 10%) 포함 계산</span>
+                        <span>월세 부가세(10%) 포함 계산</span>
                     </label>
                     <label class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100 px-2.5 sm:px-3 py-1.5 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-200/70 transition whitespace-nowrap">
                         <input type="checkbox" id="toggle-maint-vat-calc" class="rounded text-[#003891] focus:ring-[#003891] w-4 h-4" onchange="onClientMaintVatToggle()" />
-                        <span>공용관리비 부가세(VAT 10%) 포함 계산</span>
+                        <span>공용관리비 부가세(10%) 포함 계산</span>
                     </label>
                 </div>
             </div>
@@ -590,7 +590,7 @@
         </div>
     </div>
 
-    <script src="db.js?v=20261116_v246"></script>
+    <script src="db.js?v=20261116_v247"></script>
     <script>
         let _briefing = null;
         let _attachedMemos = [];
@@ -863,6 +863,7 @@
                         const saleP = Number(item.salePrice) || 0;
                         const floors = getFloorParts(item);
 
+                        const hasRentVat = item.rentVat !== false;
                         const hasMaintVat = _userToggledMaintVat ? includeMaintVat : (includeMaintVat || Boolean(item.maintVat));
 
                         // Initial Required Capital
@@ -879,15 +880,15 @@
                         }
 
                         // Monthly Out-of-pocket Fixed Cost (Rent VAT + Maintenance VAT support)
-                        const rentVatAmount = includeVat ? Math.round(rent * 0.1 * 10) / 10 : 0;
+                        const rentVatAmount = (includeVat && hasRentVat) ? Math.round(rent * 0.1 * 10) / 10 : 0;
                         const maintVatAmount = (hasMaintVat && maint > 0) ? Math.round(maint * 0.1 * 10) / 10 : 0;
                         const totalMonthly = Math.round((rent + rentVatAmount + maint + maintVatAmount) * 10) / 10;
                         let monthlyText = rent > 0 ? `월 ${formatManwon(totalMonthly)}` : '-';
                         let monthlySub = '';
                         if (rent > 0) {
-                            if (includeVat && hasMaintVat && maint > 0) {
+                            if (includeVat && hasRentVat && hasMaintVat && maint > 0) {
                                 monthlySub = `(월세+부가세10% + 공용관리비+부가세10%)`;
-                            } else if (includeVat) {
+                            } else if (includeVat && hasRentVat) {
                                 monthlySub = `(월세+부가세10% + 공용관리비)`;
                             } else if (hasMaintVat && maint > 0) {
                                 monthlySub = `(월세 + 공용관리비+부가세10%)`;
@@ -908,7 +909,7 @@
                                 : (item.premiumText || '무권리'));
 
                         const maintSubText = maint > 0
-                            ? `공용관리비 ${formatManwon(maint)}${hasMaintVat ? `·VAT별도` : ''}`
+                            ? `공용관리비 ${formatManwon(maint)}${hasMaintVat ? `·부가세별도` : ''}`
                             : '공용관리비 별도/없음';
 
                         // Deposit & Rent with identical font size and weight, kept single-line per row
@@ -916,7 +917,7 @@
                             ? `<div class="text-xs sm:text-sm font-extrabold text-slate-900 whitespace-nowrap">매매가 ${formatManwon(saleP)}</div>
                                <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5 whitespace-nowrap">기보증금 ${formatManwon(dep)} / 월세 ${formatManwon(rent)}</div>`
                             : `<div class="text-xs sm:text-sm font-extrabold text-slate-900 whitespace-nowrap">보증금 ${formatManwon(dep)}</div>
-                               <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5 whitespace-nowrap">월세 ${formatManwon(rent)} <span class="text-xs text-slate-500 font-medium whitespace-nowrap">(${maintSubText})</span></div>`;
+                               <div class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5 whitespace-nowrap">월세 ${formatManwon(rent)}${hasRentVat && rent > 0 ? `<span class="text-xs text-[#003891] font-bold">·부가세별도</span>` : ''} <span class="text-xs text-slate-500 font-medium whitespace-nowrap">(${maintSubText})</span></div>`;
 
                         const docCount = Array.isArray(item.officialDocs) ? item.officialDocs.length : 0;
 
@@ -970,6 +971,7 @@
                         const saleP = Number(item.salePrice) || 0;
                         const floors = getFloorParts(item);
 
+                        const hasRentVat = item.rentVat !== false;
                         const hasMaintVat = _userToggledMaintVat ? includeMaintVat : (includeMaintVat || Boolean(item.maintVat));
 
                         // Initial Capital
@@ -986,20 +988,20 @@
                         }
 
                         // Monthly Cost
-                        const rentVatAmount = includeVat ? Math.round(rent * 0.1 * 10) / 10 : 0;
+                        const rentVatAmount = (includeVat && hasRentVat) ? Math.round(rent * 0.1 * 10) / 10 : 0;
                         const maintVatAmount = (hasMaintVat && maint > 0) ? Math.round(maint * 0.1 * 10) / 10 : 0;
                         const totalMonthly = Math.round((rent + rentVatAmount + maint + maintVatAmount) * 10) / 10;
                         let monthlyText = rent > 0 ? `월 ${formatManwon(totalMonthly)}` : '-';
                         let monthlySub = '';
                         if (rent > 0) {
-                            if (includeVat && hasMaintVat && maint > 0) {
-                                monthlySub = `(월세+VAT10% + 관리비+VAT10%)`;
-                            } else if (includeVat) {
-                                monthlySub = `(월세+VAT10% + 관리비)`;
+                            if (includeVat && hasRentVat && hasMaintVat && maint > 0) {
+                                monthlySub = `(월세+부가세10% + 관리비+부가세10%)`;
+                            } else if (includeVat && hasRentVat) {
+                                monthlySub = `(월세+부가세10% + 관리비)`;
                             } else if (hasMaintVat && maint > 0) {
-                                monthlySub = `(월세 + 관리비+VAT10%)`;
+                                monthlySub = `(월세 + 관리비+부가세10%)`;
                             } else {
-                                monthlySub = `(월세+관리비 · VAT별도)`;
+                                monthlySub = `(월세+관리비 · 부가세별도)`;
                             }
                         }
                         if (isSale && rent > 0) {
@@ -1043,7 +1045,7 @@
                                     <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200/80">
                                         <div class="text-[10px] font-bold text-slate-500 mb-0.5">기본 조건 / 권리금</div>
                                         <div class="font-extrabold text-slate-900 text-xs">${isSale ? `매매 ${formatManwon(saleP)}` : `보증금 ${formatManwon(dep)}`}</div>
-                                        <div class="text-[11px] text-slate-700 font-bold mt-0.5">${isSale ? `보 ${formatManwon(dep)} / 월 ${formatManwon(rent)}` : `월세 ${formatManwon(rent)} (${escHtml(premDisplay)})`}</div>
+                                        <div class="text-[11px] text-slate-700 font-bold mt-0.5">${isSale ? `보 ${formatManwon(dep)} / 월 ${formatManwon(rent)}` : `월세 ${formatManwon(rent)}${hasRentVat && rent > 0 ? '·부가세별도' : ''} (${escHtml(premDisplay)})`}</div>
                                     </div>
                                 </div>
 
@@ -1087,9 +1089,10 @@
                 const saleP = Number(item.salePrice) || 0;
                 const floors = getFloorParts(item);
 
+                const hasRentVat = item.rentVat !== false;
                 const hasMaintVat = _userToggledMaintVat ? includeMaintVat : (includeMaintVat || Boolean(item.maintVat));
                 const totalInit = isSale ? Math.max(saleP - dep, 0) : (dep + prem);
-                const rentVatAmount = includeVat ? Math.round(rent * 0.1 * 10) / 10 : 0;
+                const rentVatAmount = (includeVat && hasRentVat) ? Math.round(rent * 0.1 * 10) / 10 : 0;
                 const maintVatAmount = (hasMaintVat && maint > 0) ? Math.round(maint * 0.1 * 10) / 10 : 0;
                 const totalMonthly = Math.round((rent + rentVatAmount + maint + maintVatAmount) * 10) / 10;
 
@@ -1230,12 +1233,12 @@
                                     </div>
                                     <div class="bg-slate-50 rounded-xl p-3 sm:p-3.5 border border-slate-200 flex flex-col justify-between">
                                         <div class="text-xs text-slate-600 font-bold whitespace-nowrap">월세 (임대료)</div>
-                                        <div class="text-base sm:text-lg font-black text-slate-900 mt-1 whitespace-nowrap">${formatManwon(rent)}</div>
+                                        <div class="text-base sm:text-lg font-black text-slate-900 mt-1 whitespace-nowrap">${formatManwon(rent)}${hasRentVat && rent > 0 ? ` <span class="text-xs text-[#003891] font-bold">(부가세별도)</span>` : ''}</div>
                                     </div>
                                     <div class="bg-slate-50 rounded-xl p-3 sm:p-3.5 border border-slate-200 flex flex-col justify-between">
                                         <div class="text-xs text-slate-600 font-bold whitespace-nowrap">공용관리비 / 권리금</div>
                                         <div class="text-xs sm:text-sm font-extrabold text-slate-800 mt-1 space-y-0.5">
-                                            <div class="whitespace-nowrap">관리비: ${maint > 0 ? formatManwon(maint) + (hasMaintVat ? ` <span class="text-[11px] text-[#003891] font-bold">(+VAT)</span>` : '') : '없음/별도'}</div>
+                                            <div class="whitespace-nowrap">관리비: ${maint > 0 ? formatManwon(maint) + (hasMaintVat ? ` <span class="text-[11px] text-[#003891] font-bold">(부가세별도)</span>` : '') : '없음/별도'}</div>
                                             <div class="text-slate-700 whitespace-nowrap">권리금: ${prem > 0 ? (item.premiumText && !item.premiumText.includes('무권리') ? `${formatManwon(prem)} <span class="text-xs text-slate-500 font-bold">(${escHtml(item.premiumText)})</span>` : formatManwon(prem)) : escHtml(item.premiumText || '무권리')}</div>
                                         </div>
                                     </div>
@@ -1248,10 +1251,10 @@
                                     </div>
                                     ${showMonthlyCost ? `
                                     <div class="bg-slate-100 rounded-xl p-3 sm:p-3.5 border border-slate-300 col-span-2 sm:col-span-1 flex flex-col justify-between">
-                                        <div class="text-xs text-slate-800 font-extrabold whitespace-nowrap">월 실제 고정비 ${(includeVat || (hasMaintVat && maint > 0)) ? '(VAT포함)' : '(VAT별도)'}</div>
+                                        <div class="text-xs text-slate-800 font-extrabold whitespace-nowrap">월 실제 고정비 ${((includeVat && hasRentVat) || (hasMaintVat && maint > 0)) ? '(부가세포함)' : '(부가세별도)'}</div>
                                         <div>
                                             <div class="text-base sm:text-lg font-black text-slate-900 mt-1 whitespace-nowrap">월 ${formatManwon(totalMonthly)}</div>
-                                            <div class="text-[11px] text-slate-500 whitespace-nowrap">월세${includeVat ? '+부가세10%' : ''}+관리비${(hasMaintVat && maint > 0) ? '+부가세10%' : ''}</div>
+                                            <div class="text-[11px] text-slate-500 whitespace-nowrap">월세${includeVat && hasRentVat ? '+부가세10%' : ''}+관리비${(hasMaintVat && maint > 0) ? '+부가세10%' : ''}</div>
                                         </div>
                                     </div>
                                     ` : ''}
