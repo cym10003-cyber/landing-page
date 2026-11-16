@@ -590,7 +590,7 @@
         </div>
     </div>
 
-    <script src="db.js?v=20261116_v245"></script>
+    <script src="db.js?v=20261116_v246"></script>
     <script>
         let _briefing = null;
         let _attachedMemos = [];
@@ -694,6 +694,9 @@
                 }
 
                 _briefing = found;
+                if (typeof resolveBriefingItemsMissingCoords === 'function') {
+                    await resolveBriefingItemsMissingCoords(_briefing);
+                }
                 const memoMap = new Map((store.memos || []).map(m => [String(m.id), m]));
                 _attachedMemos = (found.attachedMemoIds || []).map(id => memoMap.get(String(id))).filter(Boolean);
 

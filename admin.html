@@ -1012,7 +1012,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261116_v245"></script>
+<script src="db.js?v=20261116_v246"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -2491,7 +2491,13 @@ function syncEditorInputsToMemory() {
         if (title !== null) item.title = title.trim();
 
         const address = getVal('address');
-        if (address !== null) item.address = address.trim();
+        if (address !== null) {
+            const trimmedAddr = address.trim();
+            if (trimmedAddr !== item.address) {
+                item.address = trimmedAddr;
+                item._addressDirty = true;
+            }
+        }
 
         const curF = getVal('currentFloor');
         const totF = getVal('totalFloor');
@@ -2537,6 +2543,25 @@ function syncEditorInputsToMemory() {
         if (comment !== null) item.agentComment = comment.trim();
     });
 }
+
+async function autoGeocodeBriefingItem(idx, showNotice = false) {
+    syncEditorInputsToMemory();
+    const item = _editingBriefingItems[idx];
+    if (!item) return;
+    const bfTitle = (document.getElementById('bf-title') ? document.getElementById('bf-title').value : '') || '';
+    if (typeof geocodeKoreanAddressToCoords === 'function') {
+        const coords = await geocodeKoreanAddressToCoords(item.address, `${item.title || ''} ${bfTitle}`);
+        if (coords) {
+            item.coordinates = coords;
+            item._lastGeocodedAddr = item.address;
+            item._addressDirty = false;
+            if (showNotice && typeof showToast === 'function') {
+                showToast(`[${idx + 1}번 매물] 입력하신 주소(${item.address})로 지도 위치가 정확히 설정되었습니다!`);
+            }
+        }
+    }
+}
+window.autoGeocodeBriefingItem = autoGeocodeBriefingItem;
 
 function toggleBriefingItemBadge(itemIdx, badgeLabel) {
     syncEditorInputsToMemory();
@@ -2919,8 +2944,13 @@ function renderBriefingEditorItems() {
                     <!-- Row 2: Location -> Area(Pyeong) -> CurrentFloor -> TotalFloor -->
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">소재지 (블라인드 시 번지 자동가림)</label>
-                            <input type="text" id="bf-item-${idx}-address" value="${escAdminHtml(item.address)}" class="w-full rounded-lg border-slate-300 text-xs font-bold p-2" />
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="block font-bold text-slate-700">소재지 (블라인드 시 번지 자동가림)</label>
+                                <button type="button" onclick="autoGeocodeBriefingItem(${idx}, true)" class="text-[11px] font-extrabold text-[#003891] hover:underline flex items-center gap-0.5 cursor-pointer" title="입력한 주소로 지도 핀 위치를 즉시 갱신합니다">
+                                    <span class="material-symbols-outlined text-[13px]">my_location</span>위치 자동반영
+                                </button>
+                            </div>
+                            <input type="text" id="bf-item-${idx}-address" value="${escAdminHtml(item.address)}" onchange="autoGeocodeBriefingItem(${idx}, true)" class="w-full rounded-lg border-slate-300 text-xs font-bold p-2" />
                         </div>
                         <div>
                             <label class="block font-extrabold text-[#003891] mb-1">면적 (평수)</label>
@@ -3087,6 +3117,22 @@ async function saveCurrentBriefing(showShareToast = true, silent = false) {
 
     const now = new Date();
     const dateStr = `${now.getFullYear()}. ${String(now.getMonth() + 1).padStart(2, '0')}. ${String(now.getDate()).padStart(2, '0')}`;
+
+    // Automatically resolve accurate GPS coordinates for any stealth item or modified address before saving
+    if (typeof geocodeKoreanAddressToCoords === 'function') {
+        for (const item of _editingBriefingItems) {
+            if (!item) continue;
+            const isDummy = typeof isDummyDefaultCoordinate === 'function' && isDummyDefaultCoordinate(item.coordinates);
+            if (item._addressDirty || isDummy) {
+                const resolved = await geocodeKoreanAddressToCoords(item.address, `${item.title || ''} ${title}`);
+                if (resolved) {
+                    item.coordinates = resolved;
+                    item._lastGeocodedAddr = item.address;
+                    item._addressDirty = false;
+                }
+            }
+        }
+    }
 
     const existingIdx = (_briefingStore.briefings || []).findIndex(b => String(b.id) === id);
     const briefingObj = {

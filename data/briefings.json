@@ -1,5 +1,5 @@
 ﻿{
-    "updatedAt":  1794795809335,
+    "updatedAt":  1794806401114,
     "memos":  [
                   {
                       "id":  "memo_doc_rent",
@@ -76,12 +76,478 @@
               ],
     "briefings":  [
                       {
+                          "id":  "br_mwir33n7",
+                          "customerName":  "미용피부과",
+                          "customerPhone":  "",
+                          "title":  "범어동 및 수성구 피부과 추천 매물입니다.",
+                          "createdAt":  "2026. 11. 16",
+                          "updatedAt":  1794805797547,
+                          "expiresAt":  "",
+                          "blindAddress":  false,
+                          "showComparisonTable":  true,
+                          "showMonthlyCost":  false,
+                          "includeVat":  true,
+                          "includeMaintVat":  true,
+                          "showYield":  false,
+                          "showMap":  true,
+                          "generalNote":  "안녕하세요 최가네부동산입니다. 범어동 및 수성구 피부과 추천 매물 안내해드리겠습니다.",
+                          "attachedMemoIds":  [
+                                                  "memo_doc_rent",
+                                                  "memo_special_terms_rent"
+                                              ],
+                          "customerPicks":  [
+
+                                            ],
+                          "items":  [
+                                        {
+                                            "itemId":  "item_1794802592214_qw94",
+                                            "postId":  "1783903230894",
+                                            "propNo":  "1575",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 범어동 달구벌대로 인테리어완비 무권리 사무실",
+                                            "address":  "대구광역시 수성구 범어동 42-8 요아킴빌딩",
+                                            "currentFloor":  "지상 4층",
+                                            "totalFloor":  "지하 1층~지상 6층",
+                                            "floor":  "지상 4층 / 총 지하 1층~지상 6층",
+                                            "area":  "약 138평",
+                                            "deposit":  20000,
+                                            "rent":  450,
+                                            "managementFee":  480,
+                                            "maintVat":  true,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "내부화장실",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "렌트프리 협의",
+                                                           "역세권"
+                                                       ],
+                                            "agentComment":  "• 범어동 최고위치의 달구벌대로 무권리 대형 사무실\n• 고정주차 1대, 기본 인테리어완비\n• 관리비는 평당 3-3.5만원 정도 (개별전기요금을 포함한 금액입니다)\n• 업무시설(사무실)로 용도변경이 필요합니다.\n• 본 건물에 입점된 정형외과는 인근 유료주차장과 계약하여 고객주차를 유도하고 있습니다.",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783903191226_iodm_______________01035484000_KakaoTalk_20260331_142821660_04.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783903193075_59nr_______________01035484000_KakaoTalk_20260331_142821660_08.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783903194808_nup1_______________01035484000_KakaoTalk_20260331_142821660_11.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783903196513_qcck_______________01035484000_KakaoTalk_20260331_142821660_14.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783903198490_p9lf_______________01035484000_KakaoTalk_20260331_142821660_17.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783903200431_ev1y_______________01035484000_KakaoTalk_20260331_142821660_26.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783903202313_llh8_______________01035484000_KakaoTalk_20260331_142830032_01.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.859478701457626,
+                                                                128.6242309212685
+                                                            ],
+                                            "autoSyncPost":  false
+                                        },
+                                        {
+                                            "itemId":  "stealth_1794802709241",
+                                            "postId":  "",
+                                            "propNo":  "",
+                                            "tradeType":  "rent",
+                                            "title":  "범어네거리 무권리 사무실 메타타워V",
+                                            "address":  "대구광역시 수성구 범어동 43-8 메타타워V",
+                                            "currentFloor":  "지상 2층",
+                                            "totalFloor":  "지하 3층~지상 10층",
+                                            "floor":  "지상 2층 / 총 지하 3층~지상 10층",
+                                            "area":  "전용 약 130.8평",
+                                            "deposit":  15000,
+                                            "rent":  675,
+                                            "managementFee":  484.5,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "무권리",
+                                                           "즉시입주 가능",
+                                                           "외부화장실",
+                                                           "대로변/코너",
+                                                           "역세권",
+                                                           "높은 층고/노출천장",
+                                                           "렌트프리 협의"
+                                                       ],
+                                            "agentComment":  "• 주차 73대, 고정주차 2대\n• 2년 계약시에 렌트프리 총 6개월 제공함\n• 성형외과, 모발이식, 한의원 입점되어 있음\n•  제1종근린생활시설(의원)",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794803195243_3db8_50ffbd884f42868e093aaf822133824b_Photoroom.png",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794803197771_osca_0829ed949f61ea1de7c1769d0b2d465f_Photoroom.png",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794803200817_i6fh_864a213c065b11026c34ff5f55a41159_Photoroom.png",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794803203642_caqb_b0f9e6ed9518e55adcb52c1a8f06709a_Photoroom.png",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794803205820_bqnb_e9c72c13787975b7f2ea361747f99972_Photoroom.png"
+                                                       ],
+                                            "coordinates":  [
+                                                                35.861045320454,
+                                                                128.626006519713
+                                                            ],
+                                            "maintVat":  false,
+                                            "autoSyncPost":  false
+                                        },
+                                        {
+                                            "itemId":  "item_1794803289058_is20",
+                                            "postId":  "1783901695498",
+                                            "propNo":  "987",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 범어동 무권리 달구벌대로 상가 사무실 임대",
+                                            "address":  "대구광역시 수성구 범어동 189-6 아우름타워",
+                                            "currentFloor":  "지상 10층",
+                                            "totalFloor":  "지하 3층 ~ 지상 11층",
+                                            "floor":  "지상 10층 / 총 지하 3층 ~ 지상 11층",
+                                            "area":  "전용 약 173평",
+                                            "deposit":  20000,
+                                            "rent":  1400,
+                                            "managementFee":  311.6,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "무권리",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "테라스/베란다",
+                                                           "렌트프리 협의",
+                                                           "역세권"
+                                                       ],
+                                            "agentComment":  "• 범어역 수성구청역 최고위치 신축빌딩, 분할가능\n• 주차 63대, 무료주차 1대, 고객주차 주차권 1시간 500원 구매가능\n• 제1종근린생활시설(의원)\n• 피부과(에디트의원)가 입점되어 있으나 위치 등이 마음에 드셔서 의사가 있을시 임대인에게 물어보겠습니다.",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783901662381_95u7_KakaoTalk_20251223_111232737_09.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783901664301_139w_KakaoTalk_20251223_111232737_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783901666377_sovo_KakaoTalk_20251223_111232737_15.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783901668345_ima9_KakaoTalk_20251223_111232737_18.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783901670359_01se_KakaoTalk_20251223_111232737_22.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783901672295_j9pn_KakaoTalk_20251223_111232737_25.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783901674106_8yd1_KakaoTalk_20251223_111243662.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783901675511_2p3e_KakaoTalk_20251223_111243662_06.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783901678292_n76h_KakaoTalk_20251223_111243662_09.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.858413526048956,
+                                                                128.62960070371628
+                                                            ],
+                                            "autoSyncPost":  false
+                                        },
+                                        {
+                                            "itemId":  "item_1794803475302_30lx",
+                                            "postId":  "1783900059115",
+                                            "propNo":  "1587",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 범어동 파크타워 무권리 상가 임대",
+                                            "address":  "대구광역시 수성구 범어동 167-15 파크타워",
+                                            "currentFloor":  "지상 5층",
+                                            "totalFloor":  "지하 1층~지상 12층",
+                                            "floor":  "지상 5층 / 총 지하 1층~지상 12층",
+                                            "area":  "전용 약 92평",
+                                            "deposit":  10000,
+                                            "rent":  820,
+                                            "managementFee":  145.8,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "무권리",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "역세권",
+                                                           "렌트프리 협의"
+                                                       ],
+                                            "agentComment":  "• 범어동 수성구청역 위치 최상, 병의원 우대, 분할가능\n• 주차 40대, 고정주차 1대 제공, 고객주차 1시간 무료\n• 실제 현황상으로 6층이며 건축물대장에는 5층으로 기재되어 있습니다.\n• 3층, 4층은 보1억/850만이며, 두개층 임대 가능하고 조건협의 됩니다.",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783900029560_6d2a_KakaoTalk_20260408_174110215_17.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783900031437_fn5k_KakaoTalk_20260408_174110215_19.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783900033449_835m_KakaoTalk_20260408_174110215_26.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783900035281_dwwm_KakaoTalk_20260408_174110215_28.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783900036850_f6i5_KakaoTalk_20260408_174155962_03.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783900038639_fztn_KakaoTalk_20260408_174155962_25.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.8590526330117,
+                                                                128.6331841349602
+                                                            ],
+                                            "autoSyncPost":  false
+                                        },
+                                        {
+                                            "itemId":  "stealth_1794803654969",
+                                            "postId":  "",
+                                            "propNo":  "",
+                                            "tradeType":  "rent",
+                                            "title":  "11월말 준공예정 신축건물",
+                                            "address":  "대구광역시 수성구 범어동 206-3",
+                                            "currentFloor":  "지상 3층",
+                                            "totalFloor":  "지상 13층",
+                                            "floor":  "지상 3층 / 총 지상 13층",
+                                            "area":  "전용 약 86평",
+                                            "deposit":  10000,
+                                            "rent":  900,
+                                            "managementFee":  132,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "즉시입주 가능",
+                                                           "렌트프리 협의",
+                                                           "외부화장실",
+                                                           "대로변/코너",
+                                                           "역세권"
+                                                       ],
+                                            "agentComment":  "•11월말 준공예정으로 4층 전용 약 89평 보1억/월900만으로 2개층 사용 가능합니다.\n• 주차 49대, 고정주차 1대 제공",
+                                            "photos":  [
+
+                                                       ],
+                                            "coordinates":  [
+                                                                35.858633050629,
+                                                                128.637405908032
+                                                            ],
+                                            "maintVat":  false,
+                                            "autoSyncPost":  false
+                                        },
+                                        {
+                                            "itemId":  "item_1794804276000_eb3c",
+                                            "postId":  "1783899118288",
+                                            "propNo":  "1611",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 범어동 제이제이타워 무권리 상가 사무실",
+                                            "address":  "대구광역시 수성구 범어동 217-6 제이제이타워",
+                                            "currentFloor":  "지상 3층",
+                                            "totalFloor":  "지하 1층~지상 11층",
+                                            "floor":  "지상 3층 / 총 지하 1층~지상 11층",
+                                            "area":  "전용 약 129평",
+                                            "deposit":  20000,
+                                            "rent":  1400,
+                                            "managementFee":  240.5,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "무권리",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너"
+                                                       ],
+                                            "agentComment":  "• 교육연구시설(학원)로 되어있으나 26년 9월 준공 건물로 용도변경 바로 가능합니다.\n• 엘베 3대, 외부화장실 2개, 주차 약 95대(주차타워 39대X2개, 자주식 약 17대)",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783899080454_sbhe_KakaoTalk_20260508_150345199_03.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783899082201_ljnd_KakaoTalk_20260508_150345199_04.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783899084112_upb9_KakaoTalk_20260508_150345199_05.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783899085676_o979______2026_05_13_093801.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783899087116_433j______2026_05_13_093840.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783899088690_9ljx______2026_05_13_093906.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main/images/post_img_1783899090227_3jj7______2026_05_13_093927.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.85854830413649,
+                                                                128.64176720380783
+                                                            ],
+                                            "autoSyncPost":  false
+                                        },
+                                        {
+                                            "itemId":  "stealth_1794804574987",
+                                            "postId":  "",
+                                            "propNo":  "",
+                                            "tradeType":  "rent",
+                                            "title":  "수성엠비션타워 5층",
+                                            "address":  "대구광역시 수성구 만촌동 1036-2 수성엠비션타워",
+                                            "currentFloor":  "지상 5층",
+                                            "totalFloor":  "지하 2층~지상 10층",
+                                            "floor":  "지상 5층 / 총 지하 2층~지상 10층",
+                                            "area":  "전용 약 153.71평",
+                                            "deposit":  20000,
+                                            "rent":  1510,
+                                            "managementFee":  152,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "내부화장실",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "즉시입주 가능",
+                                                           "렌트프리 협의",
+                                                           "대로변/코너",
+                                                           "역세권"
+                                                       ],
+                                            "agentComment":  "• 주차 61대, 고정주차는 유료8만원으로 1대가능, 고객주차 30분에 1000원\n• 협력 주차장: 만촌동 1036-26번지 월주차 13만원 부가세포함, 추가 제한없음, 1시간 3000원\n• 공용관리비 공급평당 6500원\n• 교육연구시설(학원), 24년 7월 준공이라 용도변경에 무리 없습니다.\n• 테슬라매장이 입점되어 있습니다. \n• 본 건물 9층에 온빛수학학원을 입점시켜서 임대인과 소통이 잘됩니다. 조건협의 최대로 유리하게 해드릴수 있습니다.",
+                                            "photos":  [
+
+                                                       ],
+                                            "coordinates":  [
+                                                                35.859400665322,
+                                                                128.640694296286
+                                                            ],
+                                            "maintVat":  false,
+                                            "autoSyncPost":  false
+                                        },
+                                        {
+                                            "itemId":  "item_1794804875988_axuo",
+                                            "postId":  "1787615008706",
+                                            "propNo":  "1332",
+                                            "tradeType":  "rent",
+                                            "title":  "수성구 만촌동 무권리 달구벌대로 대형사무실 수성S큐브",
+                                            "address":  "대구광역시 수성구 만촌동 1040-9 수성S큐브",
+                                            "currentFloor":  "지상 9층",
+                                            "totalFloor":  "지하 1층~지상 13층",
+                                            "floor":  "지상 9층 / 총 지하 1층~지상 13층",
+                                            "area":  "전용 약 159.05평",
+                                            "deposit":  15000,
+                                            "rent":  750,
+                                            "managementFee":  182.1,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너"
+                                                       ],
+                                            "agentComment":  "• 만촌동 달구벌대로 수성S큐브 대형평수 무권리 매물\n• 천장형냉난방기 8대 기본옵션 제공\n• 주차 70대, 고정주차 6대, 고객주차 1시간 무료\n• 교육연구시설(학원)으로 용도변경이 필요함",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787614982242_fqdv_KakaoTalk_20250928_184733095_05.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787614983950_70mb_KakaoTalk_20250928_184733095_07.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787614986075_pa7d_KakaoTalk_20250928_184733095_09.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787614987781_g28x_KakaoTalk_20250928_184733095_11.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787614989756_tell_KakaoTalk_20250928_184733095_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787614991512_2nez_KakaoTalk_20250928_184733095_15.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787614992854_hs7q_KakaoTalk_20250928_184733095_18.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.858274400040806,
+                                                                128.6466890573502
+                                                            ],
+                                            "autoSyncPost":  false
+                                        },
+                                        {
+                                            "itemId":  "item_1794805105933_617r",
+                                            "postId":  "1787196681815",
+                                            "propNo":  "1675",
+                                            "tradeType":  "rent",
+                                            "title":  "태왕디아너스 무권리 만촌역 초역세권 시설완비 상가임대",
+                                            "address":  "대구광역시 수성구 만촌동 1041-1 만촌역태왕디아너스",
+                                            "currentFloor":  "지상 12층",
+                                            "totalFloor":  "지하 1층~지상 23층",
+                                            "floor":  "지상 12층 / 총 지하 1층~지상 23층",
+                                            "area":  "전용 약 101.69평",
+                                            "deposit":  10000,
+                                            "rent":  650,
+                                            "managementFee":  233,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "역세권"
+                                                       ],
+                                            "agentComment":  "• 만촌역 태왕디아너스 메디컬 타워, 전망 좋은 무권리 매물\n• 기본인테리어 완비, 천장형냉난방기 5대\n• 주차 편리",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787196650676_8f3q_KakaoTalk_20260820_092300257_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787196652151_au5j_KakaoTalk_20260820_092300257_18.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787196653764_vihf_KakaoTalk_20260820_092300257_23.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787196655541_wh20_KakaoTalk_20260820_092300257_27.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787196657279_6wc2_KakaoTalk_20260820_092300257_28.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787196658764_6byq_KakaoTalk_20260820_092313204.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787196660489_uhuy_KakaoTalk_20260820_092313204_03.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787196662005_pj9p_KakaoTalk_20260820_092313204_09.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787196663675_s3lj_KakaoTalk_20260820_092313204_14.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1787196665490_ov5w_KakaoTalk_20260820_092313204_22.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.85896133233249,
+                                                                128.64691436290744
+                                                            ],
+                                            "autoSyncPost":  false
+                                        },
+                                        {
+                                            "itemId":  "stealth_1794805221044",
+                                            "postId":  "",
+                                            "propNo":  "",
+                                            "tradeType":  "rent",
+                                            "title":  "범어역 범어353타워 무권리 사무실",
+                                            "address":  "대구광역시 수성구 범어동 33-16 범어353타워",
+                                            "currentFloor":  "지상 12층",
+                                            "totalFloor":  "지하 1층~지상 15층",
+                                            "floor":  "지상 12층 / 총 지하 1층~지상 15층",
+                                            "area":  "전용 약 128.18평",
+                                            "deposit":  20000,
+                                            "rent":  1400,
+                                            "managementFee":  225,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "무권리",
+                                                           "즉시입주 가능",
+                                                           "외부화장실",
+                                                           "렌트프리 협의",
+                                                           "대로변/코너",
+                                                           "역세권"
+                                                       ],
+                                            "agentComment":  "• 주차 94대, 무료주차2대, 손님1시간반 무료주차\n• 건축물용도: 의료시설(병원)",
+                                            "photos":  [
+
+                                                       ],
+                                            "coordinates":  [
+                                                                35.862180355872,
+                                                                128.626175917977
+                                                            ],
+                                            "maintVat":  false,
+                                            "autoSyncPost":  false
+                                        }
+                                    ]
+                      },
+                      {
                           "id":  "br_mwil8hy9",
                           "customerName":  "010-9273-8477",
                           "customerPhone":  "",
                           "title":  "사무실 매물 리스트",
                           "createdAt":  "2026. 11. 16",
-                          "updatedAt":  1794795386198,
+                          "updatedAt":  1794797744771,
                           "expiresAt":  "",
                           "blindAddress":  false,
                           "showComparisonTable":  true,
@@ -90,7 +556,7 @@
                           "includeMaintVat":  false,
                           "showYield":  false,
                           "showMap":  true,
-                          "generalNote":  "어제 보신 매물과 추가로 매물을 더 보내드립니다^^",
+                          "generalNote":  "대표님 안녕하세요^^ 최가네부동산입니다. 어제 보신 매물과 추가로 보실만한 매물을 더 보내드립니다^^",
                           "attachedMemoIds":  [
                                                   "memo_doc_rent",
                                                   "memo_special_terms_rent"
@@ -104,7 +570,7 @@
                                             "postId":  "1784012786859",
                                             "propNo":  "1050",
                                             "tradeType":  "rent",
-                                            "title":  "대구 수성구 지산동 무권리 대형 사무실 인테리어 완비 상가임대",
+                                            "title":  "대구 수성구 지산동 무권리 대형 사무실 인테리어 완비",
                                             "address":  "대구광역시 수성구 지산동 1276-6",
                                             "currentFloor":  "지상 6층",
                                             "totalFloor":  "지하 1층~지상 8층",
@@ -148,7 +614,8 @@
                                             "coordinates":  [
                                                                 35.82250222273537,
                                                                 128.6379557847977
-                                                            ]
+                                                            ],
+                                            "autoSyncPost":  false
                                         },
                                         {
                                             "itemId":  "item_1794792863389_jr3x",
@@ -203,14 +670,15 @@
                                             "coordinates":  [
                                                                 35.905128657799494,
                                                                 128.61197054386142
-                                                            ]
+                                                            ],
+                                            "autoSyncPost":  false
                                         },
                                         {
                                             "itemId":  "item_1794792887554_3ihm",
                                             "postId":  "1784010224523",
                                             "propNo":  "1334",
                                             "tradeType":  "rent",
-                                            "title":  "대구 수성구 수성동1가 무권리 신천동로 사무실 임대 상가",
+                                            "title":  "대구 수성구 수성동1가 무권리 신천동로 사무실",
                                             "address":  "대구광역시 수성구 수성동1가 649-43",
                                             "currentFloor":  "지상 2층",
                                             "totalFloor":  "지하 1층~지상 4층",
@@ -251,7 +719,8 @@
                                             "coordinates":  [
                                                                 35.848952401292024,
                                                                 128.60832542181015
-                                                            ]
+                                                            ],
+                                            "autoSyncPost":  false
                                         },
                                         {
                                             "itemId":  "item_1794793278197_6f5b",
@@ -300,14 +769,15 @@
                                             "coordinates":  [
                                                                 35.86353927968325,
                                                                 128.64160627126697
-                                                            ]
+                                                            ],
+                                            "autoSyncPost":  false
                                         },
                                         {
                                             "itemId":  "item_1794793485602_j6h2",
                                             "postId":  "1784605742188",
                                             "propNo":  "1668",
                                             "tradeType":  "rent",
-                                            "title":  "대구 수성구 상동 시설완비 인테리어 최상급 주차완비 사무실 임대",
+                                            "title":  "대구 수성구 상동 시설완비 인테리어 최상급 주차완비 사무실",
                                             "address":  "대구광역시 수성구 상동 619-3",
                                             "currentFloor":  "지상 4층",
                                             "totalFloor":  "지상 1층~지상 7층",
@@ -408,14 +878,15 @@
                                             "coordinates":  [
                                                                 35.883739085534,
                                                                 128.63152652978897
-                                                            ]
+                                                            ],
+                                            "autoSyncPost":  false
                                         },
                                         {
                                             "itemId":  "item_1794793782824_l16b",
                                             "postId":  "1791327135735",
                                             "propNo":  "1747",
                                             "tradeType":  "rent",
-                                            "title":  "남산동 반월당역 인테리어완비 무권리 주차 편리한",
+                                            "title":  "남산동 반월당역 인테리어완비 무권리 주차 편리한 사무실",
                                             "address":  "대구광역시 중구 남산동 688-5",
                                             "currentFloor":  "지상 3층",
                                             "totalFloor":  "지상 1층~지상 5층",
@@ -440,7 +911,7 @@
                                                            "대로변/코너",
                                                            "역세권"
                                                        ],
-                                            "agentComment":  "• 남산동 반월당역 역세권, 인테리어 완비된 사무실\n• 칸막이공간 2개, 중앙홀 1개\n• 무권리 매물로 냉난방기 등 내부의 집기들은 모두 제외됨",
+                                            "agentComment":  "• 남산동 반월당역 역세권, 인테리어 완비된 사무실\n• 칸막이공간 2개, 중앙홀 1개\n• 무권리 매물로 냉난방기 등 내부의 집기들은 모두 제외됨\n• 반월당역 초역세권, 바로 옆 탑마트 지하주차장 월주차 가능해 주차 매우 편리함(1대 7만원)",
                                             "photos":  [
                                                            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327103045_ncwo_KakaoTalk_20261007_073318373_05.jpg",
                                                            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327104960_aj88_KakaoTalk_20261007_073318373_07.jpg",
@@ -460,14 +931,15 @@
                                             "coordinates":  [
                                                                 35.860630813847486,
                                                                 128.59488755464554
-                                                            ]
+                                                            ],
+                                            "autoSyncPost":  false
                                         },
                                         {
                                             "itemId":  "item_1794795048257_zlbp",
                                             "postId":  "1794795000532",
                                             "propNo":  "1802",
                                             "tradeType":  "rent",
-                                            "title":  "무권리 달서구 두류동 감삼역초역세권 인테리어완비 두류센트레빌더시티 2층 상가임대",
+                                            "title":  "무권리 달서구 두류동 감삼역초역세권 인테리어완비 두류센트레빌더시티 2층 사무실",
                                             "address":  "대구광역시 달서구 두류동 2346 401동 201호",
                                             "currentFloor":  "지상 2층",
                                             "totalFloor":  "지상 1층~지상 2층",
@@ -505,7 +977,8 @@
                                             "coordinates":  [
                                                                 35.85251784740962,
                                                                 128.54943215847018
-                                                            ]
+                                                            ],
+                                            "autoSyncPost":  false
                                         }
                                     ]
                       },

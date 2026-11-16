@@ -3245,13 +3245,13 @@ async function getBriefingData(autoSyncWithPosts = true) {
         } catch (e) {}
     }
 
-    // Check if localStorage has a newer version saved within last 15 min
+    // Check if localStorage has a newer version saved within last 20 sec
     try {
         const localRaw = localStorage.getItem('choi_briefings_cache');
         if (localRaw) {
             const localData = JSON.parse(localRaw);
             if (localData && localData.updatedAt) {
-                if (!remoteData || (localData.updatedAt > (remoteData.updatedAt || 0) && Date.now() - localData.updatedAt < 900000)) {
+                if (!remoteData || (localData.updatedAt > (remoteData.updatedAt || 0) && Date.now() - localData.updatedAt < 20000)) {
                     // Merge customerPicks from remoteData if any arrived
                     if (remoteData && Array.isArray(remoteData.briefings) && Array.isArray(localData.briefings)) {
                         localData.briefings.forEach(lb => {
@@ -3344,4 +3344,121 @@ async function saveBriefingData(dataObj) {
     return dataObj;
 }
 window.saveBriefingData = saveBriefingData;
+
+const DAEGU_LANDMARK_COORDS = {
+    '범어네거리': [35.8593, 128.6253], '범어역': [35.8593, 128.6253], '수성구청역': [35.8586, 128.6306],
+    '만촌역': [35.8586, 128.6455], '수성시장역': [35.8599, 128.6138], '대구은행역': [35.8608, 128.6042],
+    '경대병원역': [35.8624, 128.6001], '반월당역': [35.8658, 128.5933], '중앙로역': [35.8712, 128.5945],
+    '동대구역': [35.8778, 128.6285], '신매역': [35.8409, 128.7052], '고산역': [35.8423, 128.6924],
+    '대공원역': [35.8427, 128.6788], '범물역': [35.8213, 128.6392], '지산역': [35.8245, 128.6331],
+    '수성못역': [35.8318, 128.6225], '황금역': [35.8459, 128.6245], '어린이세상역': [35.8515, 128.6248],
+    '감삼역': [35.8517, 128.5467], '두류역': [35.8568, 128.5552], '죽전역': [35.8501, 128.5365],
+    '알파시티': [35.8370, 128.6819], '수성알파시티': [35.8370, 128.6819],
+    '범어동': [35.8595, 128.6280], '만촌동': [35.8588, 128.6450], '수성동1가': [35.8590, 128.6060],
+    '수성동2가': [35.8570, 128.6130], '수성동3가': [35.8560, 128.6190], '수성동4가': [35.8620, 128.6130],
+    '수성동': [35.8585, 128.6130], '황금동': [35.8455, 128.6250], '중동': [35.8440, 128.6140],
+    '상동': [35.8330, 128.6130], '파동': [35.8150, 128.6130], '두산동': [35.8310, 128.6230],
+    '지산동': [35.8235, 128.6360], '범물동': [35.8190, 128.6430], '시지동': [35.8420, 128.6930],
+    '신매동': [35.8405, 128.7055], '노변동': [35.8415, 128.7020], '사월동': [35.8390, 128.7150],
+    '대흥동': [35.8370, 128.6819], '삼덕동': [35.8645, 128.6040], '동인동': [35.8700, 128.6060],
+    '동성로': [35.8685, 128.5960], '남산동': [35.8610, 128.5880], '대봉동': [35.8575, 128.6005],
+    '신천동': [35.8740, 128.6260], '효목동': [35.8780, 128.6420], '신암동': [35.8840, 128.6240],
+    '산격동': [35.8990, 128.6080], '침산동': [35.8890, 128.5890], '칠성동': [35.8800, 128.5980],
+    '대명동': [35.8460, 128.5790], '봉덕동': [35.8410, 128.5980], '이천동': [35.8520, 128.6010],
+    '두류동': [35.8550, 128.5550], '감삼동': [35.8505, 128.5430], '죽전동': [35.8515, 128.5350],
+    '용산동': [35.8565, 128.5290], '장기동': [35.8465, 128.5260], '본리동': [35.8390, 128.5370],
+    '상인동': [35.8180, 128.5370], '진천동': [35.8135, 128.5230], '월성동': [35.8255, 128.5260],
+    '이곡동': [35.8540, 128.5100], '호산동': [35.8420, 128.4880], '내당동': [35.8610, 128.5620]
+};
+
+async function geocodeKoreanAddressToCoords(addressStr, fallbackHint = '') {
+    const raw = String(addressStr || '').trim();
+    const hint = String(fallbackHint || '').trim();
+    if (!raw && !hint) return null;
+
+    let normalized = raw;
+    // If address has Gu + lot number without Dong (e.g. "대구광역시 수성구 206-3"), infer Dong from hint or default to 범어동
+    if (/구\s+\d+(?:-\d+)?/.test(normalized) && !/[가-힣]+(?:동|리|가|로|길)\s+\d+/.test(normalized)) {
+        const dongMatch = (raw + ' ' + hint).match(/(범어동|만촌동|수성동[1-4]?가?|황금동|지산동|두산동|상동|중동|신매동|노변동|시지동|대흥동|신천동|신암동|남산동|삼덕동|동인동|대봉동|두류동|감삼동|죽전동|산격동|침산동|대명동|봉덕동)/);
+        const inferredDong = dongMatch ? dongMatch[1] : '범어동';
+        normalized = normalized.replace(/(구)\s+(\d+(?:-\d+)?)/, `$1 ${inferredDong} $2`);
+    }
+
+    // Extract clean address up to lot number or road number (strip trailing building names like "메타타워V")
+    let cleanLotAddr = normalized.replace(/(\d+(?:-\d+)?)\s+[^\d].*$/, '$1').trim();
+    if (!cleanLotAddr.includes('대구') && !cleanLotAddr.includes('경산') && !cleanLotAddr.includes('경북')) {
+        cleanLotAddr = '대구광역시 ' + cleanLotAddr;
+    }
+
+    const hasSpecificNumber = /\d+/.test(cleanLotAddr);
+
+    // 1. Try ArcGIS World Geocoder (100% precision on Korean lot numbers & road addresses)
+    if (hasSpecificNumber) {
+        try {
+            const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json&singleLine=${encodeURIComponent(cleanLotAddr)}&countryCode=KOR&maxLocations=1`;
+            const res = await fetch(url);
+            if (res.ok) {
+                const data = await res.json();
+                const cand = data && data.candidates && data.candidates[0];
+                if (cand && cand.score >= 85 && cand.location) {
+                    return [Number(cand.location.y), Number(cand.location.x)];
+                }
+            }
+        } catch (e) {}
+    }
+
+    // 2. Check specific landmarks/stations/dongs in combined text if no lot number or if lot lookup missed
+    const combined = `${normalized} ${hint}`;
+    for (const [kw, coords] of Object.entries(DAEGU_LANDMARK_COORDS)) {
+        if (combined.includes(kw)) {
+            return [coords[0], coords[1]];
+        }
+    }
+
+    // 3. Fallback to ArcGIS general query
+    try {
+        const url = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json&singleLine=${encodeURIComponent(cleanLotAddr)}&countryCode=KOR&maxLocations=1`;
+        const res = await fetch(url);
+        if (res.ok) {
+            const data = await res.json();
+            const cand = data && data.candidates && data.candidates[0];
+            if (cand && cand.location) {
+                return [Number(cand.location.y), Number(cand.location.x)];
+            }
+        }
+    } catch (e) {}
+
+    return null;
+}
+window.geocodeKoreanAddressToCoords = geocodeKoreanAddressToCoords;
+
+function isDummyDefaultCoordinate(coords) {
+    if (!Array.isArray(coords) || coords.length !== 2) return true;
+    const lat = Number(coords[0]);
+    const lng = Number(coords[1]);
+    if (isNaN(lat) || isNaN(lng)) return true;
+    return Math.abs(lat - 35.8581) < 0.00015 && Math.abs(lng - 128.6205) < 0.00015;
+}
+window.isDummyDefaultCoordinate = isDummyDefaultCoordinate;
+
+async function resolveBriefingItemsMissingCoords(briefingObj) {
+    if (!briefingObj || !Array.isArray(briefingObj.items)) return false;
+    let changed = false;
+    for (const item of briefingObj.items) {
+        if (!item) continue;
+        const isStealth = String(item.itemId || '').startsWith('stealth_') || !item.postId;
+        const needsGeocode = isDummyDefaultCoordinate(item.coordinates) || (isStealth && item._lastGeocodedAddr && item._lastGeocodedAddr !== item.address);
+        if (needsGeocode && (item.address || item.title)) {
+            const resolved = await geocodeKoreanAddressToCoords(item.address, `${item.title || ''} ${briefingObj.title || ''}`);
+            if (resolved) {
+                item.coordinates = resolved;
+                item._lastGeocodedAddr = item.address;
+                changed = true;
+            }
+        }
+    }
+    return changed;
+}
+window.resolveBriefingItemsMissingCoords = resolveBriefingItemsMissingCoords;
+
 
