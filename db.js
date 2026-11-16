@@ -3146,8 +3146,22 @@ function syncBriefingItemsWithPosts(briefingsList, postsList) {
                 if (item.deposit !== latest.deposit) { item.deposit = latest.deposit; anyChanged = true; }
                 if (item.rent !== latest.rent) { item.rent = latest.rent; anyChanged = true; }
                 if (item.managementFee !== latest.managementFee) { item.managementFee = latest.managementFee; anyChanged = true; }
-                if (item.premium !== latest.premium) { item.premium = latest.premium; anyChanged = true; }
-                if (latest.premiumText && item.premiumText !== latest.premiumText) { item.premiumText = latest.premiumText; anyChanged = true; }
+
+                // Safe premium sync:
+                // Only overwrite if the post itself has an explicit parsed positive premium (latest.premium > 0),
+                // or if the post explicitly says '무권리'/'없음' AND item does NOT have a positive premium manually set!
+                if (latest.premium > 0) {
+                    if (item.premium !== latest.premium) { item.premium = latest.premium; anyChanged = true; }
+                    if (latest.premiumText && item.premiumText !== latest.premiumText) { item.premiumText = latest.premiumText; anyChanged = true; }
+                } else if (latest.premiumText && (latest.premiumText.includes('무권리') || latest.premiumText.includes('없음'))) {
+                    if (!item.premium || item.premium === 0) {
+                        if (item.premium !== 0) { item.premium = 0; anyChanged = true; }
+                        if (item.premiumText !== '무권리') { item.premiumText = '무권리'; anyChanged = true; }
+                    }
+                }
+                // If post has non-numeric text like '문의 (적극협의 가능)' or '협의', latest.premium is 0.
+                // In this case, NEVER overwrite a positive item.premium (>0) or user custom text!
+
                 if (item.salePrice !== latest.salePrice) { item.salePrice = latest.salePrice; anyChanged = true; }
                 if (item.tradeType !== latest.tradeType) { item.tradeType = latest.tradeType; anyChanged = true; }
             }

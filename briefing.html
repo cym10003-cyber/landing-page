@@ -671,8 +671,8 @@
             const isPreview = params.get('preview') === 'admin';
 
             try {
-                // getBriefingData(true) automatically syncs items with the latest homepage posts!
-                const store = await getBriefingData(true);
+                // Load exact saved briefing data without dynamic overriding
+                const store = await getBriefingData(false);
                 const found = (store.briefings || []).find(b => String(b.id) === String(briefingId));
 
                 if (!found) {
@@ -895,9 +895,12 @@
                             monthlySub = `(현재 임대 수익 기준)`;
                         }
 
+                        const hasCustomPremText = item.premiumText && !item.premiumText.includes('무권리') && item.premiumText !== `${prem}` && item.premiumText !== formatManwon(prem);
                         const premDisplay = isSale
                             ? '매매 건'
-                            : (prem > 0 ? formatManwon(prem) : (item.premiumText || '무권리'));
+                            : (prem > 0
+                                ? (hasCustomPremText ? `${formatManwon(prem)} (${item.premiumText})` : formatManwon(prem))
+                                : (item.premiumText || '무권리'));
 
                         const maintSubText = maint > 0
                             ? `공용관리비 ${formatManwon(maint)}${hasMaintVat ? `·VAT별도` : ''}`
@@ -999,9 +1002,12 @@
                             monthlySub = `(현재 임대수익 기준)`;
                         }
 
+                        const hasCustomPremText = item.premiumText && !item.premiumText.includes('무권리') && item.premiumText !== `${prem}` && item.premiumText !== formatManwon(prem);
                         const premDisplay = isSale
                             ? '매매 건'
-                            : (prem > 0 ? formatManwon(prem) : (item.premiumText || '무권리'));
+                            : (prem > 0
+                                ? (hasCustomPremText ? `${formatManwon(prem)} (${item.premiumText})` : formatManwon(prem))
+                                : (item.premiumText || '무권리'));
 
                         const docCount = Array.isArray(item.officialDocs) ? item.officialDocs.length : 0;
 
@@ -1187,7 +1193,7 @@
                                         <div class="text-xs text-slate-600 font-bold whitespace-nowrap">공용관리비 / 권리금</div>
                                         <div class="text-xs sm:text-sm font-extrabold text-slate-800 mt-1 space-y-0.5">
                                             <div class="whitespace-nowrap">관리비: ${maint > 0 ? formatManwon(maint) + (hasMaintVat ? ` <span class="text-[11px] text-[#003891] font-bold">(+VAT)</span>` : '') : '없음/별도'}</div>
-                                            <div class="text-slate-700 whitespace-nowrap">권리금: ${prem > 0 ? formatManwon(prem) : escHtml(item.premiumText || '무권리')}</div>
+                                            <div class="text-slate-700 whitespace-nowrap">권리금: ${prem > 0 ? (item.premiumText && !item.premiumText.includes('무권리') ? `${formatManwon(prem)} <span class="text-xs text-slate-500 font-bold">(${escHtml(item.premiumText)})</span>` : formatManwon(prem)) : escHtml(item.premiumText || '무권리')}</div>
                                         </div>
                                     </div>
                                     <div class="bg-[#f0f5ff] rounded-xl p-3 sm:p-3.5 border border-blue-200 flex flex-col justify-between">

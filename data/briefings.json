@@ -1,249 +1,691 @@
-{
-  "updatedAt": 1794438479582,
-  "memos": [
-    {
-      "id": "memo_doc_rent",
-      "category": "계약서류",
-      "title": "📋 상가·사무실 임대차 계약 시 준비서류 안내 (개인/법인)",
-      "isPinned": true,
-      "updatedAt": 1794438479582,
-      "content": "<div style=\"font-family:'Pretendard Variable',Pretendard,sans-serif; line-height:1.75; color:#1e293b;\">\n    <div style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\">\n        🏛️ 상가·사무실 안전 임대차 계약 준비서류 안내\n    </div>\n    <p style=\"margin:0 0 10px 0; font-size:13px; color:#475569;\">\n        안녕하세요, <strong>최가네부동산공인중개사사무소</strong>입니다.<br/>\n        원활하고 안전한 계약 진행을 위해 계약 당일 아래 서류를 미리 지참해 주시기 바랍니다.\n    </p>\n\n    <div style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:10px;\">\n        <div style=\"font-size:13px; font-weight:800; color:#0f172a; margin-bottom:6px;\">\n            👤 1. 개인 임차인 (대표님 직접 방문 시)\n        </div>\n        <ul style=\"margin:0; padding-left:18px; font-size:12px; color:#334155; line-height:1.7;\">\n            <li><strong>신분증</strong> (주민등록증 또는 운전면허증 필수)</li>\n            <li><strong>도장</strong> (서명 가능하나 사업자등록용 일반도장 권장)</li>\n            <li><strong>계약금</strong> (통상 보증금의 10%, 은행 계좌이체 준비)</li>\n            <li><strong>사업자등록증 사본</strong> (기존 사업체 이전·확장 시)</li>\n        </ul>\n    </div>\n\n    <div style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:10px;\">\n        <div style=\"font-size:13px; font-weight:800; color:#0f172a; margin-bottom:6px;\">\n            🏢 2. 법인 임차인\n        </div>\n        <ul style=\"margin:0; padding-left:18px; font-size:12px; color:#334155; line-height:1.7;\">\n            <li><strong>법인등기부등본 1통</strong> (최근 3개월 이내 발급분, 말소사항 포함)</li>\n            <li><strong>법인인감증명서 1통</strong> (최근 3개월 이내 발급분)</li>\n            <li><strong>사업자등록증 사본</strong> 1부</li>\n            <li><strong>[대표이사 직접 방문 시]</strong> 법인인감도장, 대표이사 신분증</li>\n            <li><strong>[대리인(직원) 방문 시]</strong> 법인인감 날인된 위임장, 재직증명서, 대리인 신분증 및 도장</li>\n        </ul>\n    </div>\n\n    <div style=\"background-color:#eff6ff; border-left:4px solid #003891; padding:10px 14px; border-radius:8px; margin:10px 0; color:#002766; font-size:12px; line-height:1.6;\">\n        💡 <strong>[중요 체크 팁] 모바일 이체 한도 사전 확인</strong><br/>\n        계약 당일 은행 앱의 '1회 및 1일 이체 한도'가 계약금보다 낮아 송금이 지연되는 경우가 빈번합니다. 방문 전 주거래 은행 앱에서 이체 한도를 미리 증액해 두시면 훨씬 빠르고 쾌적하게 계약이 완료됩니다.\n    </div>\n\n    <div style=\"text-align:right; font-size:11px; color:#64748b; margin-top:8px;\">\n        📞 최가네부동산 직통 상담: <strong>010-3548-4000</strong>\n    </div>\n</div>",
-      "plainText": "[상가·사무실 임대차 계약 시 준비서류 안내]\n\n안녕하세요, 최가네부동산입니다.\n원활하고 안전한 계약 진행을 위해 아래 준비서류를 확인 부탁드립니다.\n\n1. 개인 임차인 (대표님 직접 방문 시)\n• 신분증 (주민등록증 또는 운전면허증 필수)\n• 도장 (서명 가능하나 사업자등록용 도장 지참 권장)\n• 계약금 (통상 보증금의 10%, 계좌이체 준비)\n• 기존 사업자이신 경우: 사업자등록증 사본\n\n2. 법인 임차인\n• 법인등기부등본 1통 (최근 3개월 이내, 말소사항 포함)\n• 법인인감증명서 1통 (최근 3개월 이내)\n• 사업자등록증 사본\n• [대표이사 직접 방문 시] 법인인감도장, 대표이사 신분증\n• [대리인(직원) 방문 시] 법인인감 날인된 위임장, 재직증명서, 대리인 신분증 및 도장\n\n* 이체 한도 체크 팁\n계약 당일 모바일/인터넷뱅킹 '1회 및 1일 이체 한도'가 계약금보다 낮아 당황하시는 경우가 많습니다. 방문 전 은행 앱에서 이체 한도를 미리 확인 및 증액해 주시면 감사하겠습니다.\n\n문의: 최가네부동산 (010-3548-4000)"
-    },
-    {
-      "id": "memo_special_terms_rent",
-      "category": "특약문구",
-      "title": "🛡️ 상가·사무실 임대차 필수 안심 특약 문구 모음",
-      "isPinned": true,
-      "updatedAt": 1794438479582,
-      "content": "<div style=\"font-family:'Pretendard Variable',Pretendard,sans-serif; line-height:1.75; color:#1e293b;\">\n    <div style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\">\n        🛡️ 상가·사무실 임대차 표준 안심 특약 문구\n    </div>\n    <p style=\"margin:0 0 10px 0; font-size:12px; color:#475569;\">\n        임차인의 보증금 보호와 입주 후 분쟁을 예방하기 위해 최가네부동산에서 계약서 작성 시 기본으로 챙겨드리는 필수 특약 조항입니다.\n    </p>\n\n    <div style=\"space-y:8px;\">\n        <div style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\">\n            <div style=\"font-size:12px; font-weight:800; color:#0f172a;\">1. 🔒 권리제한 없는 상태 유지 (보증금 안전)</div>\n            <div style=\"font-size:11.5px; color:#334155; margin-top:2px;\">\n                \"임대인은 잔금일 익일까지 현재 등기부등본상 권리 관계를 그대로 유지하며, 추가 근저당권 설정 등 임차인의 보증금 보호에 불리한 일체의 권리 설정을 하지 않는다.\"\n            </div>\n        </div>\n\n        <div style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\">\n            <div style=\"font-size:12px; font-weight:800; color:#0f172a;\">2. 🏢 인허가 및 업종 신고 불가 시 조건부 계약 해제</div>\n            <div style=\"font-size:11.5px; color:#334155; margin-top:2px;\">\n                \"본 계약은 임차인이 목적물에서 [OO업종] 영업 허가(신고/등록)가 가능함을 전제로 하며, 건물 자체의 구조적 하자로 인허가가 불가할 경우 본 계약은 위약금 없이 무효로 하고 임대인은 기수령한 금원 전액을 즉시 반환한다.\"\n            </div>\n        </div>\n\n        <div style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\">\n            <div style=\"font-size:12px; font-weight:800; color:#0f172a;\">3. 🎁 렌트프리(무상 인테리어 공사 기간) 합의</div>\n            <div style=\"font-size:11.5px; color:#334155; margin-top:2px;\">\n                \"임대인은 임차인의 원활한 인테리어 공사 및 영업 준비를 위해 [202X년 X월 X일 ~ X월 X일 (총 OO일간)] 무상 임대기간(Rent-Free)을 제공한다. 단, 해당 기간 중 발생하는 실비 공용관리비 및 공과금은 임차인이 부담한다.\"\n            </div>\n        </div>\n\n        <div style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\">\n            <div style=\"font-size:12px; font-weight:800; color:#0f172a;\">4. 🔧 건물 구조체 결함 및 누수 하자 보수 책임</div>\n            <div style=\"font-size:11.5px; color:#334155; margin-top:2px;\">\n                \"건물 구조체 결함으로 인한 천장/외벽 누수, 메인 배관 및 기본 전기·소방 시설의 중대한 하자는 임대인 비용으로 즉시 수리하며, 임차인의 사용상 과실이나 단순 소모품 교체는 임차인이 부담한다.\"\n            </div>\n        </div>\n\n        <div style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\">\n            <div style=\"font-size:12px; font-weight:800; color:#0f172a;\">5. 🧹 퇴거 시 원상복구 기준 명확화</div>\n            <div style=\"font-size:11.5px; color:#334155; margin-top:2px;\">\n                \"임대차 종료 시 임차인은 계약 당시 현황(현장 사진 첨부)을 기준으로 원상복구하되, 계약 이전부터 설치되어 있던 시설물([칸막이/기본에어컨 등])에 대해서는 원상복구(철거) 의무를 면제한다.\"\n            </div>\n        </div>\n    </div>\n\n    <div style=\"background-color:#fff1f2; border-left:4px solid #e11d48; padding:9px 12px; border-radius:8px; margin-top:10px; color:#881337; font-size:11.5px;\">\n        ⚠️ <strong>[맞춤 특약 지원]</strong> 현장 상태와 업종에 따라 최적의 특약을 1:1 맞춤형으로 조율해 작성해 드립니다.\n    </div>\n</div>",
-      "plainText": "[상가·사무실 임대차 표준 안심 특약 문구]\n\n1. [권리제한 없는 상태 유지]\n임대인은 잔금일 익일까지 현재 등기부등본상 권리 관계를 유지하며, 추가 근저당 설정 등 임차인의 보증금 보호에 불리한 행위를 하지 않는다.\n\n2. [인허가 및 용도 확인 조건부 계약 해제]\n본 계약은 임차인이 목적물에서 [OO업종] 영업 허가(신고/등록)가 가능함을 전제로 하며, 만약 건물 자체의 중대한 하자로 인해 인허가가 불가할 경우 본 계약은 위약금 없이 무효로 하고 임대인은 수령한 금원 전액을 즉시 반환한다.\n\n3. [렌트프리(인테리어 기간) 합의]\n임대인은 임차인의 원활한 인테리어 공사 및 입주 준비를 위해 [202X년 X월 X일 ~ X월 X일 (총 OO일간)] 무상 임대기간(Rent-Free)을 제공한다. 단, 해당 기간 중 발생하는 공용관리비 및 실비 공과금은 임차인이 부담한다.\n\n4. [주요 설비 및 누수 하자 보수]\n건물 구조체 결함으로 인한 천장/외벽 누수, 메인 배관 및 기본 전기·소방 설비의 중대한 하자는 임대인이 수리하며, 임차인의 사용·관리상 과실이나 소모품 교체는 임차인이 부담한다.\n\n5. [원상복구 기준 명확화]\n임대차 종료 시 임차인은 입주 당시 현황(현장 사진 첨부)을 기준으로 원상복구하되, 기존부터 설치되어 있던 시설물([칸막이/천장형에어컨 등])에 대해서는 철거 의무를 면제한다."
-    },
-    {
-      "id": "memo_tax_premium",
-      "category": "세무/대출",
-      "title": "💰 상가 권리금(시설·영업) 계약 및 부가가치세 핵심 체크포인트",
-      "isPinned": true,
-      "updatedAt": 1794438479582,
-      "content": "<div style=\"font-family:'Pretendard Variable',Pretendard,sans-serif; line-height:1.75; color:#1e293b;\">\n    <div style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\">\n        💰 상가 권리금(시설·영업권) 계약 &amp; 세무 핵심 체크포인트\n    </div>\n    <p style=\"margin:0 0 10px 0; font-size:12px; color:#475569;\">\n        상가 양도·양수(권리금) 계약 진행 시 가장 많이 궁금해하시는 세무 처리 및 안전 진행 절차를 정리해 드립니다.\n    </p>\n\n    <div style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px;\">\n        <div style=\"font-size:12.5px; font-weight:800; color:#0f172a; margin-bottom:4px;\">\n            🤝 1. 권리금 계약 후 본계약 진행 원칙 (100% 안전장치)\n        </div>\n        <div style=\"font-size:12px; color:#334155; line-height:1.65;\">\n            • 기존 임차인(양도인)과의 권리금 계약은 반드시 <strong>'건물주(임대인)와의 신규 임대차계약 체결'</strong>을 전제조건으로 체결합니다.<br/>\n            • 만약 임대인의 과도한 임대료 인상이나 거절로 본계약이 무산될 경우, <strong>권리금 계약금 전액을 조건 없이 즉시 반환</strong>받도록 특약을 명시합니다.\n        </div>\n    </div>\n\n    <div style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px;\">\n        <div style=\"font-size:12.5px; font-weight:800; color:#0f172a; margin-bottom:4px;\">\n            📑 2. 세금계산서 발행 및 부가가치세(VAT) 환급\n        </div>\n        <div style=\"font-size:12px; color:#334155; line-height:1.65;\">\n            • 권리금에 대한 부가세(10%)는 원칙적으로 별도이며, 양도인이 세금계산서를 발행하면 신규 임차인은 <strong>부가세 확정신고 시 매입세액 전액 공제(환급)</strong>를 받으실 수 있습니다.<br/>\n            • 영업권(순수 권리금)은 소득세법상 기타소득 원천징수(8.8%) 대상이 될 수 있으므로 시설비와 영업권의 안분 비율을 담당 세무사와 사전 협의하시면 절세에 매우 유리합니다.\n        </div>\n    </div>\n\n    <div style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px;\">\n        <div style=\"font-size:12.5px; font-weight:800; color:#0f172a; margin-bottom:4px;\">\n            🔌 3. 잔금일 공과금 &amp; 관리비 일할 정산\n        </div>\n        <div style=\"font-size:12px; color:#334155; line-height:1.65;\">\n            • 잔금 시점까지 기존 임차인이 사용한 전기·수도·도시가스·공용관리비를 검침하여 <strong>1원 단위까지 일할 정산</strong>하고 영수증을 교부해 드립니다.\n        </div>\n    </div>\n\n    <div style=\"background-color:#eff6ff; border-left:4px solid #003891; padding:9px 12px; border-radius:8px; color:#002766; font-size:11.5px;\">\n        💡 <strong>최가네부동산 권리금 중개 원칙:</strong> 양도인·양수인 양측 모두가 억울함 없이 투명하고 명확하게 시설 승계 리스트를 작성해 드립니다.\n    </div>\n</div>",
-      "plainText": "[상가 권리금 계약 및 부가가치세(VAT) 핵심 안내]\n\n안녕하세요, 최가네부동산입니다.\n상가 양도·양수(권리금) 계약 시 가장 많이 문의하시는 세무 및 진행 절차를 정리해 드립니다.\n\n1. 권리금 계약 후 임대차 본계약 진행 원칙\n• 기존 임차인(양도인)과의 권리금 계약은 반드시 '임대인과의 신규 임대차계약 체결'을 조건으로 진행합니다.\n• 만약 임대인의 정당한 사유 없는 계약 거절 등으로 본계약이 체결되지 않을 경우, 권리금 계약금을 100% 안전하게 반환받도록 특약을 명시해 드립니다.\n\n2. 권리금 세금계산서 및 부가가치세 처리\n• 권리금에 대한 부가가치세(10%)는 별도이며, 양도인이 세금계산서를 발행하면 양수인(신규 임차인)은 부가세 신고 시 매입세액 공제(환급)를 받으실 수 있습니다.\n• 영업권(무형자산) 부분에 대해서는 세법에 따라 기타소득 원천징수(8.8%) 신고 대상이 될 수 있으므로 담당 세무사와 공제 방식(시설비 vs 영업권 비중)을 사전 협의하시면 절세에 큰 도움이 됩니다.\n\n3. 잔금일 정산 항목\n• 잔금일 기준으로 기존 임차인이 사용한 전기·수도·도시가스·공용관리비·임대료를 일할 정산하여 깔끔하게 인수인계해 드립니다.\n\n문의: 최가네부동산 (010-3548-4000)"
-    },
-    {
-      "id": "memo_business_reg",
-      "category": "계약서류",
-      "title": "✅ 계약 체결 후 사업자등록 & 확정일자 필수 진행 체크리스트",
-      "isPinned": false,
-      "updatedAt": 1794438479582,
-      "content": "<div style=\"font-family:'Pretendard Variable',Pretendard,sans-serif; line-height:1.75; color:#1e293b;\">\n    <div style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\">\n        ✅ 계약 체결 후 사업자등록 &amp; 확정일자 진행 체크리스트\n    </div>\n\n    <div style=\"space-y:8px;\">\n        <div style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:11px; margin-bottom:8px;\">\n            <div style=\"font-size:12.5px; font-weight:800; color:#0f172a;\">STEP 1 🏢 사업자등록 신청 (관할 세무서 또는 홈택스)</div>\n            <ul style=\"margin:4px 0 0 0; padding-left:18px; font-size:12px; color:#334155; line-height:1.65;\">\n                <li><strong>필요서류:</strong> 임대차계약서 사본, 신분증, 도장, (허가/등록 업종인 경우) 영업허가증·신고필증 사본</li>\n                <li><strong>핵심 팁:</strong> 인테리어 공사비 세금계산서의 매입세액 공제(환급)를 받으시려면 <strong>착공 전 사업자등록을 미리 신청</strong>하시는 것이 필수적입니다.</li>\n            </ul>\n        </div>\n\n        <div style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:11px; margin-bottom:8px;\">\n            <div style=\"font-size:12.5px; font-weight:800; color:#0f172a;\">STEP 2 📌 상가건물 확정일자 부여 신청 (우선변제권 확보)</div>\n            <ul style=\"margin:4px 0 0 0; padding-left:18px; font-size:12px; color:#334155; line-height:1.65;\">\n                <li>세무서에서 사업자등록 신청 시 <strong>임대차계약서 원본에 '확정일자'</strong>를 함께 받으셔야 상가건물임대차보호법상 최우선 변제권 요건을 갖추게 됩니다.</li>\n                <li><strong>대항력 완성 요건:</strong> [점유(인도) + 사업자등록 + 확정일자] 3박자가 완료되어야 완벽한 법적 보호를 받습니다.</li>\n            </ul>\n        </div>\n\n        <div style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:11px; margin-bottom:8px;\">\n            <div style=\"font-size:12.5px; font-weight:800; color:#0f172a;\">STEP 3 ⚡ 한전 명의변경 및 통신·보안 시설 이전</div>\n            <ul style=\"margin:4px 0 0 0; padding-left:18px; font-size:12px; color:#334155; line-height:1.65;\">\n                <li><strong>한전 (국번없이 123):</strong> 신규 사업자등록증 발급 후 한전 고객번호 확인하여 명의변경 및 자동이체 등록</li>\n                <li><strong>인터넷 / 보안(캡스·에스원) / 정수기:</strong> 입주 1주일 전 사전 예약 필수</li>\n            </ul>\n        </div>\n    </div>\n</div>",
-      "plainText": "[계약 체결 후 사업자등록 & 확정일자 체크리스트]\n\n1. 사업자등록 신청 (관할 세무서 또는 홈택스)\n• 필요서류: 상가건물 임대차계약서 사본, 신분증, 도장, (허가/등록 업종인 경우) 영업허가증·신고필증 사본\n• 인테리어 공사비 세금계산서 매입세액 공제를 받으시려면 인테리어 착공 전에 사업자등록을 먼저 신청하시는 것이 유리합니다.\n\n2. 상가건물 확정일자 부여 신청 (필수)\n• 세무서에서 사업자등록 신청 시 임대차계약서 원본을 제시하고 '확정일자'를 함께 신청하시면 상가건물임대차보호법상 우선변제권 요건을 갖추게 됩니다.\n• 잔금 및 점유(인도) + 사업자등록 신청 + 확정일자가 완료되면 대항력과 우선변제권이 완성됩니다.\n\n3. 전기 명의변경 및 화재보험·인터넷 이전\n• 한전(국번 없이 123): 신규 사업자등록증 발급 후 고객번호 확인하여 명의변경 및 자동이체 신청\n• 인터넷/보안(캡스·에스원)/정수기: 입주 1주일 전 미리 이전 설치 예약 권장"
-    },
-    {
-      "id": "memo_building_sale",
-      "category": "세무/대출",
-      "title": "🏢 상가건물·상가주택(꼬마빌딩) 매매 절차 및 포괄양수도 가이드",
-      "isPinned": false,
-      "updatedAt": 1794438479582,
-      "content": "<div style=\"font-family:'Pretendard Variable',Pretendard,sans-serif; line-height:1.75; color:#1e293b;\">\n    <div style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\">\n        🏢 상가건물·상가주택(꼬마빌딩) 매매 절차 &amp; 포괄양수도 절세 가이드\n    </div>\n\n    <div style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px;\">\n        <div style=\"font-size:12.5px; font-weight:800; color:#0f172a; margin-bottom:4px;\">\n            🗺️ 4단계 빌딩 매매 진행 로드맵\n        </div>\n        <div style=\"font-size:12px; color:#334155; line-height:1.7;\">\n            • <strong>[1단계: 가계약 및 조건 조율]</strong> 매매가, 잔금일정, 임차인 승계/명도 조건, 제1금융권 대출 한도 가심사<br/>\n            • <strong>[2단계: 본계약 체결 (계약금 10%)]</strong> 등기부·건축물대장·토지이용계획 정밀 분석 및 맞춤 특약 작성<br/>\n            • <strong>[3단계: 중도금 및 잔금 준비]</strong> 부동산 담보대출 본심사 실행 조율, 임대차계약서 원본 인수인계<br/>\n            • <strong>[4단계: 잔금 및 소유권이전등기]</strong> 보증금·임대료·관리비 일할 정산 및 취득세 납부·이전등기 완료\n        </div>\n    </div>\n\n    <div style=\"background-color:#eff6ff; border-left:4px solid #003891; padding:10px 14px; border-radius:8px; color:#002766; font-size:12px; line-height:1.65;\">\n        💡 <strong>[핵심 절세] 사업의 포괄양수도 계약 (건물분 부가세 면제 팁)</strong><br/>\n        매도인과 매수인이 동일한 일반과세 임대사업자 지위를 승계하는 경우, <strong>'포괄양수도 특약'</strong>을 체결하여 건물분 부가가치세(10%)를 주고받는 절차를 생략하고 수천만 원의 초기 자금 부담을 획기적으로 줄일 수 있습니다. (전담 세무사 사전 검토 무료 지원)\n    </div>\n</div>",
-      "plainText": "[상가건물·상가주택 매매 절차 및 포괄양수도 안내]\n\n1. 매매 진행 단계\n• [1단계: 가계약 및 조건 조율] 매매가, 잔금 일정, 임차인 승계/명도 조건, 대출 가능 한도 사전 가심사\n• [2단계: 본계약 체결 (계약금 10%)] 등기부·건축물대장·토지이용계획 정밀 권리분석 및 특약 작성\n• [3단계: 중도금 및 잔금 준비] 제1금융권 기업/부동산 담보대출 실행 조율, 기존 임대차계약서 원본 및 시설 관리 현황 인수\n• [4단계: 잔금 및 소유권이전등기] 임대차보증금·선불/후불 월세·공용관리비·장기수선충당금 정산 및 법무사 이전등기\n\n2. 사업의 포괄양수도 계약 (건물분 부가세 절감 팁)\n• 매도인과 매수인이 동일한 과세사업자(일반과세자) 지위를 유지하며 임대사업에 관한 모든 권리와 의무를 포괄적으로 승계하는 경우, '포괄양수도 특약'을 통해 건물분 부가가치세 납부 및 환급 절차를 생략하여 초기 자금 부담을 대폭 줄일 수 있습니다.\n• (주의: 매수인의 사업자 과세유형 및 직접 사용 여부에 따라 요건이 달라지므로 계약 전 세무사 사전 검토를 함께 도와드립니다.)\n\n문의: 최가네부동산 (010-3548-4000)"
-    },
-    {
-      "id": "memo_special_terms_sale",
-      "category": "특약문구",
-      "title": "📑 상가건물·꼬마빌딩 매매 시 명도·임대차승계 표준 안심 특약",
-      "isPinned": false,
-      "updatedAt": 1794438479582,
-      "content": "<div style=\"font-family:'Pretendard Variable',Pretendard,sans-serif; line-height:1.75; color:#1e293b;\">\n    <div style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\">\n        📑 상가건물·꼬마빌딩 매매 표준 안심 특약\n    </div>\n\n    <div style=\"space-y:8px;\">\n        <div style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\">\n            <div style=\"font-size:12px; font-weight:800; color:#0f172a;\">1. 💼 사업의 포괄양수도 명시</div>\n            <div style=\"font-size:11.5px; color:#334155; margin-top:2px;\">\n                \"본 계약은 부동산 임대업에 관한 일체의 권리와 의무를 포괄적으로 승계하는 '사업의 포괄양수도' 계약이며, 매수인의 귀책으로 포괄양수도가 부인될 경우 발생하는 부가세는 매수인이 부담한다.\"\n            </div>\n        </div>\n\n        <div style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\">\n            <div style=\"font-size:12px; font-weight:800; color:#0f172a;\">2. 👥 기존 임대차 승계 및 보증금 일할 정산</div>\n            <div style=\"font-size:11.5px; color:#334155; margin-top:2px;\">\n                \"매수인은 현재 입점 중인 임차인의 임대차보증금 총 [ 금 O억 O천만원 ] 및 월차임 계약을 그대로 승계하며, 잔금일 기준으로 선불/후불 월세 및 관리비를 일할 정산한다.\"\n            </div>\n        </div>\n\n        <div style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\">\n            <div style=\"font-size:12px; font-weight:800; color:#0f172a;\">3. 🔑 공실 명도(비워주기) 조건부 인수 시</div>\n            <div style=\"font-size:11.5px; color:#334155; margin-top:2px;\">\n                \"매도인은 잔금일([202X년 X월 X일])까지 [OO층]의 공실 명도를 완료하여 매수인에게 인도하기로 하며, 명도 합의서 및 공과금 완납 영수증을 잔금 지급과 동시 교부한다.\"\n            </div>\n        </div>\n\n        <div style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\">\n            <div style=\"font-size:12px; font-weight:800; color:#0f172a;\">4. 🏦 기존 대출(근저당권) 전액 말소 조건</div>\n            <div style=\"font-size:11.5px; color:#334155; margin-top:2px;\">\n                \"매도인은 등기부등본상 설정된 근저당권(채권최고액 금 O억원)을 잔금 수령과 동시에 전액 상환 및 말소 접수하기로 한다.\"\n            </div>\n        </div>\n    </div>\n</div>",
-      "plainText": "[상가건물·상가주택 매매 표준 특약 문구]\n\n1. [사업의 포괄양수도]\n본 계약은 부동산 임대업에 관한 일체의 권리와 의무를 포괄적으로 승계하는 '사업의 포괄양수도' 계약이며, 만약 매수인의 귀책사유로 포괄양수도가 부인되어 부가가치세가 과세될 경우 해당 부가세 및 가산세는 매수인이 부담한다.\n\n2. [기존 임대차 승계 및 정산]\n매수인은 현재 입점 중인 임차인의 임대차보증금 총 [ 금 O억 O천만원 ] 및 월차임 계약을 그대로 승계하며, 잔금일 기준으로 기수령한 월세·공용관리비 및 공과금을 일할 정산한다.\n\n3. [명도(비워주기) 조건부 매매 시]\n매도인은 잔금일([202X년 X월 X일])까지 [1층 상가 및 3층 주택]의 공실 명도를 완료하여 매수인에게 인도하기로 하며, 명도 합의서 및 공과금 완납 영수증을 잔금 시 교부한다.\n\n4. [융자 말소 또는 승계]\n매도인은 등기부등본상 설정된 근저당권(채권최고액 금 O억원)을 잔금 수령과 동시에 전액 상환 및 말소하기로 한다."
-    },
-    {
-      "id": "memo_greeting_tour",
-      "category": "인사말/기타",
-      "title": "💌 [카톡 전송용] 현장 매물 투어 감사 인사말 & 브리핑 안내",
-      "isPinned": true,
-      "updatedAt": 1794438479582,
-      "content": "<div style=\"font-family:'Pretendard Variable',Pretendard,sans-serif; line-height:1.75; color:#1e293b;\">\n    <div style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\">\n        💌 현장 투어 감사 인사 &amp; 모바일 브리핑 리포트\n    </div>\n    <div style=\"font-size:12.5px; color:#334155; line-height:1.75;\">\n        안녕하세요 대표님!<br/>\n        오늘 바쁘신 일정 중에도 귀한 시간 내어 <strong>최가네부동산</strong>과 함께 현장 투어를 진행해 주셔서 진심으로 감사드립니다.<br/><br/>\n        오늘 둘러보신 매물들의 <strong>실사진, 임대·매매 조건, 공적장부, 그리고 현장 브리핑 코멘트</strong>를 한눈에 비교하실 수 있도록 <strong>[전용 모바일 브리핑 보드]</strong> 링크로 깔끔하게 정리해 보내드립니다.\n    </div>\n\n    <div style=\"background-color:#eff6ff; border-left:4px solid #003891; padding:10px 14px; border-radius:8px; margin:10px 0; color:#002766; font-size:12px; line-height:1.65;\">\n        🎯 <strong>[조건 조율 안내]</strong><br/>\n        천천히 검토해 보시고 가장 마음에 드시는 <strong>1순위 매물</strong>을 말씀해 주시면, <strong>렌트프리(무상임대) 기간 확보 및 보증금·임대료 조정</strong>을 임대인 측과 최우선으로 협의해 드리겠습니다.\n    </div>\n\n    <div style=\"font-size:12px; color:#64748b; margin-top:8px;\">\n        대표님의 성공적인 개업과 사업 번창을 위해 끝까지 든든한 파트너가 되겠습니다. 감사합니다!<br/>\n        <strong>- 최가네부동산공인중개사사무소 드림 (010-3548-4000)</strong>\n    </div>\n</div>",
-      "plainText": "안녕하세요 대표님!\n오늘 바쁘신 일정 중에도 귀한 시간 내어 최가네부동산과 함께 매물 현장 투어(임장)를 진행해 주셔서 진심으로 감사드립니다.\n\n오늘 현장에서 함께 둘러보신 매물들의 사진, 임대/매매 조건, 그리고 현장 브리핑 코멘트를 한눈에 비교하실 수 있도록 [전용 매물 브리핑 보드] 링크로 깔끔하게 정리해 두었습니다.\n\n천천히 검토해 보시고 가장 마음에 드시는 1순위 매물이나 추가로 조율(렌트프리, 보증금/월세 조정, 주차, 인테리어 협의 등)을 원하시는 부분이 있으시면 언제든 편하게 말씀해 주세요!\n\n대표님의 성공적인 사업 번창과 가장 유리한 조건의 계약을 위해 끝까지 든든하게 책임지겠습니다. 감사합니다!\n\n- 최가네부동산 드림 (010-3548-4000)"
-    },
-    {
-      "id": "memo_office_info",
-      "category": "인사말/기타",
-      "title": "📍 최가네부동산 찾아오시는 길 & 사무소 공식 안내",
-      "isPinned": false,
-      "updatedAt": 1794438479582,
-      "content": "<div style=\"font-family:'Pretendard Variable',Pretendard,sans-serif; line-height:1.75; color:#1e293b;\">\n    <div style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\">\n        📍 최가네부동산공인중개사사무소 안내\n    </div>\n    \n    <div style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; font-size:12px; color:#334155; line-height:1.75;\">\n        • <strong>상호명:</strong> 최가네부동산공인중개사사무소<br/>\n        • <strong>직통전화:</strong> 010-3548-4000 / 053-746-7114<br/>\n        • <strong>사무소 주소:</strong> 대구광역시 수성구 수성동1가 72-3번지 (대구지하철 2호선 대구은행역 2번 출구 도보 3분)<br/>\n        • <strong>공식 홈페이지:</strong> <a href=\"https://www.choi114.com\" target=\"_blank\" style=\"color:#003891; font-weight:bold; text-decoration:underline;\">www.choi114.com</a><br/>\n        • <strong>모바일 명함:</strong> <a href=\"https://www.choi114.com/card\" target=\"_blank\" style=\"color:#003891; font-weight:bold; text-decoration:underline;\">www.choi114.com/card</a><br/>\n        • <strong>등록번호:</strong> 제27260-2024-00085호\n    </div>\n</div>",
-      "plainText": "[최가네부동산공인중개사사무소 안내]\n\n• 상호명: 최가네부동산공인중개사사무소\n• 대표전화: 010-3548-4000 / 053-746-7114\n• 소재지: 대구광역시 수성구 수성동1가 72-3번지 (대구지하철 2호선 대구은행역 2번 출구 도보 3분)\n• 공식 홈페이지: https://www.choi114.com\n• 모바일 명함: https://www.choi114.com/card\n• 중개등록번호: 제27260-2024-00085호"
-    }
-  ],
-  "briefings": [
-    {
-      "id": "br_mwbn5kl2",
-      "customerName": "VIP 고객님",
-      "customerPhone": "",
-      "title": "VIP 고객님 맞춤 매물 비교 브리핑",
-      "createdAt": "2026. 11. 11",
-      "updatedAt": 1794372694858,
-      "expiresAt": "",
-      "blindAddress": true,
-      "showComparisonTable": true,
-      "showMonthlyCost": true,
-      "includeVat": true,
-      "showYield": true,
-      "showMap": true,
-      "generalNote": "오늘 최가네부동산과 함께 현장에서 둘러보신 추천 매물 비교 리포트입니다. 초기 필요자금과 임대·매매 조건을 한눈에 비교해 보시고, 가장 마음에 드시는 1순위 매물을 선택해 주시면 렌트프리 및 세부 조건을 최우선으로 조율해 드리겠습니다.",
-      "attachedMemoIds": [
-        "memo_special_terms_rent"
-      ],
-      "customerPicks": [],
-      "items": []
-    },
-    {
-      "id": "sample_vip_01",
-      "customerName": "김OO 대표님",
-      "customerPhone": "",
-      "title": "수성구 역세권 & 알파시티 무권리 추천 오피스·학원 비교 브리핑",
-      "createdAt": "2026. 11. 11",
-      "updatedAt": 1794374148564,
-      "expiresAt": "",
-      "blindAddress": true,
-      "showComparisonTable": true,
-      "showMonthlyCost": true,
-      "includeVat": true,
-      "showYield": true,
-      "showMap": true,
-      "generalNote": "오늘 함께 둘러보신 수성구 핵심 권역(신매역 달구벌대로변 / 수성알파시티) 무권리 추천 매물 3곳 비교 리포트입니다. 모든 매물이 100% 무권리이며 주차 여건과 인테리어 가성비가 검증된 알짜 호실입니다. 1순위 매물을 선택해 주시면 렌트프리 및 임대 조건을 최우선으로 조율해 드리겠습니다.",
-      "attachedMemoIds": [],
-      "customerPicks": [
-        {
-          "id": "pick_1794465454001",
-          "propNo": "1790",
-          "itemTitle": "신매역 초역세권 달구벌대로 고정주차 12대 대형 오피스/학원",
-          "pickType": "1순위 마음에 듦 (임대료·렌트프리 조율 희망)",
-          "customerMemo": "1번 노변동 매물 월세 조금만 더 조정되면 바로 계약하고 싶습니다.",
-          "customerPhone": "010-3548-4000",
-          "date": "2026. 11. 12. 오후 3:37:34",
-          "timestamp": 1794465454001
-        }
-      ],
-      "items": [
-        {
-          "itemId": "item_1790",
-          "postId": "1794292303569",
-          "propNo": "1790",
-          "tradeType": "rent",
-          "title": "신매역 초역세권 달구벌대로 고정주차 12대 대형 오피스/학원",
-          "address": "대구광역시 수성구 노변동",
-          "currentFloor": "지상 3층",
-          "totalFloor": "지하 1층~지상 5층",
-          "floor": "지상 3층 / 총 지하 1층~지상 5층",
-          "area": "약 130.25평",
-          "deposit": 10000,
-          "rent": 510,
-          "managementFee": 90,
-          "premium": 0,
-          "premiumText": "무권리",
-          "salePrice": 0,
-          "badges": [
-            "주차 편함",
-            "엘리베이터 유",
-            "내부화장실",
-            "무권리",
-            "인테리어 완비",
-            "즉시입주 가능",
-            "대로변/코너",
-            "역세권",
-            "무상철거/원상복구 협의"
-          ],
-          "agentComment": "건물 후면 60대 규모 차단기 주차장 중 '고정주차 12대 + 방문객 무료'를 제공하는 희소 매물입니다. 기존 학원 인테리어 무상 인수 또는 임대인 비용 부담 '전면 무상 철거' 모두 가능하며, 렌트프리 기간도 적극 협의해 드리겠습니다.",
-          "photos": [
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794292170884_6yxj_KakaoTalk_20261110_141556662_22.jpg",
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794292172261_qtf6_KakaoTalk_20261110_141556662_23.jpg",
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794292174124_ujq9_KakaoTalk_20261110_141556662_24.jpg",
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794292187487_rrgv_KakaoTalk_20261110_151249711_01.jpg"
-          ],
-          "coordinates": [
-            35.84113394732438,
-            128.7025433778763
-          ]
-        },
-        {
-          "itemId": "item_1788",
-          "postId": "1794211462428",
-          "propNo": "1788",
-          "tradeType": "rent",
-          "title": "수성알파시티 대흥동 8층 풀인테리어 (룸3개+시스템에어컨4대)",
-          "address": "대구광역시 수성구 대흥동",
-          "currentFloor": "지상 8층",
-          "totalFloor": "지하 1층~지상 8층",
-          "floor": "지상 8층 / 총 지하 1층~지상 8층",
-          "area": "전용 약 34.55평 (공급 43.6평)",
-          "deposit": 5000,
-          "rent": 220,
-          "managementFee": 17.5,
-          "premium": 0,
-          "premiumText": "무권리",
-          "salePrice": 0,
-          "badges": [
-            "주차 편함",
-            "엘리베이터 유",
-            "외부화장실",
-            "냉난방기 있음",
-            "무권리",
-            "인테리어 완비",
-            "룸/칸막이 완비",
-            "탕비실/싱크대",
-            "즉시입주 가능"
-          ],
-          "agentComment": "수성알파시티 내 고층(8층)으로 채광과 개방감이 탁월하며, 대표실·회의실 등 유리 칸막이 룸 3개와 천장형 냉난방기 4대가 무권리로 완비되어 초기 인테리어 비용 3~4천만 원을 즉시 아낄 수 있는 호실입니다.",
-          "photos": [
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211382868_v1i5_KakaoTalk_20261109_161012452_13.jpg",
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211350263_rooc_KakaoTalk_20261109_161012452_02.jpg",
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211353584_l164_KakaoTalk_20261109_161012452_05.jpg",
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211358082_mqpu_KakaoTalk_20261109_161012452_10.jpg"
-          ],
-          "coordinates": [
-            35.83699394216165,
-            128.6819761991501
-          ]
-        },
-        {
-          "itemId": "item_1787",
-          "postId": "1794211876354",
-          "propNo": "1787",
-          "tradeType": "rent",
-          "title": "수성알파시티 대흥동 6층 노출천장·에폭시바닥 가성비 오피스",
-          "address": "대구광역시 수성구 대흥동",
-          "currentFloor": "지상 6층",
-          "totalFloor": "지하 1층~지상 8층",
-          "floor": "지상 6층 / 총 지하 1층~지상 8층",
-          "area": "전용 약 34.34평 (공급 44.8평)",
-          "deposit": 5000,
-          "rent": 180,
-          "managementFee": 17.5,
-          "premium": 0,
-          "premiumText": "무권리",
-          "salePrice": 0,
-          "badges": [
-            "주차 편함",
-            "엘리베이터 유",
-            "외부화장실",
-            "무권리",
-            "인테리어 완비",
-            "높은 층고/노출천장",
-            "즉시입주 가능"
-          ],
-          "agentComment": "동일 건물 8층(220만) 대비 월세가 40만 원 저렴한 '월 180만 원' 가성비 호실입니다. 개방감 좋은 노출천장 + 에폭시 바닥이 시공되어 있어 오픈형 사무실이나 학원·연구소로 강력 추천드립니다.",
-          "photos": [
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211781200_6hp5_KakaoTalk_20261109_160951182_01.jpg",
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211782686_16ko_KakaoTalk_20261109_160951182_04.jpg",
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211785903_mhkt_KakaoTalk_20261109_160951182_08.jpg",
-            "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211787520_0jea_KakaoTalk_20261109_160951182_10.jpg"
-          ],
-          "coordinates": [
-            35.83694175584373,
-            128.68185013532639
-          ]
-        }
-      ]
-    }
-  ]
+﻿{
+    "updatedAt":  1794795809335,
+    "memos":  [
+                  {
+                      "id":  "memo_doc_rent",
+                      "category":  "계약서류",
+                      "title":  "📋 상가·사무실 임대차 계약 시 준비서류 안내 (개인/법인)",
+                      "isPinned":  true,
+                      "updatedAt":  1794438479582,
+                      "content":  "\u003cdiv style=\"font-family:\u0027Pretendard Variable\u0027,Pretendard,sans-serif; line-height:1.75; color:#1e293b;\"\u003e\n    \u003cdiv style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\"\u003e\n        🏛️ 상가·사무실 안전 임대차 계약 준비서류 안내\n    \u003c/div\u003e\n    \u003cp style=\"margin:0 0 10px 0; font-size:13px; color:#475569;\"\u003e\n        안녕하세요, \u003cstrong\u003e최가네부동산공인중개사사무소\u003c/strong\u003e입니다.\u003cbr/\u003e\n        원활하고 안전한 계약 진행을 위해 계약 당일 아래 서류를 미리 지참해 주시기 바랍니다.\n    \u003c/p\u003e\n\n    \u003cdiv style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:10px;\"\u003e\n        \u003cdiv style=\"font-size:13px; font-weight:800; color:#0f172a; margin-bottom:6px;\"\u003e\n            👤 1. 개인 임차인 (대표님 직접 방문 시)\n        \u003c/div\u003e\n        \u003cul style=\"margin:0; padding-left:18px; font-size:12px; color:#334155; line-height:1.7;\"\u003e\n            \u003cli\u003e\u003cstrong\u003e신분증\u003c/strong\u003e (주민등록증 또는 운전면허증 필수)\u003c/li\u003e\n            \u003cli\u003e\u003cstrong\u003e도장\u003c/strong\u003e (서명 가능하나 사업자등록용 일반도장 권장)\u003c/li\u003e\n            \u003cli\u003e\u003cstrong\u003e계약금\u003c/strong\u003e (통상 보증금의 10%, 은행 계좌이체 준비)\u003c/li\u003e\n            \u003cli\u003e\u003cstrong\u003e사업자등록증 사본\u003c/strong\u003e (기존 사업체 이전·확장 시)\u003c/li\u003e\n        \u003c/ul\u003e\n    \u003c/div\u003e\n\n    \u003cdiv style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:10px;\"\u003e\n        \u003cdiv style=\"font-size:13px; font-weight:800; color:#0f172a; margin-bottom:6px;\"\u003e\n            🏢 2. 법인 임차인\n        \u003c/div\u003e\n        \u003cul style=\"margin:0; padding-left:18px; font-size:12px; color:#334155; line-height:1.7;\"\u003e\n            \u003cli\u003e\u003cstrong\u003e법인등기부등본 1통\u003c/strong\u003e (최근 3개월 이내 발급분, 말소사항 포함)\u003c/li\u003e\n            \u003cli\u003e\u003cstrong\u003e법인인감증명서 1통\u003c/strong\u003e (최근 3개월 이내 발급분)\u003c/li\u003e\n            \u003cli\u003e\u003cstrong\u003e사업자등록증 사본\u003c/strong\u003e 1부\u003c/li\u003e\n            \u003cli\u003e\u003cstrong\u003e[대표이사 직접 방문 시]\u003c/strong\u003e 법인인감도장, 대표이사 신분증\u003c/li\u003e\n            \u003cli\u003e\u003cstrong\u003e[대리인(직원) 방문 시]\u003c/strong\u003e 법인인감 날인된 위임장, 재직증명서, 대리인 신분증 및 도장\u003c/li\u003e\n        \u003c/ul\u003e\n    \u003c/div\u003e\n\n    \u003cdiv style=\"background-color:#eff6ff; border-left:4px solid #003891; padding:10px 14px; border-radius:8px; margin:10px 0; color:#002766; font-size:12px; line-height:1.6;\"\u003e\n        💡 \u003cstrong\u003e[중요 체크 팁] 모바일 이체 한도 사전 확인\u003c/strong\u003e\u003cbr/\u003e\n        계약 당일 은행 앱의 \u00271회 및 1일 이체 한도\u0027가 계약금보다 낮아 송금이 지연되는 경우가 빈번합니다. 방문 전 주거래 은행 앱에서 이체 한도를 미리 증액해 두시면 훨씬 빠르고 쾌적하게 계약이 완료됩니다.\n    \u003c/div\u003e\n\n    \u003cdiv style=\"text-align:right; font-size:11px; color:#64748b; margin-top:8px;\"\u003e\n        📞 최가네부동산 직통 상담: \u003cstrong\u003e010-3548-4000\u003c/strong\u003e\n    \u003c/div\u003e\n\u003c/div\u003e",
+                      "plainText":  "[상가·사무실 임대차 계약 시 준비서류 안내]\n\n안녕하세요, 최가네부동산입니다.\n원활하고 안전한 계약 진행을 위해 아래 준비서류를 확인 부탁드립니다.\n\n1. 개인 임차인 (대표님 직접 방문 시)\n• 신분증 (주민등록증 또는 운전면허증 필수)\n• 도장 (서명 가능하나 사업자등록용 도장 지참 권장)\n• 계약금 (통상 보증금의 10%, 계좌이체 준비)\n• 기존 사업자이신 경우: 사업자등록증 사본\n\n2. 법인 임차인\n• 법인등기부등본 1통 (최근 3개월 이내, 말소사항 포함)\n• 법인인감증명서 1통 (최근 3개월 이내)\n• 사업자등록증 사본\n• [대표이사 직접 방문 시] 법인인감도장, 대표이사 신분증\n• [대리인(직원) 방문 시] 법인인감 날인된 위임장, 재직증명서, 대리인 신분증 및 도장\n\n* 이체 한도 체크 팁\n계약 당일 모바일/인터넷뱅킹 \u00271회 및 1일 이체 한도\u0027가 계약금보다 낮아 당황하시는 경우가 많습니다. 방문 전 은행 앱에서 이체 한도를 미리 확인 및 증액해 주시면 감사하겠습니다.\n\n문의: 최가네부동산 (010-3548-4000)"
+                  },
+                  {
+                      "id":  "memo_special_terms_rent",
+                      "category":  "특약문구",
+                      "title":  "🛡️ 상가·사무실 임대차 필수 안심 특약 문구 모음",
+                      "isPinned":  true,
+                      "updatedAt":  1794438479582,
+                      "content":  "\u003cdiv style=\"font-family:\u0027Pretendard Variable\u0027,Pretendard,sans-serif; line-height:1.75; color:#1e293b;\"\u003e\n    \u003cdiv style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\"\u003e\n        🛡️ 상가·사무실 임대차 표준 안심 특약 문구\n    \u003c/div\u003e\n    \u003cp style=\"margin:0 0 10px 0; font-size:12px; color:#475569;\"\u003e\n        임차인의 보증금 보호와 입주 후 분쟁을 예방하기 위해 최가네부동산에서 계약서 작성 시 기본으로 챙겨드리는 필수 특약 조항입니다.\n    \u003c/p\u003e\n\n    \u003cdiv style=\"space-y:8px;\"\u003e\n        \u003cdiv style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12px; font-weight:800; color:#0f172a;\"\u003e1. 🔒 권리제한 없는 상태 유지 (보증금 안전)\u003c/div\u003e\n            \u003cdiv style=\"font-size:11.5px; color:#334155; margin-top:2px;\"\u003e\n                \"임대인은 잔금일 익일까지 현재 등기부등본상 권리 관계를 그대로 유지하며, 추가 근저당권 설정 등 임차인의 보증금 보호에 불리한 일체의 권리 설정을 하지 않는다.\"\n            \u003c/div\u003e\n        \u003c/div\u003e\n\n        \u003cdiv style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12px; font-weight:800; color:#0f172a;\"\u003e2. 🏢 인허가 및 업종 신고 불가 시 조건부 계약 해제\u003c/div\u003e\n            \u003cdiv style=\"font-size:11.5px; color:#334155; margin-top:2px;\"\u003e\n                \"본 계약은 임차인이 목적물에서 [OO업종] 영업 허가(신고/등록)가 가능함을 전제로 하며, 건물 자체의 구조적 하자로 인허가가 불가할 경우 본 계약은 위약금 없이 무효로 하고 임대인은 기수령한 금원 전액을 즉시 반환한다.\"\n            \u003c/div\u003e\n        \u003c/div\u003e\n\n        \u003cdiv style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12px; font-weight:800; color:#0f172a;\"\u003e3. 🎁 렌트프리(무상 인테리어 공사 기간) 합의\u003c/div\u003e\n            \u003cdiv style=\"font-size:11.5px; color:#334155; margin-top:2px;\"\u003e\n                \"임대인은 임차인의 원활한 인테리어 공사 및 영업 준비를 위해 [202X년 X월 X일 ~ X월 X일 (총 OO일간)] 무상 임대기간(Rent-Free)을 제공한다. 단, 해당 기간 중 발생하는 실비 공용관리비 및 공과금은 임차인이 부담한다.\"\n            \u003c/div\u003e\n        \u003c/div\u003e\n\n        \u003cdiv style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12px; font-weight:800; color:#0f172a;\"\u003e4. 🔧 건물 구조체 결함 및 누수 하자 보수 책임\u003c/div\u003e\n            \u003cdiv style=\"font-size:11.5px; color:#334155; margin-top:2px;\"\u003e\n                \"건물 구조체 결함으로 인한 천장/외벽 누수, 메인 배관 및 기본 전기·소방 시설의 중대한 하자는 임대인 비용으로 즉시 수리하며, 임차인의 사용상 과실이나 단순 소모품 교체는 임차인이 부담한다.\"\n            \u003c/div\u003e\n        \u003c/div\u003e\n\n        \u003cdiv style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12px; font-weight:800; color:#0f172a;\"\u003e5. 🧹 퇴거 시 원상복구 기준 명확화\u003c/div\u003e\n            \u003cdiv style=\"font-size:11.5px; color:#334155; margin-top:2px;\"\u003e\n                \"임대차 종료 시 임차인은 계약 당시 현황(현장 사진 첨부)을 기준으로 원상복구하되, 계약 이전부터 설치되어 있던 시설물([칸막이/기본에어컨 등])에 대해서는 원상복구(철거) 의무를 면제한다.\"\n            \u003c/div\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\n    \u003cdiv style=\"background-color:#fff1f2; border-left:4px solid #e11d48; padding:9px 12px; border-radius:8px; margin-top:10px; color:#881337; font-size:11.5px;\"\u003e\n        ⚠️ \u003cstrong\u003e[맞춤 특약 지원]\u003c/strong\u003e 현장 상태와 업종에 따라 최적의 특약을 1:1 맞춤형으로 조율해 작성해 드립니다.\n    \u003c/div\u003e\n\u003c/div\u003e",
+                      "plainText":  "[상가·사무실 임대차 표준 안심 특약 문구]\n\n1. [권리제한 없는 상태 유지]\n임대인은 잔금일 익일까지 현재 등기부등본상 권리 관계를 유지하며, 추가 근저당 설정 등 임차인의 보증금 보호에 불리한 행위를 하지 않는다.\n\n2. [인허가 및 용도 확인 조건부 계약 해제]\n본 계약은 임차인이 목적물에서 [OO업종] 영업 허가(신고/등록)가 가능함을 전제로 하며, 만약 건물 자체의 중대한 하자로 인해 인허가가 불가할 경우 본 계약은 위약금 없이 무효로 하고 임대인은 수령한 금원 전액을 즉시 반환한다.\n\n3. [렌트프리(인테리어 기간) 합의]\n임대인은 임차인의 원활한 인테리어 공사 및 입주 준비를 위해 [202X년 X월 X일 ~ X월 X일 (총 OO일간)] 무상 임대기간(Rent-Free)을 제공한다. 단, 해당 기간 중 발생하는 공용관리비 및 실비 공과금은 임차인이 부담한다.\n\n4. [주요 설비 및 누수 하자 보수]\n건물 구조체 결함으로 인한 천장/외벽 누수, 메인 배관 및 기본 전기·소방 설비의 중대한 하자는 임대인이 수리하며, 임차인의 사용·관리상 과실이나 소모품 교체는 임차인이 부담한다.\n\n5. [원상복구 기준 명확화]\n임대차 종료 시 임차인은 입주 당시 현황(현장 사진 첨부)을 기준으로 원상복구하되, 기존부터 설치되어 있던 시설물([칸막이/천장형에어컨 등])에 대해서는 철거 의무를 면제한다."
+                  },
+                  {
+                      "id":  "memo_tax_premium",
+                      "category":  "세무/대출",
+                      "title":  "💰 상가 권리금(시설·영업) 계약 및 부가가치세 핵심 체크포인트",
+                      "isPinned":  true,
+                      "updatedAt":  1794438479582,
+                      "content":  "\u003cdiv style=\"font-family:\u0027Pretendard Variable\u0027,Pretendard,sans-serif; line-height:1.75; color:#1e293b;\"\u003e\n    \u003cdiv style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\"\u003e\n        💰 상가 권리금(시설·영업권) 계약 \u0026amp; 세무 핵심 체크포인트\n    \u003c/div\u003e\n    \u003cp style=\"margin:0 0 10px 0; font-size:12px; color:#475569;\"\u003e\n        상가 양도·양수(권리금) 계약 진행 시 가장 많이 궁금해하시는 세무 처리 및 안전 진행 절차를 정리해 드립니다.\n    \u003c/p\u003e\n\n    \u003cdiv style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px;\"\u003e\n        \u003cdiv style=\"font-size:12.5px; font-weight:800; color:#0f172a; margin-bottom:4px;\"\u003e\n            🤝 1. 권리금 계약 후 본계약 진행 원칙 (100% 안전장치)\n        \u003c/div\u003e\n        \u003cdiv style=\"font-size:12px; color:#334155; line-height:1.65;\"\u003e\n            • 기존 임차인(양도인)과의 권리금 계약은 반드시 \u003cstrong\u003e\u0027건물주(임대인)와의 신규 임대차계약 체결\u0027\u003c/strong\u003e을 전제조건으로 체결합니다.\u003cbr/\u003e\n            • 만약 임대인의 과도한 임대료 인상이나 거절로 본계약이 무산될 경우, \u003cstrong\u003e권리금 계약금 전액을 조건 없이 즉시 반환\u003c/strong\u003e받도록 특약을 명시합니다.\n        \u003c/div\u003e\n    \u003c/div\u003e\n\n    \u003cdiv style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px;\"\u003e\n        \u003cdiv style=\"font-size:12.5px; font-weight:800; color:#0f172a; margin-bottom:4px;\"\u003e\n            📑 2. 세금계산서 발행 및 부가가치세(VAT) 환급\n        \u003c/div\u003e\n        \u003cdiv style=\"font-size:12px; color:#334155; line-height:1.65;\"\u003e\n            • 권리금에 대한 부가세(10%)는 원칙적으로 별도이며, 양도인이 세금계산서를 발행하면 신규 임차인은 \u003cstrong\u003e부가세 확정신고 시 매입세액 전액 공제(환급)\u003c/strong\u003e를 받으실 수 있습니다.\u003cbr/\u003e\n            • 영업권(순수 권리금)은 소득세법상 기타소득 원천징수(8.8%) 대상이 될 수 있으므로 시설비와 영업권의 안분 비율을 담당 세무사와 사전 협의하시면 절세에 매우 유리합니다.\n        \u003c/div\u003e\n    \u003c/div\u003e\n\n    \u003cdiv style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px;\"\u003e\n        \u003cdiv style=\"font-size:12.5px; font-weight:800; color:#0f172a; margin-bottom:4px;\"\u003e\n            🔌 3. 잔금일 공과금 \u0026amp; 관리비 일할 정산\n        \u003c/div\u003e\n        \u003cdiv style=\"font-size:12px; color:#334155; line-height:1.65;\"\u003e\n            • 잔금 시점까지 기존 임차인이 사용한 전기·수도·도시가스·공용관리비를 검침하여 \u003cstrong\u003e1원 단위까지 일할 정산\u003c/strong\u003e하고 영수증을 교부해 드립니다.\n        \u003c/div\u003e\n    \u003c/div\u003e\n\n    \u003cdiv style=\"background-color:#eff6ff; border-left:4px solid #003891; padding:9px 12px; border-radius:8px; color:#002766; font-size:11.5px;\"\u003e\n        💡 \u003cstrong\u003e최가네부동산 권리금 중개 원칙:\u003c/strong\u003e 양도인·양수인 양측 모두가 억울함 없이 투명하고 명확하게 시설 승계 리스트를 작성해 드립니다.\n    \u003c/div\u003e\n\u003c/div\u003e",
+                      "plainText":  "[상가 권리금 계약 및 부가가치세(VAT) 핵심 안내]\n\n안녕하세요, 최가네부동산입니다.\n상가 양도·양수(권리금) 계약 시 가장 많이 문의하시는 세무 및 진행 절차를 정리해 드립니다.\n\n1. 권리금 계약 후 임대차 본계약 진행 원칙\n• 기존 임차인(양도인)과의 권리금 계약은 반드시 \u0027임대인과의 신규 임대차계약 체결\u0027을 조건으로 진행합니다.\n• 만약 임대인의 정당한 사유 없는 계약 거절 등으로 본계약이 체결되지 않을 경우, 권리금 계약금을 100% 안전하게 반환받도록 특약을 명시해 드립니다.\n\n2. 권리금 세금계산서 및 부가가치세 처리\n• 권리금에 대한 부가가치세(10%)는 별도이며, 양도인이 세금계산서를 발행하면 양수인(신규 임차인)은 부가세 신고 시 매입세액 공제(환급)를 받으실 수 있습니다.\n• 영업권(무형자산) 부분에 대해서는 세법에 따라 기타소득 원천징수(8.8%) 신고 대상이 될 수 있으므로 담당 세무사와 공제 방식(시설비 vs 영업권 비중)을 사전 협의하시면 절세에 큰 도움이 됩니다.\n\n3. 잔금일 정산 항목\n• 잔금일 기준으로 기존 임차인이 사용한 전기·수도·도시가스·공용관리비·임대료를 일할 정산하여 깔끔하게 인수인계해 드립니다.\n\n문의: 최가네부동산 (010-3548-4000)"
+                  },
+                  {
+                      "id":  "memo_business_reg",
+                      "category":  "계약서류",
+                      "title":  "✅ 계약 체결 후 사업자등록 \u0026 확정일자 필수 진행 체크리스트",
+                      "isPinned":  false,
+                      "updatedAt":  1794438479582,
+                      "content":  "\u003cdiv style=\"font-family:\u0027Pretendard Variable\u0027,Pretendard,sans-serif; line-height:1.75; color:#1e293b;\"\u003e\n    \u003cdiv style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\"\u003e\n        ✅ 계약 체결 후 사업자등록 \u0026amp; 확정일자 진행 체크리스트\n    \u003c/div\u003e\n\n    \u003cdiv style=\"space-y:8px;\"\u003e\n        \u003cdiv style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:11px; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12.5px; font-weight:800; color:#0f172a;\"\u003eSTEP 1 🏢 사업자등록 신청 (관할 세무서 또는 홈택스)\u003c/div\u003e\n            \u003cul style=\"margin:4px 0 0 0; padding-left:18px; font-size:12px; color:#334155; line-height:1.65;\"\u003e\n                \u003cli\u003e\u003cstrong\u003e필요서류:\u003c/strong\u003e 임대차계약서 사본, 신분증, 도장, (허가/등록 업종인 경우) 영업허가증·신고필증 사본\u003c/li\u003e\n                \u003cli\u003e\u003cstrong\u003e핵심 팁:\u003c/strong\u003e 인테리어 공사비 세금계산서의 매입세액 공제(환급)를 받으시려면 \u003cstrong\u003e착공 전 사업자등록을 미리 신청\u003c/strong\u003e하시는 것이 필수적입니다.\u003c/li\u003e\n            \u003c/ul\u003e\n        \u003c/div\u003e\n\n        \u003cdiv style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:11px; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12.5px; font-weight:800; color:#0f172a;\"\u003eSTEP 2 📌 상가건물 확정일자 부여 신청 (우선변제권 확보)\u003c/div\u003e\n            \u003cul style=\"margin:4px 0 0 0; padding-left:18px; font-size:12px; color:#334155; line-height:1.65;\"\u003e\n                \u003cli\u003e세무서에서 사업자등록 신청 시 \u003cstrong\u003e임대차계약서 원본에 \u0027확정일자\u0027\u003c/strong\u003e를 함께 받으셔야 상가건물임대차보호법상 최우선 변제권 요건을 갖추게 됩니다.\u003c/li\u003e\n                \u003cli\u003e\u003cstrong\u003e대항력 완성 요건:\u003c/strong\u003e [점유(인도) + 사업자등록 + 확정일자] 3박자가 완료되어야 완벽한 법적 보호를 받습니다.\u003c/li\u003e\n            \u003c/ul\u003e\n        \u003c/div\u003e\n\n        \u003cdiv style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:11px; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12.5px; font-weight:800; color:#0f172a;\"\u003eSTEP 3 ⚡ 한전 명의변경 및 통신·보안 시설 이전\u003c/div\u003e\n            \u003cul style=\"margin:4px 0 0 0; padding-left:18px; font-size:12px; color:#334155; line-height:1.65;\"\u003e\n                \u003cli\u003e\u003cstrong\u003e한전 (국번없이 123):\u003c/strong\u003e 신규 사업자등록증 발급 후 한전 고객번호 확인하여 명의변경 및 자동이체 등록\u003c/li\u003e\n                \u003cli\u003e\u003cstrong\u003e인터넷 / 보안(캡스·에스원) / 정수기:\u003c/strong\u003e 입주 1주일 전 사전 예약 필수\u003c/li\u003e\n            \u003c/ul\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e",
+                      "plainText":  "[계약 체결 후 사업자등록 \u0026 확정일자 체크리스트]\n\n1. 사업자등록 신청 (관할 세무서 또는 홈택스)\n• 필요서류: 상가건물 임대차계약서 사본, 신분증, 도장, (허가/등록 업종인 경우) 영업허가증·신고필증 사본\n• 인테리어 공사비 세금계산서 매입세액 공제를 받으시려면 인테리어 착공 전에 사업자등록을 먼저 신청하시는 것이 유리합니다.\n\n2. 상가건물 확정일자 부여 신청 (필수)\n• 세무서에서 사업자등록 신청 시 임대차계약서 원본을 제시하고 \u0027확정일자\u0027를 함께 신청하시면 상가건물임대차보호법상 우선변제권 요건을 갖추게 됩니다.\n• 잔금 및 점유(인도) + 사업자등록 신청 + 확정일자가 완료되면 대항력과 우선변제권이 완성됩니다.\n\n3. 전기 명의변경 및 화재보험·인터넷 이전\n• 한전(국번 없이 123): 신규 사업자등록증 발급 후 고객번호 확인하여 명의변경 및 자동이체 신청\n• 인터넷/보안(캡스·에스원)/정수기: 입주 1주일 전 미리 이전 설치 예약 권장"
+                  },
+                  {
+                      "id":  "memo_building_sale",
+                      "category":  "세무/대출",
+                      "title":  "🏢 상가건물·상가주택(꼬마빌딩) 매매 절차 및 포괄양수도 가이드",
+                      "isPinned":  false,
+                      "updatedAt":  1794438479582,
+                      "content":  "\u003cdiv style=\"font-family:\u0027Pretendard Variable\u0027,Pretendard,sans-serif; line-height:1.75; color:#1e293b;\"\u003e\n    \u003cdiv style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\"\u003e\n        🏢 상가건물·상가주택(꼬마빌딩) 매매 절차 \u0026amp; 포괄양수도 절세 가이드\n    \u003c/div\u003e\n\n    \u003cdiv style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px;\"\u003e\n        \u003cdiv style=\"font-size:12.5px; font-weight:800; color:#0f172a; margin-bottom:4px;\"\u003e\n            🗺️ 4단계 빌딩 매매 진행 로드맵\n        \u003c/div\u003e\n        \u003cdiv style=\"font-size:12px; color:#334155; line-height:1.7;\"\u003e\n            • \u003cstrong\u003e[1단계: 가계약 및 조건 조율]\u003c/strong\u003e 매매가, 잔금일정, 임차인 승계/명도 조건, 제1금융권 대출 한도 가심사\u003cbr/\u003e\n            • \u003cstrong\u003e[2단계: 본계약 체결 (계약금 10%)]\u003c/strong\u003e 등기부·건축물대장·토지이용계획 정밀 분석 및 맞춤 특약 작성\u003cbr/\u003e\n            • \u003cstrong\u003e[3단계: 중도금 및 잔금 준비]\u003c/strong\u003e 부동산 담보대출 본심사 실행 조율, 임대차계약서 원본 인수인계\u003cbr/\u003e\n            • \u003cstrong\u003e[4단계: 잔금 및 소유권이전등기]\u003c/strong\u003e 보증금·임대료·관리비 일할 정산 및 취득세 납부·이전등기 완료\n        \u003c/div\u003e\n    \u003c/div\u003e\n\n    \u003cdiv style=\"background-color:#eff6ff; border-left:4px solid #003891; padding:10px 14px; border-radius:8px; color:#002766; font-size:12px; line-height:1.65;\"\u003e\n        💡 \u003cstrong\u003e[핵심 절세] 사업의 포괄양수도 계약 (건물분 부가세 면제 팁)\u003c/strong\u003e\u003cbr/\u003e\n        매도인과 매수인이 동일한 일반과세 임대사업자 지위를 승계하는 경우, \u003cstrong\u003e\u0027포괄양수도 특약\u0027\u003c/strong\u003e을 체결하여 건물분 부가가치세(10%)를 주고받는 절차를 생략하고 수천만 원의 초기 자금 부담을 획기적으로 줄일 수 있습니다. (전담 세무사 사전 검토 무료 지원)\n    \u003c/div\u003e\n\u003c/div\u003e",
+                      "plainText":  "[상가건물·상가주택 매매 절차 및 포괄양수도 안내]\n\n1. 매매 진행 단계\n• [1단계: 가계약 및 조건 조율] 매매가, 잔금 일정, 임차인 승계/명도 조건, 대출 가능 한도 사전 가심사\n• [2단계: 본계약 체결 (계약금 10%)] 등기부·건축물대장·토지이용계획 정밀 권리분석 및 특약 작성\n• [3단계: 중도금 및 잔금 준비] 제1금융권 기업/부동산 담보대출 실행 조율, 기존 임대차계약서 원본 및 시설 관리 현황 인수\n• [4단계: 잔금 및 소유권이전등기] 임대차보증금·선불/후불 월세·공용관리비·장기수선충당금 정산 및 법무사 이전등기\n\n2. 사업의 포괄양수도 계약 (건물분 부가세 절감 팁)\n• 매도인과 매수인이 동일한 과세사업자(일반과세자) 지위를 유지하며 임대사업에 관한 모든 권리와 의무를 포괄적으로 승계하는 경우, \u0027포괄양수도 특약\u0027을 통해 건물분 부가가치세 납부 및 환급 절차를 생략하여 초기 자금 부담을 대폭 줄일 수 있습니다.\n• (주의: 매수인의 사업자 과세유형 및 직접 사용 여부에 따라 요건이 달라지므로 계약 전 세무사 사전 검토를 함께 도와드립니다.)\n\n문의: 최가네부동산 (010-3548-4000)"
+                  },
+                  {
+                      "id":  "memo_special_terms_sale",
+                      "category":  "특약문구",
+                      "title":  "📑 상가건물·꼬마빌딩 매매 시 명도·임대차승계 표준 안심 특약",
+                      "isPinned":  false,
+                      "updatedAt":  1794438479582,
+                      "content":  "\u003cdiv style=\"font-family:\u0027Pretendard Variable\u0027,Pretendard,sans-serif; line-height:1.75; color:#1e293b;\"\u003e\n    \u003cdiv style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\"\u003e\n        📑 상가건물·꼬마빌딩 매매 표준 안심 특약\n    \u003c/div\u003e\n\n    \u003cdiv style=\"space-y:8px;\"\u003e\n        \u003cdiv style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12px; font-weight:800; color:#0f172a;\"\u003e1. 💼 사업의 포괄양수도 명시\u003c/div\u003e\n            \u003cdiv style=\"font-size:11.5px; color:#334155; margin-top:2px;\"\u003e\n                \"본 계약은 부동산 임대업에 관한 일체의 권리와 의무를 포괄적으로 승계하는 \u0027사업의 포괄양수도\u0027 계약이며, 매수인의 귀책으로 포괄양수도가 부인될 경우 발생하는 부가세는 매수인이 부담한다.\"\n            \u003c/div\u003e\n        \u003c/div\u003e\n\n        \u003cdiv style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12px; font-weight:800; color:#0f172a;\"\u003e2. 👥 기존 임대차 승계 및 보증금 일할 정산\u003c/div\u003e\n            \u003cdiv style=\"font-size:11.5px; color:#334155; margin-top:2px;\"\u003e\n                \"매수인은 현재 입점 중인 임차인의 임대차보증금 총 [ 금 O억 O천만원 ] 및 월차임 계약을 그대로 승계하며, 잔금일 기준으로 선불/후불 월세 및 관리비를 일할 정산한다.\"\n            \u003c/div\u003e\n        \u003c/div\u003e\n\n        \u003cdiv style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12px; font-weight:800; color:#0f172a;\"\u003e3. 🔑 공실 명도(비워주기) 조건부 인수 시\u003c/div\u003e\n            \u003cdiv style=\"font-size:11.5px; color:#334155; margin-top:2px;\"\u003e\n                \"매도인은 잔금일([202X년 X월 X일])까지 [OO층]의 공실 명도를 완료하여 매수인에게 인도하기로 하며, 명도 합의서 및 공과금 완납 영수증을 잔금 지급과 동시 교부한다.\"\n            \u003c/div\u003e\n        \u003c/div\u003e\n\n        \u003cdiv style=\"background-color:#f8fafc; border-left:3px solid #003891; padding:9px 12px; border-radius:0 8px 8px 0; margin-bottom:8px;\"\u003e\n            \u003cdiv style=\"font-size:12px; font-weight:800; color:#0f172a;\"\u003e4. 🏦 기존 대출(근저당권) 전액 말소 조건\u003c/div\u003e\n            \u003cdiv style=\"font-size:11.5px; color:#334155; margin-top:2px;\"\u003e\n                \"매도인은 등기부등본상 설정된 근저당권(채권최고액 금 O억원)을 잔금 수령과 동시에 전액 상환 및 말소 접수하기로 한다.\"\n            \u003c/div\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e",
+                      "plainText":  "[상가건물·상가주택 매매 표준 특약 문구]\n\n1. [사업의 포괄양수도]\n본 계약은 부동산 임대업에 관한 일체의 권리와 의무를 포괄적으로 승계하는 \u0027사업의 포괄양수도\u0027 계약이며, 만약 매수인의 귀책사유로 포괄양수도가 부인되어 부가가치세가 과세될 경우 해당 부가세 및 가산세는 매수인이 부담한다.\n\n2. [기존 임대차 승계 및 정산]\n매수인은 현재 입점 중인 임차인의 임대차보증금 총 [ 금 O억 O천만원 ] 및 월차임 계약을 그대로 승계하며, 잔금일 기준으로 기수령한 월세·공용관리비 및 공과금을 일할 정산한다.\n\n3. [명도(비워주기) 조건부 매매 시]\n매도인은 잔금일([202X년 X월 X일])까지 [1층 상가 및 3층 주택]의 공실 명도를 완료하여 매수인에게 인도하기로 하며, 명도 합의서 및 공과금 완납 영수증을 잔금 시 교부한다.\n\n4. [융자 말소 또는 승계]\n매도인은 등기부등본상 설정된 근저당권(채권최고액 금 O억원)을 잔금 수령과 동시에 전액 상환 및 말소하기로 한다."
+                  },
+                  {
+                      "id":  "memo_greeting_tour",
+                      "category":  "인사말/기타",
+                      "title":  "💌 [카톡 전송용] 현장 매물 투어 감사 인사말 \u0026 브리핑 안내",
+                      "isPinned":  true,
+                      "updatedAt":  1794438479582,
+                      "content":  "\u003cdiv style=\"font-family:\u0027Pretendard Variable\u0027,Pretendard,sans-serif; line-height:1.75; color:#1e293b;\"\u003e\n    \u003cdiv style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\"\u003e\n        💌 현장 투어 감사 인사 \u0026amp; 모바일 브리핑 리포트\n    \u003c/div\u003e\n    \u003cdiv style=\"font-size:12.5px; color:#334155; line-height:1.75;\"\u003e\n        안녕하세요 대표님!\u003cbr/\u003e\n        오늘 바쁘신 일정 중에도 귀한 시간 내어 \u003cstrong\u003e최가네부동산\u003c/strong\u003e과 함께 현장 투어를 진행해 주셔서 진심으로 감사드립니다.\u003cbr/\u003e\u003cbr/\u003e\n        오늘 둘러보신 매물들의 \u003cstrong\u003e실사진, 임대·매매 조건, 공적장부, 그리고 현장 브리핑 코멘트\u003c/strong\u003e를 한눈에 비교하실 수 있도록 \u003cstrong\u003e[전용 모바일 브리핑 보드]\u003c/strong\u003e 링크로 깔끔하게 정리해 보내드립니다.\n    \u003c/div\u003e\n\n    \u003cdiv style=\"background-color:#eff6ff; border-left:4px solid #003891; padding:10px 14px; border-radius:8px; margin:10px 0; color:#002766; font-size:12px; line-height:1.65;\"\u003e\n        🎯 \u003cstrong\u003e[조건 조율 안내]\u003c/strong\u003e\u003cbr/\u003e\n        천천히 검토해 보시고 가장 마음에 드시는 \u003cstrong\u003e1순위 매물\u003c/strong\u003e을 말씀해 주시면, \u003cstrong\u003e렌트프리(무상임대) 기간 확보 및 보증금·임대료 조정\u003c/strong\u003e을 임대인 측과 최우선으로 협의해 드리겠습니다.\n    \u003c/div\u003e\n\n    \u003cdiv style=\"font-size:12px; color:#64748b; margin-top:8px;\"\u003e\n        대표님의 성공적인 개업과 사업 번창을 위해 끝까지 든든한 파트너가 되겠습니다. 감사합니다!\u003cbr/\u003e\n        \u003cstrong\u003e- 최가네부동산공인중개사사무소 드림 (010-3548-4000)\u003c/strong\u003e\n    \u003c/div\u003e\n\u003c/div\u003e",
+                      "plainText":  "안녕하세요 대표님!\n오늘 바쁘신 일정 중에도 귀한 시간 내어 최가네부동산과 함께 매물 현장 투어(임장)를 진행해 주셔서 진심으로 감사드립니다.\n\n오늘 현장에서 함께 둘러보신 매물들의 사진, 임대/매매 조건, 그리고 현장 브리핑 코멘트를 한눈에 비교하실 수 있도록 [전용 매물 브리핑 보드] 링크로 깔끔하게 정리해 두었습니다.\n\n천천히 검토해 보시고 가장 마음에 드시는 1순위 매물이나 추가로 조율(렌트프리, 보증금/월세 조정, 주차, 인테리어 협의 등)을 원하시는 부분이 있으시면 언제든 편하게 말씀해 주세요!\n\n대표님의 성공적인 사업 번창과 가장 유리한 조건의 계약을 위해 끝까지 든든하게 책임지겠습니다. 감사합니다!\n\n- 최가네부동산 드림 (010-3548-4000)"
+                  },
+                  {
+                      "id":  "memo_office_info",
+                      "category":  "인사말/기타",
+                      "title":  "📍 최가네부동산 찾아오시는 길 \u0026 사무소 공식 안내",
+                      "isPinned":  false,
+                      "updatedAt":  1794438479582,
+                      "content":  "\u003cdiv style=\"font-family:\u0027Pretendard Variable\u0027,Pretendard,sans-serif; line-height:1.75; color:#1e293b;\"\u003e\n    \u003cdiv style=\"font-size:15px; font-weight:800; color:#003891; margin-bottom:8px;\"\u003e\n        📍 최가네부동산공인중개사사무소 안내\n    \u003c/div\u003e\n    \n    \u003cdiv style=\"background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; font-size:12px; color:#334155; line-height:1.75;\"\u003e\n        • \u003cstrong\u003e상호명:\u003c/strong\u003e 최가네부동산공인중개사사무소\u003cbr/\u003e\n        • \u003cstrong\u003e직통전화:\u003c/strong\u003e 010-3548-4000 / 053-746-7114\u003cbr/\u003e\n        • \u003cstrong\u003e사무소 주소:\u003c/strong\u003e 대구광역시 수성구 수성동1가 72-3번지 (대구지하철 2호선 대구은행역 2번 출구 도보 3분)\u003cbr/\u003e\n        • \u003cstrong\u003e공식 홈페이지:\u003c/strong\u003e \u003ca href=\"https://www.choi114.com\" target=\"_blank\" style=\"color:#003891; font-weight:bold; text-decoration:underline;\"\u003ewww.choi114.com\u003c/a\u003e\u003cbr/\u003e\n        • \u003cstrong\u003e모바일 명함:\u003c/strong\u003e \u003ca href=\"https://www.choi114.com/card\" target=\"_blank\" style=\"color:#003891; font-weight:bold; text-decoration:underline;\"\u003ewww.choi114.com/card\u003c/a\u003e\u003cbr/\u003e\n        • \u003cstrong\u003e등록번호:\u003c/strong\u003e 제27260-2024-00085호\n    \u003c/div\u003e\n\u003c/div\u003e",
+                      "plainText":  "[최가네부동산공인중개사사무소 안내]\n\n• 상호명: 최가네부동산공인중개사사무소\n• 대표전화: 010-3548-4000 / 053-746-7114\n• 소재지: 대구광역시 수성구 수성동1가 72-3번지 (대구지하철 2호선 대구은행역 2번 출구 도보 3분)\n• 공식 홈페이지: https://www.choi114.com\n• 모바일 명함: https://www.choi114.com/card\n• 중개등록번호: 제27260-2024-00085호"
+                  }
+              ],
+    "briefings":  [
+                      {
+                          "id":  "br_mwil8hy9",
+                          "customerName":  "010-9273-8477",
+                          "customerPhone":  "",
+                          "title":  "사무실 매물 리스트",
+                          "createdAt":  "2026. 11. 16",
+                          "updatedAt":  1794795386198,
+                          "expiresAt":  "",
+                          "blindAddress":  false,
+                          "showComparisonTable":  true,
+                          "showMonthlyCost":  false,
+                          "includeVat":  true,
+                          "includeMaintVat":  false,
+                          "showYield":  false,
+                          "showMap":  true,
+                          "generalNote":  "어제 보신 매물과 추가로 매물을 더 보내드립니다^^",
+                          "attachedMemoIds":  [
+                                                  "memo_doc_rent",
+                                                  "memo_special_terms_rent"
+                                              ],
+                          "customerPicks":  [
+
+                                            ],
+                          "items":  [
+                                        {
+                                            "itemId":  "item_1794792841943_lfmy",
+                                            "postId":  "1784012786859",
+                                            "propNo":  "1050",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 지산동 무권리 대형 사무실 인테리어 완비 상가임대",
+                                            "address":  "대구광역시 수성구 지산동 1276-6",
+                                            "currentFloor":  "지상 6층",
+                                            "totalFloor":  "지하 1층~지상 8층",
+                                            "floor":  "지상 6층 / 총 지하 1층~지상 8층",
+                                            "area":  "약 83평",
+                                            "deposit":  3000,
+                                            "rent":  170,
+                                            "managementFee":  20,
+                                            "maintVat":  true,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "룸/칸막이 완비",
+                                                           "탕비실/싱크대",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "역세권"
+                                                       ],
+                                            "agentComment":  "• 지산동 범물역 초역세권 도보 3분, 대로변위치\n• 인테리어 완비, 칸막이4개, 중앙홀, 탕비실, 외부화장실2개, 엘베\n• 추천업종 : 사무실 등",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784012744559_yeyd_kkKakaoTalk_20250121_085100518_23.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784012746473_3bv2_kkKakaoTalk_20250121_085100518_27.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784012750450_dr8q_kkKakaoTalk_20250121_085127783.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784012752183_sm5y_kkKakaoTalk_20250121_085127783_03.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784012753917_ud4s_kkKakaoTalk_20250121_085127783_08.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784012755808_53ly_kkKakaoTalk_20250121_085127783_17.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784012757533_cir8_kkKakaoTalk_20250121_085127783_23.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784012759360_0pwi_kkKakaoTalk_20250121_085127783_29.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784012761349_l9au_kkKakaoTalk_20250121_085200218_02.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784012763102_rw6u_kkKakaoTalk_20250121_085200218_04.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784012764849_p41t_kkKakaoTalk_20250121_085200218_09.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.82250222273537,
+                                                                128.6379557847977
+                                                            ]
+                                        },
+                                        {
+                                            "itemId":  "item_1794792863389_jr3x",
+                                            "postId":  "1789513120255",
+                                            "propNo":  "1442",
+                                            "tradeType":  "rent",
+                                            "title":  "무권리 북구 산격동 최신인테리어 완비 주차편리",
+                                            "address":  "대구광역시 북구 산격동 179-4",
+                                            "currentFloor":  "지상 2층",
+                                            "totalFloor":  "지하 1층~지상 5층",
+                                            "floor":  "지상 2층 / 총 지하 1층~지상 5층",
+                                            "area":  "약 55평",
+                                            "deposit":  4000,
+                                            "rent":  192.5,
+                                            "managementFee":  27.5,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "탕비실/싱크대",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너"
+                                                       ],
+                                            "agentComment":  "• 산격동 무권리 새 인테리어 후 첫 입주\n• 천장형냉난방기 3대 기본옵션, 탕비실, 엘베, 외부화장실 2개\n• 건물 내 주차 21대, 고정주차없이 선착순으로 편하게 이용\n• 길건너 한국패션센터 공영주차장 10분 175원, 1일4000원",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513039296_mqtr_KakaoTalk_20260202_080405358_05.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513041064_m7xn_KakaoTalk_20260202_080405358_07.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513042712_yn7u_KakaoTalk_20260202_080405358_09.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513044937_plv0_KakaoTalk_20260202_080405358_11.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513046988_zqli_KakaoTalk_20260202_080405358_12.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513048715_xysg_KakaoTalk_20260202_080405358_16.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513050345_kp2p_KakaoTalk_20260202_080405358_18.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513052337_utkg_KakaoTalk_20260202_080405358_20.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513054319_85ab_KakaoTalk_20260202_080405358_22.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513056259_6wq3_KakaoTalk_20260202_080405358_24.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513058029_50qp_KakaoTalk_20260202_080405358_27.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513059387_6w30_KakaoTalk_20260202_080405358_29.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513060946_9l84_KakaoTalk_20260202_080420511_01.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513062502_ddk4_KakaoTalk_20260202_080420511_03.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1789513078775_ec2r_KakaoTalk_20251208_150218451_20.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.905128657799494,
+                                                                128.61197054386142
+                                                            ]
+                                        },
+                                        {
+                                            "itemId":  "item_1794792887554_3ihm",
+                                            "postId":  "1784010224523",
+                                            "propNo":  "1334",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 수성동1가 무권리 신천동로 사무실 임대 상가",
+                                            "address":  "대구광역시 수성구 수성동1가 649-43",
+                                            "currentFloor":  "지상 2층",
+                                            "totalFloor":  "지하 1층~지상 4층",
+                                            "floor":  "지상 2층 / 총 지하 1층~지상 4층",
+                                            "area":  "약 63평",
+                                            "deposit":  3000,
+                                            "rent":  250,
+                                            "managementFee":  10,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "무권리",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "고정주차 3대"
+                                                       ],
+                                            "agentComment":  "• 수성동 대구 전지역 이동이 편리한 무권리 사무실\n• 주차완비, 고정주차 3대, 엘베, 화장실 2개\n• 26.11.16 현재 기존임차인 퇴거하였으며, 기본인테리어 완비된 깔끔한 공실입니다",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010197912_fl43_01035484000KakaoTalk_20251001_151849663_12.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010200402_0w7o_01035484000KakaoTalk_20251001_151849663_15.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010202311_gvs3_01035484000KakaoTalk_20251001_151849663_20.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010204408_3tq5_01035484000KakaoTalk_20251001_151849663_28.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010206319_4qby_01035484000KakaoTalk_20251001_151909413.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010208376_g1fq_01035484000KakaoTalk_20251001_151909413_04.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010210306_70w9_01035484000KakaoTalk_20251001_151909413_10.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010212328_r2hh_01035484000KakaoTalk_20251001_151909413_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010214316_96yn_01035484000KakaoTalk_20251001_151909413_17.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010216244_2el3_01035484000KakaoTalk_20251001_151909413_22.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.848952401292024,
+                                                                128.60832542181015
+                                                            ]
+                                        },
+                                        {
+                                            "itemId":  "item_1794793278197_6f5b",
+                                            "postId":  "1783985170239",
+                                            "propNo":  "1511",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 만촌동 시설완비 무권리 사무실 임대",
+                                            "address":  "대구광역시 수성구 만촌동 960-8",
+                                            "currentFloor":  "지상 3층",
+                                            "totalFloor":  "지하 1층~지상4층",
+                                            "floor":  "지상 3층 / 총 지하 1층~지상4층",
+                                            "area":  "약 45평",
+                                            "deposit":  3000,
+                                            "rent":  120,
+                                            "managementFee":  0,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너"
+                                                       ],
+                                            "agentComment":  "• 만촌동 인테리어 및 시설완비된 무권리 사무실\n• 무권리 매물로 내부 집기 및 냉난방기는 제외됩니다\n• 건물내 주차 5대 및 선착순 주차, 주변에 주차할 곳 많습니다",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985130056_dvxx_______________01035484000_KakaoTalk_20260213_104837412_10.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985131963_mzax_______________01035484000_KakaoTalk_20260213_104837412_11.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985133634_mgct_______________01035484000_KakaoTalk_20260213_104837412_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985135498_67v7_______________01035484000_KakaoTalk_20260213_104837412_15.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985137419_hhet_______________01035484000_KakaoTalk_20260213_104837412_20.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985138927_g7nf_______________01035484000_KakaoTalk_20260213_104837412_22.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985140672_3gca_______________01035484000_KakaoTalk_20260213_104837412_24.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985142503_oflk_______________01035484000_KakaoTalk_20260213_104837412_25.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985143934_6eru_______________01035484000_KakaoTalk_20260213_104837412_28.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985145571_2b64_______________01035484000_KakaoTalk_20260213_104840050.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985147371_xgme_______________01035484000_KakaoTalk_20260213_104840050_02.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.86353927968325,
+                                                                128.64160627126697
+                                                            ]
+                                        },
+                                        {
+                                            "itemId":  "item_1794793485602_j6h2",
+                                            "postId":  "1784605742188",
+                                            "propNo":  "1668",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 상동 시설완비 인테리어 최상급 주차완비 사무실 임대",
+                                            "address":  "대구광역시 수성구 상동 619-3",
+                                            "currentFloor":  "지상 4층",
+                                            "totalFloor":  "지상 1층~지상 7층",
+                                            "floor":  "지상 4층 / 총 지상 1층~지상 7층",
+                                            "area":  "약 61.61평",
+                                            "deposit":  2000,
+                                            "rent":  210,
+                                            "managementFee":  20,
+                                            "maintVat":  true,
+                                            "premium":  2000,
+                                            "premiumText":  "협의",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "내부화장실",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "룸/칸막이 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너"
+                                                       ],
+                                            "agentComment":  "• 천장형냉난방기 4대, 중앙홀, 칸막이공간 4개, 내부화장실 2개, 엘리베이터\n• 고정주차 2대 제공, 인근 7분거리에 수성못공영주차장이 있음(30분 600원, 초과 10분당 300원, 1일 6000원)\n• 인테리어가 최상급으로 시설비가 있는 매물입니다.\n• 시설비는 2000만원입니다.",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605444886_yv18________01035484000_KakaoTalk_20260721_112701189_17.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605446581_kvww________01035484000_KakaoTalk_20260721_112701189_19.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605448562_gmvh________01035484000_KakaoTalk_20260721_112701189_22.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605450426_blzj________01035484000_KakaoTalk_20260721_112701189_27.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605452036_ygsv________01035484000_KakaoTalk_20260721_112722177_02.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605453900_z7bs________01035484000_KakaoTalk_20260721_112722177_05.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605455691_em1m________01035484000_KakaoTalk_20260721_112722177_07.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605457486_idi2________01035484000_KakaoTalk_20260721_112722177_12.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605460196_gl62________01035484000_KakaoTalk_20260721_112722177_14.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605462925_pdx7________01035484000_KakaoTalk_20260721_112722177_16.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605465687_z4gm________01035484000_KakaoTalk_20260721_112722177_19.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605468236_2g0o________01035484000_KakaoTalk_20260721_112722177_20.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784605471345_uvu2________01035484000_KakaoTalk_20260721_112722177_22.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.82686480444373,
+                                                                128.6101278662682
+                                                            ],
+                                            "autoSyncPost":  false
+                                        },
+                                        {
+                                            "itemId":  "item_1794793610517_s1u7",
+                                            "postId":  "1786593856919",
+                                            "propNo":  "1681",
+                                            "tradeType":  "rent",
+                                            "title":  "동구 신암동 무권리 인테리어 완비 상가 사무실",
+                                            "address":  "대구광역시 동구 신암동 332-8",
+                                            "currentFloor":  "지상 3층",
+                                            "totalFloor":  "지하 1층~지상 5층",
+                                            "floor":  "지상 3층 / 총 지하 1층~지상 5층",
+                                            "area":  "약 50.04평",
+                                            "deposit":  2000,
+                                            "rent":  150,
+                                            "managementFee":  15,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "내부화장실",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "룸/칸막이 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "역세권"
+                                                       ],
+                                            "agentComment":  "• 무권리 인테리어 완비 깔끔 사무실, 중앙홀, 칸막이공간 2개, 내부화장실2개, 엘베\n• 건물 뒤에 주차장 있음, 고정주차 1대 제공, 길건너 동대구역 3주차장이 있어 주차 편리\n• 추천업종 : 사무실 등",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593658723_0pc9_KakaoTalk_20260813_124339537_06.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593660299_z5zn_KakaoTalk_20260813_124339537_08.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593661526_4x4a_KakaoTalk_20260813_124339537_09.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593663096_ty8a_KakaoTalk_20260813_124339537_11.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593664667_qejh_KakaoTalk_20260813_124339537_12.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593666428_d34e_KakaoTalk_20260813_124339537_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593668001_61ar_KakaoTalk_20260813_124339537_17.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593669594_oawr_KakaoTalk_20260813_124339537_20.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593671484_1lga_KakaoTalk_20260813_124339537_21.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593673054_3vav_KakaoTalk_20260813_124339537_23.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593674650_lkvs_KakaoTalk_20260813_124339537_24.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593676756_kniw_KakaoTalk_20260813_124339537_25.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593678549_bog7_KakaoTalk_20260813_124339537_27.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593680613_x4rc_KakaoTalk_20260813_124345069.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593682242_1m8q_KakaoTalk_20260813_124345069_02.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.883739085534,
+                                                                128.63152652978897
+                                                            ]
+                                        },
+                                        {
+                                            "itemId":  "item_1794793782824_l16b",
+                                            "postId":  "1791327135735",
+                                            "propNo":  "1747",
+                                            "tradeType":  "rent",
+                                            "title":  "남산동 반월당역 인테리어완비 무권리 주차 편리한",
+                                            "address":  "대구광역시 중구 남산동 688-5",
+                                            "currentFloor":  "지상 3층",
+                                            "totalFloor":  "지상 1층~지상 5층",
+                                            "floor":  "지상 3층 / 총 지상 1층~지상 5층",
+                                            "area":  "약 48.54평",
+                                            "deposit":  3000,
+                                            "rent":  140,
+                                            "managementFee":  10,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "내부화장실",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "룸/칸막이 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "역세권"
+                                                       ],
+                                            "agentComment":  "• 남산동 반월당역 역세권, 인테리어 완비된 사무실\n• 칸막이공간 2개, 중앙홀 1개\n• 무권리 매물로 냉난방기 등 내부의 집기들은 모두 제외됨",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327103045_ncwo_KakaoTalk_20261007_073318373_05.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327104960_aj88_KakaoTalk_20261007_073318373_07.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327106796_1srr_KakaoTalk_20261007_073318373_10.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327108740_vqz1_KakaoTalk_20261007_073318373_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327110076_cnh5_KakaoTalk_20261007_073318373_15.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327111380_1c5a_KakaoTalk_20261007_073318373_17.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327112930_l9le_KakaoTalk_20261007_073318373_19.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327114417_p02y_KakaoTalk_20261007_073318373_20.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327115986_7ylu_KakaoTalk_20261007_073318373_22.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327117659_5px0_KakaoTalk_20261007_073318373_23.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327119173_p33k_KakaoTalk_20261007_073318373_26.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.860630813847486,
+                                                                128.59488755464554
+                                                            ]
+                                        },
+                                        {
+                                            "itemId":  "item_1794795048257_zlbp",
+                                            "postId":  "1794795000532",
+                                            "propNo":  "1802",
+                                            "tradeType":  "rent",
+                                            "title":  "무권리 달서구 두류동 감삼역초역세권 인테리어완비 두류센트레빌더시티 2층 상가임대",
+                                            "address":  "대구광역시 달서구 두류동 2346 401동 201호",
+                                            "currentFloor":  "지상 2층",
+                                            "totalFloor":  "지상 1층~지상 2층",
+                                            "floor":  "지상 2층 / 총 지상 1층~지상 2층",
+                                            "area":  "전용 약 37.51평",
+                                            "deposit":  3000,
+                                            "rent":  150,
+                                            "managementFee":  14,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "역세권",
+                                                           "냉난방기 있음"
+                                                       ],
+                                            "agentComment":  "• 두류동 감삼역 초역세권, 두류센트레빌더시티 상가\n• 코너쪽의 호실이라 가시성이 좋음\n• 기본 인테리어 완비\n• 천장형냉난방기 비용이 소액있으나 인수하지 않아도 됨",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794794883893_lblj_KakaoTalk_20261116_105205501.png",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794794885520_6a0m_KakaoTalk_20261116_105205501_01.png",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794794886834_tvsb_KakaoTalk_20261116_105205501_02.png",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794794888126_oo7i_KakaoTalk_20261116_105205501_03.png",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794794889829_hqc3_KakaoTalk_20261116_105205501_04.png"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.85251784740962,
+                                                                128.54943215847018
+                                                            ]
+                                        }
+                                    ]
+                      },
+                      {
+                          "id":  "sample_vip_01",
+                          "customerName":  "김OO 대표님",
+                          "customerPhone":  "",
+                          "title":  "수성구 역세권 \u0026 알파시티 무권리 추천 오피스·학원 비교 브리핑",
+                          "createdAt":  "2026. 11. 11",
+                          "updatedAt":  1794463687854,
+                          "expiresAt":  "",
+                          "blindAddress":  true,
+                          "showComparisonTable":  true,
+                          "showMonthlyCost":  true,
+                          "includeVat":  true,
+                          "includeMaintVat":  false,
+                          "showYield":  true,
+                          "showMap":  true,
+                          "generalNote":  "오늘 함께 둘러보신 수성구 핵심 권역(신매역 달구벌대로변 / 수성알파시티) 무권리 추천 매물 3곳 비교 리포트입니다. 모든 매물이 100% 무권리이며 주차 여건과 인테리어 가성비가 검증된 알짜 호실입니다. 1순위 매물을 선택해 주시면 렌트프리 및 임대 조건을 최우선으로 조율해 드리겠습니다.",
+                          "attachedMemoIds":  [
+
+                                              ],
+                          "customerPicks":  [
+                                                {
+                                                    "id":  "pick_1794466799672",
+                                                    "itemId":  "",
+                                                    "propNo":  "1790",
+                                                    "itemTitle":  "신매역 초역세권 달구벌대로 고정주차 12대 대형 오피스/학원",
+                                                    "pickType":  "1순위 마음에 듦 (조건 협의 희망)",
+                                                    "customerMemo":  "1111",
+                                                    "customerPhone":  "010-3545-0000",
+                                                    "date":  "2026. 11. 12. 오후 3:59:59",
+                                                    "timestamp":  1794466799672
+                                                },
+                                                {
+                                                    "id":  "pick_1794466757284",
+                                                    "itemId":  "",
+                                                    "propNo":  "전체 매물 조건 협의 문의",
+                                                    "itemTitle":  "전체 매물",
+                                                    "pickType":  "1순위 마음에 듦 (조건 협의 희망)",
+                                                    "customerMemo":  "임대료 조율해주세요",
+                                                    "customerPhone":  "010-3545-0000",
+                                                    "date":  "2026. 11. 12. 오후 3:59:17",
+                                                    "timestamp":  1794466757284
+                                                },
+                                                {
+                                                    "id":  "pick_1794466584024",
+                                                    "itemId":  "",
+                                                    "propNo":  "전체 매물 조건 협의 문의",
+                                                    "itemTitle":  "",
+                                                    "pickType":  "1순위 마음에 듦 (조건 협의 희망)",
+                                                    "customerMemo":  "임대료 조율해주세요",
+                                                    "customerPhone":  "",
+                                                    "date":  "2026. 11. 12. 오후 3:56:23",
+                                                    "timestamp":  1794466584024
+                                                }
+                                            ],
+                          "items":  [
+                                        {
+                                            "itemId":  "item_1790",
+                                            "postId":  "1794292303569",
+                                            "propNo":  "1790",
+                                            "tradeType":  "rent",
+                                            "title":  "신매역 초역세권 달구벌대로 고정주차 12대 대형 오피스/학원",
+                                            "address":  "대구광역시 수성구 노변동",
+                                            "currentFloor":  "지상 3층",
+                                            "totalFloor":  "지하 1층~지상 5층",
+                                            "floor":  "지상 3층 / 총 지하 1층~지상 5층",
+                                            "area":  "약 130.25평",
+                                            "deposit":  10000,
+                                            "rent":  510,
+                                            "managementFee":  90,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "내부화장실",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "역세권",
+                                                           "무상철거/원상복구 협의"
+                                                       ],
+                                            "agentComment":  "건물 후면 60대 규모 차단기 주차장 중 \u0027고정주차 12대 + 방문객 무료\u0027를 제공하는 희소 매물입니다. 기존 학원 인테리어 무상 인수 또는 임대인 비용 부담 \u0027전면 무상 철거\u0027 모두 가능하며, 렌트프리 기간도 적극 협의해 드리겠습니다.",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794292170884_6yxj_KakaoTalk_20261110_141556662_22.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794292172261_qtf6_KakaoTalk_20261110_141556662_23.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794292174124_ujq9_KakaoTalk_20261110_141556662_24.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794292187487_rrgv_KakaoTalk_20261110_151249711_01.jpg"
+                                                       ],
+                                            "coordinates":  [
+                                                                35.84113394732438,
+                                                                128.7025433778763
+                                                            ],
+                                            "maintVat":  false
+                                        },
+                                        {
+                                            "itemId":  "item_1788",
+                                            "postId":  "1794211462428",
+                                            "propNo":  "1788",
+                                            "tradeType":  "rent",
+                                            "title":  "수성알파시티 대흥동 8층 풀인테리어 (룸3개+시스템에어컨4대)",
+                                            "address":  "대구광역시 수성구 대흥동",
+                                            "currentFloor":  "지상 8층",
+                                            "totalFloor":  "지하 1층~지상 8층",
+                                            "floor":  "지상 8층 / 총 지하 1층~지상 8층",
+                                            "area":  "전용 약 34.55평 (공급 43.6평)",
+                                            "deposit":  5000,
+                                            "rent":  220,
+                                            "managementFee":  17.5,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "룸/칸막이 완비",
+                                                           "탕비실/싱크대",
+                                                           "즉시입주 가능"
+                                                       ],
+                                            "agentComment":  "수성알파시티 내 고층(8층)으로 채광과 개방감이 탁월하며, 대표실·회의실 등 유리 칸막이 룸 3개와 천장형 냉난방기 4대가 무권리로 완비되어 초기 인테리어 비용 3~4천만 원을 즉시 아낄 수 있는 호실입니다.",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211382868_v1i5_KakaoTalk_20261109_161012452_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211350263_rooc_KakaoTalk_20261109_161012452_02.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211353584_l164_KakaoTalk_20261109_161012452_05.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211358082_mqpu_KakaoTalk_20261109_161012452_10.jpg"
+                                                       ],
+                                            "coordinates":  [
+                                                                35.83699394216165,
+                                                                128.6819761991501
+                                                            ],
+                                            "maintVat":  false
+                                        },
+                                        {
+                                            "itemId":  "item_1787",
+                                            "postId":  "1794211876354",
+                                            "propNo":  "1787",
+                                            "tradeType":  "rent",
+                                            "title":  "수성알파시티 대흥동 6층 노출천장·에폭시바닥 가성비 오피스",
+                                            "address":  "대구광역시 수성구 대흥동",
+                                            "currentFloor":  "지상 6층",
+                                            "totalFloor":  "지하 1층~지상 8층",
+                                            "floor":  "지상 6층 / 총 지하 1층~지상 8층",
+                                            "area":  "전용 약 34.34평 (공급 44.8평)",
+                                            "deposit":  5000,
+                                            "rent":  180,
+                                            "managementFee":  17.5,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "높은 층고/노출천장",
+                                                           "즉시입주 가능"
+                                                       ],
+                                            "agentComment":  "동일 건물 8층(220만) 대비 월세가 40만 원 저렴한 \u0027월 180만 원\u0027 가성비 호실입니다. 개방감 좋은 노출천장 + 에폭시 바닥이 시공되어 있어 오픈형 사무실이나 학원·연구소로 강력 추천드립니다.",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211781200_6hp5_KakaoTalk_20261109_160951182_01.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211782686_16ko_KakaoTalk_20261109_160951182_04.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211785903_mhkt_KakaoTalk_20261109_160951182_08.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211787520_0jea_KakaoTalk_20261109_160951182_10.jpg"
+                                                       ],
+                                            "coordinates":  [
+                                                                35.83694175584373,
+                                                                128.68185013532639
+                                                            ],
+                                            "maintVat":  false
+                                        }
+                                    ]
+                      }
+                  ]
 }

@@ -2519,10 +2519,16 @@ function syncEditorInputsToMemory() {
         if (maintVatEl) item.maintVat = Boolean(maintVatEl.checked);
 
         const premium = getVal('premium');
-        if (premium !== null) item.premium = parseFloat(premium) || 0;
+        if (premium !== null) {
+            item.premium = parseFloat(premium) || 0;
+            item.autoSyncPost = false;
+        }
 
         const premiumText = getVal('premiumText');
-        if (premiumText !== null) item.premiumText = premiumText.trim();
+        if (premiumText !== null) {
+            item.premiumText = premiumText.trim();
+            item.autoSyncPost = false;
+        }
 
         const salePrice = getVal('salePrice');
         if (salePrice !== null) item.salePrice = parseFloat(salePrice) || 0;
