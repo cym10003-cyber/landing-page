@@ -60,7 +60,7 @@ export default async function handler(req, res) {
       // Handle pageview, postview, and like (favorite) recording centrally
       if (type === 'pageview' || type === 'postview' || type === 'like') {
         const updateAnalyticsData = (analytics) => {
-          const todayStr = new Date().toISOString().split('T')[0];
+          const todayStr = new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0];
           if (analytics.todayDate !== todayStr) {
             analytics.todayDate = todayStr;
             analytics.todayPageviews = 0;
@@ -68,7 +68,7 @@ export default async function handler(req, res) {
 
           if (!analytics.dailyHistory) analytics.dailyHistory = {};
           if (!analytics.dailyHistory[todayStr]) {
-            analytics.dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {}, likes: {} };
+            analytics.dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {}, likes: {}, inflowLandings: {} };
           }
 
           if (type === 'pageview') {
@@ -94,6 +94,12 @@ export default async function handler(req, res) {
             const pid = String(bodyData.postId);
             if (!analytics.dailyHistory[todayStr].postViews) analytics.dailyHistory[todayStr].postViews = {};
             analytics.dailyHistory[todayStr].postViews[pid] = (analytics.dailyHistory[todayStr].postViews[pid] || 0) + 1;
+            if (bodyData.inflowLandingEngine) {
+              const eng = String(bodyData.inflowLandingEngine).trim();
+              const lKey = `${eng}||${pid}`;
+              if (!analytics.dailyHistory[todayStr].inflowLandings) analytics.dailyHistory[todayStr].inflowLandings = {};
+              analytics.dailyHistory[todayStr].inflowLandings[lKey] = (analytics.dailyHistory[todayStr].inflowLandings[lKey] || 0) + 1;
+            }
             if (bodyData.inflowKeyword && String(bodyData.inflowKeyword).trim().length >= 2) {
               const kw = String(bodyData.inflowKeyword).trim();
               const src = bodyData.inflowSource || '검색유입';

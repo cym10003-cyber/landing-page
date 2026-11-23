@@ -1129,6 +1129,19 @@ function recordPageView() {
         if (source !== '내부 이동') {
             if (!dailyHistory[todayStr].referrers) dailyHistory[todayStr].referrers = {};
             dailyHistory[todayStr].referrers[source] = (dailyHistory[todayStr].referrers[source] || 0) + 1;
+
+            let shortEngine = '';
+            if (source.includes('네이버')) shortEngine = '네이버';
+            else if (source.includes('구글')) shortEngine = '구글';
+            else if (source.includes('다음')) shortEngine = '다음/카카오';
+            else if (source.includes('ChatGPT')) shortEngine = 'AI 검색';
+
+            if (shortEngine) {
+                try {
+                    sessionStorage.setItem('choi_search_inflow_engine', shortEngine);
+                    sessionStorage.setItem('choi_search_inflow_landed', '0');
+                } catch (e) {}
+            }
         }
 
         const inflow = (source !== '내부 이동') ? extractExternalSearchInflow() : null;
@@ -1215,7 +1228,32 @@ function recordPostView(postId, postTitle) {
         dailyHistory[todayStr].postViews[postId] = (dailyHistory[todayStr].postViews[postId] || 0) + 1;
 
         const source = getReferrerSource();
-        const inflow = (source !== '내부 이동' && postTitle) ? extractExternalSearchInflow(postTitle) : null;
+        let inflowLandingEngine = '';
+        if (source.includes('네이버')) inflowLandingEngine = '네이버';
+        else if (source.includes('구글')) inflowLandingEngine = '구글';
+        else if (source.includes('다음')) inflowLandingEngine = '다음/카카오';
+        else if (source.includes('ChatGPT')) inflowLandingEngine = 'AI 검색';
+
+        if (!inflowLandingEngine) {
+            try {
+                const sessEng = sessionStorage.getItem('choi_search_inflow_engine') || '';
+                const sessLanded = sessionStorage.getItem('choi_search_inflow_landed') || '0';
+                if (sessEng && sessLanded === '0') {
+                    inflowLandingEngine = sessEng;
+                }
+            } catch (e) {}
+        }
+
+        if (inflowLandingEngine) {
+            try {
+                sessionStorage.setItem('choi_search_inflow_landed', '1');
+            } catch (e) {}
+            if (!dailyHistory[todayStr].inflowLandings) dailyHistory[todayStr].inflowLandings = {};
+            const lKey = `${inflowLandingEngine}||${postId}`;
+            dailyHistory[todayStr].inflowLandings[lKey] = (dailyHistory[todayStr].inflowLandings[lKey] || 0) + 1;
+        }
+
+        const inflow = (source !== '내부 이동' && postTitle) ? extractExternalSearchInflow() : null;
         if (inflow && inflow.keyword) {
             if (!dailyHistory[todayStr].searchKeywords) dailyHistory[todayStr].searchKeywords = {};
             const kKey = `[${inflow.source}] ${inflow.keyword}`;
@@ -1232,6 +1270,7 @@ function recordPostView(postId, postTitle) {
                 type: 'postview',
                 postId,
                 postTitle,
+                inflowLandingEngine,
                 inflowKeyword: inflow ? inflow.keyword : '',
                 inflowSource: inflow ? inflow.source : ''
             })
@@ -1477,6 +1516,88 @@ function getAnalyticsSummary(remoteData = null) {
         const topQueries3Days = calcTopQueriesByPeriod(dates3Set);
         const topQueries7Days = calcTopQueriesByPeriod(dates7Set);
 
+        // Build Top 50 Search Engine Inflow Landed Properties (네이버·구글 검색 유입 도착 매물 TOP 50)
+        const calcInflowLandingsByPeriod = (allowedDatesSet = null) => {
+            const landMap = {}; // key: "engine||postId" -> { id, propNo, title, engine, count }
+
+            const resolvePropMeta = (pid) => {
+                const pvInfo = postViews[pid];
+                let rawTitle = (pvInfo && pvInfo.title && pvInfo.title !== '매물 상세') ? pvInfo.title : '';
+                const cleanTitle = rawTitle
+                    ? String(rawTitle).replace(/\s*[-|]\s*최가네부동산.*$/i, '').trim()
+                    : `매물번호 ${pid} 상세페이지`;
+                let propNo = '';
+                const mNo = cleanTitle.match(/매물\s*번호\s*[:：]?\s*([0-9]{3,5})/i);
+                if (mNo) propNo = mNo[1];
+                else if (/^\d{3,5}$/.test(String(pid))) propNo = String(pid);
+                else propNo = String(pid).slice(-4);
+                return { cleanTitle, propNo, hasRealTitle: Boolean(rawTitle) };
+            };
+
+            const addLanding = (engine, pid, cnt = 1) => {
+                if (!pid || cnt <= 0) return;
+                const { cleanTitle, propNo } = resolvePropMeta(pid);
+                const eng = engine || '네이버';
+                const key = `${eng}||${pid}`;
+                if (!landMap[key]) {
+                    landMap[key] = {
+                        id: String(pid),
+                        propNo,
+                        title: cleanTitle,
+                        engine: eng,
+                        count: 0
+                    };
+                }
+                landMap[key].count += cnt;
+            };
+
+            Object.entries(dailyHistory).forEach(([ds, dayEntry]) => {
+                if (!dayEntry) return;
+                if (allowedDatesSet && !allowedDatesSet.has(ds)) return;
+
+                const hasExplicitLandings = dayEntry.inflowLandings && typeof dayEntry.inflowLandings === 'object' && Object.keys(dayEntry.inflowLandings).length > 0;
+                if (hasExplicitLandings) {
+                    Object.entries(dayEntry.inflowLandings).forEach(([lKey, cnt]) => {
+                        const parts = String(lKey).split('||');
+                        if (parts.length >= 2) {
+                            addLanding(parts[0], parts.slice(1).join('||'), cnt || 0);
+                        }
+                    });
+                } else if (dayEntry.postViews && typeof dayEntry.postViews === 'object') {
+                    // Fallback for historical days before inflowLandings field existed:
+                    // if that day had Naver/Google/AI search inflows, attribute viewed properties to the search engine
+                    const refs = dayEntry.referrers || {};
+                    const naverCnt = (refs['네이버 (Naver)'] || 0);
+                    const googleCnt = (refs['구글 (Google)'] || 0);
+                    const aiCnt = (refs['ChatGPT (AI 추천 검색)'] || 0);
+                    const daumCnt = (refs['다음/카카오 (Daum)'] || 0);
+                    const totalSearchRef = naverCnt + googleCnt + aiCnt + daumCnt;
+
+                    if (totalSearchRef > 0) {
+                        let dominantEngine = '네이버';
+                        if (googleCnt > naverCnt && googleCnt >= aiCnt) dominantEngine = '구글';
+                        else if (aiCnt > naverCnt && aiCnt > googleCnt) dominantEngine = 'AI 검색';
+                        else if (daumCnt > naverCnt && daumCnt > googleCnt) dominantEngine = '다음/카카오';
+
+                        Object.entries(dayEntry.postViews).forEach(([pid, vCnt]) => {
+                            addLanding(dominantEngine, pid, vCnt || 1);
+                        });
+                    }
+                }
+            });
+
+            return Object.values(landMap)
+                .filter(it => it.count > 0)
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 50);
+        };
+
+        const inflowLandings = calcInflowLandingsByPeriod(null);
+        const inflowLandingsToday = calcInflowLandingsByPeriod(new Set([todayStr]));
+        const inflowLandingsYesterday = calcInflowLandingsByPeriod(new Set([yesterdayStr]));
+        const inflowLandings3Days = calcInflowLandingsByPeriod(dates3Set);
+        const inflowLandings7Days = calcInflowLandingsByPeriod(dates7Set);
+
         const topViews = Object.values(postViews)
             .sort((a, b) => b.count - a.count)
             .slice(0, 10);
@@ -1488,6 +1609,11 @@ function getAnalyticsSummary(remoteData = null) {
             topQueriesYesterday,
             topQueries3Days,
             topQueries7Days,
+            inflowLandings,
+            inflowLandingsToday,
+            inflowLandingsYesterday,
+            inflowLandings3Days,
+            inflowLandings7Days,
             topViews,
             todayTopViews,
             yesterdayTopViews,

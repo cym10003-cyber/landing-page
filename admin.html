@@ -277,22 +277,14 @@
 
             <!-- Two-Column Grid Row 2: Top Search Queries & Top Viewed Listings -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
-                <!-- Top 50 Search & Inflow Keywords Card with Period Toggle -->
+                <!-- Top 50 Search Inflow Landed Properties & Keywords Card with Period Toggle -->
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
-                    <div class="flex justify-between items-center mb-md flex-wrap gap-xs">
+                    <div class="flex justify-between items-start mb-2.5 flex-wrap gap-2">
                         <div>
                             <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
-                                <span class="material-symbols-outlined text-primary">search</span> 네이버·구글·홈페이지 유입 검색어 TOP 50
+                                <span class="material-symbols-outlined text-primary">travel_explore</span> 네이버·구글 검색 유입 도착 매물 &amp; 검색어 TOP 50
                             </h3>
-                            <p class="text-[11px] text-muted mt-0.5">손님이 직접 입력한 홈페이지 검색어 및 실제 검색엔진 파라미터(query·n_query) 유입어 순위</p>
-                            <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
-                                <a href="https://searchadvisor.naver.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-[10px] font-extrabold transition">
-                                    <span>N 네이버 서치어드바이저 (암호화 검색어 전체보기) ↗</span>
-                                </a>
-                                <a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-[10px] font-extrabold transition">
-                                    <span>G 구글 서치콘솔 (구글 유입 검색어 전체보기) ↗</span>
-                                </a>
-                            </div>
+                            <p class="text-[11px] text-muted mt-0.5">네이버·구글 검색 결과에서 손님이 클릭해 들어온 매물(#매물번호) 및 홈페이지 직접 검색어 순위</p>
                         </div>
                         <div class="flex bg-surface-container rounded-lg p-0.5 text-[11px] sm:text-xs font-semibold overflow-x-auto max-w-full">
                             <button id="query-period-today" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">오늘</button>
@@ -300,6 +292,28 @@
                             <button id="query-period-3days" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">3일전</button>
                             <button id="query-period-7days" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">최근 7일</button>
                             <button id="query-period-all" class="px-2 sm:px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer whitespace-nowrap">전체 누적</button>
+                        </div>
+                    </div>
+                    <!-- Mode Switcher: Search Landed Properties vs Direct Search Keywords vs Combined -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2.5 border-b border-hairline">
+                        <div class="inline-flex bg-slate-100 p-1 rounded-xl border border-slate-200 gap-1 text-xs">
+                            <button type="button" id="qmode-btn-landing" onclick="setQueryDisplayMode('landing')" class="px-2.5 py-1 rounded-lg bg-[#003891] text-white font-extrabold cursor-pointer transition">
+                                🏢 네이버·구글 유입 도착 매물
+                            </button>
+                            <button type="button" id="qmode-btn-keyword" onclick="setQueryDisplayMode('keyword')" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 font-bold cursor-pointer transition">
+                                🔍 홈페이지 직접 입력 검색어
+                            </button>
+                            <button type="button" id="qmode-btn-both" onclick="setQueryDisplayMode('both')" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 font-bold cursor-pointer transition">
+                                📊 통합 보기
+                            </button>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-1">
+                            <a href="https://searchadvisor.naver.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-[10px] font-extrabold transition">
+                                <span>N 서치어드바이저 ↗</span>
+                            </a>
+                            <a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-[10px] font-extrabold transition">
+                                <span>G 서치콘솔 ↗</span>
+                            </a>
                         </div>
                     </div>
                     <div id="top-queries-list" class="space-y-sm max-h-[440px] overflow-y-auto pr-1">
@@ -1241,7 +1255,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261123_v250"></script>
+<script src="db.js?v=20261124_v251"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -1438,7 +1452,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 let currentViewPeriod = 'all';
 let currentRefPeriod = 'all';
 let currentQueryPeriod = 'all';
+let currentQueryDisplayMode = 'landing'; // 'landing' | 'keyword' | 'both'
 let _lastRemoteAnalytics = null;
+
+function setQueryDisplayMode(mode) {
+    currentQueryDisplayMode = mode;
+    const modes = ['landing', 'keyword', 'both'];
+    modes.forEach(m => {
+        const btn = document.getElementById(`qmode-btn-${m}`);
+        if (!btn) return;
+        if (m === mode) {
+            btn.className = 'px-2.5 py-1 rounded-lg bg-[#003891] text-white font-extrabold cursor-pointer transition';
+        } else {
+            btn.className = 'px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 font-bold cursor-pointer transition';
+        }
+    });
+    renderTopQueriesList(getAnalyticsSummary(_lastRemoteAnalytics));
+}
+window.setQueryDisplayMode = setQueryDisplayMode;
 
 async function renderAnalyticsView() {
     let remoteAnalytics = null;
@@ -1584,63 +1615,120 @@ function renderTopQueriesList(summary) {
     const qContainer = document.getElementById('top-queries-list');
     if (!qContainer) return;
 
-    let qData = summary.topQueries || [];
     const todayStr = (summary.todayDate || new Date().toISOString().split('T')[0]).slice(5);
     const yesterdayStr = (summary.yesterdayDate || '').slice(5);
     const day3Str = (summary.day3Date || '').slice(5);
-    let emptyMsg = '아직 수집된 유입 검색어가 없습니다.';
+
+    let kwList = summary.topQueries || [];
+    let landList = summary.inflowLandings || [];
+    let periodLabel = '전체 기간';
 
     if (currentQueryPeriod === 'today') {
-        qData = summary.topQueriesToday || [];
-        emptyMsg = `오늘(${todayStr}) 수집된 유입 검색어가 아직 없습니다. [어제] 또는 [전체 누적]을 눌러보세요.`;
+        kwList = summary.topQueriesToday || [];
+        landList = summary.inflowLandingsToday || [];
+        periodLabel = `오늘(${todayStr})`;
     } else if (currentQueryPeriod === 'yesterday') {
-        qData = summary.topQueriesYesterday || [];
-        emptyMsg = `어제(${yesterdayStr}) 수집된 유입 검색어가 없습니다.`;
+        kwList = summary.topQueriesYesterday || [];
+        landList = summary.inflowLandingsYesterday || [];
+        periodLabel = `어제(${yesterdayStr})`;
     } else if (currentQueryPeriod === '3days') {
-        qData = summary.topQueries3Days || [];
-        emptyMsg = `최근 3일간(${day3Str}~${todayStr}) 수집된 유입 검색어가 없습니다.`;
+        kwList = summary.topQueries3Days || [];
+        landList = summary.inflowLandings3Days || [];
+        periodLabel = `최근 3일(${day3Str}~${todayStr})`;
     } else if (currentQueryPeriod === '7days') {
-        qData = summary.topQueries7Days || [];
-        emptyMsg = '최근 7일간 수집된 유입 검색어가 없습니다.';
+        kwList = summary.topQueries7Days || [];
+        landList = summary.inflowLandings7Days || [];
+        periodLabel = '최근 7일';
     }
 
-    if (!qData || qData.length === 0) {
-        qContainer.innerHTML = `<div class="text-center py-md text-muted text-sm">${emptyMsg}</div>`;
+    let itemsToRender = [];
+    if (currentQueryDisplayMode === 'landing') {
+        itemsToRender = landList.map(it => ({ ...it, itemType: 'landing' }));
+    } else if (currentQueryDisplayMode === 'keyword') {
+        itemsToRender = kwList.map(it => ({ ...it, itemType: 'keyword' }));
+    } else {
+        itemsToRender = [
+            ...landList.map(it => ({ ...it, itemType: 'landing' })),
+            ...kwList.map(it => ({ ...it, itemType: 'keyword' }))
+        ].sort((a, b) => (b.count || 0) - (a.count || 0));
+    }
+
+    if (!itemsToRender || itemsToRender.length === 0) {
+        const modeDesc = currentQueryDisplayMode === 'landing'
+            ? '네이버·구글 검색으로 유입되어 클릭된 도착 매물이'
+            : (currentQueryDisplayMode === 'keyword' ? '직접 입력된 검색어가' : '수집된 검색 유입 데이터가');
+        qContainer.innerHTML = `<div class="text-center py-md text-muted text-sm">${periodLabel}에는 ${modeDesc} 아직 없습니다. [전체 누적] 또는 다른 탭을 눌러보세요.</div>`;
         return;
     }
 
-    const maxCount = qData[0].count || 1;
-    qContainer.innerHTML = qData.slice(0, 50).map((q, idx) => {
+    const maxCount = itemsToRender[0].count || 1;
+    qContainer.innerHTML = itemsToRender.slice(0, 50).map((it, idx) => {
         const badgeClass = idx === 0 ? 'bg-amber-500 text-white' : idx === 1 ? 'bg-slate-400 text-white' : idx === 2 ? 'bg-amber-700 text-white' : 'bg-surface-container text-muted';
-        const pct = Math.round((q.count / maxCount) * 100);
-        const src = q.source || '홈페이지';
-        let srcBadge = `<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-extrabold shrink-0">홈페이지</span>`;
-        let barColor = 'bg-primary';
-        if (src.includes('네이버')) {
-            srcBadge = `<span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold shrink-0">N 네이버</span>`;
-            barColor = 'bg-emerald-600';
-        } else if (src.includes('구글')) {
-            srcBadge = `<span class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-extrabold shrink-0">G 구글</span>`;
-            barColor = 'bg-blue-600';
-        } else if (src.includes('ChatGPT') || src.includes('AI')) {
-            srcBadge = `<span class="px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200 text-[10px] font-extrabold shrink-0">AI 검색</span>`;
-            barColor = 'bg-purple-600';
-        }
-        return `
-            <div class="flex flex-col gap-1 text-sm border-b border-hairline/50 pb-xs">
-                <div class="flex justify-between items-center gap-2">
-                    <div class="flex items-center gap-1.5 min-w-0">
-                        <span class="w-5 h-5 rounded-full ${badgeClass} text-[11px] font-bold flex items-center justify-center shrink-0">${idx + 1}</span>
-                        ${srcBadge}
-                        <span class="font-bold text-ink truncate" title="${q.query}">${q.query}</span>
+        const pct = Math.round((it.count / maxCount) * 100);
+
+        if (it.itemType === 'landing') {
+            const eng = it.engine || '네이버';
+            let engBadge = `<span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold shrink-0">N 네이버 유입</span>`;
+            let barColor = 'bg-emerald-600';
+            if (eng.includes('구글')) {
+                engBadge = `<span class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-extrabold shrink-0">G 구글 유입</span>`;
+                barColor = 'bg-blue-600';
+            } else if (eng.includes('ChatGPT') || eng.includes('AI')) {
+                engBadge = `<span class="px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200 text-[10px] font-extrabold shrink-0">AI 검색 유입</span>`;
+                barColor = 'bg-purple-600';
+            } else if (eng.includes('다음')) {
+                engBadge = `<span class="px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-extrabold shrink-0">D 다음 유입</span>`;
+                barColor = 'bg-amber-500';
+            }
+            const propBadge = it.propNo
+                ? `<span class="px-1.5 py-0.5 rounded bg-slate-900 text-white text-[10px] font-black shrink-0">#${it.propNo}</span>`
+                : '';
+
+            return `
+                <div class="flex flex-col gap-1 text-sm border-b border-hairline/50 pb-xs">
+                    <div class="flex justify-between items-center gap-2">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <span class="w-5 h-5 rounded-full ${badgeClass} text-[11px] font-bold flex items-center justify-center shrink-0">${idx + 1}</span>
+                            ${engBadge}
+                            ${propBadge}
+                            <a href="news-detail.html?id=${encodeURIComponent(it.id)}" target="_blank" class="font-bold text-ink hover:text-primary hover:underline truncate" title="${it.title}">
+                                ${it.title}
+                            </a>
+                        </div>
+                        <span class="text-xs font-extrabold text-primary shrink-0">${it.count}회</span>
                     </div>
-                    <span class="text-xs font-extrabold text-primary shrink-0">${q.count}회</span>
+                    <div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+                        <div class="${barColor} h-full rounded-full transition-all duration-500" style="width: ${Math.max(pct, 4)}%"></div>
+                    </div>
                 </div>
-                <div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-                    <div class="${barColor} h-full rounded-full transition-all duration-500" style="width: ${Math.max(pct, 4)}%"></div>
+            `;
+        } else {
+            const src = it.source || '홈페이지';
+            let srcBadge = `<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-300 text-[10px] font-extrabold shrink-0">🔍 홈페이지 검색어</span>`;
+            let barColor = 'bg-primary';
+            if (src.includes('네이버')) {
+                srcBadge = `<span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold shrink-0">N 네이버 검색어</span>`;
+                barColor = 'bg-emerald-600';
+            } else if (src.includes('구글')) {
+                srcBadge = `<span class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-extrabold shrink-0">G 구글 검색어</span>`;
+                barColor = 'bg-blue-600';
+            }
+            return `
+                <div class="flex flex-col gap-1 text-sm border-b border-hairline/50 pb-xs">
+                    <div class="flex justify-between items-center gap-2">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <span class="w-5 h-5 rounded-full ${badgeClass} text-[11px] font-bold flex items-center justify-center shrink-0">${idx + 1}</span>
+                            ${srcBadge}
+                            <span class="font-bold text-ink truncate" title="${it.query}">"${it.query}"</span>
+                        </div>
+                        <span class="text-xs font-extrabold text-primary shrink-0">${it.count}회</span>
+                    </div>
+                    <div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+                        <div class="${barColor} h-full rounded-full transition-all duration-500" style="width: ${Math.max(pct, 4)}%"></div>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+        }
     }).join('');
 }
 
