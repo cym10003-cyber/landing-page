@@ -82,14 +82,15 @@
                         "xl": "28px"
                     },
                     "fontFamily": {
-                        "display-hero": ["Inter"],
-                        "nav": ["Inter"],
-                        "body": ["Inter"],
-                        "section-h2": ["Inter"],
-                        "display-hero-mobile": ["Inter"],
-                        "label-sm": ["Inter"],
-                        "subsection-h3": ["Inter"],
-                        "button": ["Inter"]
+                        "sans": ["Pretendard Variable", "Pretendard", "-apple-system", "BlinkMacSystemFont", "system-ui", "Roboto", "sans-serif"],
+                        "display-hero": ["Pretendard Variable", "Pretendard", "sans-serif"],
+                        "nav": ["Pretendard Variable", "Pretendard", "sans-serif"],
+                        "body": ["Pretendard Variable", "Pretendard", "sans-serif"],
+                        "section-h2": ["Pretendard Variable", "Pretendard", "sans-serif"],
+                        "display-hero-mobile": ["Pretendard Variable", "Pretendard", "sans-serif"],
+                        "label-sm": ["Pretendard Variable", "Pretendard", "sans-serif"],
+                        "subsection-h3": ["Pretendard Variable", "Pretendard", "sans-serif"],
+                        "button": ["Pretendard Variable", "Pretendard", "sans-serif"]
                     },
                     "fontSize": {
                         "display-hero": ["58px", { "lineHeight": "1.36", "letterSpacing": "-0.4px", "fontWeight": "700" }],
@@ -150,7 +151,10 @@
                 <h1 class="font-subsection-h3 text-2xl text-ink font-bold">최가네부동산 통합 대시보드</h1>
                 <p class="text-muted text-sm mt-xs">등록된 매물 관리 및 손님 방문/검색어 실시간 데이터 분석</p>
             </div>
-            <div class="flex gap-sm w-full sm:w-auto">
+            <div class="flex flex-wrap gap-sm w-full sm:w-auto">
+                <button type="button" onclick="window.showAdminTab('briefing'); window.switchBriefingSubTab('news');" class="flex-1 sm:flex-initial bg-amber-500 hover:bg-amber-600 text-slate-950 px-4 py-2.5 rounded-lg text-sm font-black transition-all flex items-center justify-center gap-1.5 shadow-sm min-h-[44px] cursor-pointer">
+                    <span class="material-symbols-outlined text-[18px]">newspaper</span> 오늘의 정책뉴스·카톡발송
+                </button>
                 <a href="news-write.html" class="flex-1 sm:flex-initial bg-primary-container text-white px-lg py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-mid transition-all flex items-center justify-center gap-xs shadow-sm min-h-[44px]">
                     <span class="material-symbols-outlined text-[18px]">add_circle</span> 새 글 작성
                 </a>
@@ -273,12 +277,24 @@
 
             <!-- Two-Column Grid Row 2: Top Search Queries & Top Viewed Listings -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
-                <!-- Top 10 Search Queries Card -->
+                <!-- Top 50 Search & Inflow Keywords Card with Period Toggle -->
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
-                    <h3 class="font-bold text-lg text-ink mb-md flex items-center gap-xs">
-                        <span class="material-symbols-outlined text-primary">search</span> 손님들의 인기 검색어 TOP 10
-                    </h3>
-                    <div id="top-queries-list" class="space-y-sm">
+                    <div class="flex justify-between items-center mb-md flex-wrap gap-xs">
+                        <div>
+                            <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
+                                <span class="material-symbols-outlined text-primary">search</span> 네이버·구글·홈페이지 유입 검색어 TOP 50
+                            </h3>
+                            <p class="text-[11px] text-muted mt-0.5">네이버·구글 검색 유입 키워드 및 홈페이지 내 손님 검색어 순위 (최대 50개)</p>
+                        </div>
+                        <div class="flex bg-surface-container rounded-lg p-0.5 text-[11px] sm:text-xs font-semibold overflow-x-auto max-w-full">
+                            <button id="query-period-today" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">오늘</button>
+                            <button id="query-period-yesterday" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">어제</button>
+                            <button id="query-period-3days" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">3일전</button>
+                            <button id="query-period-7days" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">최근 7일</button>
+                            <button id="query-period-all" class="px-2 sm:px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer whitespace-nowrap">전체 누적</button>
+                        </div>
+                    </div>
+                    <div id="top-queries-list" class="space-y-sm max-h-[440px] overflow-y-auto pr-1">
                         <!-- Populated by JS -->
                     </div>
                 </div>
@@ -454,7 +470,7 @@
                     <h2 class="text-base sm:text-xl font-black tracking-tight text-slate-900">메모창고 &amp; 손님 맞춤형 매물 브리핑 보드</h2>
                     <p class="text-xs text-slate-600 font-semibold">손님별 브리핑 링크 무제한 생성 · 브리핑당 매물 수 무제한 추가 · 홈페이지 매물 조건 수정 시 자동 동기화</p>
                 </div>
-                <div class="flex bg-white p-1 rounded-xl border border-blue-200 shadow-xs shrink-0">
+                <div class="flex flex-wrap bg-white p-1 rounded-xl border border-blue-200 shadow-xs shrink-0 gap-1">
                     <button type="button" id="subtab-btn-briefing" onclick="switchBriefingSubTab('briefing')" class="px-3.5 py-2 rounded-lg bg-[#003891] text-white font-extrabold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition">
                         <span class="material-symbols-outlined text-[17px]">assignment_ind</span>
                         <span>손님 브리핑 보드</span>
@@ -462,6 +478,10 @@
                     <button type="button" id="subtab-btn-memo" onclick="switchBriefingSubTab('memo')" class="px-3.5 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-bold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition">
                         <span class="material-symbols-outlined text-[17px]">inventory_2</span>
                         <span>메모창고 (안내문 보관함)</span>
+                    </button>
+                    <button type="button" id="subtab-btn-news" onclick="switchBriefingSubTab('news')" class="px-3.5 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-bold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition">
+                        <span class="material-symbols-outlined text-[17px] text-amber-600">newspaper</span>
+                        <span>오늘의 부동산 뉴스·정책 발송</span>
                     </button>
                 </div>
             </div>
@@ -730,6 +750,207 @@
                     <!-- Memo Cards Grid -->
                     <div id="memo-warehouse-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-VIEW 3: Daily Real Estate Policy & Market News Collector + Kakao/SMS Briefing Generator (📰 오늘의 부동산 뉴스·정책 발송) -->
+            <div id="subview-daily-news" class="hidden space-y-5">
+                <div class="bg-surface-container-lowest p-4 sm:p-6 rounded-2xl shadow-card-soft border border-hairline space-y-5">
+                    <!-- Top Header & Actions -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-hairline pb-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <h3 class="font-extrabold text-base sm:text-lg text-ink flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-amber-500">newspaper</span>
+                                    <span>실시간 부동산 정책·시장 뉴스 수집 &amp; 손님 카톡·문자 안부 브리핑</span>
+                                </h3>
+                                <span id="daily-news-updated-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-extrabold">실시간 자동 업데이트</span>
+                            </div>
+                            <p class="text-xs text-muted mt-1">
+                                국토부 부동산 정책, 상가·오피스 시장 동향, 금리·대출·세무, 대구·경북 주요 뉴스를 매일 실시간으로 수집하여 건물주·임차인·투자자 손님께 카톡이나 문자로 1초 만에 보내실 수 있습니다.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 shrink-0">
+                            <button type="button" onclick="autoPickTop3DailyNews()" class="px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-extrabold text-xs flex items-center gap-1 cursor-pointer transition">
+                                <span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+                                <span>TOP 3 핵심뉴스 자동선택</span>
+                            </button>
+                            <button type="button" onclick="toggleManualNewsForm()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 font-extrabold text-xs flex items-center gap-1 cursor-pointer transition">
+                                <span class="material-symbols-outlined text-[16px]">post_add</span>
+                                <span>+ 직접 뉴스·정책 추가</span>
+                            </button>
+                            <button type="button" onclick="fetchDailyRealEstateNews(true)" class="px-4 py-2 rounded-xl bg-[#003891] hover:bg-blue-800 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-xs cursor-pointer transition">
+                                <span class="material-symbols-outlined text-[16px]" id="daily-news-refresh-icon">refresh</span>
+                                <span>최신 뉴스 새로고침</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Manual News/Policy Quick Add Accordion (Hidden by default) -->
+                    <div id="manual-news-add-box" class="hidden bg-amber-50/70 border border-amber-200 rounded-xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs sm:text-sm font-extrabold text-amber-950 flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[18px] text-amber-600">edit_note</span>
+                                <span>유튜브·신문에서 본 부동산 정책이나 지역 소식 직접 추가하기</span>
+                            </h4>
+                            <button type="button" onclick="toggleManualNewsForm()" class="text-xs font-bold text-slate-500 hover:text-slate-800 cursor-pointer">닫기 ✕</button>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-700 mb-1">분류</label>
+                                <select id="manual-news-cat" class="w-full rounded-lg border-slate-300 text-xs font-bold p-2 bg-white">
+                                    <option value="부동산 정책·제도">🏛️ 부동산 정책·제도</option>
+                                    <option value="상가·오피스·수익형">🏢 상가·오피스·수익형</option>
+                                    <option value="금리·대출·세무">💰 금리·대출·세무</option>
+                                    <option value="대구·경북 지역소식">📍 대구·경북 지역소식</option>
+                                </select>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-[11px] font-bold text-slate-700 mb-1">뉴스/정책 제목 <span class="text-rose-500">*</span></label>
+                                <input type="text" id="manual-news-title" placeholder="예: 소상공인 임차료 부담 완화 및 상가 공실 용도변경 특례 시행" class="w-full rounded-lg border-slate-300 text-xs font-bold p-2 bg-white" />
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-700 mb-1">출처 / 링크 (선택)</label>
+                                <input type="text" id="manual-news-link" placeholder="예: 국토교통부 또는 링크 URL" class="w-full rounded-lg border-slate-300 text-xs p-2 bg-white" />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-700 mb-1">핵심 요약 설명 (손님 브리핑에 들어갈 내용)</label>
+                                <input type="text" id="manual-news-summary" placeholder="예: 상업용 건물의 공실 해소를 위해 오피스·근생 용도변경 절차가 대폭 간소화됩니다." class="w-full rounded-lg border-slate-300 text-xs p-2 bg-white" />
+                            </div>
+                            <div class="flex items-end gap-2">
+                                <div class="flex-1">
+                                    <label class="block text-[11px] font-bold text-slate-700 mb-1">최가네부동산 코멘트 (선택)</label>
+                                    <input type="text" id="manual-news-tip" placeholder="예: 공실 장기화 상가 건물주분들께서는 용도 다변화를 적극 검토해 보실 시점입니다." class="w-full rounded-lg border-slate-300 text-xs p-2 bg-white" />
+                                </div>
+                                <button type="button" onclick="addManualNewsItem()" class="px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shrink-0 cursor-pointer h-[34px]">
+                                    + 목록에 추가
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter Pills & Custom Keyword Search Bar -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <div class="flex flex-wrap items-center gap-1.5" id="daily-news-cat-pills">
+                            <button type="button" onclick="setDailyNewsCategory('all')" data-ncat="all" class="px-3 py-1.5 rounded-xl bg-[#003891] text-white text-xs font-extrabold cursor-pointer transition">🔥 종합 핵심 픽</button>
+                            <button type="button" onclick="setDailyNewsCategory('policy')" data-ncat="policy" class="px-3 py-1.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 text-xs font-bold cursor-pointer transition">🏛️ 부동산 정책·제도</button>
+                            <button type="button" onclick="setDailyNewsCategory('commercial')" data-ncat="commercial" class="px-3 py-1.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 text-xs font-bold cursor-pointer transition">🏢 상가·오피스·수익형</button>
+                            <button type="button" onclick="setDailyNewsCategory('finance')" data-ncat="finance" class="px-3 py-1.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 text-xs font-bold cursor-pointer transition">💰 금리·대출·세무</button>
+                            <button type="button" onclick="setDailyNewsCategory('daegu')" data-ncat="daegu" class="px-3 py-1.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 text-xs font-bold cursor-pointer transition">📍 대구·경북 지역소식</button>
+                        </div>
+                        <div class="flex items-center gap-1.5 w-full lg:w-80">
+                            <input type="text" id="daily-news-custom-q" onkeydown="if(event.key==='Enter'){event.preventDefault();searchCustomDailyNews();}" placeholder="🔍 원하는 뉴스 주제 검색 (예: 수성구, 기준금리, 권리금)" class="flex-1 rounded-xl border-slate-300 text-xs font-bold p-2 bg-white" />
+                            <button type="button" onclick="searchCustomDailyNews()" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shrink-0 cursor-pointer">검색</button>
+                        </div>
+                    </div>
+
+                    <!-- Main 2-Column Split: Left = News Picker List / Right = Kakao & SMS Briefing Composer -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+                        <!-- LEFT (7 cols): Collected News Cards -->
+                        <div class="lg:col-span-7 space-y-3">
+                            <div class="flex items-center justify-between px-1">
+                                <span class="text-xs font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
+                                    <span>📋 수집된 뉴스 목록</span>
+                                    <span id="daily-news-selected-count" class="px-2 py-0.5 rounded-md bg-blue-50 text-[#003891] border border-blue-200 text-[11px] font-black">선택됨 3건</span>
+                                </span>
+                                <button type="button" onclick="clearDailyNewsSelection()" class="text-xs font-bold text-slate-500 hover:text-rose-600 cursor-pointer">선택 전체해제</button>
+                            </div>
+
+                            <div id="daily-news-list-container" class="space-y-2.5 max-h-[680px] overflow-y-auto pr-1">
+                                <div class="text-center py-12 text-muted text-sm bg-slate-50 rounded-xl border border-dashed border-slate-300">
+                                    실시간 부동산 정책·시장 뉴스를 불러오는 중입니다...
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT (5 cols): KakaoTalk / SMS Customer Briefing Generator -->
+                        <div class="lg:col-span-5 bg-[#f8fafc] dark:bg-slate-900/90 p-4 sm:p-5 rounded-2xl border-2 border-[#003891]/25 shadow-sm space-y-4 sticky top-20">
+                            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
+                                <div>
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#fee500] text-[#191600] text-[10px] font-black mb-1">KAKAO &amp; SMS BRIEFING</span>
+                                    <h4 class="font-black text-sm sm:text-base text-slate-900 dark:text-white">손님 카톡·문자 브리핑 자동 생성기</h4>
+                                </div>
+                                <span id="daily-news-char-count" class="text-[11px] font-bold text-slate-500 bg-white px-2.5 py-1 rounded-lg border border-slate-200">0자 (LMS 가능)</span>
+                            </div>
+
+                            <!-- 1. Target Customer Greeting Preset -->
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-extrabold text-slate-800 dark:text-slate-200">1. 발송 대상 손님 맞춤 인사말 선택</label>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5" id="daily-news-target-btns">
+                                    <button type="button" onclick="setDailyNewsTargetPreset('landlord')" data-ntarget="landlord" class="px-2.5 py-2 rounded-xl bg-[#003891] text-white text-xs font-extrabold text-left cursor-pointer transition">🏢 건물주·임대인</button>
+                                    <button type="button" onclick="setDailyNewsTargetPreset('tenant')" data-ntarget="tenant" class="px-2.5 py-2 rounded-xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 text-xs font-bold text-left cursor-pointer transition">🏬 임차인·대표님</button>
+                                    <button type="button" onclick="setDailyNewsTargetPreset('investor')" data-ntarget="investor" class="px-2.5 py-2 rounded-xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 text-xs font-bold text-left cursor-pointer transition">💎 빌딩·투자고객</button>
+                                    <button type="button" onclick="setDailyNewsTargetPreset('vipcare')" data-ntarget="vipcare" class="px-2.5 py-2 rounded-xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 text-xs font-bold text-left cursor-pointer transition">🤝 기존계약 케어</button>
+                                    <button type="button" onclick="setDailyNewsTargetPreset('general')" data-ntarget="general" class="px-2.5 py-2 rounded-xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 text-xs font-bold text-left cursor-pointer transition col-span-2 sm:col-span-2">☀️ 다정한 기본 아침·주간 안부</button>
+                                </div>
+                            </div>
+
+                            <!-- 2. Message Format Style & Customer Name -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <div>
+                                    <label class="block text-xs font-extrabold text-slate-800 dark:text-slate-200 mb-1">2. 손님 호칭 (선택)</label>
+                                    <input type="text" id="daily-news-recipient" oninput="rebuildDailyNewsMessage()" placeholder="예: 김OO 대표님 (비워두면 기본호칭)" class="w-full rounded-xl border-slate-300 text-xs font-bold p-2 bg-white" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-extrabold text-slate-800 dark:text-slate-200 mb-1">3. 메시지 구성 스타일</label>
+                                    <select id="daily-news-style" onchange="rebuildDailyNewsMessage()" class="w-full rounded-xl border-slate-300 text-xs font-bold p-2 bg-white">
+                                        <option value="standard">📱 카톡 표준형 (요약+전문가코멘트)</option>
+                                        <option value="compact">✉️ 문자 컴팩트형 (핵심 3줄 요약)</option>
+                                        <option value="detailed">📊 VIP 심층 리포트형 (전체 상세)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 3. Content Checkboxes -->
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700 grid grid-cols-2 gap-2 text-xs font-bold text-slate-700 dark:text-slate-200">
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" id="dn-opt-summary" checked onchange="rebuildDailyNewsMessage()" class="rounded text-[#003891]" />
+                                    <span>핵심 요약 포함</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" id="dn-opt-tip" checked onchange="rebuildDailyNewsMessage()" class="rounded text-[#003891]" />
+                                    <span>💡 중개사 실무 코멘트</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" id="dn-opt-link" checked onchange="rebuildDailyNewsMessage()" class="rounded text-[#003891]" />
+                                    <span>🔗 원문 기사 링크</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" id="dn-opt-footer" checked onchange="rebuildDailyNewsMessage()" class="rounded text-[#003891]" />
+                                    <span>🏢 최가네 명함·홈페이지</span>
+                                </label>
+                            </div>
+
+                            <!-- 4. Editable Message Preview Textarea -->
+                            <div class="space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <label class="text-xs font-extrabold text-slate-800 dark:text-slate-200">4. 발송 문구 미리보기 및 자유 수정</label>
+                                    <button type="button" onclick="rebuildDailyNewsMessage()" class="text-[11px] font-bold text-[#003891] hover:underline cursor-pointer">🔄 문구 기본값 다시 생성</button>
+                                </div>
+                                <textarea id="daily-news-msg-preview" oninput="updateDailyNewsCharCount()" rows="14" class="w-full rounded-xl border-slate-300 bg-white dark:bg-slate-950 text-xs sm:text-[13px] leading-relaxed font-medium text-slate-800 dark:text-slate-100 p-3.5 focus:ring-[#003891] focus:border-[#003891]"></textarea>
+                            </div>
+
+                            <!-- 5. Action Buttons (Copy for Kakao, Open SMS App, Save to Memo Warehouse) -->
+                            <div class="space-y-2 pt-1">
+                                <button type="button" onclick="copyDailyNewsBriefingMsg()" class="w-full py-3 px-4 rounded-xl bg-[#fee500] hover:bg-[#fdd835] text-[#191600] border border-[#d4be00] font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm cursor-pointer transition">
+                                    <span class="material-symbols-outlined text-[19px]">chat</span>
+                                    <span>카톡·문자 발송용 문구 전체 복사하기</span>
+                                </button>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <button type="button" onclick="openMobileSmsWithDailyNews()" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-xs cursor-pointer transition">
+                                        <span class="material-symbols-outlined text-[16px]">sms</span>
+                                        <span>휴대폰 문자 앱 바로 열기</span>
+                                    </button>
+                                    <button type="button" onclick="saveDailyNewsToMemoWarehouse()" class="py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-xs cursor-pointer transition">
+                                        <span class="material-symbols-outlined text-[16px]">inventory_2</span>
+                                        <span>메모창고에 카드로 저장</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1012,7 +1233,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261123_v248"></script>
+<script src="db.js?v=20261123_v249"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -1127,6 +1348,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         Object.entries(refPeriodBtns).forEach(([key, btn]) => {
             if (btn) btn.addEventListener('click', () => setRefPeriod(key));
         });
+
+        const queryPeriodBtns = {
+            today: document.getElementById('query-period-today'),
+            yesterday: document.getElementById('query-period-yesterday'),
+            '3days': document.getElementById('query-period-3days'),
+            '7days': document.getElementById('query-period-7days'),
+            all: document.getElementById('query-period-all')
+        };
+
+        function setQueryPeriod(activeKey) {
+            currentQueryPeriod = activeKey;
+            Object.entries(queryPeriodBtns).forEach(([key, btn]) => {
+                if (!btn) return;
+                if (key === activeKey) {
+                    btn.className = 'px-2 sm:px-2.5 py-1 rounded-md bg-white text-primary shadow-xs font-bold transition-all cursor-pointer whitespace-nowrap';
+                } else {
+                    btn.className = 'px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap';
+                }
+            });
+            renderTopQueriesList(getAnalyticsSummary(_lastRemoteAnalytics));
+        }
+
+        Object.entries(queryPeriodBtns).forEach(([key, btn]) => {
+            if (btn) btn.addEventListener('click', () => setQueryPeriod(key));
+        });
         
         document.getElementById('logout-btn').onclick = () => {
             sessionStorage.removeItem('isAdmin');
@@ -1183,13 +1429,45 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 let currentViewPeriod = 'all';
 let currentRefPeriod = 'all';
+let currentQueryPeriod = 'all';
+let _lastRemoteAnalytics = null;
 
 async function renderAnalyticsView() {
     let remoteAnalytics = null;
     try {
+        if (!_top50CachedPosts || _top50CachedPosts.length === 0) {
+            _top50CachedPosts = await getPosts();
+        }
+        if (Array.isArray(_top50CachedPosts) && _top50CachedPosts.length > 0) {
+            const pvCache = JSON.parse(localStorage.getItem('analytics_post_views') || '{}');
+            let pvUpdated = false;
+            _top50CachedPosts.forEach(p => {
+                if (!p || !p.id) return;
+                const pid = String(p.id);
+                if (!pvCache[pid]) {
+                    pvCache[pid] = { id: pid, title: p.title || '매물 상세', count: 0, lastViewed: 0 };
+                    pvUpdated = true;
+                } else if ((!pvCache[pid].title || pvCache[pid].title === '매물 상세') && p.title) {
+                    pvCache[pid].title = p.title;
+                    pvUpdated = true;
+                }
+                const dispNo = typeof getPropertyDisplayNumber === 'function' ? getPropertyDisplayNumber(p) : '';
+                if (dispNo && !pvCache[dispNo]) {
+                    pvCache[dispNo] = { id: dispNo, title: p.title || '매물 상세', count: 0, lastViewed: 0 };
+                    pvUpdated = true;
+                }
+            });
+            if (pvUpdated) {
+                localStorage.setItem('analytics_post_views', JSON.stringify(pvCache));
+            }
+        }
+    } catch (e) {}
+
+    try {
         const res = await fetch('/api/analytics?type=analytics&t=' + Date.now());
         if (res.ok) {
             remoteAnalytics = await res.json();
+            _lastRemoteAnalytics = remoteAnalytics;
             if (remoteAnalytics && remoteAnalytics.todayDate && remoteAnalytics.dailyHistory && Object.keys(remoteAnalytics.dailyHistory).length > 0) {
                 localStorage.setItem('analytics_page_views', JSON.stringify({
                     total: remoteAnalytics.totalPageviews || 0,
@@ -1253,31 +1531,8 @@ async function renderAnalyticsView() {
     // 2. Referrer Traffic Sources Card (Filtered by Period)
     renderReferrersList(summary);
 
-    // 3. Top Search Queries List
-    const qContainer = document.getElementById('top-queries-list');
-    if (!summary.topQueries || summary.topQueries.length === 0) {
-        qContainer.innerHTML = '<div class="text-center py-md text-muted text-sm">아직 수집된 검색어가 없습니다. (손님이 검색창 이용 시 자동 저장)</div>';
-    } else {
-        const maxCount = summary.topQueries[0].count || 1;
-        qContainer.innerHTML = summary.topQueries.map((q, idx) => {
-            const badgeClass = idx === 0 ? 'bg-amber-500 text-white' : idx === 1 ? 'bg-slate-400 text-white' : idx === 2 ? 'bg-amber-700 text-white' : 'bg-surface-container text-muted';
-            const pct = Math.round((q.count / maxCount) * 100);
-            return `
-                <div class="flex flex-col gap-1 text-sm border-b border-hairline/50 pb-xs">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-xs">
-                            <span class="w-5 h-5 rounded-full ${badgeClass} text-[11px] font-bold flex items-center justify-center">${idx + 1}</span>
-                            <span class="font-bold text-ink">${q.query}</span>
-                        </div>
-                        <span class="text-xs font-semibold text-primary">${q.count}회</span>
-                    </div>
-                    <div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-                        <div class="bg-primary h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
+    // 3. Top 50 Search & Inflow Queries List (Filtered by Period)
+    renderTopQueriesList(summary);
 
     // 4. Top Views List (Filtered by Period)
     renderTopViewsList(summary);
@@ -1292,24 +1547,93 @@ async function renderAnalyticsView() {
     // 4-2. Recent Likes Activity Log Table
     renderRecentLikesTable(summary);
 
-    // 5. Recent Activity Log Table
+    // 5. Recent Activity Log Table (up to 50 logs with source badge)
     const lTbody = document.getElementById('logs-tbody');
     if (lTbody) {
         if (!summary.searchLogs || summary.searchLogs.length === 0) {
-            lTbody.innerHTML = '<tr><td colspan="3" class="text-center py-md text-muted text-xs">수집된 실시간 검색 로그가 없습니다. (손님이 매물리스트/지도 검색창에 키워드 입력 시 저장)</td></tr>';
+            lTbody.innerHTML = '<tr><td colspan="3" class="text-center py-md text-muted text-xs">수집된 실시간 검색 로그가 없습니다. (손님이 네이버/구글 검색 유입 또는 검색창 이용 시 저장)</td></tr>';
         } else {
-            lTbody.innerHTML = summary.searchLogs.slice(0, 20).map(log => {
+            lTbody.innerHTML = summary.searchLogs.slice(0, 50).map(log => {
                 const devBadge = log.device === 'mobile' ? '<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[11px] font-semibold">📱 모바일</span>' : '<span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px] font-semibold">💻 PC</span>';
+                const src = log.source || '홈페이지 검색';
+                let srcBadge = `<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-extrabold mr-1.5">${src}</span>`;
+                if (src.includes('네이버')) srcBadge = `<span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold mr-1.5">N 네이버</span>`;
+                else if (src.includes('구글')) srcBadge = `<span class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-extrabold mr-1.5">G 구글</span>`;
+                else if (src.includes('ChatGPT') || src.includes('AI')) srcBadge = `<span class="px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200 text-[10px] font-extrabold mr-1.5">AI 검색</span>`;
                 return `
                     <tr class="hover:bg-surface-container-low transition-colors text-ink text-xs">
                         <td class="px-md py-2.5 text-muted">${log.date}</td>
                         <td class="px-md py-2.5 text-center">${devBadge}</td>
-                        <td class="px-md py-2.5 font-bold text-ink">${log.query}</td>
+                        <td class="px-md py-2.5 font-bold text-ink">${srcBadge}${log.query}</td>
                     </tr>
                 `;
             }).join('');
         }
     }
+}
+
+function renderTopQueriesList(summary) {
+    const qContainer = document.getElementById('top-queries-list');
+    if (!qContainer) return;
+
+    let qData = summary.topQueries || [];
+    const todayStr = (summary.todayDate || new Date().toISOString().split('T')[0]).slice(5);
+    const yesterdayStr = (summary.yesterdayDate || '').slice(5);
+    const day3Str = (summary.day3Date || '').slice(5);
+    let emptyMsg = '아직 수집된 유입 검색어가 없습니다.';
+
+    if (currentQueryPeriod === 'today') {
+        qData = summary.topQueriesToday || [];
+        emptyMsg = `오늘(${todayStr}) 수집된 유입 검색어가 아직 없습니다. [어제] 또는 [전체 누적]을 눌러보세요.`;
+    } else if (currentQueryPeriod === 'yesterday') {
+        qData = summary.topQueriesYesterday || [];
+        emptyMsg = `어제(${yesterdayStr}) 수집된 유입 검색어가 없습니다.`;
+    } else if (currentQueryPeriod === '3days') {
+        qData = summary.topQueries3Days || [];
+        emptyMsg = `최근 3일간(${day3Str}~${todayStr}) 수집된 유입 검색어가 없습니다.`;
+    } else if (currentQueryPeriod === '7days') {
+        qData = summary.topQueries7Days || [];
+        emptyMsg = '최근 7일간 수집된 유입 검색어가 없습니다.';
+    }
+
+    if (!qData || qData.length === 0) {
+        qContainer.innerHTML = `<div class="text-center py-md text-muted text-sm">${emptyMsg}</div>`;
+        return;
+    }
+
+    const maxCount = qData[0].count || 1;
+    qContainer.innerHTML = qData.slice(0, 50).map((q, idx) => {
+        const badgeClass = idx === 0 ? 'bg-amber-500 text-white' : idx === 1 ? 'bg-slate-400 text-white' : idx === 2 ? 'bg-amber-700 text-white' : 'bg-surface-container text-muted';
+        const pct = Math.round((q.count / maxCount) * 100);
+        const src = q.source || '홈페이지';
+        let srcBadge = `<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-extrabold shrink-0">홈페이지</span>`;
+        let barColor = 'bg-primary';
+        if (src.includes('네이버')) {
+            srcBadge = `<span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold shrink-0">N 네이버</span>`;
+            barColor = 'bg-emerald-600';
+        } else if (src.includes('구글')) {
+            srcBadge = `<span class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-extrabold shrink-0">G 구글</span>`;
+            barColor = 'bg-blue-600';
+        } else if (src.includes('ChatGPT') || src.includes('AI')) {
+            srcBadge = `<span class="px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200 text-[10px] font-extrabold shrink-0">AI 검색</span>`;
+            barColor = 'bg-purple-600';
+        }
+        return `
+            <div class="flex flex-col gap-1 text-sm border-b border-hairline/50 pb-xs">
+                <div class="flex justify-between items-center gap-2">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                        <span class="w-5 h-5 rounded-full ${badgeClass} text-[11px] font-bold flex items-center justify-center shrink-0">${idx + 1}</span>
+                        ${srcBadge}
+                        <span class="font-bold text-ink truncate" title="${q.query}">${q.query}</span>
+                    </div>
+                    <span class="text-xs font-extrabold text-primary shrink-0">${q.count}회</span>
+                </div>
+                <div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+                    <div class="${barColor} h-full rounded-full transition-all duration-500" style="width: ${Math.max(pct, 4)}%"></div>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
 function renderReferrersList(summary) {
@@ -2127,20 +2451,27 @@ window.initBriefingAndMemoTab = initBriefingAndMemoTab;
 function switchBriefingSubTab(sub) {
     const bView = document.getElementById('subview-briefing-board');
     const mView = document.getElementById('subview-memo-warehouse');
+    const nView = document.getElementById('subview-daily-news');
     const bBtn = document.getElementById('subtab-btn-briefing');
     const mBtn = document.getElementById('subtab-btn-memo');
+    const nBtn = document.getElementById('subtab-btn-news');
+
+    const activeCls = 'px-3.5 py-2 rounded-lg bg-[#003891] text-white font-extrabold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition';
+    const inactiveCls = 'px-3.5 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-bold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition';
+
+    if (bView) bView.classList.toggle('hidden', sub !== 'briefing');
+    if (mView) mView.classList.toggle('hidden', sub !== 'memo');
+    if (nView) nView.classList.toggle('hidden', sub !== 'news');
+
+    if (bBtn) bBtn.className = sub === 'briefing' ? activeCls : inactiveCls;
+    if (mBtn) mBtn.className = sub === 'memo' ? activeCls : inactiveCls;
+    if (nBtn) nBtn.className = sub === 'news' ? activeCls : inactiveCls;
 
     if (sub === 'memo') {
-        if (bView) bView.classList.add('hidden');
-        if (mView) mView.classList.remove('hidden');
-        if (mBtn) mBtn.className = 'px-3.5 py-2 rounded-lg bg-[#003891] text-white font-extrabold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition';
-        if (bBtn) bBtn.className = 'px-3.5 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-bold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition';
         renderMemoWarehouseGrid();
+    } else if (sub === 'news') {
+        initDailyNewsPanel();
     } else {
-        if (mView) mView.classList.add('hidden');
-        if (bView) bView.classList.remove('hidden');
-        if (bBtn) bBtn.className = 'px-3.5 py-2 rounded-lg bg-[#003891] text-white font-extrabold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition';
-        if (mBtn) mBtn.className = 'px-3.5 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-bold text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer transition';
         renderBriefingMemoCheckboxes();
     }
 }
@@ -3758,6 +4089,522 @@ async function deleteMemoById(id) {
     }
 }
 window.deleteMemoById = deleteMemoById;
+
+// =========================================================================
+// 📰 실시간 부동산 정책·시장 뉴스 수집 & 손님 카톡·문자 브리핑 생성기
+// =========================================================================
+
+let _dailyNewsItems = [];
+let _dailyNewsManualItems = [];
+let _dailyNewsSelectedIds = new Set();
+let _dailyNewsCurrentCategory = 'all';
+let _dailyNewsTargetPreset = 'landlord';
+let _dailyNewsInitialized = false;
+
+const DAILY_NEWS_FALLBACK_ITEMS = [
+    {
+        id: 'fallback_news_1',
+        categoryKey: 'policy',
+        categoryLabel: '부동산 정책·제도',
+        title: '국토부, 상업용 부동산 공실 해소 위한 건축물 용도변경 기준 완화 추진',
+        publisher: '정책브리핑',
+        link: 'https://www.molit.go.kr',
+        dateStr: new Date().toISOString().split('T')[0],
+        summary: '도심 내 상가·오피스 공실 해소를 위해 근린생활시설과 업무시설 간 용도변경 절차 및 주차장·소방 특례 기준을 합리화하여 건물 활용도를 높이는 정책이 추진됩니다.',
+        brokerTip: '공실 기간이 길어지는 중대형 상가는 사무실(업무시설)이나 의원·학원으로 용도 다변화를 검토해 임대 수익률을 방어할 시점입니다.'
+    },
+    {
+        id: 'fallback_news_2',
+        categoryKey: 'finance',
+        categoryLabel: '금리·대출·세무',
+        title: '금융권 상업용 부동산 담보·사업자 대출 금리 동향 및 대환대출 체크포인트',
+        publisher: '경제브리핑',
+        link: 'https://www.bok.or.kr',
+        dateStr: new Date().toISOString().split('T')[0],
+        summary: '기준금리 동결 및 인하 기대감 속에 시중은행의 개인사업자·법인 부동산 담보대출 가산금리 조정이 이어지고 있어 기존 고금리 대출의 대환 조건 점검이 중요해졌습니다.',
+        brokerTip: '금리 0.5%p만 낮춰도 연간 이자 비용이 크게 절감되고 건물 순수익률이 상승하므로 보유 건물·상가 대출 금리 점검을 권장드립니다.'
+    },
+    {
+        id: 'fallback_news_3',
+        categoryKey: 'daegu',
+        categoryLabel: '대구·경북 지역소식',
+        title: '대구 수성구·중구 핵심 대로변 상권, 무권리·인테리어 완비 실속형 오피스·상가 수요 집중',
+        publisher: '대구상권분석',
+        link: 'https://www.choi114.com',
+        dateStr: new Date().toISOString().split('T')[0],
+        summary: '초기 시설 투자비를 아끼려는 법인 지사·병의원·전문직 임차인들이 대구 수성구 범어·만촌동 및 중구 대로변의 인테리어 완비·렌트프리 협의 매물을 중심으로 빠르게 계약을 체결하고 있습니다.',
+        brokerTip: '우량 임차인 유치를 원하시는 임대인분들께는 렌트프리·시설 인계 전략을, 창업·이전 임차인분들께는 초기자금 절감형 알짜 매물을 맞춤 연결해 드리고 있습니다.'
+    }
+];
+
+function initDailyNewsPanel() {
+    try {
+        const savedManual = JSON.parse(localStorage.getItem('choi_manual_daily_news') || '[]');
+        if (Array.isArray(savedManual)) _dailyNewsManualItems = savedManual;
+    } catch (e) {}
+
+    if (!_dailyNewsInitialized) {
+        _dailyNewsInitialized = true;
+        fetchDailyRealEstateNews(false);
+    } else {
+        renderDailyNewsList();
+        rebuildDailyNewsMessage();
+    }
+}
+window.initDailyNewsPanel = initDailyNewsPanel;
+
+async function fetchDailyRealEstateNews(showNotice = false, customQuery = '') {
+    const container = document.getElementById('daily-news-list-container');
+    const refreshIcon = document.getElementById('daily-news-refresh-icon');
+    const badge = document.getElementById('daily-news-updated-badge');
+
+    if (refreshIcon) refreshIcon.classList.add('animate-spin');
+    if (container && _dailyNewsItems.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-12 text-muted text-sm bg-slate-50 rounded-xl border border-dashed border-slate-300">
+                🔄 실시간 부동산 정책·상권·금리·대구 뉴스를 수집하고 있습니다...
+            </div>
+        `;
+    }
+
+    try {
+        let apiUrl = `/api/daily-news?category=${encodeURIComponent(_dailyNewsCurrentCategory)}&t=${Date.now()}`;
+        if (customQuery) {
+            apiUrl += `&q=${encodeURIComponent(customQuery)}`;
+        }
+        const res = await fetch(apiUrl);
+        if (res.ok) {
+            const data = await res.json();
+            if (data && Array.isArray(data.items) && data.items.length > 0) {
+                _dailyNewsItems = [..._dailyNewsManualItems, ...data.items];
+                if (badge) {
+                    const nowTime = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+                    badge.textContent = `실시간 수집 완료 (${nowTime})`;
+                }
+            }
+        }
+    } catch (e) {}
+
+    if (!_dailyNewsItems || _dailyNewsItems.length === 0) {
+        _dailyNewsItems = [..._dailyNewsManualItems, ...DAILY_NEWS_FALLBACK_ITEMS];
+    }
+
+    if (_dailyNewsSelectedIds.size === 0 && _dailyNewsItems.length > 0) {
+        _dailyNewsItems.slice(0, 3).forEach(it => _dailyNewsSelectedIds.add(it.id));
+    }
+
+    if (refreshIcon) refreshIcon.classList.remove('animate-spin');
+    renderDailyNewsList();
+    rebuildDailyNewsMessage();
+
+    if (showNotice && typeof showToast === 'function') {
+        showToast('📰 최신 부동산 정책·시장 뉴스를 업데이트했습니다!');
+    }
+}
+window.fetchDailyRealEstateNews = fetchDailyRealEstateNews;
+
+function setDailyNewsCategory(cat) {
+    _dailyNewsCurrentCategory = cat;
+    const customInput = document.getElementById('daily-news-custom-q');
+    if (customInput) customInput.value = '';
+
+    const btns = document.querySelectorAll('#daily-news-cat-pills button[data-ncat]');
+    btns.forEach(btn => {
+        const bCat = btn.getAttribute('data-ncat');
+        if (bCat === cat) {
+            btn.className = 'px-3 py-1.5 rounded-xl bg-[#003891] text-white text-xs font-extrabold cursor-pointer transition';
+        } else {
+            btn.className = 'px-3 py-1.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 text-xs font-bold cursor-pointer transition';
+        }
+    });
+
+    _dailyNewsSelectedIds.clear();
+    fetchDailyRealEstateNews(false);
+}
+window.setDailyNewsCategory = setDailyNewsCategory;
+
+function searchCustomDailyNews() {
+    const q = (document.getElementById('daily-news-custom-q')?.value || '').trim();
+    if (!q) {
+        fetchDailyRealEstateNews(true);
+        return;
+    }
+    _dailyNewsSelectedIds.clear();
+    fetchDailyRealEstateNews(true, q);
+}
+window.searchCustomDailyNews = searchCustomDailyNews;
+
+function toggleManualNewsForm() {
+    const box = document.getElementById('manual-news-add-box');
+    if (box) box.classList.toggle('hidden');
+}
+window.toggleManualNewsForm = toggleManualNewsForm;
+
+function addManualNewsItem() {
+    const catLabel = document.getElementById('manual-news-cat')?.value || '부동산 정책·제도';
+    const title = (document.getElementById('manual-news-title')?.value || '').trim();
+    const link = (document.getElementById('manual-news-link')?.value || '').trim();
+    const summary = (document.getElementById('manual-news-summary')?.value || '').trim();
+    const tip = (document.getElementById('manual-news-tip')?.value || '').trim();
+
+    if (!title) {
+        alert('추가할 뉴스 또는 부동산 정책 제목을 입력해 주세요.');
+        return;
+    }
+
+    const newItem = {
+        id: 'manual_news_' + Date.now(),
+        categoryKey: 'manual',
+        categoryLabel: catLabel,
+        title: title,
+        publisher: '최가네 직접브리핑',
+        link: link.startsWith('http') ? link : '',
+        dateStr: new Date().toISOString().split('T')[0],
+        summary: summary || `${title} 관련 핵심 부동산 정책·시장 체크포인트입니다.`,
+        brokerTip: tip || '상가·사무실·건물 임대차 및 매매 관련 맞춤 상담은 최가네부동산으로 편하게 문의해 주세요.',
+        isManual: true
+    };
+
+    _dailyNewsManualItems.unshift(newItem);
+    try {
+        localStorage.setItem('choi_manual_daily_news', JSON.stringify(_dailyNewsManualItems.slice(0, 20)));
+    } catch (e) {}
+
+    _dailyNewsItems.unshift(newItem);
+    _dailyNewsSelectedIds.add(newItem.id);
+
+    if (document.getElementById('manual-news-title')) document.getElementById('manual-news-title').value = '';
+    if (document.getElementById('manual-news-link')) document.getElementById('manual-news-link').value = '';
+    if (document.getElementById('manual-news-summary')) document.getElementById('manual-news-summary').value = '';
+    if (document.getElementById('manual-news-tip')) document.getElementById('manual-news-tip').value = '';
+
+    renderDailyNewsList();
+    rebuildDailyNewsMessage();
+    if (typeof showToast === 'function') {
+        showToast('✨ 직접 입력하신 부동산 뉴스/정책 항목이 브리핑에 추가되었습니다.');
+    }
+}
+window.addManualNewsItem = addManualNewsItem;
+
+function deleteManualNewsItem(id, ev) {
+    if (ev) ev.stopPropagation();
+    _dailyNewsManualItems = _dailyNewsManualItems.filter(it => it.id !== id);
+    _dailyNewsItems = _dailyNewsItems.filter(it => it.id !== id);
+    _dailyNewsSelectedIds.delete(id);
+    try {
+        localStorage.setItem('choi_manual_daily_news', JSON.stringify(_dailyNewsManualItems));
+    } catch (e) {}
+    renderDailyNewsList();
+    rebuildDailyNewsMessage();
+}
+window.deleteManualNewsItem = deleteManualNewsItem;
+
+function toggleDailyNewsSelect(id) {
+    if (_dailyNewsSelectedIds.has(id)) {
+        _dailyNewsSelectedIds.delete(id);
+    } else {
+        if (_dailyNewsSelectedIds.size >= 6) {
+            alert('손님 카톡 가독성을 위해 한 번에 최대 6개까지만 선택하실 수 있습니다.');
+            return;
+        }
+        _dailyNewsSelectedIds.add(id);
+    }
+    renderDailyNewsList();
+    rebuildDailyNewsMessage();
+}
+window.toggleDailyNewsSelect = toggleDailyNewsSelect;
+
+function autoPickTop3DailyNews() {
+    _dailyNewsSelectedIds.clear();
+    _dailyNewsItems.slice(0, 3).forEach(it => _dailyNewsSelectedIds.add(it.id));
+    renderDailyNewsList();
+    rebuildDailyNewsMessage();
+    if (typeof showToast === 'function') {
+        showToast('✨ 오늘 가장 중요한 TOP 3 핵심 뉴스를 자동 선택했습니다.');
+    }
+}
+window.autoPickTop3DailyNews = autoPickTop3DailyNews;
+
+function clearDailyNewsSelection() {
+    _dailyNewsSelectedIds.clear();
+    renderDailyNewsList();
+    rebuildDailyNewsMessage();
+}
+window.clearDailyNewsSelection = clearDailyNewsSelection;
+
+function renderDailyNewsList() {
+    const container = document.getElementById('daily-news-list-container');
+    const countBadge = document.getElementById('daily-news-selected-count');
+    if (countBadge) countBadge.textContent = `선택됨 ${_dailyNewsSelectedIds.size}건`;
+    if (!container) return;
+
+    if (!_dailyNewsItems || _dailyNewsItems.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-10 text-muted text-sm bg-slate-50 rounded-xl border border-dashed border-slate-300">
+                검색된 뉴스가 없습니다. [최신 뉴스 새로고침] 버튼을 눌러주세요.
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = _dailyNewsItems.map((item, idx) => {
+        const isSelected = _dailyNewsSelectedIds.has(item.id);
+        let catBadgeCls = 'bg-blue-50 text-[#003891] border-blue-200';
+        if (item.categoryLabel && item.categoryLabel.includes('정책')) catBadgeCls = 'bg-indigo-50 text-indigo-800 border-indigo-200';
+        else if (item.categoryLabel && item.categoryLabel.includes('금리')) catBadgeCls = 'bg-amber-50 text-amber-800 border-amber-200';
+        else if (item.categoryLabel && item.categoryLabel.includes('대구')) catBadgeCls = 'bg-emerald-50 text-emerald-800 border-emerald-200';
+
+        return `
+            <div onclick="toggleDailyNewsSelect('${escAdminHtml(item.id)}')" class="p-3.5 sm:p-4 rounded-xl border-2 transition cursor-pointer ${isSelected ? 'bg-blue-50/50 dark:bg-slate-800 border-[#003891] shadow-xs' : 'bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 hover:border-slate-400'}">
+                <div class="flex items-start gap-3">
+                    <div class="pt-0.5 shrink-0">
+                        <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); toggleDailyNewsSelect('${escAdminHtml(item.id)}')" class="w-4 h-4 rounded text-[#003891] cursor-pointer" />
+                    </div>
+                    <div class="flex-1 min-w-0 space-y-1.5">
+                        <div class="flex flex-wrap items-center justify-between gap-1.5">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="px-2 py-0.5 rounded-md border text-[10px] font-extrabold ${catBadgeCls}">
+                                    ${escAdminHtml(item.categoryLabel || '부동산 소식')}
+                                </span>
+                                <span class="text-[11px] font-bold text-slate-600 dark:text-slate-300">
+                                    ${escAdminHtml(item.publisher || '주요언론')}
+                                </span>
+                                <span class="text-[11px] text-slate-400">
+                                    ${escAdminHtml(item.dateStr || '')}
+                                </span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                ${item.link ? `<a href="${escAdminHtml(item.link)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="text-[11px] font-extrabold text-[#003891] hover:underline flex items-center gap-0.5">원문 보기 ↗</a>` : ''}
+                                ${item.isManual ? `<button type="button" onclick="deleteManualNewsItem('${escAdminHtml(item.id)}', event)" class="text-[11px] font-bold text-rose-600 hover:underline cursor-pointer">삭제</button>` : ''}
+                            </div>
+                        </div>
+                        <h5 class="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white leading-snug">
+                            ${escAdminHtml(item.title)}
+                        </h5>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            • <span class="font-bold text-slate-800 dark:text-slate-100">핵심요약:</span> ${escAdminHtml(item.summary || '')}
+                        </p>
+                        ${item.brokerTip ? `
+                            <div class="text-[11px] text-[#003891] dark:text-blue-300 bg-white/80 dark:bg-slate-900/60 px-2.5 py-1.5 rounded-lg border border-blue-100 dark:border-slate-700 font-bold">
+                                💡 <span class="font-extrabold">중개 실무 포인트:</span> ${escAdminHtml(item.brokerTip)}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+window.renderDailyNewsList = renderDailyNewsList;
+
+function setDailyNewsTargetPreset(targetKey) {
+    _dailyNewsTargetPreset = targetKey;
+    const btns = document.querySelectorAll('#daily-news-target-btns button[data-ntarget]');
+    btns.forEach(btn => {
+        const k = btn.getAttribute('data-ntarget');
+        const colSpan = k === 'general' ? ' col-span-2 sm:col-span-2' : '';
+        if (k === targetKey) {
+            btn.className = 'px-2.5 py-2 rounded-xl bg-[#003891] text-white text-xs font-extrabold text-left cursor-pointer transition' + colSpan;
+        } else {
+            btn.className = 'px-2.5 py-2 rounded-xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 text-xs font-bold text-left cursor-pointer transition' + colSpan;
+        }
+    });
+    rebuildDailyNewsMessage();
+}
+window.setDailyNewsTargetPreset = setDailyNewsTargetPreset;
+
+function rebuildDailyNewsMessage() {
+    const textarea = document.getElementById('daily-news-msg-preview');
+    if (!textarea) return;
+
+    const recipientRaw = (document.getElementById('daily-news-recipient')?.value || '').trim();
+    const style = document.getElementById('daily-news-style')?.value || 'standard';
+    const incSummary = document.getElementById('dn-opt-summary')?.checked !== false;
+    const incTip = document.getElementById('dn-opt-tip')?.checked !== false;
+    const incLink = document.getElementById('dn-opt-link')?.checked !== false;
+    const incFooter = document.getElementById('dn-opt-footer')?.checked !== false;
+
+    const now = new Date();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+    const dow = weekdays[now.getDay()];
+    const todayKor = `${month}월 ${day}일(${dow})`;
+
+    const selectedList = _dailyNewsItems.filter(it => _dailyNewsSelectedIds.has(it.id));
+
+    let greeting = '';
+    let closing = '';
+
+    if (_dailyNewsTargetPreset === 'landlord') {
+        const who = recipientRaw || '소유주·임대인 대표님';
+        greeting = `안녕하세요, ${who}! 대구 상가·사무실·수익형빌딩 전문 [최가네부동산]입니다.\n\n건물 가치 관리와 임대 수익률 점검에 꼭 참고하셔야 할 ${todayKor} 핵심 부동산 정책·시장 브리핑을 정리해 보내드립니다.`;
+        closing = `공실 해소 전략(우량 임차인 유치·렌트프리·용도 다변화)이나 보유 건물 시세·세무·대출 점검이 필요하실 때 언제든 편하게 연락 주십시오. 늘 건승과 번창을 기원합니다!`;
+    } else if (_dailyNewsTargetPreset === 'tenant') {
+        const who = recipientRaw || '대표님';
+        greeting = `안녕하세요, ${who}! 늘 사업장 번창을 응원하는 [최가네부동산]입니다.\n\n매장 및 사무실 운영과 사업 계획에 도움이 될 만한 ${todayKor} 주요 부동산 정책·상권·금융 소식을 간추려 전해드립니다.`;
+        closing = `사업장 확장·이전, 권리금 회수 및 양도양수, 임대차 재계약 조건 협의 등 궁금하신 점은 언제든 최가네부동산으로 편하게 말씀해 주세요. 오늘도 활기차고 대박 나는 하루 되십시오!`;
+    } else if (_dailyNewsTargetPreset === 'investor') {
+        const who = recipientRaw || '투자자 대표님';
+        greeting = `안녕하세요, ${who}! 대구 상업용·수익형 부동산 파트너 [최가네부동산]입니다.\n\n금리·대출 흐름과 매수 타이밍 판단에 핵심이 되는 ${todayKor} 부동산 정책 및 수익형 시장 주요 뉴스를 브리핑해 드립니다.`;
+        closing = `대구 수성구·중구·달서구 등 핵심 입지의 고수익 급매 상가·꼬마빌딩 비공개 물건도 상시 확보 중이오니, 찾으시는 조건이 있으시면 언제든 말씀해 주십시오.`;
+    } else if (_dailyNewsTargetPreset === 'vipcare') {
+        const who = recipientRaw || '고객님';
+        greeting = `안녕하세요, ${who}! 소중한 인연을 이어가고 있는 [최가네부동산]입니다.\n\n그동안 평안하셨는지 안부 인사 여쭈며, 알아두시면 유익한 ${todayKor} 부동산 정책·시장 핵심 뉴스를 정리해 보내드립니다.`;
+        closing = `계약 이후에도 부동산 관리나 추가 매물 상담이 필요하실 때 언제나 든든한 파트너가 되어 드리겠습니다. 건강과 행운이 늘 함께하시길 바랍니다!`;
+    } else {
+        const who = recipientRaw ? `${recipientRaw}, ` : '';
+        greeting = `${who}안녕하세요! 대구 상가·사무실 전문 [최가네부동산]입니다.\n\n바쁘신 일상 속에1분 만에 핵심만 보실 수 있도록 ${todayKor} 오늘의 부동산 정책·경제 주요 소식을 정리해 드립니다.`;
+        closing = `상가·사무실·건물 임대 및 매매와 관련하여 궁금하신 점이 있으시면 언제든 편하게 문의해 주세요. 기분 좋은 하루 보내시길 바랍니다!`;
+    }
+
+    const lines = [];
+    lines.push(`📰 [최가네부동산] ${todayKor} 부동산 정책·시장 핵심 브리핑`);
+    lines.push('');
+    lines.push(greeting);
+    lines.push('');
+    lines.push('━━━━━━━━━━━━━━━━━━━━');
+
+    if (selectedList.length === 0) {
+        lines.push('※ 왼쪽 뉴스 목록에서 손님께 보내실 뉴스(1~5개)를 체크해 주세요.');
+    } else {
+        const numEmojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣'];
+        selectedList.forEach((item, idx) => {
+            const numIcon = numEmojis[idx] || `${idx + 1}.`;
+            lines.push(`${numIcon} [${item.categoryLabel || '주요소식'}] ${item.title}`);
+
+            if (style === 'compact') {
+                if (incSummary && item.summary) {
+                    lines.push(`• 요약: ${item.summary}`);
+                }
+                if (incLink && item.link) {
+                    lines.push(`• 원문: ${item.link}`);
+                }
+            } else if (style === 'detailed') {
+                if (item.publisher || item.dateStr) {
+                    lines.push(`• 출처/일자: ${item.publisher || '주요언론'} (${item.dateStr || todayKor})`);
+                }
+                if (incSummary && item.summary) {
+                    lines.push(`• 핵심 내용: ${item.summary}`);
+                }
+                if (incTip && item.brokerTip) {
+                    lines.push(`💡 최가네 실무 포인트: ${item.brokerTip}`);
+                }
+                if (incLink && item.link) {
+                    lines.push(`🔗 기사 원문: ${item.link}`);
+                }
+            } else {
+                // standard Kakao format
+                if (incSummary && item.summary) {
+                    lines.push(`▸ 핵심요약: ${item.summary}`);
+                }
+                if (incTip && item.brokerTip) {
+                    lines.push(`💡 실무코멘트: ${item.brokerTip}`);
+                }
+                if (incLink && item.link) {
+                    lines.push(`🔗 원문보기: ${item.link}`);
+                }
+            }
+            lines.push('');
+        });
+    }
+
+    lines.push('━━━━━━━━━━━━━━━━━━━━');
+    lines.push(closing);
+
+    if (incFooter) {
+        lines.push('');
+        lines.push('🏢 최가네부동산 공인중개사사무소');
+        lines.push('📞 대표상담: 010-3548-4000');
+        lines.push('🌐 실시간 추천매물 보기: https://www.choi114.com');
+    }
+
+    textarea.value = lines.join('\n');
+    updateDailyNewsCharCount();
+}
+window.rebuildDailyNewsMessage = rebuildDailyNewsMessage;
+
+function updateDailyNewsCharCount() {
+    const textarea = document.getElementById('daily-news-msg-preview');
+    const badge = document.getElementById('daily-news-char-count');
+    if (!textarea || !badge) return;
+    const len = (textarea.value || '').length;
+    const typeLabel = len <= 90 ? '단문 SMS' : '장문 LMS·카톡';
+    badge.textContent = `${len.toLocaleString()}자 (${typeLabel})`;
+}
+window.updateDailyNewsCharCount = updateDailyNewsCharCount;
+
+function copyDailyNewsBriefingMsg() {
+    const textarea = document.getElementById('daily-news-msg-preview');
+    if (!textarea || !textarea.value.trim()) {
+        alert('복사할 브리핑 문구가 없습니다. 뉴스를 먼저 선택해 주세요.');
+        return;
+    }
+    const text = textarea.value;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+    } else {
+        textarea.select();
+        document.execCommand('copy');
+    }
+    if (typeof showToast === 'function') {
+        showToast('💬 카톡·문자 발송용 부동산 정책 브리핑이 복사되었습니다! 카카오톡이나 문자창에 바로 붙여넣기(Ctrl+V) 하세요.');
+    } else {
+        alert('카톡·문자 발송용 문구가 복사되었습니다!');
+    }
+}
+window.copyDailyNewsBriefingMsg = copyDailyNewsBriefingMsg;
+
+function openMobileSmsWithDailyNews() {
+    const textarea = document.getElementById('daily-news-msg-preview');
+    if (!textarea || !textarea.value.trim()) {
+        alert('전송할 브리핑 문구가 없습니다.');
+        return;
+    }
+    const body = encodeURIComponent(textarea.value);
+    const ua = navigator.userAgent || '';
+    const sep = /iPad|iPhone|iPod/i.test(ua) ? '&' : '?';
+    window.location.href = `sms:${sep}body=${body}`;
+}
+window.openMobileSmsWithDailyNews = openMobileSmsWithDailyNews;
+
+async function saveDailyNewsToMemoWarehouse() {
+    const textarea = document.getElementById('daily-news-msg-preview');
+    if (!textarea || !textarea.value.trim()) {
+        alert('저장할 브리핑 문구가 없습니다.');
+        return;
+    }
+
+    const now = new Date();
+    const dateLabel = `${now.getMonth() + 1}월 ${now.getDate()}일`;
+    const plain = textarea.value.trim();
+    const htmlContent = escAdminHtml(plain).replace(/\n/g, '<br>');
+
+    const newMemo = {
+        id: 'memo_news_' + Date.now(),
+        category: '인사말/기타',
+        title: `📰 [${dateLabel}] 오늘의 부동산 정책·시장 핵심 브리핑`,
+        content: htmlContent,
+        plainText: plain,
+        isPinned: true,
+        photos: [],
+        attachments: [],
+        updatedAt: Date.now()
+    };
+
+    if (!Array.isArray(_briefingStore.memos)) _briefingStore.memos = [];
+    _briefingStore.memos.unshift(newMemo);
+    await saveBriefingData(_briefingStore);
+    renderMemoWarehouseGrid();
+    renderBriefingMemoCheckboxes();
+
+    if (typeof showToast === 'function') {
+        showToast('🗂️ 오늘의 부동산 뉴스 브리핑이 [메모창고]에 저장되었습니다! 손님 브리핑 보드에도 첨부하실 수 있습니다.');
+    } else {
+        alert('메모창고에 저장되었습니다.');
+    }
+}
+window.saveDailyNewsToMemoWarehouse = saveDailyNewsToMemoWarehouse;
 
 </script>
 </body></html>

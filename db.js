@@ -1063,6 +1063,77 @@ function getKSTDateStr(offsetDays = 0) {
     }
 }
 
+function extractSearchKeywordFromTitle(rawTitle) {
+    if (!rawTitle) return '';
+    let t = String(rawTitle)
+        .replace(/\s*[-|]\s*최가네부동산.*$/i, '')
+        .replace(/매물\s*번호\s*[:：]?\s*\d+/gi, '')
+        .replace(/[\[\]()]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    if (t.length > 34) {
+        const words = t.split(' ').filter(Boolean);
+        t = words.slice(0, 6).join(' ');
+    }
+    return t;
+}
+
+function extractExternalSearchInflow(postTitleHint = '') {
+    try {
+        const ref = document.referrer || '';
+        const source = getReferrerSource();
+        let shortEngine = '';
+        if (source.includes('네이버')) shortEngine = '네이버';
+        else if (source.includes('구글')) shortEngine = '구글';
+        else if (source.includes('다음')) shortEngine = '다음/카카오';
+        else if (source.includes('ChatGPT')) shortEngine = 'ChatGPT';
+
+        const paramNames = ['query', 'q', 'oquery', 'acq', 'n_query', 'utm_term', 'keyword', 'k', 'wd', 'p', 'text'];
+
+        // 1. Check current URL query parameters (e.g. utm_term, n_query, keyword)
+        const curParams = new URLSearchParams(window.location.search);
+        for (const pName of paramNames) {
+            const val = curParams.get(pName);
+            if (val && val.trim().length >= 2) {
+                return {
+                    keyword: val.trim(),
+                    source: shortEngine || '검색유입'
+                };
+            }
+        }
+
+        // 2. Check document.referrer query parameters
+        if (ref) {
+            try {
+                const refUrl = new URL(ref);
+                for (const pName of paramNames) {
+                    const val = refUrl.searchParams.get(pName);
+                    if (val && val.trim().length >= 2) {
+                        return {
+                            keyword: val.trim(),
+                            source: shortEngine || '검색유입'
+                        };
+                    }
+                }
+            } catch (e) {}
+        }
+
+        // 3. If visitor came from Naver / Google / ChatGPT where HTTPS Referrer-Policy hid the query parameter,
+        // infer the landed search keyword from the target property / landing page title
+        if (shortEngine) {
+            const rawHint = postTitleHint || document.title || '';
+            const cleanKw = extractSearchKeywordFromTitle(rawHint);
+            if (cleanKw && cleanKw.length >= 2 && !cleanKw.includes('관리자 페이지')) {
+                return {
+                    keyword: cleanKw,
+                    source: shortEngine
+                };
+            }
+        }
+    } catch (e) {}
+    return null;
+}
+
 function recordPageView() {
     try {
         const todayStr = getKSTDateStr();
@@ -1078,7 +1149,7 @@ function recordPageView() {
 
         let dailyHistory = JSON.parse(localStorage.getItem('analytics_daily_history') || '{}');
         if (!dailyHistory[todayStr]) {
-            dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {} };
+            dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {}, searchKeywords: {} };
         }
         dailyHistory[todayStr].count += 1;
 
@@ -1086,6 +1157,14 @@ function recordPageView() {
         if (source !== '내부 이동') {
             if (!dailyHistory[todayStr].referrers) dailyHistory[todayStr].referrers = {};
             dailyHistory[todayStr].referrers[source] = (dailyHistory[todayStr].referrers[source] || 0) + 1;
+        }
+
+        const inflow = (source !== '내부 이동') ? extractExternalSearchInflow() : null;
+        if (inflow && inflow.keyword) {
+            if (!dailyHistory[todayStr].searchKeywords) dailyHistory[todayStr].searchKeywords = {};
+            const kKey = `[${inflow.source}] ${inflow.keyword}`;
+            dailyHistory[todayStr].searchKeywords[kKey] = (dailyHistory[todayStr].searchKeywords[kKey] || 0) + 1;
+            recordSearchQuery(inflow.keyword, inflow.source);
         }
 
         const keys = Object.keys(dailyHistory).sort();
@@ -1098,7 +1177,12 @@ function recordPageView() {
         fetch('/api/analytics', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ type: 'pageview', referrer: source })
+            body: JSON.stringify({
+                type: 'pageview',
+                referrer: source,
+                inflowKeyword: inflow ? inflow.keyword : '',
+                inflowSource: inflow ? inflow.source : ''
+            })
         }).catch(() => {});
     } catch(e){}
 }
@@ -1107,23 +1191,24 @@ try {
     recordPageView();
 } catch(e){}
 
-function recordSearchQuery(query) {
+function recordSearchQuery(query, source = '홈페이지 검색') {
     if (!query || typeof query !== 'string') return;
     const cleanQ = query.trim();
     if (cleanQ.length < 2) return;
     try {
-        const todayStr = new Date().toISOString().split('T')[0];
+        const todayStr = getKSTDateStr();
         const logs = JSON.parse(localStorage.getItem('analytics_search_logs') || '[]');
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         const logObj = {
             query: cleanQ,
+            source: source || '홈페이지 검색',
             device: isMobile ? 'mobile' : 'desktop',
             timestamp: Date.now(),
             date: new Date().toLocaleString('ko-KR'),
             dateKey: todayStr
         };
         logs.unshift(logObj);
-        if (logs.length > 500) logs.pop();
+        if (logs.length > 2000) logs.pop();
         localStorage.setItem('analytics_search_logs', JSON.stringify(logs));
 
         // Sync search log to server for real-time cross-device analytics
@@ -1138,7 +1223,7 @@ function recordSearchQuery(query) {
 function recordPostView(postId, postTitle) {
     if (!postId) return;
     try {
-        const todayStr = new Date().toISOString().split('T')[0];
+        const todayStr = getKSTDateStr();
         
         const views = JSON.parse(localStorage.getItem('analytics_post_views') || '{}');
         if (!views[postId]) {
@@ -1151,18 +1236,33 @@ function recordPostView(postId, postTitle) {
 
         let dailyHistory = JSON.parse(localStorage.getItem('analytics_daily_history') || '{}');
         if (!dailyHistory[todayStr]) {
-            dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {} };
+            dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {}, searchKeywords: {} };
         }
         if (!dailyHistory[todayStr].postViews) dailyHistory[todayStr].postViews = {};
         
         dailyHistory[todayStr].postViews[postId] = (dailyHistory[todayStr].postViews[postId] || 0) + 1;
+
+        const source = getReferrerSource();
+        const inflow = (source !== '내부 이동' && postTitle) ? extractExternalSearchInflow(postTitle) : null;
+        if (inflow && inflow.keyword) {
+            if (!dailyHistory[todayStr].searchKeywords) dailyHistory[todayStr].searchKeywords = {};
+            const kKey = `[${inflow.source}] ${inflow.keyword}`;
+            dailyHistory[todayStr].searchKeywords[kKey] = (dailyHistory[todayStr].searchKeywords[kKey] || 0) + 1;
+        }
+
         localStorage.setItem('analytics_daily_history', JSON.stringify(dailyHistory));
 
         // Sync postview to server for unified cross-device analytics
         fetch('/api/analytics', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ type: 'postview', postId, postTitle })
+            body: JSON.stringify({
+                type: 'postview',
+                postId,
+                postTitle,
+                inflowKeyword: inflow ? inflow.keyword : '',
+                inflowSource: inflow ? inflow.source : ''
+            })
         }).catch(() => {});
     } catch(e){}
 }
@@ -1337,20 +1437,101 @@ function getAnalyticsSummary(remoteData = null) {
         const topReferrers7Days = calcReferrers(ref7Map, total7DaysVisits);
         const days7TopViews = calcTopViews(pv7Map);
 
-        const qCounts = {};
         let mobileCount = 0;
         let desktopCount = 0;
 
+        const getLogDateKey = (log) => {
+            if (log && log.dateKey) return log.dateKey;
+            if (log && log.timestamp) {
+                try {
+                    return new Date(Number(log.timestamp)).toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' });
+                } catch (e) {
+                    return new Date(Number(log.timestamp) + 9 * 3600 * 1000).toISOString().split('T')[0];
+                }
+            }
+            return '';
+        };
+
         searchLogs.forEach(log => {
-            qCounts[log.query] = (qCounts[log.query] || 0) + 1;
             if (log.device === 'mobile') mobileCount++;
             else desktopCount++;
         });
 
-        const topQueries = Object.entries(qCounts)
-            .map(([query, count]) => ({ query, count }))
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 10);
+        // Build Top 50 Search & Inflow Keywords for a given set of dates (null = all time)
+        const calcTopQueriesByPeriod = (allowedDatesSet = null) => {
+            const kwMap = {}; // key: "source||query" -> { query, source, count }
+
+            const addKw = (rawQuery, rawSource, cnt = 1) => {
+                if (!rawQuery || cnt <= 0) return;
+                let q = String(rawQuery).trim();
+                let src = String(rawSource || '홈페이지 검색').trim();
+                const prefixMatch = q.match(/^\[([^\]]+)\]\s*(.+)$/);
+                if (prefixMatch) {
+                    src = prefixMatch[1].trim();
+                    q = prefixMatch[2].trim();
+                }
+                if (q.length < 2) return;
+                const mapKey = `${src}||${q}`;
+                if (!kwMap[mapKey]) {
+                    kwMap[mapKey] = { query: q, source: src, count: 0 };
+                }
+                kwMap[mapKey].count += cnt;
+            };
+
+            // 1) Explicit searchLogs
+            searchLogs.forEach(log => {
+                if (!log || !log.query) return;
+                const dKey = getLogDateKey(log);
+                if (allowedDatesSet && !allowedDatesSet.has(dKey)) return;
+                addKw(log.query, log.source || '홈페이지 검색', 1);
+            });
+
+            // 2) Daily history searchKeywords & search-engine landed property keywords
+            Object.entries(dailyHistory).forEach(([ds, dayEntry]) => {
+                if (!dayEntry) return;
+                if (allowedDatesSet && !allowedDatesSet.has(ds)) return;
+
+                if (dayEntry.searchKeywords && typeof dayEntry.searchKeywords === 'object') {
+                    Object.entries(dayEntry.searchKeywords).forEach(([kKey, cnt]) => {
+                        addKw(kKey, '네이버', cnt || 0);
+                    });
+                }
+
+                // Derive landed property search keywords for days with external search engine traffic (Naver / Google / AI)
+                const refs = dayEntry.referrers || {};
+                const naverCnt = (refs['네이버 (Naver)'] || 0);
+                const googleCnt = (refs['구글 (Google)'] || 0);
+                const aiCnt = (refs['ChatGPT (AI 추천 검색)'] || 0);
+                const totalSearchRef = naverCnt + googleCnt + aiCnt;
+
+                if (totalSearchRef > 0 && dayEntry.postViews && typeof dayEntry.postViews === 'object') {
+                    const dominantEngine = naverCnt >= googleCnt ? '네이버' : '구글';
+                    Object.entries(dayEntry.postViews).forEach(([pid, vCnt]) => {
+                        const pvInfo = postViews[pid];
+                        if (pvInfo && pvInfo.title && pvInfo.title !== '매물 상세') {
+                            const extractedKw = extractSearchKeywordFromTitle(pvInfo.title);
+                            if (extractedKw && extractedKw.length >= 2) {
+                                addKw(extractedKw, dominantEngine, vCnt || 1);
+                            }
+                        }
+                    });
+                }
+            });
+
+            return Object.values(kwMap)
+                .filter(it => it.count > 0)
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 50);
+        };
+
+        const dates7Set = new Set(datesList.map(d => d.fullDate));
+        const dates3Set = new Set([day2Str, yesterdayStr, todayStr]);
+
+        const topQueries = calcTopQueriesByPeriod(null);
+        const topQueriesToday = calcTopQueriesByPeriod(new Set([todayStr]));
+        const topQueriesYesterday = calcTopQueriesByPeriod(new Set([yesterdayStr]));
+        const topQueries3Days = calcTopQueriesByPeriod(dates3Set);
+        const topQueries7Days = calcTopQueriesByPeriod(dates7Set);
 
         const topViews = Object.values(postViews)
             .sort((a, b) => b.count - a.count)
@@ -1359,6 +1540,10 @@ function getAnalyticsSummary(remoteData = null) {
         return {
             searchLogs,
             topQueries,
+            topQueriesToday,
+            topQueriesYesterday,
+            topQueries3Days,
+            topQueries7Days,
             topViews,
             todayTopViews,
             yesterdayTopViews,

@@ -83,10 +83,24 @@ export default async function handler(req, res) {
               if (!analytics.dailyHistory[todayStr].referrers) analytics.dailyHistory[todayStr].referrers = {};
               analytics.dailyHistory[todayStr].referrers[cleanRef] = (analytics.dailyHistory[todayStr].referrers[cleanRef] || 0) + 1;
             }
+            if (bodyData.inflowKeyword && String(bodyData.inflowKeyword).trim().length >= 2) {
+              const kw = String(bodyData.inflowKeyword).trim();
+              const src = bodyData.inflowSource || '검색유입';
+              const key = `[${src}] ${kw}`;
+              if (!analytics.dailyHistory[todayStr].searchKeywords) analytics.dailyHistory[todayStr].searchKeywords = {};
+              analytics.dailyHistory[todayStr].searchKeywords[key] = (analytics.dailyHistory[todayStr].searchKeywords[key] || 0) + 1;
+            }
           } else if (type === 'postview' && bodyData.postId) {
             const pid = String(bodyData.postId);
             if (!analytics.dailyHistory[todayStr].postViews) analytics.dailyHistory[todayStr].postViews = {};
             analytics.dailyHistory[todayStr].postViews[pid] = (analytics.dailyHistory[todayStr].postViews[pid] || 0) + 1;
+            if (bodyData.inflowKeyword && String(bodyData.inflowKeyword).trim().length >= 2) {
+              const kw = String(bodyData.inflowKeyword).trim();
+              const src = bodyData.inflowSource || '검색유입';
+              const key = `[${src}] ${kw}`;
+              if (!analytics.dailyHistory[todayStr].searchKeywords) analytics.dailyHistory[todayStr].searchKeywords = {};
+              analytics.dailyHistory[todayStr].searchKeywords[key] = (analytics.dailyHistory[todayStr].searchKeywords[key] || 0) + 1;
+            }
           } else if (type === 'like' && bodyData.postId) {
             const pid = String(bodyData.postId);
             const isUnlike = bodyData.action === 'unlike';
@@ -186,17 +200,20 @@ export default async function handler(req, res) {
         }
       }
 
-      // Handle search log recording (existing query handler)
-      const { query, device, timestamp, date } = bodyData;
+      // Handle search log recording (existing query handler + external search engine inflow keywords)
+      const { query, source, device, timestamp, date, dateKey } = bodyData;
       if (!query || String(query).trim().length < 2) {
         return res.status(400).json({ error: 'Valid query required' });
       }
 
+      const kstDateStr = dateKey || new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0];
       const logObj = {
         query: String(query).trim(),
+        source: String(source || '홈페이지 검색').trim(),
         device: device === 'mobile' ? 'mobile' : 'desktop',
         timestamp: timestamp || Date.now(),
-        date: date || new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
+        date: date || new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+        dateKey: kstDateStr
       };
 
       if (token) {
@@ -225,7 +242,7 @@ export default async function handler(req, res) {
           const lastLog = logsList[0];
           if (!lastLog || lastLog.query !== logObj.query || Math.abs(lastLog.timestamp - logObj.timestamp) > 5000) {
             logsList.unshift(logObj);
-            if (logsList.length > 500) logsList.pop();
+            if (logsList.length > 2000) logsList.pop();
 
             const jsonStr = JSON.stringify(logsList, null, 2);
             const contentBase64 = Buffer.from(jsonStr, 'utf8').toString('base64');
