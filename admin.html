@@ -284,7 +284,15 @@
                             <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
                                 <span class="material-symbols-outlined text-primary">search</span> 네이버·구글·홈페이지 유입 검색어 TOP 50
                             </h3>
-                            <p class="text-[11px] text-muted mt-0.5">네이버·구글 검색 유입 키워드 및 홈페이지 내 손님 검색어 순위 (최대 50개)</p>
+                            <p class="text-[11px] text-muted mt-0.5">손님이 직접 입력한 홈페이지 검색어 및 실제 검색엔진 파라미터(query·n_query) 유입어 순위</p>
+                            <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
+                                <a href="https://searchadvisor.naver.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-[10px] font-extrabold transition">
+                                    <span>N 네이버 서치어드바이저 (암호화 검색어 전체보기) ↗</span>
+                                </a>
+                                <a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-[10px] font-extrabold transition">
+                                    <span>G 구글 서치콘솔 (구글 유입 검색어 전체보기) ↗</span>
+                                </a>
+                            </div>
                         </div>
                         <div class="flex bg-surface-container rounded-lg p-0.5 text-[11px] sm:text-xs font-semibold overflow-x-auto max-w-full">
                             <button id="query-period-today" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">오늘</button>
@@ -1233,7 +1241,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261123_v249"></script>
+<script src="db.js?v=20261123_v250"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();

@@ -1063,22 +1063,7 @@ function getKSTDateStr(offsetDays = 0) {
     }
 }
 
-function extractSearchKeywordFromTitle(rawTitle) {
-    if (!rawTitle) return '';
-    let t = String(rawTitle)
-        .replace(/\s*[-|]\s*최가네부동산.*$/i, '')
-        .replace(/매물\s*번호\s*[:：]?\s*\d+/gi, '')
-        .replace(/[\[\]()]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
-    if (t.length > 34) {
-        const words = t.split(' ').filter(Boolean);
-        t = words.slice(0, 6).join(' ');
-    }
-    return t;
-}
-
-function extractExternalSearchInflow(postTitleHint = '') {
+function extractExternalSearchInflow() {
     try {
         const ref = document.referrer || '';
         const source = getReferrerSource();
@@ -1102,7 +1087,7 @@ function extractExternalSearchInflow(postTitleHint = '') {
             }
         }
 
-        // 2. Check document.referrer query parameters
+        // 2. Check document.referrer query parameters (only real search query parameters)
         if (ref) {
             try {
                 const refUrl = new URL(ref);
@@ -1116,19 +1101,6 @@ function extractExternalSearchInflow(postTitleHint = '') {
                     }
                 }
             } catch (e) {}
-        }
-
-        // 3. If visitor came from Naver / Google / ChatGPT where HTTPS Referrer-Policy hid the query parameter,
-        // infer the landed search keyword from the target property / landing page title
-        if (shortEngine) {
-            const rawHint = postTitleHint || document.title || '';
-            const cleanKw = extractSearchKeywordFromTitle(rawHint);
-            if (cleanKw && cleanKw.length >= 2 && !cleanKw.includes('관리자 페이지')) {
-                return {
-                    keyword: cleanKw,
-                    source: shortEngine
-                };
-            }
         }
     } catch (e) {}
     return null;
@@ -1471,6 +1443,10 @@ function getAnalyticsSummary(remoteData = null) {
                     q = prefixMatch[2].trim();
                 }
                 if (q.length < 2) return;
+                // Exclude property post titles that were previously inferred as search queries
+                const wordCount = q.split(/\s+/).filter(Boolean).length;
+                if (wordCount >= 5 && q.length >= 18) return;
+                if (q.includes('최가네부동산') && q.length >= 15) return;
                 const mapKey = `${src}||${q}`;
                 if (!kwMap[mapKey]) {
                     kwMap[mapKey] = { query: q, source: src, count: 0 };
@@ -1478,44 +1454,12 @@ function getAnalyticsSummary(remoteData = null) {
                 kwMap[mapKey].count += cnt;
             };
 
-            // 1) Explicit searchLogs
+            // 1) Explicit searchLogs (from website search bar + real URL search parameters)
             searchLogs.forEach(log => {
                 if (!log || !log.query) return;
                 const dKey = getLogDateKey(log);
                 if (allowedDatesSet && !allowedDatesSet.has(dKey)) return;
                 addKw(log.query, log.source || '홈페이지 검색', 1);
-            });
-
-            // 2) Daily history searchKeywords & search-engine landed property keywords
-            Object.entries(dailyHistory).forEach(([ds, dayEntry]) => {
-                if (!dayEntry) return;
-                if (allowedDatesSet && !allowedDatesSet.has(ds)) return;
-
-                if (dayEntry.searchKeywords && typeof dayEntry.searchKeywords === 'object') {
-                    Object.entries(dayEntry.searchKeywords).forEach(([kKey, cnt]) => {
-                        addKw(kKey, '네이버', cnt || 0);
-                    });
-                }
-
-                // Derive landed property search keywords for days with external search engine traffic (Naver / Google / AI)
-                const refs = dayEntry.referrers || {};
-                const naverCnt = (refs['네이버 (Naver)'] || 0);
-                const googleCnt = (refs['구글 (Google)'] || 0);
-                const aiCnt = (refs['ChatGPT (AI 추천 검색)'] || 0);
-                const totalSearchRef = naverCnt + googleCnt + aiCnt;
-
-                if (totalSearchRef > 0 && dayEntry.postViews && typeof dayEntry.postViews === 'object') {
-                    const dominantEngine = naverCnt >= googleCnt ? '네이버' : '구글';
-                    Object.entries(dayEntry.postViews).forEach(([pid, vCnt]) => {
-                        const pvInfo = postViews[pid];
-                        if (pvInfo && pvInfo.title && pvInfo.title !== '매물 상세') {
-                            const extractedKw = extractSearchKeywordFromTitle(pvInfo.title);
-                            if (extractedKw && extractedKw.length >= 2) {
-                                addKw(extractedKw, dominantEngine, vCnt || 1);
-                            }
-                        }
-                    });
-                }
             });
 
             return Object.values(kwMap)
