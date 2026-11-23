@@ -1,17 +1,44 @@
 import fs from 'fs';
 import path from 'path';
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const postsPath = path.join(process.cwd(), 'data', 'posts.json');
-  let posts = [];
+  let posts = null;
 
+  const token = (process.env.GITHUB_TOKEN || '').trim();
   try {
-    if (fs.existsSync(postsPath)) {
-      posts = JSON.parse(fs.readFileSync(postsPath, 'utf8'));
+    const ghApiUrl = `https://api.github.com/repos/cym10003-cyber/landing-page/contents/data/posts.json?t=${Date.now()}`;
+    const headers = { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Vercel-Serverless-Function' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const apiRes = await fetch(ghApiUrl, { headers, cache: 'no-store' });
+    if (apiRes.ok) {
+      const apiData = await apiRes.json();
+      if (apiData && apiData.content) {
+        posts = JSON.parse(Buffer.from(apiData.content, 'base64').toString('utf8'));
+      }
     }
-  } catch (e) {
-    console.error('Error reading posts.json for Sitemap:', e);
+  } catch (e) {}
+
+  if (!posts) {
+    try {
+      const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/landing-page/main/data/posts.json?t=${Date.now()}`, {
+        headers: { 'User-Agent': 'Vercel-Serverless-Function', 'Cache-Control': 'no-cache' }
+      });
+      if (ghRes.ok) posts = await ghRes.json();
+    } catch (e) {}
   }
+
+  if (!posts) {
+    try {
+      if (fs.existsSync(postsPath)) {
+        posts = JSON.parse(fs.readFileSync(postsPath, 'utf8'));
+      }
+    } catch (e) {
+      console.error('Error reading posts.json for Sitemap:', e);
+    }
+  }
+
+  const publicPosts = Array.isArray(posts) ? posts.filter(p => p && p.isPrivate !== true) : [];
 
   const host = 'www.choi114.com';
   const protocol = 'https';
@@ -26,14 +53,15 @@ export default function handler(req, res) {
     { loc: `${baseUrl}/property-news`, lastmod: todayStr, changefreq: 'daily', priority: '0.8' }
   ];
 
-  // Dynamic Post URLs
-  const postUrls = posts.map(post => {
-    const pubDate = post.id ? new Date(Number(post.id)).toISOString().split('T')[0] : todayStr;
+  // Dynamic Post URLs (Public listings only)
+  const postUrls = publicPosts.map(post => {
+    const ts = Number(post.id);
+    const pubDate = (!isNaN(ts) && ts > 1000000000000) ? new Date(ts).toISOString().split('T')[0] : todayStr;
     return {
       loc: `${baseUrl}/news-detail?id=${post.id}`,
       lastmod: pubDate,
       changefreq: 'weekly',
-      priority: '0.7'
+      priority: '0.8'
     };
   });
 

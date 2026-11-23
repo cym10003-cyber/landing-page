@@ -12,15 +12,20 @@ function extractPropertyNumber(p) {
 }
 
 function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
-  const content = (post.content || '').replace(/<style[\s\S]*?<\/style>/gi, '');
+  const rawContent = (post.content || '').replace(/<style[\s\S]*?<\/style>/gi, '');
+  const content = rawContent
+    .replace(/<\/(p|div|li|tr|h[1-6])>/gi, '\n')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/[ \t]+/g, ' ');
   const title = post.title || '';
   const address = post.address || '';
   const coords = post.coordinates || [35.8589, 128.632];
   const pid = post.id || '';
   const postUrl = `${baseUrl}/news-detail?id=${pid}`;
 
-  // 1. First image or default
-  const firstImgMatch = content.match(/!\[.*?\]\((.*?)\)/);
+  // 1. First image or default (supports both markdown ![](url) and HTML <img src="url">)
+  const firstImgMatch = rawContent.match(/!\[.*?\]\((.*?)\)/) || rawContent.match(/<img[^>]+src=["']([^"']+)["']/i);
   const ogImage = firstImgMatch ? firstImgMatch[1] : `${baseUrl}/og_home.jpg`;
 
   // 2. Extract Location
@@ -371,15 +376,17 @@ export default async function handler(req, res) {
           // JSON-LD Script tag string
           const jsonLdScript = `\n<script type="application/ld+json" id="schema-jsonld">\n${JSON.stringify(schemaJsonLd, null, 2)}\n</script>\n`;
 
-          // Inject initial post object script tag string and meta keywords into <head>
+          // Inject initial post object script tag string, robots directive, and meta keywords into <head>
           const keywordsEscaped = (metaKeywords || '').replace(/"/g, '&quot;');
+          const robotsDirective = post.isPrivate === true ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+          const robotsMeta = `\n<meta name="robots" content="${robotsDirective}" />`;
           const keywordsMeta = `\n<meta name="keywords" content="${keywordsEscaped}" />\n`;
           const initialPostScript = `\n<script>\nwindow.__INITIAL_POST__ = ${JSON.stringify(post)};\n</script>\n`;
           html = html
             .replace(/<meta name="geo\.placename" content="[^"]*"\s*\/?>/i, `<meta name="geo.placename" content="${cleanLoc.replace(/"/g, '&quot;')}" />`)
             .replace(/<meta name="geo\.position" content="[^"]*"\s*\/?>/i, `<meta name="geo.position" content="${coords[0] || 35.8599};${coords[1] || 128.6146}" />`)
             .replace(/<meta name="ICBM" content="[^"]*"\s*\/?>/i, `<meta name="ICBM" content="${coords[0] || 35.8599}, ${coords[1] || 128.6146}" />`)
-            .replace('</head>', `${keywordsMeta}${jsonLdScript}${initialPostScript}</head>`);
+            .replace('</head>', `${robotsMeta}${keywordsMeta}${jsonLdScript}${initialPostScript}</head>`);
 
           // Replace meta and title tags dynamically for OpenGraph crawlers
           html = html
@@ -484,6 +491,14 @@ export default async function handler(req, res) {
               '<div id="post-text-content" class="text-ink leading-relaxed prose prose-blue max-w-none text-base">\n            내용을 불러오는 중입니다...\n        </div>',
               `<div id="post-text-content" class="text-ink leading-relaxed prose prose-blue max-w-none text-base">\n${preText.join('\n')}\n        </div>`
             );
+          } else if (isHtmlPost) {
+            const htmlBodyWithoutMdImgs = (post.content || '').replace(/!\[.*?\]\(.*?\)/g, '').trim();
+            if (htmlBodyWithoutMdImgs) {
+              html = html.replace(
+                '<div id="post-text-content" class="text-ink leading-relaxed prose prose-blue max-w-none text-base">\n            내용을 불러오는 중입니다...\n        </div>',
+                `<div id="post-text-content" class="text-ink leading-relaxed prose prose-blue max-w-none text-base">\n${htmlBodyWithoutMdImgs}\n        </div>`
+              );
+            }
           }
         }
       }
