@@ -847,10 +847,9 @@ async function uploadImageFile(file) {
             });
             
             if (putRes.ok) {
-              const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@main/images/${filename}`;
-              try {
-                fetch(`https://purge.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@main/images/${filename}`).catch(() => {});
-              } catch (e) {}
+              const result = await putRes.json();
+              const commitSha = (result && result.commit && result.commit.sha) ? result.commit.sha : 'main';
+              const rawUrl = `https://cdn.jsdelivr.net/gh/${config.github_owner}/landing-page-assets@${commitSha}/images/${filename}`;
               return resolve(rawUrl);
             } else {
               const errorMsg = await putRes.text();

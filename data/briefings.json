@@ -1,5 +1,5 @@
 ﻿{
-    "updatedAt":  1794806401114,
+    "updatedAt":  1795413847878,
     "memos":  [
                   {
                       "id":  "memo_doc_rent",
@@ -76,12 +76,648 @@
               ],
     "briefings":  [
                       {
+                          "id":  "br_mwstm54c",
+                          "customerName":  "메트라이프",
+                          "customerPhone":  "",
+                          "title":  "e편한세상 동대구역 센텀스퀘어 3층 전용 약 204.89평",
+                          "createdAt":  "2026. 11. 23",
+                          "updatedAt":  1795413271441,
+                          "expiresAt":  "",
+                          "blindAddress":  false,
+                          "showComparisonTable":  false,
+                          "showMonthlyCost":  false,
+                          "includeVat":  false,
+                          "includeMaintVat":  false,
+                          "showYield":  false,
+                          "showMap":  true,
+                          "generalNote":  "동대구역 바로 앞에 위치한 e편한세상 동대구역 센텀스퀘어입니다.",
+                          "attachedMemoIds":  [
+
+                                              ],
+                          "customerPicks":  [
+
+                                            ],
+                          "items":  [
+                                        {
+                                            "itemId":  "stealth_1795411580994",
+                                            "postId":  "",
+                                            "propNo":  "1810",
+                                            "tradeType":  "rent",
+                                            "title":  "e편한세상 동대구역 센텀스퀘어 3층(319호, 302호, 321호, 322호) 전용 약 204.89평",
+                                            "address":  "대구광역시 동구 신천동 1542번지",
+                                            "currentFloor":  "지상 3층",
+                                            "totalFloor":  "지하 1층~지상 5층",
+                                            "floor":  "지상 3층 / 총 지하 1층~지상 5층",
+                                            "area":  "전용 약 204.89평",
+                                            "deposit":  43050,
+                                            "rent":  2870,
+                                            "rentVat":  true,
+                                            "managementFee":  684.4,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "무권리",
+                                                           "즉시입주 가능",
+                                                           "외부화장실",
+                                                           "엘리베이터 유",
+                                                           "대로변/코너",
+                                                           "역세권",
+                                                           "고정주차 8대 제공"
+                                                       ],
+                                            "agentComment":  "공급면적 약 456.32평 (1508.5127㎡), 전용면적 약 204.89평 (677.3323㎡)\n월세 전용면적평당 14만원, 보증금 월세x15개월\n공용관리비 공급면적의 평당 1.5만원\n주차 176대, 고정주차 8대 제공, 고객주차 30분 500원(주차권 구매시)\n주차요금도 선결제 가능함(4시간x40명x25일=400만원)",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412754866_zbm0_319_322_.png"
+                                                       ],
+                                            "coordinates":  [
+                                                                35.876476027014,
+                                                                128.627885993862
+                                                            ],
+                                            "_addressDirty":  false,
+                                            "autoSyncPost":  false,
+                                            "_lastGeocodedAddr":  "대구광역시 동구 신천동 1542번지",
+                                            "officialDocs":  [
+                                                                 {
+                                                                     "id":  "doc_1795412264200_fpal",
+                                                                     "docType":  "건축물대장",
+                                                                     "fileName":  "신천동 1542 e편한세상 동대구역 센텀스퀘어 301동 319호.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@12a2325babf312dfc0a5eaae290675c106bcdb64/docs/official_pdf_1795412258523_126k.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412261468_pa4g_page_1.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412262786_7fgh_page_2.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  2,
+                                                                     "uploadedAt":  1795412264200
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795412270059_1tdz",
+                                                                     "docType":  "건축물대장",
+                                                                     "fileName":  "신천동 1542 e편한세상 동대구역 센텀스퀘어 301동 320호.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@eed1dd0580ee171736ca7679d960c418da058306/docs/official_pdf_1795412264228_8i00.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412266259_znn5_page_1.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412268330_ran5_page_2.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  2,
+                                                                     "uploadedAt":  1795412270059
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795412277717_4pau",
+                                                                     "docType":  "건축물대장",
+                                                                     "fileName":  "신천동 1542 e편한세상 동대구역 센텀스퀘어 301동 321호.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@8d1b1f97171f246bb3f28edcffed9398a9046f40/docs/official_pdf_1795412270071_izw5.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412273016_uoko_page_1.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412275567_z834_page_2.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  2,
+                                                                     "uploadedAt":  1795412277717
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795412283617_5zek",
+                                                                     "docType":  "건축물대장",
+                                                                     "fileName":  "신천동 1542 e편한세상 동대구역 센텀스퀘어 301동 322호.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@7c4eeb8e0647f4c8d0a7a86b0478e16a18e61a8b/docs/official_pdf_1795412277746_lttn.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412280662_qtjp_page_1.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412282267_lycx_page_2.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  2,
+                                                                     "uploadedAt":  1795412283617
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795412374132_oozo",
+                                                                     "docType":  "건축물대장",
+                                                                     "fileName":  "건축물대장 동대구역 센텀스퀘어 301동.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@a778c43599fdf70ddde3bc881fe62eb9fe6c6490/docs/official_pdf_1795412367175_1wqn.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412369319_a4i5_page_1.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412370933_c678_page_2.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412372589_pqbq_page_3.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  3,
+                                                                     "uploadedAt":  1795412374132
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795412380585_bvz7",
+                                                                     "docType":  "건축물대장",
+                                                                     "fileName":  "건축물대장 동대구역 센텀스퀘어.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@a78a99639f2e371eea642537ebda682a19466cd9/docs/official_pdf_1795412374143_e9l4.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412375739_mabh_page_1.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412377567_1lew_page_2.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412379067_0mjw_page_3.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  3,
+                                                                     "uploadedAt":  1795412380585
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795412871465_xw60",
+                                                                     "docType":  "도면",
+                                                                     "fileName":  "e편한세상 동대구역 센텀스퀘어 상업시설 전체평면 도면-2.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@0474c0dc9497443c4c934465faac4bed788b2af9/docs/official_pdf_1795412848453_twnr.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412854420_1t0h_page_1.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412860594_vxss_page_2.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412863602_zw7j_page_3.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412866434_k0xy_page_4.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412869399_joo3_page_5.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  5,
+                                                                     "uploadedAt":  1795412871465
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795412899673_f7um",
+                                                                     "docType":  "지적도등본",
+                                                                     "fileName":  "신천동 1542 지적도등본.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@a561fa82047d012e6876d40b349264d4d338f0f1/docs/official_pdf_1795412890847_jw7t.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412897112_ycns_page_1.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  1,
+                                                                     "uploadedAt":  1795412899673
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795412909664_u5y2",
+                                                                     "docType":  "토지이용계획확인원",
+                                                                     "fileName":  "신천동 1542 토지이용계획.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@59717dd8df9d1040fae18516c5cd4cb4dc37f76e/docs/official_pdf_1795412905699_kua3.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795412907780_g43z_page_1.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  1,
+                                                                     "uploadedAt":  1795412909664
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795413219428_lyvj",
+                                                                     "docType":  "토지대장",
+                                                                     "fileName":  "신천동 1542 e편한세상 동대구역 센텀스퀘어 301동 319호 토지대장.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@3125bf021e44cc9b379510879744aa9247b15f12/docs/official_pdf_1795413211941_csks.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795413215145_r0yj_page_1.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795413217691_99nx_page_2.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  2,
+                                                                     "uploadedAt":  1795413219428
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795413226027_uxua",
+                                                                     "docType":  "토지대장",
+                                                                     "fileName":  "신천동 1542 e편한세상 동대구역 센텀스퀘어 301동 320호 토지대장.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@07de58487717b4db978f07f77591a2ae77bb7598/docs/official_pdf_1795413219455_g4g6.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795413222071_glhf_page_1.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795413223857_c8vo_page_2.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  2,
+                                                                     "uploadedAt":  1795413226027
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795413233862_vjzh",
+                                                                     "docType":  "토지대장",
+                                                                     "fileName":  "신천동 1542 e편한세상 동대구역 센텀스퀘어 301동 321호 토지대장.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@21e3c882c128b89a9027d775bfcc11c63c3f88f8/docs/official_pdf_1795413226045_4e3f.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795413229784_4v0a_page_1.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795413232337_t6hk_page_2.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  2,
+                                                                     "uploadedAt":  1795413233862
+                                                                 },
+                                                                 {
+                                                                     "id":  "doc_1795413240771_20a4",
+                                                                     "docType":  "토지대장",
+                                                                     "fileName":  "신천동 1542 e편한세상 동대구역 센텀스퀘어 301동 322호 토지대장.pdf",
+                                                                     "pdfUrl":  "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@819fe15888e9dcb849fb2ff95a324b98c3ff2273/docs/official_pdf_1795413233876_rdwg.pdf",
+                                                                     "pageImages":  [
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795413236708_u4ea_page_1.png?v=2",
+                                                                                        "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1795413238644_bjfa_page_2.png?v=2"
+                                                                                    ],
+                                                                     "pageCount":  2,
+                                                                     "uploadedAt":  1795413240771
+                                                                 }
+                                                             ]
+                                        }
+                                    ]
+                      },
+                      {
+                          "id":  "br_mwois432",
+                          "customerName":  "컨설팅사무실",
+                          "customerPhone":  "",
+                          "title":  "매물 보내드립니다^^",
+                          "createdAt":  "2026. 11. 20",
+                          "updatedAt":  1795154043331,
+                          "expiresAt":  "",
+                          "blindAddress":  false,
+                          "showComparisonTable":  true,
+                          "showMonthlyCost":  false,
+                          "includeVat":  true,
+                          "includeMaintVat":  false,
+                          "showYield":  false,
+                          "showMap":  true,
+                          "generalNote":  "최가네부동산 매물 보내드립니다. 검토해보시고 편하게 연락주세요^^",
+                          "attachedMemoIds":  [
+
+                                              ],
+                          "customerPicks":  [
+
+                                            ],
+                          "items":  [
+                                        {
+                                            "itemId":  "item_1795151437575_qhnc",
+                                            "postId":  "1794211097718",
+                                            "propNo":  "1786",
+                                            "tradeType":  "rent",
+                                            "title":  "무권리 인테리어완비 시설완비 수성구 대흥동 알파시티 주차편리한 사무실",
+                                            "address":  "대구광역시 수성구 대흥동 841-1번지",
+                                            "currentFloor":  "지상 4층",
+                                            "totalFloor":  "지하 1층~지상 8층",
+                                            "floor":  "지상 4층 / 총 지하 1층~지상 8층",
+                                            "area":  "전용 약 34.55평",
+                                            "deposit":  5000,
+                                            "rent":  200,
+                                            "rentVat":  true,
+                                            "managementFee":  17.5,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "룸/칸막이 완비",
+                                                           "탕비실/싱크대",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너"
+                                                       ],
+                                            "agentComment":  "• 대흥동 알파시티 인테리어 및 시설완비된 무권리 사무실\n• 중앙홀, 칸막이 2개, 천장형냉난방기 2대 기본옵션 제공, 싱크대, 외부화장실 2개\n• 고정주차 1대 제공, 건물 바로 옆에 공한지 주차장 있음\n• 아르코호텔 옆 곳간유료주차장 월주차 1대 7만원\n• 보증금, 월세는 조율됩니다.",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794210997261_jcvz_KakaoTalk_20261109_160929307_02.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794210998783_lzh8_KakaoTalk_20261109_160929307_03.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211000193_entd_KakaoTalk_20261109_160929307_04.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211001670_f1a0_KakaoTalk_20261109_160929307_05.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211003118_1q6i_KakaoTalk_20261109_160929307_06.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211004736_rs8e_KakaoTalk_20261109_160929307_07.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211006294_82wj_KakaoTalk_20261109_160929307_08.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211007860_3smu_KakaoTalk_20261109_160929307_09.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211009623_cygf_KakaoTalk_20261109_160929307_10.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211011249_m502_KakaoTalk_20261109_160929307_11.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211013303_nu78_KakaoTalk_20261109_160929307_12.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794211014627_sbwh_KakaoTalk_20261109_160929307_13.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.837363133131,
+                                                                128.681948263516
+                                                            ],
+                                            "autoSyncPost":  false,
+                                            "_lastGeocodedAddr":  "대구광역시 수성구 대흥동 841-1번지",
+                                            "_addressDirty":  false
+                                        },
+                                        {
+                                            "itemId":  "item_1795151635098_9p6p",
+                                            "postId":  "1784703491898",
+                                            "propNo":  "1670",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 두산동 무권리 인테리어 완비 사무실",
+                                            "address":  "대구광역시 수성구 두산동 65-5번지",
+                                            "currentFloor":  "지상 2층",
+                                            "totalFloor":  "지상 1층~지상 4층",
+                                            "floor":  "지상 2층 / 총 지상 1층~지상 4층",
+                                            "area":  "약 38.07평",
+                                            "deposit":  3000,
+                                            "rent":  150,
+                                            "rentVat":  true,
+                                            "managementFee":  0,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "내부화장실",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "탕비실/싱크대",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너"
+                                                       ],
+                                            "agentComment":  "• 두산동 들안길 인근 화이트톤 인테리어가 완비된 무권리 사무실\n• 내부화장실 2개, 엘베, 자동문, 싱크대\n• 고정주차 1대 제공",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703270865_4tax_KakaoTalk_20260722_153259154_12.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703272659_72r2_KakaoTalk_20260722_153259154_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703274456_o8ap_KakaoTalk_20260722_153259154_14.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703275976_shny_KakaoTalk_20260722_153259154_15.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703277673_agn7_KakaoTalk_20260722_153259154_17.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703279593_j9za_KakaoTalk_20260722_153259154_18.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703281325_3z9k_KakaoTalk_20260722_153259154_21.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703283008_vami_KakaoTalk_20260722_153259154_24.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703285019_e5ot_KakaoTalk_20260722_153259154_26.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703286723_h1zg_KakaoTalk_20260722_153259154_27.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703288203_2isk_KakaoTalk_20260722_153319962_01.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703289974_tq66_KakaoTalk_20260722_153319962_03.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703291753_0xeu_KakaoTalk_20260722_153319962_06.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703293422_17jr_KakaoTalk_20260722_153319962_08.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784703295265_iohi_KakaoTalk_20260722_153319962_11.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.835993613971,
+                                                                128.618158879046
+                                                            ],
+                                            "autoSyncPost":  false,
+                                            "_addressDirty":  false,
+                                            "_lastGeocodedAddr":  "대구광역시 수성구 두산동 65-5번지"
+                                        },
+                                        {
+                                            "itemId":  "item_1795151779268_l4k4",
+                                            "postId":  "1783992285780",
+                                            "propNo":  "1633",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 두산동 인테리어완비 사무실 임대 수성못역 인근",
+                                            "address":  "대구광역시 수성구 두산동 194-12번지",
+                                            "currentFloor":  "지상 3층",
+                                            "totalFloor":  "지상 1층~지상 4층",
+                                            "floor":  "지상 3층 / 총 지상 1층~지상 4층",
+                                            "area":  "약 35평",
+                                            "deposit":  2000,
+                                            "rent":  150,
+                                            "rentVat":  true,
+                                            "managementFee":  10,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "테라스/베란다"
+                                                       ],
+                                            "agentComment":  "• 두산동 시설완비, 인테리어 완비된 무권리 사무실, 스탠드냉난방기1대, 벽걸이냉난방기 2대, 테라스있음\n• 고정주차 1대 제공, 현재 1층이 비어있어 2대정도 주차사용중",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783992261023_53wr________01035484000_KakaoTalk_20260602_120534327_01.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783992263095_4hrz________01035484000_KakaoTalk_20260602_120534327_02.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783992265298_kr21________01035484000_KakaoTalk_20260602_120534327_03.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783992267410_v6uh________01035484000_KakaoTalk_20260602_120534327_04.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783992269565_dsn8________01035484000_KakaoTalk_20260602_120534327_05.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783992271338_piko________01035484000_KakaoTalk_20260602_120534327_06.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783992273256_4jsa________01035484000_KakaoTalk_20260602_120534327_07.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783992275224_8pbv________01035484000_KakaoTalk_20260602_120534327_08.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.833078346137,
+                                                                128.622249080158
+                                                            ],
+                                            "autoSyncPost":  false,
+                                            "_addressDirty":  false,
+                                            "_lastGeocodedAddr":  "대구광역시 수성구 두산동 194-12번지"
+                                        },
+                                        {
+                                            "itemId":  "item_1795153779598_rrvh",
+                                            "postId":  "1786593856919",
+                                            "propNo":  "1681",
+                                            "tradeType":  "rent",
+                                            "title":  "동구 신암동 무권리 인테리어 완비 상가 사무실",
+                                            "address":  "대구광역시 동구 신암동 332-8번지",
+                                            "currentFloor":  "지상 3층",
+                                            "totalFloor":  "지하 1층~지상 5층",
+                                            "floor":  "지상 3층 / 총 지하 1층~지상 5층",
+                                            "area":  "약 50.04평",
+                                            "deposit":  2000,
+                                            "rent":  150,
+                                            "rentVat":  true,
+                                            "managementFee":  15,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "내부화장실",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "룸/칸막이 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "역세권"
+                                                       ],
+                                            "agentComment":  "• 무권리 인테리어 완비 깔끔 사무실, 중앙홀, 칸막이공간 2개, 내부화장실2개, 엘베\n• 건물 뒤에 주차장 있음, 고정주차 1대 제공, 길건너 동대구역 3주차장이 있어 주차 편리\n• 추천업종 : 사무실 등",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593658723_0pc9_KakaoTalk_20260813_124339537_06.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593660299_z5zn_KakaoTalk_20260813_124339537_08.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593661526_4x4a_KakaoTalk_20260813_124339537_09.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593663096_ty8a_KakaoTalk_20260813_124339537_11.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593664667_qejh_KakaoTalk_20260813_124339537_12.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593666428_d34e_KakaoTalk_20260813_124339537_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593668001_61ar_KakaoTalk_20260813_124339537_17.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593669594_oawr_KakaoTalk_20260813_124339537_20.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593671484_1lga_KakaoTalk_20260813_124339537_21.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593673054_3vav_KakaoTalk_20260813_124339537_23.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593674650_lkvs_KakaoTalk_20260813_124339537_24.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593676756_kniw_KakaoTalk_20260813_124339537_25.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593678549_bog7_KakaoTalk_20260813_124339537_27.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593680613_x4rc_KakaoTalk_20260813_124345069.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1786593682242_1m8q_KakaoTalk_20260813_124345069_02.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.883813461235,
+                                                                128.631352749016
+                                                            ],
+                                            "autoSyncPost":  false,
+                                            "_addressDirty":  false,
+                                            "_lastGeocodedAddr":  "대구광역시 동구 신암동 332-8번지"
+                                        },
+                                        {
+                                            "itemId":  "item_1795153799081_c049",
+                                            "postId":  "1783985170239",
+                                            "propNo":  "1511",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 만촌동 시설완비 무권리 사무실 임대",
+                                            "address":  "대구광역시 수성구 만촌동 960-8번지",
+                                            "currentFloor":  "지상 3층",
+                                            "totalFloor":  "지하 1층~지상4층",
+                                            "floor":  "지상 3층 / 총 지하 1층~지상4층",
+                                            "area":  "약 45평",
+                                            "deposit":  3000,
+                                            "rent":  120,
+                                            "rentVat":  true,
+                                            "managementFee":  0,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너"
+                                                       ],
+                                            "agentComment":  "• 만촌동 인테리어 및 시설완비된 무권리 사무실\n• 무권리 매물로 내부 집기 및 냉난방기는 제외됩니다\n• 건물내 주차 5대 및 선착순 주차, 주변에 주차할 곳 많습니다",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985130056_dvxx_______________01035484000_KakaoTalk_20260213_104837412_10.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985131963_mzax_______________01035484000_KakaoTalk_20260213_104837412_11.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985133634_mgct_______________01035484000_KakaoTalk_20260213_104837412_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985135498_67v7_______________01035484000_KakaoTalk_20260213_104837412_15.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985137419_hhet_______________01035484000_KakaoTalk_20260213_104837412_20.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985138927_g7nf_______________01035484000_KakaoTalk_20260213_104837412_22.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985140672_3gca_______________01035484000_KakaoTalk_20260213_104837412_24.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985142503_oflk_______________01035484000_KakaoTalk_20260213_104837412_25.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985143934_6eru_______________01035484000_KakaoTalk_20260213_104837412_28.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985145571_2b64_______________01035484000_KakaoTalk_20260213_104840050.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1783985147371_xgme_______________01035484000_KakaoTalk_20260213_104840050_02.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.863744586643,
+                                                                128.641542628706
+                                                            ],
+                                            "autoSyncPost":  false,
+                                            "_lastGeocodedAddr":  "대구광역시 수성구 만촌동 960-8번지",
+                                            "_addressDirty":  false
+                                        },
+                                        {
+                                            "itemId":  "item_1795153869988_kbs2",
+                                            "postId":  "1784010224523",
+                                            "propNo":  "1334",
+                                            "tradeType":  "rent",
+                                            "title":  "대구 수성구 수성동1가 무권리 신천동로 사무실 임대 상가",
+                                            "address":  "대구광역시 수성구 수성동1가 649-43번지",
+                                            "currentFloor":  "지상 2층",
+                                            "totalFloor":  "지하 1층~지상 4층",
+                                            "floor":  "지상 2층 / 총 지하 1층~지상 4층",
+                                            "area":  "약 63평",
+                                            "deposit":  2500,
+                                            "rent":  150,
+                                            "rentVat":  true,
+                                            "managementFee":  10,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "외부화장실",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너"
+                                                       ],
+                                            "agentComment":  "• 수성동 대구 전지역 이동이 편리한 무권리 사무실\n• 주차완비, 고정주차 3대, 엘베, 화장실 2개\n• 무권리 매물로 천장형냉난방기를 포함한 모든 집기들은 제외됩니다.",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010197912_fl43_01035484000KakaoTalk_20251001_151849663_12.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010200402_0w7o_01035484000KakaoTalk_20251001_151849663_15.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010202311_gvs3_01035484000KakaoTalk_20251001_151849663_20.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010204408_3tq5_01035484000KakaoTalk_20251001_151849663_28.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010206319_4qby_01035484000KakaoTalk_20251001_151909413.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010208376_g1fq_01035484000KakaoTalk_20251001_151909413_04.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010210306_70w9_01035484000KakaoTalk_20251001_151909413_10.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010212328_r2hh_01035484000KakaoTalk_20251001_151909413_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010214316_96yn_01035484000KakaoTalk_20251001_151909413_17.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1784010216244_2el3_01035484000KakaoTalk_20251001_151909413_22.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.849179227766,
+                                                                128.608421873585
+                                                            ],
+                                            "autoSyncPost":  false,
+                                            "_addressDirty":  false,
+                                            "_lastGeocodedAddr":  "대구광역시 수성구 수성동1가 649-43번지"
+                                        },
+                                        {
+                                            "itemId":  "item_1795153931887_lqst",
+                                            "postId":  "1791327135735",
+                                            "propNo":  "1747",
+                                            "tradeType":  "rent",
+                                            "title":  "남산동 반월당역 인테리어완비 무권리 주차 편리한",
+                                            "address":  "대구광역시 중구 남산동 688-5번지",
+                                            "currentFloor":  "지상 3층",
+                                            "totalFloor":  "지상 1층~지상 5층",
+                                            "floor":  "지상 3층 / 총 지상 1층~지상 5층",
+                                            "area":  "약 48.54평",
+                                            "deposit":  3000,
+                                            "rent":  140,
+                                            "rentVat":  true,
+                                            "managementFee":  10,
+                                            "maintVat":  false,
+                                            "premium":  0,
+                                            "premiumText":  "무권리",
+                                            "salePrice":  0,
+                                            "badges":  [
+                                                           "주차 편함",
+                                                           "엘리베이터 유",
+                                                           "내부화장실",
+                                                           "냉난방기 있음",
+                                                           "무권리",
+                                                           "인테리어 완비",
+                                                           "룸/칸막이 완비",
+                                                           "즉시입주 가능",
+                                                           "대로변/코너",
+                                                           "역세권"
+                                                       ],
+                                            "agentComment":  "• 남산동 반월당역 역세권, 인테리어 완비된 사무실\n• 칸막이공간 2개, 중앙홀 1개\n• 무권리 매물로 냉난방기 등 내부의 집기들은 모두 제외됨",
+                                            "photos":  [
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327103045_ncwo_KakaoTalk_20261007_073318373_05.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327104960_aj88_KakaoTalk_20261007_073318373_07.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327106796_1srr_KakaoTalk_20261007_073318373_10.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327108740_vqz1_KakaoTalk_20261007_073318373_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327110076_cnh5_KakaoTalk_20261007_073318373_15.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327111380_1c5a_KakaoTalk_20261007_073318373_17.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327112930_l9le_KakaoTalk_20261007_073318373_19.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327114417_p02y_KakaoTalk_20261007_073318373_20.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327115986_7ylu_KakaoTalk_20261007_073318373_22.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327117659_5px0_KakaoTalk_20261007_073318373_23.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1791327119173_p33k_KakaoTalk_20261007_073318373_26.jpg"
+                                                       ],
+                                            "officialDocs":  [
+
+                                                             ],
+                                            "coordinates":  [
+                                                                35.860691226954,
+                                                                128.594916532093
+                                                            ],
+                                            "autoSyncPost":  false,
+                                            "_addressDirty":  false,
+                                            "_lastGeocodedAddr":  "대구광역시 중구 남산동 688-5번지"
+                                        }
+                                    ]
+                      },
+                      {
                           "id":  "br_mwir33n7",
                           "customerName":  "미용피부과",
                           "customerPhone":  "",
                           "title":  "범어동 및 수성구 피부과 추천 매물입니다.",
                           "createdAt":  "2026. 11. 16",
-                          "updatedAt":  1794805797547,
+                          "updatedAt":  1794807756703,
                           "expiresAt":  "",
                           "blindAddress":  false,
                           "showComparisonTable":  true,
@@ -92,8 +728,7 @@
                           "showMap":  true,
                           "generalNote":  "안녕하세요 최가네부동산입니다. 범어동 및 수성구 피부과 추천 매물 안내해드리겠습니다.",
                           "attachedMemoIds":  [
-                                                  "memo_doc_rent",
-                                                  "memo_special_terms_rent"
+
                                               ],
                           "customerPicks":  [
 
@@ -145,7 +780,8 @@
                                                                 35.859478701457626,
                                                                 128.6242309212685
                                                             ],
-                                            "autoSyncPost":  false
+                                            "autoSyncPost":  false,
+                                            "rentVat":  true
                                         },
                                         {
                                             "itemId":  "stealth_1794802709241",
@@ -187,7 +823,10 @@
                                                                 128.626006519713
                                                             ],
                                             "maintVat":  false,
-                                            "autoSyncPost":  false
+                                            "autoSyncPost":  false,
+                                            "rentVat":  true,
+                                            "_lastGeocodedAddr":  "대구광역시 수성구 범어동 43-8 메타타워V",
+                                            "_addressDirty":  false
                                         },
                                         {
                                             "itemId":  "item_1794803289058_is20",
@@ -237,7 +876,8 @@
                                                                 35.858413526048956,
                                                                 128.62960070371628
                                                             ],
-                                            "autoSyncPost":  false
+                                            "autoSyncPost":  false,
+                                            "rentVat":  true
                                         },
                                         {
                                             "itemId":  "item_1794803475302_30lx",
@@ -283,7 +923,8 @@
                                                                 35.8590526330117,
                                                                 128.6331841349602
                                                             ],
-                                            "autoSyncPost":  false
+                                            "autoSyncPost":  false,
+                                            "rentVat":  true
                                         },
                                         {
                                             "itemId":  "stealth_1794803654969",
@@ -291,7 +932,7 @@
                                             "propNo":  "",
                                             "tradeType":  "rent",
                                             "title":  "11월말 준공예정 신축건물",
-                                            "address":  "대구광역시 수성구 범어동 206-3",
+                                            "address":  "대구광역시 수성구 206-3",
                                             "currentFloor":  "지상 3층",
                                             "totalFloor":  "지상 13층",
                                             "floor":  "지상 3층 / 총 지상 13층",
@@ -321,7 +962,10 @@
                                                                 128.637405908032
                                                             ],
                                             "maintVat":  false,
-                                            "autoSyncPost":  false
+                                            "autoSyncPost":  false,
+                                            "rentVat":  true,
+                                            "_lastGeocodedAddr":  "대구광역시 수성구 206-3",
+                                            "_addressDirty":  false
                                         },
                                         {
                                             "itemId":  "item_1794804276000_eb3c",
@@ -366,7 +1010,8 @@
                                                                 35.85854830413649,
                                                                 128.64176720380783
                                                             ],
-                                            "autoSyncPost":  false
+                                            "autoSyncPost":  false,
+                                            "rentVat":  true
                                         },
                                         {
                                             "itemId":  "stealth_1794804574987",
@@ -397,14 +1042,25 @@
                                                        ],
                                             "agentComment":  "• 주차 61대, 고정주차는 유료8만원으로 1대가능, 고객주차 30분에 1000원\n• 협력 주차장: 만촌동 1036-26번지 월주차 13만원 부가세포함, 추가 제한없음, 1시간 3000원\n• 공용관리비 공급평당 6500원\n• 교육연구시설(학원), 24년 7월 준공이라 용도변경에 무리 없습니다.\n• 테슬라매장이 입점되어 있습니다. \n• 본 건물 9층에 온빛수학학원을 입점시켜서 임대인과 소통이 잘됩니다. 조건협의 최대로 유리하게 해드릴수 있습니다.",
                                             "photos":  [
-
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794807056463_mwjl_KakaoTalk_20250929_085742641_06.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794807059733_vg9v_KakaoTalk_20250929_085742641_07.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794807061674_68o0_KakaoTalk_20250929_085742641_08.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794807063883_i8sp_KakaoTalk_20250929_085742641_10.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794807066325_yr4k_KakaoTalk_20250929_085742641_12.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794807069425_gtyd_KakaoTalk_20250929_085742641_13.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794807072489_nweq_KakaoTalk_20250929_085742641_14.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794807075276_qqw4_KakaoTalk_20250929_100119145_06.jpg",
+                                                           "https://cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/images/post_img_1794807077422_tf89_KakaoTalk_20260728_122239410_01.jpg"
                                                        ],
                                             "coordinates":  [
                                                                 35.859400665322,
                                                                 128.640694296286
                                                             ],
                                             "maintVat":  false,
-                                            "autoSyncPost":  false
+                                            "autoSyncPost":  false,
+                                            "rentVat":  true,
+                                            "_lastGeocodedAddr":  "대구광역시 수성구 만촌동 1036-2 수성엠비션타워",
+                                            "_addressDirty":  false
                                         },
                                         {
                                             "itemId":  "item_1794804875988_axuo",
@@ -449,7 +1105,8 @@
                                                                 35.858274400040806,
                                                                 128.6466890573502
                                                             ],
-                                            "autoSyncPost":  false
+                                            "autoSyncPost":  false,
+                                            "rentVat":  true
                                         },
                                         {
                                             "itemId":  "item_1794805105933_617r",
@@ -500,7 +1157,8 @@
                                                                 35.85896133233249,
                                                                 128.64691436290744
                                                             ],
-                                            "autoSyncPost":  false
+                                            "autoSyncPost":  false,
+                                            "rentVat":  true
                                         },
                                         {
                                             "itemId":  "stealth_1794805221044",
@@ -537,7 +1195,10 @@
                                                                 128.626175917977
                                                             ],
                                             "maintVat":  false,
-                                            "autoSyncPost":  false
+                                            "autoSyncPost":  false,
+                                            "rentVat":  true,
+                                            "_lastGeocodedAddr":  "대구광역시 수성구 범어동 33-16 범어353타워",
+                                            "_addressDirty":  false
                                         }
                                     ]
                       },

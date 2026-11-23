@@ -551,7 +551,7 @@
             </button>
 
             <div id="lightbox-scroll-box" class="w-full h-full max-h-[82vh] overflow-auto flex items-center justify-center p-1 sm:p-2" onclick="handleLightboxBackdropClick(event)">
-                <img id="lightbox-img" src="" alt="매물 상세 이미지" onclick="event.stopPropagation(); toggleLightboxClickZoom()" class="max-w-full max-h-[78vh] object-contain rounded-xl shadow-2xl transition-all duration-150 cursor-zoom-in" style="image-rendering: -webkit-optimize-contrast;" />
+                <img id="lightbox-img" src="" alt="매물 상세 이미지" onerror="handleLightboxMainImgError(this)" onclick="event.stopPropagation(); toggleLightboxClickZoom()" class="max-w-full max-h-[78vh] object-contain rounded-xl shadow-2xl transition-all duration-150 cursor-zoom-in" style="image-rendering: -webkit-optimize-contrast;" />
             </div>
 
             <!-- Next Arrow Button -->
@@ -616,7 +616,7 @@
         </div>
     </div>
 
-    <script src="db.js?v=20261116_v247"></script>
+    <script src="db.js?v=20261123_v248"></script>
     <script>
         let _briefing = null;
         let _attachedMemos = [];
@@ -1660,7 +1660,7 @@
                     <div class="flex items-center gap-1.5 overflow-x-auto py-1">
                         ${pages.slice(0, 6).map((pUrl, pIdx) => `
                             <div onclick="openOfficialDocLightbox(${itemIdx}, ${docIdx}, ${pIdx})" class="relative w-14 h-18 rounded-lg overflow-hidden border border-slate-300 bg-white shrink-0 cursor-pointer hover:border-[#003891] transition group" title="${escHtml(docType)} ${pIdx + 1}페이지 사진으로 크게 보기">
-                                <img src="${escHtml(pUrl)}" alt="${escHtml(docType)} ${pIdx + 1}p" class="w-full h-16 object-cover group-hover:scale-105 transition" />
+                                <img src="${escHtml(pUrl)}" alt="${escHtml(docType)} ${pIdx + 1}p" onerror="handleDocPageImgError(this, ${itemIdx}, ${docIdx}, ${pIdx})" class="w-full h-16 object-cover group-hover:scale-105 transition" />
                                 <span class="block text-center text-[10px] font-bold bg-slate-800 text-white py-0.5 whitespace-nowrap">${pIdx + 1}P</span>
                             </div>
                         `).join('')}
@@ -1719,6 +1719,104 @@
                 </div>
             `;
         }
+
+        async function renderSinglePdfPageClientSide(pdfUrl, pageNumber = 1) {
+            if (!window.pdfjsLib || !pdfUrl) return null;
+            try {
+                const loadingTask = window.pdfjsLib.getDocument({
+                    url: pdfUrl,
+                    cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+                    cMapPacked: true,
+                    standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/'
+                });
+                const pdf = await loadingTask.promise;
+                if (pageNumber < 1 || pageNumber > pdf.numPages) return null;
+                const page = await pdf.getPage(pageNumber);
+                const viewport = page.getViewport({ scale: 3.4 });
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = Math.round(viewport.width);
+                canvas.height = Math.round(viewport.height);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                await page.render({ canvasContext: ctx, viewport }).promise;
+                return canvas.toDataURL('image/png');
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function toGithubRawFallbackUrl(url) {
+            if (!url || typeof url !== 'string') return '';
+            // Convert https://cdn.jsdelivr.net/gh/owner/repo@branch/path to https://raw.githubusercontent.com/owner/repo/main/path
+            const m = url.match(/cdn\.jsdelivr\.net\/gh\/([^/]+)\/([^/@]+)(?:@[^/]+)?\/(.+?)(?:\?.*)?$/);
+            if (m) {
+                return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/main/${m[3]}?t=${Date.now()}`;
+            }
+            return '';
+        }
+
+        async function handleDocPageImgError(imgEl, itemIdx, docIdx, pageIdx) {
+            if (!imgEl) return;
+            const curSrc = imgEl.getAttribute('src') || '';
+            const step = Number(imgEl.dataset.fallbackStep || '0');
+
+            if (step === 0) {
+                imgEl.dataset.fallbackStep = '1';
+                const rawUrl = toGithubRawFallbackUrl(curSrc);
+                if (rawUrl) {
+                    imgEl.src = rawUrl;
+                    try {
+                        if (_briefing && _briefing.items && _briefing.items[itemIdx] && _briefing.items[itemIdx].officialDocs && _briefing.items[itemIdx].officialDocs[docIdx]) {
+                            _briefing.items[itemIdx].officialDocs[docIdx].pageImages[pageIdx] = rawUrl;
+                        }
+                    } catch (e) {}
+                    return;
+                }
+            }
+
+            if (step <= 1) {
+                imgEl.dataset.fallbackStep = '2';
+                try {
+                    const doc = _briefing && _briefing.items && _briefing.items[itemIdx] && _briefing.items[itemIdx].officialDocs && _briefing.items[itemIdx].officialDocs[docIdx];
+                    if (doc && doc.pdfUrl) {
+                        const dataUrl = await renderSinglePdfPageClientSide(doc.pdfUrl, pageIdx + 1);
+                        if (dataUrl) {
+                            imgEl.src = dataUrl;
+                            doc.pageImages[pageIdx] = dataUrl;
+                        }
+                    }
+                } catch (e) {}
+            }
+        }
+        window.handleDocPageImgError = handleDocPageImgError;
+
+        async function handleLightboxMainImgError(imgEl) {
+            if (!imgEl) return;
+            const curSrc = imgEl.getAttribute('src') || '';
+            if (!curSrc || curSrc.startsWith('data:')) return;
+
+            const rawUrl = toGithubRawFallbackUrl(curSrc);
+            if (rawUrl && !curSrc.includes('raw.githubusercontent.com')) {
+                imgEl.src = rawUrl;
+                _lightboxPhotos[_lightboxIndex] = rawUrl;
+                return;
+            }
+
+            if (_lightboxDocDownloadInfo) {
+                const { itemIdx, docIdx } = _lightboxDocDownloadInfo;
+                const doc = _briefing && _briefing.items && _briefing.items[itemIdx] && _briefing.items[itemIdx].officialDocs && _briefing.items[itemIdx].officialDocs[docIdx];
+                if (doc && doc.pdfUrl) {
+                    const dataUrl = await renderSinglePdfPageClientSide(doc.pdfUrl, _lightboxIndex + 1);
+                    if (dataUrl) {
+                        imgEl.src = dataUrl;
+                        _lightboxPhotos[_lightboxIndex] = dataUrl;
+                        doc.pageImages[_lightboxIndex] = dataUrl;
+                    }
+                }
+            }
+        }
+        window.handleLightboxMainImgError = handleLightboxMainImgError;
 
         async function renderPdfUrlToImagesClientSide(pdfUrl) {
             if (!window.pdfjsLib) throw new Error('PDF.js not loaded');
@@ -1957,7 +2055,7 @@
                 } else {
                     thumbs.innerHTML = _lightboxPhotos.map((u, idx) => `
                         <button type="button" onclick="goToLightboxPhoto(${idx})" class="w-14 h-11 rounded-lg overflow-hidden border-2 transition shrink-0 cursor-pointer ${idx === _lightboxIndex ? 'border-white scale-105 shadow-md' : 'border-transparent opacity-55 hover:opacity-90'}">
-                            <img src="${escHtml(u)}" alt="" class="w-full h-full object-cover" />
+                            <img src="${escHtml(u)}" alt="" onerror="const r=toGithubRawFallbackUrl(this.src); if(r && !this.src.includes('raw.githubusercontent.com')) this.src=r;" class="w-full h-full object-cover" />
                         </button>
                     `).join('');
                 }
