@@ -237,14 +237,21 @@ function getPropertyDisplayNumber(p) {
 <script>
 (function(){
     try {
-        let cat = new URLSearchParams(window.location.search).get('category');
+        const sp = new URLSearchParams(window.location.search);
+        let cat = sp.get('category');
+        let reg = sp.get('region');
         if (cat) { try { cat = decodeURIComponent(cat); } catch(e){} }
-        if (cat && (cat === '매물리스트' || cat.includes('매물'))) {
-            document.getElementById('header-title').textContent = "대구 상가·사무실 임대 및 건물 매매 추천 리스트";
-            document.getElementById('header-description').textContent = "대구 전 지역 역세권 상가 임대, 사무실 임대, 무권리 상가, 수익형 상가 건물 매매 등 성공적인 창업과 투자를 위한 실시간 매물 정보를 제공합니다.";
-            document.title = "대구 상가·사무실 임대 및 건물 매매 추천 리스트 - 최가네부동산공인중개사사무소";
+        if (reg) { try { reg = decodeURIComponent(reg).trim(); } catch(e){} }
+        if (reg || (cat && (cat === '매물리스트' || cat.includes('매물')))) {
+            const regTitle = reg ? `대구 ${reg} 상가·사무실 임대 및 건물 매매 실매물 리스트` : "대구 상가·사무실 임대 및 건물 매매 추천 리스트";
+            const regDesc = reg
+                ? `대구 ${reg} 지역의 검증된 상가 임대, 사무실 임대, 무권리 상가, 수익형 빌딩·건물 매매 100% 실매물 정보를 실시간으로 제공합니다.`
+                : "대구 전 지역 역세권 상가 임대, 사무실 임대, 무권리 상가, 수익형 상가 건물 매매 등 성공적인 창업과 투자를 위한 실시간 매물 정보를 제공합니다.";
+            document.getElementById('header-title').textContent = regTitle;
+            document.getElementById('header-description').textContent = regDesc;
+            document.title = `${regTitle} - 최가네부동산공인중개사사무소`;
             const metaDesc = document.querySelector('meta[name="description"]');
-            if (metaDesc) metaDesc.setAttribute('content', "대구 전 지역 역세권 상가 임대, 사무실 임대, 무권리 상가, 수익형 상가 건물 매매 등 성공적인 창업과 투자를 위한 실시간 매물 정보를 제공합니다.");
+            if (metaDesc) metaDesc.setAttribute('content', regDesc);
             const navM = document.getElementById('nav-maemul');
             const navN = document.getElementById('nav-news');
             if (navM) { navM.className = 'text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-sm hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all'; }
@@ -346,6 +353,22 @@ function getPropertyDisplayNumber(p) {
         </a>
     </div>
 </div>
+<!-- 지역별 원클릭 허브 네비게이션 (정석 SEO 크롤러 링크 & 손님 구·군 필터) -->
+<nav aria-label="대구 구·군별 매물 바로가기" class="bg-surface-container-lowest p-3 sm:p-3.5 rounded-xl border border-hairline shadow-sm flex flex-wrap items-center gap-1.5" id="region-hub-nav">
+    <span class="text-xs font-extrabold text-primary mr-1 flex items-center gap-1">
+        <span class="material-symbols-outlined text-[16px]">location_on</span> 지역별 매물:
+    </span>
+    <a href="property-news.html?category=매물리스트" data-region="" class="region-hub-link px-2.5 py-1 rounded-lg bg-primary text-white text-xs font-extrabold no-underline transition">대구 전체</a>
+    <a href="property-news.html?category=매물리스트&amp;region=수성구" data-region="수성구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">수성구</a>
+    <a href="property-news.html?category=매물리스트&amp;region=중구" data-region="중구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">중구</a>
+    <a href="property-news.html?category=매물리스트&amp;region=달서구" data-region="달서구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">달서구</a>
+    <a href="property-news.html?category=매물리스트&amp;region=동구" data-region="동구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">동구</a>
+    <a href="property-news.html?category=매물리스트&amp;region=북구" data-region="북구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">북구</a>
+    <a href="property-news.html?category=매물리스트&amp;region=서구" data-region="서구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">서구</a>
+    <a href="property-news.html?category=매물리스트&amp;region=남구" data-region="남구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">남구</a>
+    <a href="property-news.html?category=매물리스트&amp;region=달성군" data-region="달성군" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">달성군</a>
+    <a href="property-news.html?category=매물리스트&amp;region=경산" data-region="경산" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">경산시</a>
+</nav>
 <!-- 원클릭 스마트 필터 섹션 (매물리스트 전용) -->
 <div id="smart-filter-section" class="hidden bg-surface-container-lowest p-md rounded-xl border border-hairline shadow-sm flex-col gap-2">
     <div class="flex items-center justify-between">
@@ -357,6 +380,102 @@ function getPropertyDisplayNumber(p) {
     <div id="property-filter-chips" class="flex flex-wrap gap-1.5 pt-0.5"></div>
 </div>
 <div id="news-list" class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 중구 남산동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795395321891" class="hover:text-primary no-underline text-ink">대구중구사무실임대 남산동 반월당역초역세권 무권리 고정주차 3대 인테리어완비 대구상가임대 매물번호:1815</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 중구 남산동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795395073187" class="hover:text-primary no-underline text-ink">대구상가임대 중구 반월당역 초역세권 동양생명빌딩 업무시설 고정주차 3대 인테리어완비 매물번호:1814</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 중구 남산동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795394892627" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 동양생명빌딩 고정주차3대 인테리어완비 중구 남산동 반월당역 초역세권 매물번호:1813</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 수성구 지산동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795162107409" class="hover:text-primary no-underline text-ink">수성구사무실임대 지산동 무권리 주차편리 고정주차 5대 황금역 초역세권 동대구로 상가 매물번호:1271</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 수성구 지산동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795161679519" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 고정주차5대 수성구 지산동 황금역 동대구로 시설 인테리어완비 상가 매물번호:1270</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 효목동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795137081431" class="hover:text-primary no-underline text-ink">대구건물매매 동구 효목동 동대구역 인근 사옥추천 매입후 리모델링 상가 주택 매매 매물번호:5561</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 동인동4가</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795052292648" class="hover:text-primary no-underline text-ink">대구상가매매 중구 동인동4가 신천대로 인근 수익률 4.2% 준신축 건물 꼬마빌딩 매물번호:5560</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 달서구 유천동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795051015886" class="hover:text-primary no-underline text-ink">대구상가매매 대곡역 초역세권 유천동 수익률 4.5% 임차인 구성 좋은 공실걱정없는 건물 빌딩 매물번호:5559</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 수성구 수성동1가</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795047170895" class="hover:text-primary no-underline text-ink">대구수성구사무실임대 수성동1가 동성초등학교네거리 무권리 신축건물 대구상가임대 매물번호:1803</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 수성구 수성동1가</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795046989560" class="hover:text-primary no-underline text-ink">대구사무실임대 수성구 수성동1가 무권리 동성초등학교네거리 신축건물 매물번호:1805</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 수성구 수성동1가</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795046139281" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 수성구 수성동1가 동성초등학교네거리 대로변 신축건물 1층 대구사무실임대 매물번호:1807</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 수성동3가</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794979996756" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 주차편리 수성구 수성동3가 달구벌대로 수협G타워 7층 상가임대 매물번호:1809</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 수성구 만촌동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794815831189" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 병원 의원 만촌역초역세권 달구벌대로 수성엠비션타워 5층 매물번호:1784</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 정평동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794815174969" class="hover:text-primary no-underline text-ink">대구사무실임대 경산시 정평동 정평역 초역세권 멋진 뷰티샵 화장실2개 샤워실 대구상가임대 매물번호:1808</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 수성동2가</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794810756317" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 병원 의원 한의원 인테리어 및 시설완비 수성구 수성동 수성시장역 초역세권 주차편리 매물번호:1794</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 두류동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794795000532" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 달서구 두류동 감삼역초역세권 인테리어완비 두류센트레빌더시티 2층 상가임대 매물번호:1802</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 동인동3가</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794791092132" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 중구 동인동 신천대로 이용편리 주차 매우 편리한 미주빌딩 매물번호:1573</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 이곡동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794789880344" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 달서구 이곡동 성서이마트 사거리 코너건물 2층 주차편리 식당 음식점 사무실 임대 매물번호:1799</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 수성구 황금동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794788932095" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 학원 수성구 황금동 동대구로 가시성좋은 코너건물 대구상가임대 범어천로공영주차장 주차편리 매물번호:1800</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 남구 봉덕동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794530971808" class="hover:text-primary no-underline text-ink">대구사무실임대 남구 봉덕동 주차편리 KT봉덕빌딩 무권리 대구상가임대 매물번호:1785</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 동구 신천동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794448536810" class="hover:text-primary no-underline text-ink">대구사무실임대 동대구역 무권리 동구 신천동 인테리어 완비 주차편리 대구상가임대 매물번호:1514</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 동구 신천동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794447675151" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 동구 신천동 병의원 사무실 인테리어완비 주차 편리 동대구역 초역세권 매물번호:1515</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 수성구 만촌동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794386096848" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 학원 병의원 사무실 달구벌대로 수성구 만촌동 만촌역 초역세권 대구사무실임대 매물번호:1032</a></h2>
+    </article>
+    <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
+        <div class="text-xs font-bold text-primary mb-1">매물리스트 · 만촌동</div>
+        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794385927233" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 수성구 만촌동 학원 병의원 만촌역초역세권 달구벌대로 대구상가임대 매물번호:1033</a></h2>
+    </article>
 </div>
 <div id="empty-state" class="hidden py-xxl text-center">
     <span class="material-symbols-outlined text-5xl text-muted mb-md">feed</span>
@@ -1049,10 +1168,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const params = new URLSearchParams(window.location.search);
     let catParam = params.get('category');
+    let regionParam = params.get('region');
     if (catParam) {
         try { catParam = decodeURIComponent(catParam); } catch(e){}
     }
-    if (catParam && (catParam === '매물리스트' || catParam.includes('매물'))) {
+    if (regionParam) {
+        try { regionParam = decodeURIComponent(regionParam).trim(); } catch(e){}
+    }
+    if (regionParam) {
+        selectedCategory = '매물리스트';
+        if (searchInput) searchInput.value = regionParam;
+        document.querySelectorAll('.region-hub-link').forEach(a => {
+            const r = a.getAttribute('data-region') || '';
+            if (r === regionParam) {
+                a.className = 'region-hub-link px-2.5 py-1 rounded-lg bg-primary text-white text-xs font-extrabold no-underline transition';
+            } else {
+                a.className = 'region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition';
+            }
+        });
+    } else if (catParam && (catParam === '매물리스트' || catParam.includes('매물'))) {
         selectedCategory = '매물리스트';
     } else if (catParam) {
         selectedCategory = catParam;
@@ -1069,6 +1203,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     
     updateSEOAndHeader(selectedCategory);
+    if (regionParam) {
+        const regTitle = `대구 ${regionParam} 상가·사무실 임대 및 건물 매매 실매물 리스트`;
+        const regDesc = `대구 ${regionParam} 지역의 검증된 상가 임대, 사무실 임대, 무권리 상가, 수익형 빌딩·건물 매매 100% 실매물 정보를 실시간으로 제공합니다.`;
+        const titleEl = document.getElementById('header-title');
+        const descEl = document.getElementById('header-description');
+        if (titleEl) titleEl.textContent = regTitle;
+        if (descEl) descEl.textContent = regDesc;
+        document.title = `${regTitle} - 최가네부동산공인중개사사무소`;
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.setAttribute('content', regDesc);
+    }
 
     // 0ms Instant Cache Render
     try {

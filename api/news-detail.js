@@ -279,26 +279,47 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
       },
       {
         '@type': 'BreadcrumbList',
-        'itemListElement': [
-          {
-            '@type': 'ListItem',
-            'position': 1,
-            'name': '최가네부동산',
-            'item': baseUrl
-          },
-          {
-            '@type': 'ListItem',
-            'position': 2,
-            'name': post.category || '매물리스트',
-            'item': `${baseUrl}/property-news?category=${encodeURIComponent(post.category || '매물리스트')}`
-          },
-          {
-            '@type': 'ListItem',
-            'position': 3,
-            'name': metaTitle,
-            'item': postUrl
-          }
-        ]
+        'itemListElement': guStr
+          ? [
+              {
+                '@type': 'ListItem',
+                'position': 1,
+                'name': '최가네부동산',
+                'item': baseUrl
+              },
+              {
+                '@type': 'ListItem',
+                'position': 2,
+                'name': `대구 ${guStr} 상가·사무실`,
+                'item': `${baseUrl}/property-news?category=${encodeURIComponent('매물리스트')}&region=${encodeURIComponent(guStr)}`
+              },
+              {
+                '@type': 'ListItem',
+                'position': 3,
+                'name': `${cleanLoc} ${fullType} (#${propNo})`,
+                'item': postUrl
+              }
+            ]
+          : [
+              {
+                '@type': 'ListItem',
+                'position': 1,
+                'name': '최가네부동산',
+                'item': baseUrl
+              },
+              {
+                '@type': 'ListItem',
+                'position': 2,
+                'name': post.category || '매물리스트',
+                'item': `${baseUrl}/property-news?category=${encodeURIComponent(post.category || '매물리스트')}`
+              },
+              {
+                '@type': 'ListItem',
+                'position': 3,
+                'name': metaTitle,
+                'item': postUrl
+              }
+            ]
       },
       {
         '@type': 'FAQPage',
@@ -513,7 +534,11 @@ export default async function handler(req, res) {
 
             const imgMatch = trimmed.match(/!\[(.*?)\]\((.*?)\)/);
             if (imgMatch) {
-              const alt = imgMatch[1] || `${post.title} 사진 ${imgIndex + 1}`;
+              const rawAlt = (imgMatch[1] || '').trim();
+              const isGenericAlt = !rawAlt || rawAlt === 'image' || rawAlt === '사진' || /^사진\s*\d*$/.test(rawAlt);
+              const alt = isGenericAlt
+                ? `${cleanLoc} ${fullType}${specStr ? ` (${specStr})` : ''} 실매물 현장사진 ${imgIndex + 1} - 최가네부동산 매물번호 ${realPropNo}`
+                : rawAlt;
               const src = imgMatch[2];
               preImages.push(`
                 <div class="mb-4 rounded-xl overflow-hidden shadow-card-soft bg-surface-container border border-hairline">
