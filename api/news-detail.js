@@ -56,11 +56,30 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
       .replace(/3000만/g, '3천').replace(/5000만/g, '5천').replace(/2000만/g, '2천').replace(/1000만/g, '1천').trim();
   }
 
+  function parseKoreanPriceToWon(rawVal) {
+    if (!rawVal) return 0;
+    const s = String(rawVal).replace(/,/g, '').trim();
+    let totalManwon = 0;
+    const eokMatch = s.match(/([0-9.]+)\s*억/);
+    if (eokMatch) totalManwon += parseFloat(eokMatch[1]) * 10000;
+    const cheonMatch = s.match(/([0-9.]+)\s*천/);
+    if (cheonMatch) totalManwon += parseFloat(cheonMatch[1]) * 1000;
+    const manMatch = s.match(/([0-9.]+)\s*만/);
+    if (manMatch) {
+      totalManwon += parseFloat(manMatch[1]);
+    } else if (!eokMatch && !cheonMatch) {
+      const pureNum = s.match(/([0-9.]+)/);
+      if (pureNum) totalManwon += parseFloat(pureNum[1]);
+    }
+    return Math.round(totalManwon * 10000);
+  }
+
   const priceParts = [];
   if (deposit) priceParts.push(`보증금 ${formatPriceVal(deposit)}`);
   if (rent) priceParts.push(`월 ${formatPriceVal(rent)}`);
   if (sale) priceParts.push(`매매가 ${formatPriceVal(sale)}`);
   const priceStr = priceParts.join(' / ');
+  const numericPriceWon = parseKoreanPriceToWon(sale) || parseKoreanPriceToWon(rent) || parseKoreanPriceToWon(deposit) || 0;
 
   // 4. Extract Area & Floor with Smart Pyeong Band Generator
   const mArea = content.match(/(?:전용면적|공급면적|면적|평수)\s*:\s*([^\n]+)/i);
@@ -202,7 +221,10 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   const metaDesc = descParts.join(' | ') + ' | 대구 전 지역 상가·사무실 임대·매매 전문 최가네부동산 (대표소장 최이명)';
 
   // RealEstateListing JSON-LD Schema Markup
-  const dateStr = post.id ? new Date(Number(post.id)).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+  const tsNum = Number(post.id);
+  const dateStr = (!isNaN(tsNum) && tsNum > 1000000000000) ? new Date(tsNum).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+  const propNo = extractPropertyNumber(post);
+  const featSummary = mFeat.length > 0 ? mFeat.slice(0, 3).join(', ') : `${cleanLoc} 핵심 상권 위치, 즉시 상담 가능`;
 
   const schemaJsonLd = {
     '@context': 'https://schema.org',
@@ -217,7 +239,8 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
         'offers': {
           '@type': 'Offer',
           'priceCurrency': 'KRW',
-          'price': priceStr || '0',
+          'price': String(numericPriceWon),
+          'description': priceStr || '상담 문의 (010-3548-4000)',
           'businessFunction': trade === '매매' ? 'http://purl.org/goodrelations/v1#Sell' : 'http://purl.org/goodrelations/v1#LeaseOut',
           'availability': 'https://schema.org/InStock',
           'seller': {
@@ -273,11 +296,32 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
             'item': postUrl
           }
         ]
+      },
+      {
+        '@type': 'FAQPage',
+        'mainEntity': [
+          {
+            '@type': 'Question',
+            'name': `${cleanLoc} ${fullType} (매물번호 ${propNo})의 임대·매매 조건과 면적은 어떻게 되나요?`,
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': `매물번호 ${propNo}번은 ${cleanLoc}에 위치한 ${fullType} 실매물로, ${specStr ? `규모는 ${specStr}이며 ` : ''}${priceStr ? `금액 조건은 ${priceStr}입니다.` : '합리적인 조건으로 진행 가능합니다.'} 상세 조건 협의는 최가네부동산(010-3548-4000)으로 문의해 주세요.`
+            }
+          },
+          {
+            '@type': 'Question',
+            'name': `${cleanLoc} ${fullType} (매물번호 ${propNo})의 주요 특징은 무엇인가요?`,
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': `${featSummary}. 대구 상가·사무실 전문 최가네부동산(대표소장 최이명)이 직접 확인한 100% 실매물입니다.`
+            }
+          }
+        ]
       }
     ]
   };
 
-  return { metaTitle, metaDesc, metaKeywords, ogImage, postUrl, schemaJsonLd, cleanLoc, coords };
+  return { metaTitle, metaDesc, metaKeywords, ogImage, postUrl, schemaJsonLd, cleanLoc, coords, guStr, dongStr, fullType, specStr, priceStr, propNo };
 }
 
 export default async function handler(req, res) {
@@ -365,7 +409,7 @@ export default async function handler(req, res) {
           const baseUrl = `${protocol}://${host}`;
 
           const pid = post.id;
-          const { metaTitle, metaDesc, metaKeywords, ogImage, postUrl, schemaJsonLd, cleanLoc, coords } = parsePostMeta(post, baseUrl);
+          const { metaTitle, metaDesc, metaKeywords, ogImage, postUrl, schemaJsonLd, cleanLoc, coords, guStr, dongStr, fullType, specStr, priceStr } = parsePostMeta(post, baseUrl);
 
           // Compile escaped values
           const titleEscaped = metaTitle.replace(/"/g, '&quot;');
@@ -500,6 +544,103 @@ export default async function handler(req, res) {
               );
             }
           }
+
+          // Pre-render AI/GEO Structured Property Spec Summary Table + Related Internal Links
+          const escHtml = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+          const relatedCandidates = posts
+            .filter(p => p && p.isPrivate !== true && String(p.id) !== String(post.id))
+            .map(p => {
+              const pText = `${p.address || ''} ${p.title || ''}`;
+              let score = 0;
+              if (dongStr && pText.includes(dongStr)) score += 10;
+              if (guStr && pText.includes(guStr)) score += 5;
+              if (fullType && pText.includes(fullType.split(' ')[0])) score += 3;
+              return { p, score };
+            })
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 6)
+            .map(item => item.p);
+
+          const relatedCardsHtml = relatedCandidates.map(rp => {
+            const rpNo = extractPropertyNumber(rp);
+            const rpLoc = (rp.address || '대구').replace('대구광역시', '대구').trim();
+            const rpUrl = `${baseUrl}/news-detail?id=${encodeURIComponent(String(rp.id))}`;
+            return `
+              <a href="${rpUrl}" class="group block p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-[#003891] hover:shadow-sm transition-all no-underline">
+                <div class="flex items-center justify-between gap-2 mb-1.5">
+                  <div class="flex items-center gap-1.5">
+                    <span class="px-2 py-0.5 rounded bg-slate-900 text-white text-[11px] font-black">#${escHtml(rpNo)}</span>
+                    <span class="px-2 py-0.5 rounded bg-blue-50 text-[#003891] border border-blue-200 text-[11px] font-extrabold">${escHtml(rpLoc)}</span>
+                  </div>
+                  <span class="text-[11px] font-bold text-slate-400 group-hover:text-[#003891]">상세보기 →</span>
+                </div>
+                <div class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-[#003891] line-clamp-1">
+                  ${escHtml(rp.title || '')}
+                </div>
+              </a>
+            `;
+          }).join('');
+
+          const regionLabel = dongStr ? `${guStr} ${dongStr}`.trim() : (guStr || cleanLoc || '대구');
+          const bottomSsrHtml = `
+            <section aria-label="매물 핵심 스펙 요약" class="bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline p-5 sm:p-6">
+              <div class="flex items-center justify-between gap-2 mb-3 pb-2.5 border-b border-hairline">
+                <h2 class="font-bold text-sm sm:text-base text-ink flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-primary text-[19px]">fact_check</span>
+                  <span>매물번호 #${escHtml(realPropNo)} 핵심 스펙 요약</span>
+                </h2>
+                <span class="px-2 py-0.5 rounded bg-blue-50 text-[#003891] text-[11px] font-extrabold">최가네부동산 검증 실매물</span>
+              </div>
+              <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs sm:text-sm">
+                <div class="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700">
+                  <dt class="text-[11px] font-bold text-slate-500">매물번호 / 분류</dt>
+                  <dd class="font-extrabold text-slate-900 dark:text-white mt-0.5">#${escHtml(realPropNo)} · ${escHtml(fullType)}</dd>
+                </div>
+                <div class="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700">
+                  <dt class="text-[11px] font-bold text-slate-500">소재지 (지역)</dt>
+                  <dd class="font-extrabold text-slate-900 dark:text-white mt-0.5">${escHtml(cleanLoc)}</dd>
+                </div>
+                <div class="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700">
+                  <dt class="text-[11px] font-bold text-slate-500">면적 / 해당층</dt>
+                  <dd class="font-extrabold text-slate-900 dark:text-white mt-0.5">${escHtml(specStr || '본문 상세 참조')}</dd>
+                </div>
+                <div class="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700 sm:col-span-2">
+                  <dt class="text-[11px] font-bold text-slate-500">임대·매매 금액 조건</dt>
+                  <dd class="font-extrabold text-[#003891] dark:text-blue-300 mt-0.5">${escHtml(priceStr || '상담 및 협의 가능 (010-3548-4000)')}</dd>
+                </div>
+                <div class="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700">
+                  <dt class="text-[11px] font-bold text-slate-500">담당 중개사무소</dt>
+                  <dd class="font-extrabold text-slate-900 dark:text-white mt-0.5">최가네부동산 (010-3548-4000)</dd>
+                </div>
+              </dl>
+            </section>
+            ${relatedCandidates.length > 0 ? `
+            <section aria-label="인근 유사 추천 매물" class="bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline p-5 sm:p-6">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3.5 pb-2.5 border-b border-hairline">
+                <div>
+                  <h2 class="font-bold text-sm sm:text-base text-ink flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-primary text-[19px]">apartment</span>
+                    <span>${escHtml(regionLabel)} 인근·유사 추천 매물</span>
+                  </h2>
+                  <p class="text-[11px] text-muted mt-0.5">함께 비교해 보시면 좋은 최가네부동산의 검증된 상가·사무실 실매물입니다.</p>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-extrabold">
+                  <a href="${baseUrl}/property-news" class="text-[#003891] hover:underline">전체 매물리스트 →</a>
+                  <span class="text-slate-300">|</span>
+                  <a href="${baseUrl}/map" class="text-[#003891] hover:underline">지도로 찾기 →</a>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                ${relatedCardsHtml}
+              </div>
+            </section>
+            ` : ''}
+          `;
+
+          html = html.replace(
+            '<div id="seo-geo-bottom-sections" class="mt-6 space-y-6 no-print"></div>',
+            `<div id="seo-geo-bottom-sections" class="mt-6 space-y-6 no-print">${bottomSsrHtml}</div>`
+          );
         }
       }
     } catch (err) {

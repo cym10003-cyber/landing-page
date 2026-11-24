@@ -53,15 +53,29 @@ export default async function handler(req, res) {
     { loc: `${baseUrl}/property-news`, lastmod: todayStr, changefreq: 'daily', priority: '0.8' }
   ];
 
-  // Dynamic Post URLs (Public listings only)
+  const escXml = (s) => String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+
+  // Dynamic Post URLs (Public listings only, with Image Sitemap tags)
   const postUrls = publicPosts.map(post => {
-    const ts = Number(post.id);
-    const pubDate = (!isNaN(ts) && ts > 1000000000000) ? new Date(ts).toISOString().split('T')[0] : todayStr;
+    const rawTs = Number(post.updatedAt || post.id);
+    const pubDate = (!isNaN(rawTs) && rawTs > 1000000000000) ? new Date(rawTs).toISOString().split('T')[0] : todayStr;
+    const contentStr = String(post.content || '');
+    const mdImgMatches = [...contentStr.matchAll(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/g)].map(m => m[1]);
+    const htmlImgMatches = [...contentStr.matchAll(/<img[^>]+src=["'](https?:\/\/[^"']+)["']/gi)].map(m => m[1]);
+    const uniqueImgs = [...new Set([...mdImgMatches, ...htmlImgMatches])].slice(0, 5);
+
     return {
       loc: `${baseUrl}/news-detail?id=${post.id}`,
       lastmod: pubDate,
       changefreq: 'weekly',
-      priority: '0.8'
+      priority: '0.8',
+      title: post.title || '최가네부동산 실매물',
+      images: uniqueImgs
     };
   });
 
@@ -69,18 +83,28 @@ export default async function handler(req, res) {
 
   const xmlItems = allUrls.map(item => {
     let itemXml = '  <url>\n';
-    itemXml += `    <loc>${item.loc}</loc>\n`;
+    itemXml += `    <loc>${escXml(item.loc)}</loc>\n`;
     if (item.lastmod) {
-      itemXml += `    <lastmod>${item.lastmod}</lastmod>\n`;
+      itemXml += `    <lastmod>${escXml(item.lastmod)}</lastmod>\n`;
     }
     itemXml += `    <changefreq>${item.changefreq}</changefreq>\n`;
     itemXml += `    <priority>${item.priority}</priority>\n`;
+    if (Array.isArray(item.images) && item.images.length > 0) {
+      item.images.forEach(imgUrl => {
+        itemXml += '    <image:image>\n';
+        itemXml += `      <image:loc>${escXml(imgUrl)}</image:loc>\n`;
+        if (item.title) {
+          itemXml += `      <image:title>${escXml(item.title)}</image:title>\n`;
+        }
+        itemXml += '    </image:image>\n';
+      });
+    }
     itemXml += '  </url>';
     return itemXml;
   }).join('\n');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${xmlItems}
 </urlset>`;
 

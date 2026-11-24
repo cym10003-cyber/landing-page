@@ -308,6 +308,9 @@
                             </button>
                         </div>
                         <div class="flex flex-wrap items-center gap-1">
+                            <button type="button" onclick="triggerIndexNowBatch()" class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-white text-[10px] font-extrabold cursor-pointer transition" title="최신 공개 매물 50건을 네이버·빙(ChatGPT) 검색엔진에 즉시 색인 요청합니다">
+                                <span>🚀 최신매물 즉시색인(IndexNow)</span>
+                            </button>
                             <a href="https://searchadvisor.naver.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-[10px] font-extrabold transition">
                                 <span>N 서치어드바이저 ↗</span>
                             </a>
@@ -1255,7 +1258,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261124_v251"></script>
+<script src="db.js?v=20261124_v252"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -1470,6 +1473,26 @@ function setQueryDisplayMode(mode) {
     renderTopQueriesList(getAnalyticsSummary(_lastRemoteAnalytics));
 }
 window.setQueryDisplayMode = setQueryDisplayMode;
+
+async function triggerIndexNowBatch() {
+    try {
+        if (typeof showToast === 'function') {
+            showToast('🚀 네이버·빙(ChatGPT) 검색엔진에 최신 매물 즉시 색인(IndexNow)을 요청하는 중입니다...');
+        }
+        const res = await fetch('/api/indexnow?batch=latest&t=' + Date.now(), { method: 'POST' });
+        const data = await res.json();
+        if (data && data.ok) {
+            if (typeof showToast === 'function') {
+                showToast(`✅ 네이버·빙(ChatGPT)에 최신 매물 및 주요 페이지 ${data.submittedCount}건 즉시 색인 요청을 완료했습니다!`);
+            } else {
+                alert(`최신 매물 ${data.submittedCount}건 즉시 색인 요청이 완료되었습니다.`);
+            }
+        }
+    } catch (e) {
+        alert('색인 요청 중 오류가 발생했습니다: ' + e.message);
+    }
+}
+window.triggerIndexNowBatch = triggerIndexNowBatch;
 
 async function renderAnalyticsView() {
     let remoteAnalytics = null;

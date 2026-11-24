@@ -307,6 +307,16 @@ async function savePost(postData) {
           try {
             fetch('https://api.vercel.com/v1/integrations/deploy/prj_qegayNObhh5O8C6xc9zyAtGxst2D/rjbOZRIWc3', { method: 'POST' });
           } catch(e) {}
+          // Notify Naver & Bing/ChatGPT immediately via IndexNow when a public listing is saved
+          if (updatedPost && updatedPost.id && !updatedPost.isPrivate) {
+            try {
+              fetch('/api/indexnow', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ postId: updatedPost.id })
+              }).catch(() => {});
+            } catch(e) {}
+          }
           break;
         } else {
           const errorMsg = await putRes.text();
