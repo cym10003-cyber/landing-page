@@ -79,7 +79,10 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
   if (rent) priceParts.push(`월 ${formatPriceVal(rent)}`);
   if (sale) priceParts.push(`매매가 ${formatPriceVal(sale)}`);
   const priceStr = priceParts.join(' / ');
-  const numericPriceWon = parseKoreanPriceToWon(sale) || parseKoreanPriceToWon(rent) || parseKoreanPriceToWon(deposit) || 0;
+  const saleWon = parseKoreanPriceToWon(sale);
+  const rentWon = parseKoreanPriceToWon(rent);
+  const depositWon = parseKoreanPriceToWon(deposit);
+  const numericPriceWon = saleWon || rentWon || depositWon || 0;
 
   // 4. Extract Area & Floor with Smart Pyeong Band Generator
   const mArea = content.match(/(?:전용면적|공급면적|면적|평수)\s*:\s*([^\n]+)/i);
@@ -321,7 +324,7 @@ function parsePostMeta(post, baseUrl = 'https://www.choi114.com') {
     ]
   };
 
-  return { metaTitle, metaDesc, metaKeywords, ogImage, postUrl, schemaJsonLd, cleanLoc, coords, guStr, dongStr, fullType, specStr, priceStr, propNo };
+  return { metaTitle, metaDesc, metaKeywords, ogImage, postUrl, schemaJsonLd, cleanLoc, coords, guStr, dongStr, fullType, trade, mainCategory, pyeongNum, rentWon, saleWon, depositWon, specStr, priceStr, propNo };
 }
 
 export default async function handler(req, res) {
@@ -409,7 +412,7 @@ export default async function handler(req, res) {
           const baseUrl = `${protocol}://${host}`;
 
           const pid = post.id;
-          const { metaTitle, metaDesc, metaKeywords, ogImage, postUrl, schemaJsonLd, cleanLoc, coords, guStr, dongStr, fullType, specStr, priceStr } = parsePostMeta(post, baseUrl);
+          const { metaTitle, metaDesc, metaKeywords, ogImage, postUrl, schemaJsonLd, cleanLoc, coords, guStr, dongStr, fullType, trade, mainCategory, pyeongNum, rentWon, saleWon, specStr, priceStr } = parsePostMeta(post, baseUrl);
 
           // Compile escaped values
           const titleEscaped = metaTitle.replace(/"/g, '&quot;');
@@ -546,37 +549,78 @@ export default async function handler(req, res) {
           }
 
           // Pre-render AI/GEO Structured Property Spec Summary Table + Related Internal Links
+          // Criteria: 1) Same trade type (임대 only with 임대, 매매 only with 매매)
+          //           2) Same Dong (+10) & Gu (+5)
+          //           3) Similar area in pyeong (±15평: +8, ±30평: +5, ±50평: +2)
+          //           4) Similar monthly rent or sale price (±30%: +7, ±50%: +4)
+          //           5) Same property category (+4)
           const escHtml = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-          const relatedCandidates = posts
+          const allOtherPublic = posts
             .filter(p => p && p.isPrivate !== true && String(p.id) !== String(post.id))
             .map(p => {
-              const pText = `${p.address || ''} ${p.title || ''}`;
+              const cm = parsePostMeta(p, baseUrl);
+              return { p, cm };
+            });
+
+          const sameTradePool = allOtherPublic.filter(item => item.cm.trade === trade);
+          const candidatePool = sameTradePool.length >= 6 ? sameTradePool : allOtherPublic;
+
+          const relatedCandidates = candidatePool
+            .map(({ p, cm }) => {
               let score = 0;
-              if (dongStr && pText.includes(dongStr)) score += 10;
-              if (guStr && pText.includes(guStr)) score += 5;
-              if (fullType && pText.includes(fullType.split(' ')[0])) score += 3;
-              return { p, score };
+              // 0. Exact same trade type (임대 vs 매매)
+              if (cm.trade === trade) score += 20;
+
+              // 1. Geographic proximity (Dong & Gu)
+              const pText = `${p.address || ''} ${p.title || ''}`;
+              if (dongStr && (cm.dongStr === dongStr || pText.includes(dongStr))) score += 10;
+              if (guStr && (cm.guStr === guStr || pText.includes(guStr))) score += 5;
+
+              // 2. Property category match (사무실 / 상가 / 병의원 / 학원 / 공장)
+              if (mainCategory && cm.mainCategory === mainCategory) score += 4;
+
+              // 3. Area (Pyeong) similarity (±15평 / ±30평 / ±50평)
+              if (pyeongNum > 0 && cm.pyeongNum > 0) {
+                const pDiff = Math.abs(pyeongNum - cm.pyeongNum);
+                if (pDiff <= 15) score += 8;
+                else if (pDiff <= 30) score += 5;
+                else if (pDiff <= 50) score += 2;
+              }
+
+              // 4. Price / Monthly Rent similarity (±30% / ±50%)
+              if (trade === '임대' && rentWon > 0 && cm.rentWon > 0) {
+                const rRatio = Math.abs(rentWon - cm.rentWon) / rentWon;
+                if (rRatio <= 0.30) score += 7;
+                else if (rRatio <= 0.50) score += 4;
+              } else if (trade === '매매' && saleWon > 0 && cm.saleWon > 0) {
+                const sRatio = Math.abs(saleWon - cm.saleWon) / saleWon;
+                if (sRatio <= 0.30) score += 7;
+                else if (sRatio <= 0.50) score += 4;
+              }
+
+              return { p, cm, score };
             })
             .sort((a, b) => b.score - a.score)
-            .slice(0, 6)
-            .map(item => item.p);
+            .slice(0, 6);
 
-          const relatedCardsHtml = relatedCandidates.map(rp => {
-            const rpNo = extractPropertyNumber(rp);
-            const rpLoc = (rp.address || '대구').replace('대구광역시', '대구').trim();
+          const relatedCardsHtml = relatedCandidates.map(({ p: rp, cm }) => {
+            const rpNo = cm.propNo || extractPropertyNumber(rp);
+            const rpLoc = cm.cleanLoc || (rp.address || '대구').replace('대구광역시', '대구').trim();
             const rpUrl = `${baseUrl}/news-detail?id=${encodeURIComponent(String(rp.id))}`;
             return `
               <a href="${rpUrl}" class="group block p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-[#003891] hover:shadow-sm transition-all no-underline">
-                <div class="flex items-center justify-between gap-2 mb-1.5">
-                  <div class="flex items-center gap-1.5">
+                <div class="flex flex-wrap items-center justify-between gap-1.5 mb-1.5">
+                  <div class="flex flex-wrap items-center gap-1">
                     <span class="px-2 py-0.5 rounded bg-slate-900 text-white text-[11px] font-black">#${escHtml(rpNo)}</span>
                     <span class="px-2 py-0.5 rounded bg-blue-50 text-[#003891] border border-blue-200 text-[11px] font-extrabold">${escHtml(rpLoc)}</span>
+                    ${cm.specStr ? `<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[11px] font-bold">${escHtml(cm.specStr)}</span>` : ''}
                   </div>
-                  <span class="text-[11px] font-bold text-slate-400 group-hover:text-[#003891]">상세보기 →</span>
+                  <span class="text-[11px] font-bold text-slate-400 group-hover:text-[#003891] shrink-0">상세보기 →</span>
                 </div>
-                <div class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-[#003891] line-clamp-1">
+                <div class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-[#003891] line-clamp-1 mb-1">
                   ${escHtml(rp.title || '')}
                 </div>
+                ${cm.priceStr ? `<div class="text-[11px] font-extrabold text-[#003891] dark:text-blue-300">${escHtml(cm.priceStr)}</div>` : ''}
               </a>
             `;
           }).join('');
