@@ -3736,15 +3736,116 @@ let _currentNaverBlogStyle = 'expert';
 let _currentNaverBlogSelectedTitleIdx = 0;
 let _lastGeneratedBlogData = null;
 
+const DAEGU_GEO_LANDMARKS = [
+    { name: '봉산육거리 인근 대로변', shortName: '봉산육거리', lat: 35.8624, lng: 128.5989 },
+    { name: '반월당네거리·반월당역 인근', shortName: '반월당역', lat: 35.8653, lng: 128.5934 },
+    { name: '계산오거리 인근 대로변', shortName: '계산오거리', lat: 35.8669, lng: 128.5902 },
+    { name: '명덕네거리·명덕역 인근', shortName: '명덕역', lat: 35.8576, lng: 128.5913 },
+    { name: '건들바위네거리·건들바위역 인근', shortName: '건들바위역', lat: 35.8549, lng: 128.5979 },
+    { name: '삼덕네거리·경대병원역 인근', shortName: '경대병원역', lat: 35.8634, lng: 128.6061 },
+    { name: '동인네거리 인근 대로변', shortName: '동인네거리', lat: 35.8698, lng: 128.6058 },
+    { name: '중앙네거리·중앙로역 인근', shortName: '중앙로역', lat: 35.8708, lng: 128.5950 },
+    { name: '대구역네거리·대구역 인근', shortName: '대구역', lat: 35.8760, lng: 128.5960 },
+    { name: '대구은행역·수성교 인근 달구벌대로변', shortName: '대구은행역', lat: 35.8599, lng: 128.6146 },
+    { name: '수성네거리 인근 달구벌대로변', shortName: '수성네거리', lat: 35.8589, lng: 128.6186 },
+    { name: '범어네거리·범어역 인근 달구벌대로변', shortName: '범어네거리·범어역', lat: 35.8588, lng: 128.6256 },
+    { name: '수성구청역 인근 달구벌대로변', shortName: '수성구청역', lat: 35.8583, lng: 128.6306 },
+    { name: '만촌네거리·만촌역 인근 달구벌대로변', shortName: '만촌네거리·만촌역', lat: 35.8576, lng: 128.6382 },
+    { name: '담티역 인근 달구벌대로변', shortName: '담티역', lat: 35.8571, lng: 128.6476 },
+    { name: '동성학교네거리 인근 대로변', shortName: '동성학교네거리', lat: 35.8550, lng: 128.6138 },
+    { name: '수성시장네거리·수성시장역 인근', shortName: '수성시장역', lat: 35.8548, lng: 128.6102 },
+    { name: '수성구민운동장역 인근', shortName: '수성구민운동장역', lat: 35.8505, lng: 128.6165 },
+    { name: '황금네거리·황금역 인근 동대구로변', shortName: '황금네거리·황금역', lat: 35.8458, lng: 128.6226 },
+    { name: '두산오거리 인근 동대구로변', shortName: '두산오거리', lat: 35.8336, lng: 128.6231 },
+    { name: '수성못오거리·들안길 인근', shortName: '수성못·들안길', lat: 35.8295, lng: 128.6215 },
+    { name: '지산네거리·지산역 인근', shortName: '지산역', lat: 35.8256, lng: 128.6331 },
+    { name: '범물네거리·범물역 인근', shortName: '범물역', lat: 35.8213, lng: 128.6401 },
+    { name: '신천네거리·신천역 인근', shortName: '신천역', lat: 35.8722, lng: 128.6175 },
+    { name: '동대구역네거리·동대구역 인근', shortName: '동대구역', lat: 35.8778, lng: 128.6285 },
+    { name: '큰고개오거리·아양교역 인근', shortName: '아양교역', lat: 35.8855, lng: 128.6365 },
+    { name: '율하역·율하네거리 인근', shortName: '율하역', lat: 35.8662, lng: 128.6930 },
+    { name: '두류네거리·두류역 인근 달구벌대로변', shortName: '두류네거리·두류역', lat: 35.8576, lng: 128.5562 },
+    { name: '감삼네거리·감삼역 인근 달구벌대로변', shortName: '감삼역', lat: 35.8549, lng: 128.5488 },
+    { name: '죽전네거리·죽전역 인근 달구벌대로변', shortName: '죽전네거리·죽전역', lat: 35.8531, lng: 128.5378 },
+    { name: '용산역 인근', shortName: '용산역', lat: 35.8515, lng: 128.5260 },
+    { name: '성서산업단지역 인근', shortName: '성서산업단지역', lat: 35.8513, lng: 128.5045 },
+    { name: '계명대역 인근 달구벌대로변', shortName: '계명대역', lat: 35.8520, lng: 128.4870 },
+    { name: '본리네거리 인근 대로변', shortName: '본리네거리', lat: 35.8388, lng: 128.5380 },
+    { name: '상인네거리·상인역 인근 월배로변', shortName: '상인네거리·상인역', lat: 35.8188, lng: 128.5376 },
+    { name: '월배역 인근 월배로변', shortName: '월배역', lat: 35.8135, lng: 128.5322 },
+    { name: '진천네거리·진천역 인근', shortName: '진천역', lat: 35.8080, lng: 128.5265 },
+    { name: '대곡역 인근', shortName: '대곡역', lat: 35.8015, lng: 128.5135 },
+    { name: '성당네거리·서부정류장역 인근', shortName: '서부정류장역', lat: 35.8371, lng: 128.5582 },
+    { name: '송현역 인근 월배로변', shortName: '송현역', lat: 35.8315, lng: 128.5512 },
+    { name: '월촌역 인근 월배로변', shortName: '월촌역', lat: 35.8255, lng: 128.5440 },
+    { name: '안지랑네거리·안지랑역 인근 대명로변', shortName: '안지랑역', lat: 35.8398, lng: 128.5735 },
+    { name: '앞산네거리·현충로역 인근 대명로변', shortName: '현충로역', lat: 35.8430, lng: 128.5815 },
+    { name: '영대병원네거리·영대병원역 인근', shortName: '영대병원역', lat: 35.8476, lng: 128.5870 },
+    { name: '교대역·명덕로 인근', shortName: '교대역', lat: 35.8525, lng: 128.5900 },
+    { name: '대명역 인근 대명로변', shortName: '대명역', lat: 35.8390, lng: 128.5655 },
+    { name: '봉덕네거리 인근 대로변', shortName: '봉덕네거리', lat: 35.8422, lng: 128.5985 },
+    { name: '반고개역 인근 달구벌대로변', shortName: '반고개역', lat: 35.8625, lng: 128.5715 },
+    { name: '내당네거리·내당역 인근 달구벌대로변', shortName: '내당역', lat: 35.8602, lng: 128.5635 },
+    { name: '청라언덕역·신남네거리 인근 달구벌대로변', shortName: '청라언덕역', lat: 35.8655, lng: 128.5815 },
+    { name: '서문시장역 인근 대로변', shortName: '서문시장역', lat: 35.8691, lng: 128.5818 },
+    { name: '달성네거리·달성공원역 인근', shortName: '달성네거리', lat: 35.8732, lng: 128.5800 },
+    { name: '태평네거리 인근 태평로변', shortName: '태평네거리', lat: 35.8768, lng: 128.5872 },
+    { name: '북구청네거리·북구청역 인근', shortName: '북구청역', lat: 35.8842, lng: 128.5825 },
+    { name: '원대오거리·원대역 인근', shortName: '원대오거리', lat: 35.8810, lng: 128.5735 },
+    { name: '만평네거리·만평역 인근', shortName: '만평역', lat: 35.8880, lng: 128.5625 },
+    { name: '침산네거리 인근 침산로변', shortName: '침산네거리', lat: 35.8895, lng: 128.5915 },
+    { name: '복현오거리 인근 대로변', shortName: '복현오거리', lat: 35.8955, lng: 128.6205 },
+    { name: '칠성시장역 인근 대로변', shortName: '칠성시장역', lat: 35.8762, lng: 128.6062 },
+    { name: '태전네거리·태전역 인근 칠곡중앙대로변', shortName: '태전역', lat: 35.9255, lng: 128.5480 },
+    { name: '칠곡네거리·구암역 인근', shortName: '구암역', lat: 35.9365, lng: 128.5555 },
+    { name: '팔거역·동천역(칠곡3지구) 인근', shortName: '팔거역', lat: 35.9435, lng: 128.5615 },
+    { name: '정평역 인근 달구벌대로변', shortName: '정평역', lat: 35.8342, lng: 128.7185 },
+    { name: '임당역·임당네거리 인근', shortName: '임당역', lat: 35.8315, lng: 128.7325 },
+    { name: '영남대역 인근 대학로변', shortName: '영남대역', lat: 35.8285, lng: 128.7495 }
+];
+
+function findNearestDaeguLandmarkByCoords(coords) {
+    if (!Array.isArray(coords) || coords.length < 2) return null;
+    const lat = Number(coords[0]);
+    const lng = Number(coords[1]);
+    if (isNaN(lat) || isNaN(lng) || isDummyDefaultCoordinate(coords)) return null;
+
+    let best = null;
+    let minMeters = Infinity;
+    const toRad = (deg) => (deg * Math.PI) / 180;
+
+    for (const lm of DAEGU_GEO_LANDMARKS) {
+        const dLat = toRad(lm.lat - lat);
+        const dLng = toRad(lm.lng - lng);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(toRad(lat)) * Math.cos(toRad(lm.lat)) *
+                  Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distM = 6371000 * c;
+        if (distM < minMeters) {
+            minMeters = distM;
+            best = { ...lm, distanceMeters: Math.round(distM) };
+        }
+    }
+    // Use coordinate landmark if within 950m of a known Daegu intersection or station
+    if (best && best.distanceMeters <= 950) {
+        return best;
+    }
+    return null;
+}
+
 function extractNaverBlogSpecs(post) {
     if (!post) return null;
-    const rawContent = String(post.content || '')
+    const fullRawContent = String(post.content || '')
         .replace(/<style[\s\S]*?<\/style>/gi, '')
         .replace(/<\/(p|div|li|tr|h[1-6])>/gi, '\n')
         .replace(/<br\s*\/?>/gi, '\n')
         .replace(/<[^>]+>/g, ' ')
         .replace(/!\[.*?\]\(.*?\)/g, '')
         .replace(/[ \t]+/g, ' ');
+
+    // CRITICAL: Strip out '🏬주요중개 이력🏬' and '🏬개업공인중개사 정보🏬' BEFORE parsing property specs or location!
+    const rawContent = fullRawContent.split(/🏬\s*주요\s*중개\s*이력|주요\s*중개\s*이력|🏬\s*개업공인중개사\s*정보|개업공인중개사\s*정보/)[0];
 
     const title = String(post.title || '').replace(/\s+/g, ' ').trim();
     const propNo = (typeof getPropertyDisplayNumber === 'function' ? getPropertyDisplayNumber(post) : '') || String(post.id || '').slice(-4);
@@ -3806,10 +3907,27 @@ function extractNaverBlogSpecs(post) {
     const elevator = getField(/엘리베이터\s*:\s*([^\n]+)/i) || (/엘리베이터|승강기|엘베/.test(fullText) ? '승강기(엘리베이터) 운행 중' : '');
     const customRecBiz = getField(/추천\s*업종\s*:\s*([^\n]+)/i);
 
-    // Extract verbatim ✅ statutory disclosure lines (🏢매물정보🏢 block) written by the broker
-    const statutoryLines = [...rawContent.matchAll(/(?:^|\n)\s*✅\s*([^\n]+)/g)]
-        .map(m => m[1].trim())
-        .filter(Boolean);
+    // Extract ONLY property info lines from 🏢매물정보🏢 block (stop before ⭐매물특징⭐, 📢, or 🏬주요중개 이력🏬)
+    const propInfoSection = rawContent.split(/⭐\s*매물\s*특징|📢|💼\s*본\s*건물/)[0];
+    const statutoryLines = [];
+    const infoLines = propInfoSection.split('\n');
+    for (let i = 0; i < infoLines.length; i++) {
+        const line = infoLines[i].trim();
+        if (line.startsWith('✅')) {
+            let cleanLine = line.replace(/^✅\s*/, '').trim();
+            // If next line is a parenthetical continuation like "(중개의뢰인이 알려준 면적으로...)", merge it
+            if (i + 1 < infoLines.length) {
+                const nextLine = infoLines[i + 1].trim();
+                if (nextLine.startsWith('(') && !nextLine.startsWith('✅')) {
+                    cleanLine += ' ' + nextLine;
+                    i++;
+                }
+            }
+            if (cleanLine.includes(':') && !/중개$/.test(cleanLine)) {
+                statutoryLines.push(cleanLine);
+            }
+        }
+    }
 
     // Extract feature bullets (🔎 lines at the start of a line ONLY — never match hyphens in phone/registration numbers!)
     const featMatches = [...rawContent.matchAll(/(?:^|\n)\s*(?:🔎|▶|•|✔|✓|★)\s*([^\n]+)/g)]
@@ -3822,23 +3940,45 @@ function extractNaverBlogSpecs(post) {
             return true;
         });
 
-    // Real Daegu subway stations, major roads, or building names (never match '대구광역' from '대구광역시'!)
+    // Determine exact location landmark using:
+    // 1) Map coordinates (post.coordinates) -> nearest Daegu intersection (예: 봉산육거리 인근 대로변, 동성학교네거리 인근 대로변)
+    // 2) Building name in title (예: 제일에스타워, 동양생명빌딩)
+    // 3) Explicit intersection/station in title or ⭐매물특징⭐ (excluding专家인사이트 / 주요중개 이력!)
+    const coordLandmark = findNearestDaeguLandmarkByCoords(post.coordinates);
+    const bldgMatch = title.match(/([가-힣A-Za-z0-9]{2,12}(?:타워[A-Za-z0-9]*|빌딩|스퀘어))/);
+    const bldgName = bldgMatch ? bldgMatch[1] : '';
+
+    const titleAndFeaturesText = `${title} ${featMatches.join(' ')}`;
+    const intersectionMatch = titleAndFeaturesText.match(/([가-힣]{2,6}(?:네거리|오거리|육거리|삼거리|교차로))/);
     const stationRegex = /(반월당역|범어역|대구은행역|수성구청역|만촌역|담티역|연호역|대공원역|고산역|신매역|사월역|정평역|임당역|영남대역|동대구역|대구역|중앙로역|명덕역|교대역|영대병원역|현충로역|안지랑역|대명역|서부정류장역|송현역|월촌역|상인역|월배역|진천역|대곡역|화원역|설화명곡역|신천역|칠성시장역|내당역|반고개역|청라언덕역|경대병원역|수성시장역|수성구민운동장역|황금역|어린이세상역|지산역|범물역|용지역|두류역|감삼역|죽전역|용산역|이곡역|성서산업단지역|계명대역|강창역|대실역|문양역|아양교역|동촌역|해안역|방촌역|용계역|율하역|신기역|반야월역|각산역|안심역|서대구역|칠곡경대병원역|팔거역|동천역|칠곡운암역|구암역|태전역|매천역|매천시장역|팔달역|공단역|만평역|팔달시장역|원대역|북구청역|달성공원역|서문시장역|남산역|건들바위역|대봉교역)/;
-    const roadRegex = /(달구벌대로|동대구로|중앙대로|수성로|태평로|국채보상로|들안길|범어네거리|반월당|동성로|수성못)/;
-    const bldgMatch = title.match(/([가-힣A-Za-z0-9]{2,10}(?:타워[A-Za-z0-9]*|빌딩|스퀘어))/);
-    const stationMatch = fullText.match(stationRegex);
-    const roadMatch = fullText.match(roadRegex);
-    const landmark = (stationMatch ? stationMatch[1] : '')
-        || (roadMatch ? roadMatch[1] : '')
-        || (bldgMatch ? bldgMatch[1] : '')
-        || (dong ? `${dong} 대로변` : `${gu} 중심상권`);
+    const stationInTitleOrFeat = titleAndFeaturesText.match(stationRegex);
+
+    let landmark = '';
+    let shortLandmark = '';
+
+    if (intersectionMatch) {
+        shortLandmark = intersectionMatch[1];
+        landmark = `${intersectionMatch[1]} 인근 대로변${bldgName ? ` (${bldgName})` : ''}`;
+    } else if (stationInTitleOrFeat) {
+        shortLandmark = stationInTitleOrFeat[1];
+        landmark = `${stationInTitleOrFeat[1]} 인근${bldgName ? ` (${bldgName})` : ''}`;
+    } else if (coordLandmark) {
+        shortLandmark = coordLandmark.shortName;
+        landmark = `${coordLandmark.name}${bldgName ? ` (${bldgName})` : ''}`;
+    } else if (bldgName) {
+        shortLandmark = bldgName;
+        landmark = `${dong || gu} 대로변 (${bldgName})`;
+    } else {
+        shortLandmark = dong ? `${dong} 대로변` : `${gu} 중심상권`;
+        landmark = shortLandmark;
+    }
 
     const highlights = [];
     if (isNoKeyMoney) highlights.push('무권리');
     if (/인테리어|시설완비|시설 완비/.test(fullText)) highlights.push('인테리어 완비');
-    if (/초역세권|역세권/.test(fullText) || stationMatch) highlights.push('역세권');
-    if (/고정주차|주차편리|주차 편리/.test(fullText)) highlights.push('주차 편리');
-    if (/렌트프리/.test(fullText)) highlights.push('렌트프리 협의');
+    if (/초역세권|역세권/.test(titleAndFeaturesText) || stationInTitleOrFeat) highlights.push('역세권');
+    if (/고정주차|주차편리|주차 편리/.test(titleAndFeaturesText)) highlights.push('주차 편리');
+    if (/렌트프리/.test(titleAndFeaturesText)) highlights.push('렌트프리 협의');
     if (/1층/.test(currentFloor) || /1층/.test(title)) highlights.push('1층 매장');
     if (highlights.length === 0) highlights.push('대로변 핵심입지');
 
@@ -3875,6 +4015,8 @@ function extractNaverBlogSpecs(post) {
         statutoryLines,
         featMatches,
         landmark,
+        shortLandmark,
+        bldgName,
         highlights
     };
 }
@@ -3991,6 +4133,7 @@ function buildNaverBlogContent(post, options = {}) {
 
     // Generate 18 SEO Hashtags for Naver Blog
     const cleanDong = sp.dong.replace(/[0-9]+가$/, '동');
+    const cleanShortLm = (sp.shortLandmark || '').replace(/[·\s()]/g, '');
     const rawTags = [
         `대구${sp.mainType.replace(/·.*$/, '')}${sp.trade}`,
         `대구상가${sp.trade}`,
@@ -4000,7 +4143,8 @@ function buildNaverBlogContent(post, options = {}) {
         sp.dong ? `${sp.dong}상가${sp.trade}` : '',
         sp.dong ? `${sp.dong}사무실${sp.trade}` : '',
         cleanDong && cleanDong !== sp.dong ? `${cleanDong}사무실` : '',
-        hasSpecificLandmark ? `대구${sp.landmark.replace(/\s+/g, '')}` : '',
+        cleanShortLm ? `대구${cleanShortLm}` : '',
+        sp.bldgName ? sp.bldgName.replace(/\s+/g, '') : '',
         sp.pyeongNum >= 10 ? `대구${Math.floor(sp.pyeongNum / 10) * 10}평대${sp.mainType.replace(/·.*$/, '')}` : '',
         sp.pyeongNum >= 10 && sp.gu ? `${sp.gu}${Math.floor(sp.pyeongNum / 10) * 10}평대사무실` : '',
         sp.isNoKeyMoney ? '대구무권리상가' : '',
@@ -4032,7 +4176,7 @@ function buildNaverBlogContent(post, options = {}) {
 
     lines.push(`■ 1. ${locPrefix}${lmParenPart} 입지 및 상권 분석`);
     lines.push('');
-    lines.push(`본 매물(매물번호 #${sp.propNo})은 ${sp.cleanAddr} 일대에 자리 잡고 있습니다. ${hasSpecificLandmark ? `${sp.landmark} 및 ` : ''}${locPrefix} 주요 도로변과 인접해 있어 대중교통을 이용하는 임직원의 출퇴근은 물론, 외부에서 찾아오시는 고객이나 거래처 분들께 위치를 설명하기에도 매우 직관적인 입지입니다.`);
+    lines.push(`본 매물(매물번호 #${sp.propNo})은 ${sp.cleanAddr} (${sp.landmark}) 일대에 자리 잡고 있습니다. 주요 대로변과 인접해 있어 대중교통을 이용하는 임직원의 출퇴근은 물론, 외부에서 찾아오시는 고객이나 거래처 분들께 위치를 설명하기에도 매우 직관적인 입지입니다.`);
     lines.push('');
     lines.push(`특히 주변에 금융기관, 오피스 빌딩, 각종 편의시설 등 비즈니스 인프라가 탄탄하게 형성되어 있어 입주 후 업무 효율성과 대외 신뢰도를 동시에 높이실 수 있습니다.`);
     lines.push('');
@@ -4058,13 +4202,18 @@ function buildNaverBlogContent(post, options = {}) {
         lines.push('');
     }
 
-    lines.push(`■ 3. 한눈에 보는 매물 핵심 스펙 및 광고 명시사항 (매물번호: #${sp.propNo})`);
+    lines.push(`■ 3. 한눈에 보는 매물 핵심 스펙 요약표 (매물번호: #${sp.propNo})`);
     lines.push('');
-    lines.push('🏢매물정보🏢');
-    lines.push('');
-    lines.push(`✅ 매물번호 : #${sp.propNo}`);
+    lines.push(`[매물번호] #${sp.propNo}`);
     statutoryDisclosureList.forEach(item => {
-        lines.push(`✅ ${item}`);
+        const colonIdx = item.indexOf(':');
+        if (colonIdx > 0) {
+            const k = item.slice(0, colonIdx).trim();
+            const v = item.slice(colonIdx + 1).trim();
+            lines.push(`[${k}] ${v}`);
+        } else {
+            lines.push(`• ${item}`);
+        }
     });
     lines.push('');
 
@@ -4110,18 +4259,22 @@ function buildNaverBlogContent(post, options = {}) {
         ? `<div style="margin:22px 0;padding:14px 16px;background-color:#fffbeb;border:1px dashed #f59e0b;border-radius:10px;color:#92400e;font-size:14px;font-weight:bold;text-align:center;">${esc(msg)}</div>`
         : '';
 
-    const statutoryHtmlRows = [
-        `<div style="margin:6px 0;font-size:15px;color:#0f172a;">✅ <b>매물번호 : #${esc(sp.propNo)}</b></div>`,
+    const statutoryTableRowsHtml = [
+        `<tr>
+          <th style="width:28%;padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">매물번호</th>
+          <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#003891;font-weight:800;">#${esc(sp.propNo)}</td>
+        </tr>`,
         ...statutoryDisclosureList.map(item => {
             const colonIdx = item.indexOf(':');
-            if (colonIdx > 0) {
-                const k = item.slice(0, colonIdx).trim();
-                const v = item.slice(colonIdx + 1).trim();
-                return `<div style="margin:6px 0;font-size:15px;color:#0f172a;">✅ <b>${esc(k)} :</b> ${esc(v)}</div>`;
-            }
-            return `<div style="margin:6px 0;font-size:15px;color:#0f172a;">✅ ${esc(item)}</div>`;
+            const k = colonIdx > 0 ? item.slice(0, colonIdx).trim() : '항목';
+            const v = colonIdx > 0 ? item.slice(colonIdx + 1).trim() : item;
+            const isPriceField = /^(보증금|월세|매매가|권리금)/.test(k);
+            return `<tr>
+              <th style="width:28%;padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">${esc(k)}</th>
+              <td style="padding:11px 14px;border:1px solid #cbd5e1;color:${isPriceField ? '#003891' : '#0f172a'};font-weight:${isPriceField ? '800' : '500'};">${esc(v)}</td>
+            </tr>`;
         })
-    ].join('');
+    ].join('\n');
 
     const richHtml = `
 <div style="font-family:'Pretendard','Malgun Gothic','나눔고딕',sans-serif;color:#1e293b;line-height:1.85;font-size:16px;letter-spacing:-0.02em;max-width:760px;">
@@ -4138,7 +4291,7 @@ function buildNaverBlogContent(post, options = {}) {
     1. ${esc(locPrefix)}${esc(lmParenPart)} 입지 및 상권 분석
   </h2>
   <p style="margin:0 0 14px 0;font-size:16px;color:#334155;line-height:1.85;">
-    본 매물(<b>매물번호 #${esc(sp.propNo)}</b>)은 <b>${esc(sp.cleanAddr)}</b> 일대에 위치하고 있습니다. ${hasSpecificLandmark ? `<b>${esc(sp.landmark)}</b> 및 ` : ''}<b>${esc(locPrefix)}</b> 주요 도로변과 인접해 있어 대중교통을 이용하는 임직원 출퇴근은 물론, 내방 고객이나 거래처에 위치를 안내하기에도 매우 뛰어난 접근성을 자랑합니다.
+    본 매물(<b>매물번호 #${esc(sp.propNo)}</b>)은 <b>${esc(sp.cleanAddr)} (${esc(sp.landmark)})</b> 일대에 위치하고 있습니다. 주요 도로변과 인접해 있어 대중교통을 이용하는 임직원 출퇴근은 물론, 내방 고객이나 거래처에 위치를 안내하기에도 매우 뛰어난 접근성을 자랑합니다.
   </p>
   <p style="margin:0 0 18px 0;font-size:16px;color:#334155;line-height:1.85;">
     주변으로 금융기관, 오피스 빌딩, 상업 편의시설 등 비즈니스 인프라가 탄탄하게 갖춰져 있어 입주 후 업무 효율성과 기업·매장의 대외 이미지를 함께 높이실 수 있는 입지입니다.
@@ -4160,12 +4313,13 @@ function buildNaverBlogContent(post, options = {}) {
   ${photoGuideHtml('📸 [사진 배치 ③] 룸/칸막이·탕비실·화장실·주차장 사진 2~3장을 여기에 넣어주세요')}
 
   <h2 style="margin:32px 0 14px 0;padding-bottom:8px;border-bottom:2px solid #003891;font-size:19px;font-weight:800;color:#003891;">
-    3. 한눈에 보는 매물 핵심 스펙 및 광고 명시사항 (매물번호 #${esc(sp.propNo)})
+    3. 한눈에 보는 매물 핵심 스펙 요약표 (매물번호 #${esc(sp.propNo)})
   </h2>
-  <div style="margin:0 0 24px 0;padding:18px 20px;background-color:#f8fafc;border:1px solid #cbd5e1;border-radius:12px;">
-    <div style="font-size:16px;font-weight:800;color:#003891;margin-bottom:10px;">🏢매물정보🏢</div>
-    ${statutoryHtmlRows}
-  </div>
+  <table style="width:100%;border-collapse:collapse;margin:0 0 24px 0;font-size:15px;border:1px solid #cbd5e1;">
+    <tbody>
+      ${statutoryTableRowsHtml}
+    </tbody>
+  </table>
 
   <h2 style="margin:32px 0 14px 0;padding-bottom:8px;border-bottom:2px solid #003891;font-size:19px;font-weight:800;color:#003891;">
     4. 추천 업종 및 최가네부동산의 종합 코멘트
