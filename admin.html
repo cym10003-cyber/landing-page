@@ -201,7 +201,7 @@
                             <th class="px-3 py-3.5 w-auto">제목</th>
                             <th class="px-2 py-3.5 w-24 text-center whitespace-nowrap">조회수</th>
                             <th class="px-2 py-3.5 w-28 text-center whitespace-nowrap">작성일</th>
-                            <th class="px-2 py-3.5 w-[350px] text-center whitespace-nowrap">작업</th>
+                            <th class="px-2 pr-4 py-3.5 w-[395px] text-center whitespace-nowrap">작업</th>
                         </tr>
                     </thead>
                     <tbody id="posts-tbody" class="divide-y divide-hairline">
@@ -1258,7 +1258,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261124_v253"></script>
+<script src="db.js?v=20261124_v254"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -1979,8 +1979,8 @@ async function loadDashboardList() {
                             </div>
                         </td>
                         <td class="px-2 py-3.5 text-muted font-medium text-xs whitespace-nowrap w-28 text-center">${post.date}</td>
-                        <td class="px-2 py-3.5 text-center whitespace-nowrap w-[350px]">
-                            <div class="flex items-center justify-center gap-1.5 flex-nowrap">
+                        <td class="px-2 pr-4 py-3.5 text-center whitespace-nowrap w-[395px]">
+                            <div class="flex items-center justify-center gap-1 flex-nowrap">
                                 <button onclick="openNaverBlogGeneratorModal('${post.id}')" class="bg-[#e6f9ee] text-[#028a3d] hover:bg-[#d0f4e0] border border-[#03c75a]/40 px-2 py-1.5 rounded text-[11px] font-extrabold flex items-center gap-0.5 cursor-pointer transition-all whitespace-nowrap shrink-0" title="네이버 블로그 상위노출 포스팅 원고 및 홈페이지 쌍끌이 링크 생성">
                                     <span class="material-symbols-outlined text-[13px]">article</span> 블로그 원고
                                 </button>

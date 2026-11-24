@@ -3785,38 +3785,62 @@ function extractNaverBlogSpecs(post) {
     const rawArea = getField(/(?:전용면적|공급면적|계약면적|면적|평수)\s*:\s*([^\n]+)/i);
     let pyeongNum = 0;
     const pMatch = (rawArea + ' ' + title + ' ' + rawContent).match(/([0-9]+(?:\.[0-9]+)?)\s*평/);
-    if (pMatch) pyeongNum = Math.round(parseFloat(pMatch[1]) * 10) / 10;
+    if (pMatch) pyeongNum = Math.round(parseFloat(pMatch[1]) * 100) / 100;
     const m2Match = (rawArea + ' ' + rawContent).match(/([0-9]+(?:\.[0-9]+)?)\s*(?:㎡|m2)/i);
-    let m2Num = m2Match ? Math.round(parseFloat(m2Match[1]) * 10) / 10 : (pyeongNum > 0 ? Math.round(pyeongNum * 3.3058 * 10) / 10 : 0);
-    if (!pyeongNum && m2Num > 0) pyeongNum = Math.round((m2Num / 3.3058) * 10) / 10;
+    let m2Num = m2Match ? Math.round(parseFloat(m2Match[1]) * 100) / 100 : (pyeongNum > 0 ? Math.round(pyeongNum * 3.3058 * 100) / 100 : 0);
+    if (!pyeongNum && m2Num > 0) pyeongNum = Math.round((m2Num / 3.3058) * 100) / 100;
 
-    const floor = getField(/(?:해당층|층수|층)\s*:\s*([^\n]+)/i) || ((title.match(/([0-9]+층|지하[0-9]+층|1층)/) || [])[1] || '상세 문의');
+    // Separate Total Floor (총 층수) and Current Floor (해당 층수)
+    const totalFloor = getField(/총\s*층\s*수?\s*:\s*([^\n]+)/i);
+    const currentFloor = getField(/해당\s*층\s*수?\s*:\s*([^\n]+)/i)
+        || getField(/(?<!총\s*)층\s*수?\s*:\s*([^\n]+)/i)
+        || ((title.match(/([0-9]+층|지하[0-9]+층|1층)/) || [])[1] || '상세 문의');
+    const floor = currentFloor;
+
     const parking = getField(/주차\s*:\s*([^\n]+)/i) || (/주차/.test(title) ? '주차 편리 (전용 주차공간 확보)' : '건물 내 주차 가능');
-    const usage = getField(/(?:건축물\s*용도|용도)\s*:\s*([^\n]+)/i) || (mainType === '사무실' ? '업무시설 / 근린생활시설' : '근린생활시설');
+    const usage = getField(/(?:중개대상물\s*종류|건축물\s*용도|용도)\s*:\s*([^\n]+)/i) || (mainType === '사무실' ? '업무시설 / 근린생활시설' : '근린생활시설');
     const direction = getField(/방향\s*:\s*([^\n]+)/i);
     const moveIn = getField(/(?:입주\s*가능일|입주시기|입주)\s*:\s*([^\n]+)/i) || (/즉시/.test(fullText) ? '즉시 입주 가능 (상호 협의)' : '상호 협의 가능');
     const approvalDate = getField(/(?:사용승인일|준공일)\s*:\s*([^\n]+)/i);
-    const restroom = getField(/화장실\s*:\s*([^\n]+)/i) || (/내부화장실/.test(fullText) ? '내부 화장실 완비' : '층별 남녀구분 화장실');
-    const elevator = /엘리베이터|승강기|엘베/.test(fullText) ? '승강기(엘리베이터) 운행 중' : '';
+    const restroom = getField(/(?:욕실\s*수|화장실)\s*:\s*([^\n]+)/i) || (/내부화장실/.test(fullText) ? '내부 화장실 완비' : '층별 남녀구분 화장실');
+    const elevator = getField(/엘리베이터\s*:\s*([^\n]+)/i) || (/엘리베이터|승강기|엘베/.test(fullText) ? '승강기(엘리베이터) 운행 중' : '');
+    const customRecBiz = getField(/추천\s*업종\s*:\s*([^\n]+)/i);
 
-    // Extract feature bullets
-    const featMatches = [...rawContent.matchAll(/(?:🔎|▶|•|✔|✓|★|-)\s*([^\n]+)/g)]
+    // Extract verbatim ✅ statutory disclosure lines (🏢매물정보🏢 block) written by the broker
+    const statutoryLines = [...rawContent.matchAll(/(?:^|\n)\s*✅\s*([^\n]+)/g)]
         .map(m => m[1].trim())
-        .filter(line => line.length >= 4 && !/^(위치|소재지|보증금|월세|매매가|관리비|권리금|전용면적|공급면적|면적|해당층|층수|주차|용도|방향|입주|사용승인일|화장실|매물번호)\s*:/.test(line));
+        .filter(Boolean);
 
-    // Station or main road keyword
-    const stationMatch = fullText.match(/([가-힣0-9]+역)\s*(?:초역세권|역세권|인근|도보)?/);
-    const roadMatch = fullText.match(/(달구벌대로|동대구로|중앙대로|수성로|태평로|국채보상로|들안길|범어네거리|반월당역|동대구역)/);
-    const landmark = (stationMatch ? stationMatch[1] : '') || (roadMatch ? roadMatch[1] : '') || `${gu} ${dong} 핵심상권`;
+    // Extract feature bullets (🔎 lines at the start of a line ONLY — never match hyphens in phone/registration numbers!)
+    const featMatches = [...rawContent.matchAll(/(?:^|\n)\s*(?:🔎|▶|•|✔|✓|★)\s*([^\n]+)/g)]
+        .map(m => m[1].trim())
+        .filter(line => {
+            if (line.length < 4) return false;
+            if (/3548-4000|746-7114|2024-00085|12-25-21|등록번호|매수신청대리인|최가네부동산|수성동1가\s*72-3/.test(line)) return false;
+            if (/^[0-9-\s]+$/.test(line)) return false;
+            if (/^(위치|소재지|보증금|월세|매매가|관리비|공용관리비|개별관리비|권리금|전용면적|공급면적|면적|해당\s*층|총\s*층|층수|방\s*수|욕실\s*수|엘리베이터|중개대상물|거래형태|주차|용도|방향|입주|사용승인일|화장실|매물번호|추천\s*업종)\s*:/.test(line)) return false;
+            return true;
+        });
+
+    // Real Daegu subway stations, major roads, or building names (never match '대구광역' from '대구광역시'!)
+    const stationRegex = /(반월당역|범어역|대구은행역|수성구청역|만촌역|담티역|연호역|대공원역|고산역|신매역|사월역|정평역|임당역|영남대역|동대구역|대구역|중앙로역|명덕역|교대역|영대병원역|현충로역|안지랑역|대명역|서부정류장역|송현역|월촌역|상인역|월배역|진천역|대곡역|화원역|설화명곡역|신천역|칠성시장역|내당역|반고개역|청라언덕역|경대병원역|수성시장역|수성구민운동장역|황금역|어린이세상역|지산역|범물역|용지역|두류역|감삼역|죽전역|용산역|이곡역|성서산업단지역|계명대역|강창역|대실역|문양역|아양교역|동촌역|해안역|방촌역|용계역|율하역|신기역|반야월역|각산역|안심역|서대구역|칠곡경대병원역|팔거역|동천역|칠곡운암역|구암역|태전역|매천역|매천시장역|팔달역|공단역|만평역|팔달시장역|원대역|북구청역|달성공원역|서문시장역|남산역|건들바위역|대봉교역)/;
+    const roadRegex = /(달구벌대로|동대구로|중앙대로|수성로|태평로|국채보상로|들안길|범어네거리|반월당|동성로|수성못)/;
+    const bldgMatch = title.match(/([가-힣A-Za-z0-9]{2,10}(?:타워[A-Za-z0-9]*|빌딩|스퀘어))/);
+    const stationMatch = fullText.match(stationRegex);
+    const roadMatch = fullText.match(roadRegex);
+    const landmark = (stationMatch ? stationMatch[1] : '')
+        || (roadMatch ? roadMatch[1] : '')
+        || (bldgMatch ? bldgMatch[1] : '')
+        || (dong ? `${dong} 대로변` : `${gu} 중심상권`);
 
     const highlights = [];
     if (isNoKeyMoney) highlights.push('무권리');
-    if (/인테리어/.test(fullText)) highlights.push('인테리어 완비');
-    if (/초역세권|역세권/.test(fullText)) highlights.push('역세권');
+    if (/인테리어|시설완비|시설 완비/.test(fullText)) highlights.push('인테리어 완비');
+    if (/초역세권|역세권/.test(fullText) || stationMatch) highlights.push('역세권');
     if (/고정주차|주차편리|주차 편리/.test(fullText)) highlights.push('주차 편리');
     if (/렌트프리/.test(fullText)) highlights.push('렌트프리 협의');
-    if (/1층/.test(floor) || /1층/.test(title)) highlights.push('1층 매장');
-    if (highlights.length === 0) highlights.push('특급 입지');
+    if (/1층/.test(currentFloor) || /1층/.test(title)) highlights.push('1층 매장');
+    if (highlights.length === 0) highlights.push('대로변 핵심입지');
 
     return {
         id: post.id,
@@ -3838,6 +3862,8 @@ function extractNaverBlogSpecs(post) {
         m2Num,
         rawArea,
         floor,
+        currentFloor,
+        totalFloor,
         parking,
         usage,
         direction,
@@ -3845,6 +3871,8 @@ function extractNaverBlogSpecs(post) {
         approvalDate,
         restroom,
         elevator,
+        customRecBiz,
+        statutoryLines,
         featMatches,
         landmark,
         highlights
@@ -3873,10 +3901,17 @@ function buildNaverBlogContent(post, options = {}) {
 
     // 3 Recommended SEO Titles for Naver Blog
     const locPrefix = sp.dong ? `대구 ${sp.gu} ${sp.dong}` : `대구 ${sp.gu}`;
+    const hasSpecificLandmark = sp.landmark && !sp.landmark.includes(sp.dong || sp.gu);
+    const lmTitlePart = hasSpecificLandmark ? `${sp.landmark} ` : '';
+    const lmParenPart = hasSpecificLandmark ? ` (${sp.landmark})` : '';
+    const floorSummaryStr = sp.totalFloor && sp.currentFloor && sp.totalFloor !== sp.currentFloor
+        ? `${sp.currentFloor} (총 층수: ${sp.totalFloor})`
+        : (sp.currentFloor || sp.floor || '상세 문의');
+
     const titleOptions = [
-        `[${locPrefix} ${sp.mainType} ${sp.trade}] ${shortPyeong ? `${shortPyeong} ` : ''}${sp.landmark} ${hlStr} 실매물 현장 브리핑 (매물번호 ${sp.propNo})`,
+        `[${locPrefix} ${sp.mainType} ${sp.trade}] ${shortPyeong ? `${shortPyeong} ` : ''}${lmTitlePart}${hlStr} 실매물 현장 브리핑 (매물번호 ${sp.propNo})`,
         `${locPrefix} ${shortPyeong ? `${shortPyeong}대 ` : ''}${sp.mainType} ${sp.trade} 찾으신다면? ${hlStr}·입지·주차·금액조건 총정리 (#${sp.propNo})`,
-        `대구 ${sp.dong || sp.gu} ${sp.landmark} 인근 ${hlStr} ${sp.mainType} ${sp.trade} 추천! 초기비용 아끼는 실속 매물 상세분석 (NO.${sp.propNo})`
+        `대구 ${sp.dong || sp.gu} ${lmTitlePart}${hlStr} ${sp.mainType} ${sp.trade} 추천! 초기비용 아끼는 실속 매물 상세분석 (NO.${sp.propNo})`
     ];
 
     const selectedTitle = titleOptions[_currentNaverBlogSelectedTitleIdx] || titleOptions[0];
@@ -3885,41 +3920,69 @@ function buildNaverBlogContent(post, options = {}) {
     let introParas = [];
     if (style === 'column') {
         introParas = [
-            `안녕하세요! 대구 전 지역 상가·사무실 임대 및 수익형 빌딩 매매 전문 파트너, 최가네부동산 공인중개사사무소 최이명 대표소장입니다.`,
-            `최근 ${locPrefix} 및 ${sp.landmark} 일대에서 사업장 이전이나 신규 지점 개설을 준비하시는 대표님들과 상담을 나누다 보면 가장 중요하게 꼽으시는 기준이 명확합니다. 바로 '초기 시설 투자비를 얼마나 절감할 수 있는가'와 '직원 출퇴근 및 방문객 주차가 얼마나 편리한가'입니다.`,
+            `안녕하세요! 대구 전 지역 상가·사무실 임대 및 수익형 빌딩 매매 전문 파트너, 최가네부동산공인중개사사무소 최이명 대표소장입니다.`,
+            `최근 ${locPrefix}${hasSpecificLandmark ? ` 및 ${sp.landmark}` : ''} 일대에서 사업장 이전이나 신규 개설을 준비하시는 대표님들과 상담을 나누다 보면 가장 중요하게 꼽으시는 기준이 명확합니다. 바로 '초기 시설 투자비를 얼마나 절감할 수 있는가'와 '직원 출퇴근 및 방문객 주차가 얼마나 편리한가'입니다.`,
             `오늘은 이러한 실수요 조건에 정확히 부합하는 [${locPrefix} ${shortPyeong} ${sp.mainType} ${sp.trade} 실매물 (매물번호: ${sp.propNo}번)]의 입지 가치와 내부 컨디션, 그리고 계약 조건까지 현장에서 직접 확인한 내용을 바탕으로 상세히 분석해 드리겠습니다.`
         ];
     } else if (style === 'friendly') {
         introParas = [
             `반갑습니다 여러분! 대구 상가·사무실 발품 파트너 최가네부동산 최이명 소장입니다 😊`,
-            `새로운 사무실이나 매장 자리를 알아보실 때 사진만 보고 갔다가 막상 현장이 기대와 달라서 아쉬웠던 경험 있으실 텐데요. 그래서 저희 최가네부동산은 제가 직접 현장을 방문해 채광, 층고, 주차장, 화장실 동선까지 꼼꼼하게 체크한 100% 실매물만 엄선해 소개해 드리고 있습니다.`,
-            `오늘 함께 살펴볼 곳은 ${locPrefix} (${sp.landmark} 인근)에 위치한 알짜배기 ${sp.mainType} ${sp.trade} 매물(매물번호 #${sp.propNo})입니다! 어떤 장점들이 있는지 하나씩 살펴볼까요?`
+            `새로운 사무실이나 매장 자리를 알아보실 때 사진만 보고 갔다가 막상 현장이 기대와 달라서 아쉬웠던 경험 있으실 텐데요. 그래서 저희 최가네부동산은 직접 현장을 방문해 채광, 층고, 주차장, 화장실 동선까지 꼼꼼하게 체크한 100% 실매물만 엄선해 소개해 드리고 있습니다.`,
+            `오늘 함께 살펴볼 곳은 ${locPrefix}${lmParenPart}에 위치한 알짜배기 ${sp.mainType} ${sp.trade} 매물(매물번호 #${sp.propNo})입니다! 어떤 장점들이 있는지 하나씩 살펴볼까요?`
         ];
     } else {
         introParas = [
-            `안녕하세요. 대구 상가·사무실·수익형 부동산 전문 [최가네부동산 공인중개사사무소] 대표소장 최이명입니다.`,
+            `안녕하세요. 대구 상가·사무실·수익형 부동산 전문 [최가네부동산공인중개사사무소] 대표소장 최이명입니다.`,
             `성공적인 비즈니스의 시작은 업종에 꼭 맞는 최적의 입지와 합리적인 임대·매매 조건을 갖춘 공간을 선점하는 데서 출발합니다.`,
-            `오늘 브리핑해 드릴 매물은 [${locPrefix}] 핵심 상권(${sp.landmark})에 위치한 ${pyeongStr} 규모의 [${sp.mainType} ${sp.trade}] 실매물(매물번호: ${sp.propNo}번)입니다. 현장에서 직접 점검한 입지 여건과 내부 시설 포인트를 꼼꼼하게 정리해 드립니다.`
+            `오늘 브리핑해 드릴 매물은 [${locPrefix}] 핵심 상권${lmParenPart}에 위치한 ${pyeongStr} 규모의 [${sp.mainType} ${sp.trade}] 실매물(매물번호: ${sp.propNo}번)입니다. 현장에서 직접 점검한 입지 여건과 내부 시설 포인트를 꼼꼼하게 정리해 드립니다.`
         ];
     }
 
-    // Recommend business types based on property traits
+    // Recommend business types based on property traits (prioritizing broker's customRecBiz if present)
     let recBiz = '일반 법인 지사, IT·디자인·설계 사무소, 세무·법무·노무 등 전문직 사무실, 교육 연구실 및 고객 상담형 오피스';
     if (sp.mainType.includes('병의원') || /병원|의원|클리닉/.test(sp.title)) {
-        recBiz = '내과·정형외과·통증의학과·피부과·치과·한의원 등 각 과 병의원 및 메디컬 클리닉';
+        recBiz = '내과·정형외과·통증의학과·피부과·치과·한의원 등 각 과 병의원 및 메디컬 클리닉, 대형 사무실';
     } else if (sp.mainType.includes('학원') || /학원|교습소/.test(sp.title)) {
         recBiz = '입시·보습·어학원, 음악·미술·코딩 학원, 성인 자격증 교육원 및 스터디카페';
     } else if (sp.mainType === '상가' || /1층|식당|카페/.test(sp.title)) {
         recBiz = '프랜차이즈 카페·베이커리, 전문 음식점, 브랜드 쇼룸, 판매점, 뷰티샵(미용·네일·에스테틱) 및 근린생활 업종 전반';
     }
+    if (sp.customRecBiz) {
+        recBiz = `${sp.customRecBiz} (${recBiz})`;
+    }
 
     const detailFeatures = sp.featMatches.length > 0
         ? sp.featMatches
         : [
-            `${locPrefix} (${sp.landmark}) 우수한 가시성 및 대중교통·차량 접근성 확보`,
+            `${locPrefix}${lmParenPart} 우수한 가시성 및 대중교통·차량 접근성 확보`,
             `${pyeongStr}의 반듯하고 효율적인 공간 구조로 업종에 맞춘 레이아웃 구성 용이`,
             `${sp.isNoKeyMoney ? '권리금 없는 무권리 조건으로 초기 입주 자금 부담 대폭 절감' : '기존 시설 및 인테리어 활용도가 높아 초기 창업·이전 비용 절감'}`,
             `${sp.parking} 여건으로 입주사 및 내방 고객 차량 이용 편리`
+        ];
+
+    // Verbatim statutory disclosure block (🏢매물정보🏢 ✅ lines)
+    const statutoryDisclosureList = (Array.isArray(sp.statutoryLines) && sp.statutoryLines.length >= 4)
+        ? sp.statutoryLines
+        : [
+            `위치 : ${sp.cleanAddr}`,
+            `면적 : ${pyeongStr}`,
+            ...(sp.trade === '매매'
+                ? [`매매가 : ${sp.salePrice || '별도 문의'}`]
+                : [
+                    `보증금 : ${sp.deposit || '문의'}`,
+                    `월세 : ${sp.rent || '문의'}`,
+                    ...(sp.maintFee ? [`공용관리비 : ${sp.maintFee}`] : []),
+                    `권리금(시설비) : ${sp.keyMoney}`
+                ]),
+            `주차 : ${sp.parking}`,
+            ...(sp.elevator ? [`엘리베이터 : ${sp.elevator}`] : []),
+            ...(sp.totalFloor ? [`총 층수 : ${sp.totalFloor}`] : []),
+            `해당 층수 : ${sp.currentFloor || sp.floor}`,
+            ...(sp.direction ? [`방향 : ${sp.direction}`] : []),
+            `중개대상물종류 : ${sp.usage}`,
+            ...(sp.approvalDate ? [`사용승인일 : ${sp.approvalDate}`] : []),
+            `거래형태 : ${sp.trade === '매매' ? '매매' : '임대차계약 (월세)'}`,
+            `입주가능일 : ${sp.moveIn}`
         ];
 
     const detailUrl = `https://www.choi114.com/news-detail?id=${encodeURIComponent(String(sp.id))}`;
@@ -3937,7 +4000,7 @@ function buildNaverBlogContent(post, options = {}) {
         sp.dong ? `${sp.dong}상가${sp.trade}` : '',
         sp.dong ? `${sp.dong}사무실${sp.trade}` : '',
         cleanDong && cleanDong !== sp.dong ? `${cleanDong}사무실` : '',
-        sp.landmark ? `대구${sp.landmark.replace(/\s+/g, '')}${sp.mainType.replace(/·.*$/, '')}` : '',
+        hasSpecificLandmark ? `대구${sp.landmark.replace(/\s+/g, '')}` : '',
         sp.pyeongNum >= 10 ? `대구${Math.floor(sp.pyeongNum / 10) * 10}평대${sp.mainType.replace(/·.*$/, '')}` : '',
         sp.pyeongNum >= 10 && sp.gu ? `${sp.gu}${Math.floor(sp.pyeongNum / 10) * 10}평대사무실` : '',
         sp.isNoKeyMoney ? '대구무권리상가' : '',
@@ -3967,9 +4030,9 @@ function buildNaverBlogContent(post, options = {}) {
         lines.push('');
     }
 
-    lines.push(`■ 1. ${locPrefix} (${sp.landmark}) 입지 및 상권 분석`);
+    lines.push(`■ 1. ${locPrefix}${lmParenPart} 입지 및 상권 분석`);
     lines.push('');
-    lines.push(`본 매물(매물번호 #${sp.propNo})은 ${sp.cleanAddr} 일대에 자리 잡고 있습니다. ${sp.landmark} 상권과 인접해 있어 대중교통을 이용하는 임직원의 출퇴근은 물론, 외부에서 찾아오시는 고객이나 거래처 분들께 위치를 설명하기에도 매우 직관적인 입지입니다.`);
+    lines.push(`본 매물(매물번호 #${sp.propNo})은 ${sp.cleanAddr} 일대에 자리 잡고 있습니다. ${hasSpecificLandmark ? `${sp.landmark} 및 ` : ''}${locPrefix} 주요 도로변과 인접해 있어 대중교통을 이용하는 임직원의 출퇴근은 물론, 외부에서 찾아오시는 고객이나 거래처 분들께 위치를 설명하기에도 매우 직관적인 입지입니다.`);
     lines.push('');
     lines.push(`특히 주변에 금융기관, 오피스 빌딩, 각종 편의시설 등 비즈니스 인프라가 탄탄하게 형성되어 있어 입주 후 업무 효율성과 대외 신뢰도를 동시에 높이실 수 있습니다.`);
     lines.push('');
@@ -3987,7 +4050,7 @@ function buildNaverBlogContent(post, options = {}) {
         lines.push(`✔ 체크포인트 ${i + 1}. ${ft}`);
     });
     lines.push('');
-    lines.push(`전체 면적은 ${pyeongStr} 규모이며, 해당층은 [${sp.floor}]입니다. ${sp.isNoKeyMoney ? '무권리 매물로 초기 권리금 부담이 전혀 없으며, ' : ''}공간 구획과 동선이 잘 잡혀 있어 입주 시 인테리어 공사 기간과 초기 세팅 비용을 크게 아끼실 수 있는 실속형 매물입니다.`);
+    lines.push(`전체 면적은 ${pyeongStr} 규모이며, 해당층은 [${floorSummaryStr}]입니다. ${sp.isNoKeyMoney ? '무권리 매물로 초기 권리금 부담이 전혀 없으며, ' : ''}공간 구획과 동선이 잘 잡혀 있어 입주 시 인테리어 공사 기간과 초기 세팅 비용을 크게 아끼실 수 있는 실속형 매물입니다.`);
     lines.push('');
 
     if (incPhotoGuide) {
@@ -3995,31 +4058,17 @@ function buildNaverBlogContent(post, options = {}) {
         lines.push('');
     }
 
-    lines.push(`■ 3. 한눈에 보는 매물 핵심 스펙 요약 (매물번호: #${sp.propNo})`);
+    lines.push(`■ 3. 한눈에 보는 매물 핵심 스펙 및 광고 명시사항 (매물번호: #${sp.propNo})`);
     lines.push('');
-    lines.push(`• 매물번호 : #${sp.propNo} (문의 시 매물번호를 말씀해 주시면 1초 만에 안내해 드립니다)`);
-    lines.push(`• 소재지 : ${sp.cleanAddr}`);
-    lines.push(`• 거래형태 / 구분 : ${sp.mainType} ${sp.trade}`);
-    lines.push(`• 면적 규모 : ${pyeongStr}`);
-    lines.push(`• 해당층 / 구조 : ${sp.floor}`);
-    if (sp.trade === '매매') {
-        lines.push(`• 매매 금액 : ${sp.salePrice || '유선 문의'}`);
-        if (sp.deposit || sp.rent) lines.push(`• 임대 현황 : 보증금 ${sp.deposit || '-'} / 월세 ${sp.rent || '-'}`);
-    } else {
-        lines.push(`• 보증금 / 월세 : 보증금 ${sp.deposit || '문의'} / 월세 ${sp.rent || '문의'}`);
-        lines.push(`• 권리금(시설비) : ${sp.keyMoney}`);
-    }
-    if (sp.maintFee) lines.push(`• 관리비 : ${sp.maintFee}`);
-    lines.push(`• 주차 여건 : ${sp.parking}`);
-    lines.push(`• 건축물 용도 : ${sp.usage}`);
-    if (sp.direction) lines.push(`• 주출입구 방향 : ${sp.direction}`);
-    if (sp.restroom) lines.push(`• 화장실 : ${sp.restroom}`);
-    if (sp.elevator) lines.push(`• 승강기 : ${sp.elevator}`);
-    if (sp.approvalDate) lines.push(`• 사용승인일 : ${sp.approvalDate}`);
-    lines.push(`• 입주 가능일 : ${sp.moveIn}`);
+    lines.push('🏢매물정보🏢');
+    lines.push('');
+    lines.push(`✅ 매물번호 : #${sp.propNo}`);
+    statutoryDisclosureList.forEach(item => {
+        lines.push(`✅ ${item}`);
+    });
     lines.push('');
 
-    lines.push(`■ 4. 추천 업종 및 최이명 대표소장의 종합 의견`);
+    lines.push(`■ 4. 추천 업종 및 최가네부동산의 종합 코멘트`);
     lines.push('');
     lines.push(`• 추천 업종 : ${recBiz}`);
     lines.push('');
@@ -4042,11 +4091,11 @@ function buildNaverBlogContent(post, options = {}) {
 
     if (incLegalFooter) {
         lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        lines.push('🏢 최가네부동산 공인중개사사무소 (법정 필수 명시사항)');
+        lines.push('🏢 최가네부동산공인중개사사무소');
         lines.push('• 대표소장 공인중개사 : 최이명');
         lines.push('• 대표 상담전화 : 010-3548-4000 / 053-746-7114');
         lines.push('• 중개사무소 소재지 : 대구광역시 수성구 수성동1가 72-3번지 (2호선 대구은행역 2번 출구)');
-        lines.push('• 등록번호 : 제27260-2024-00085호');
+        lines.push('• 등록번호 : 제27260-2024-00085호 • 매수신청대리인 등록번호 : 12-25-21');
         lines.push(`※ 전화나 문자로 "블로그에서 매물번호 [${sp.propNo}번] 보고 연락드렸습니다"라고 말씀해 주시면 가장 빠르고 정확하게 상담받으실 수 있습니다.`);
     }
 
@@ -4061,6 +4110,19 @@ function buildNaverBlogContent(post, options = {}) {
         ? `<div style="margin:22px 0;padding:14px 16px;background-color:#fffbeb;border:1px dashed #f59e0b;border-radius:10px;color:#92400e;font-size:14px;font-weight:bold;text-align:center;">${esc(msg)}</div>`
         : '';
 
+    const statutoryHtmlRows = [
+        `<div style="margin:6px 0;font-size:15px;color:#0f172a;">✅ <b>매물번호 : #${esc(sp.propNo)}</b></div>`,
+        ...statutoryDisclosureList.map(item => {
+            const colonIdx = item.indexOf(':');
+            if (colonIdx > 0) {
+                const k = item.slice(0, colonIdx).trim();
+                const v = item.slice(colonIdx + 1).trim();
+                return `<div style="margin:6px 0;font-size:15px;color:#0f172a;">✅ <b>${esc(k)} :</b> ${esc(v)}</div>`;
+            }
+            return `<div style="margin:6px 0;font-size:15px;color:#0f172a;">✅ ${esc(item)}</div>`;
+        })
+    ].join('');
+
     const richHtml = `
 <div style="font-family:'Pretendard','Malgun Gothic','나눔고딕',sans-serif;color:#1e293b;line-height:1.85;font-size:16px;letter-spacing:-0.02em;max-width:760px;">
   <div style="padding:18px 20px;background-color:#f0f5ff;border-left:5px solid #003891;border-radius:8px;margin-bottom:24px;">
@@ -4073,10 +4135,10 @@ function buildNaverBlogContent(post, options = {}) {
   ${photoGuideHtml('📸 [사진 배치 ①] 건물 외관·로비 또는 대로변 위치 사진 1~2장을 여기에 넣어주세요')}
 
   <h2 style="margin:32px 0 14px 0;padding-bottom:8px;border-bottom:2px solid #003891;font-size:19px;font-weight:800;color:#003891;">
-    1. ${esc(locPrefix)} (${esc(sp.landmark)}) 입지 및 상권 분석
+    1. ${esc(locPrefix)}${esc(lmParenPart)} 입지 및 상권 분석
   </h2>
   <p style="margin:0 0 14px 0;font-size:16px;color:#334155;line-height:1.85;">
-    본 매물(<b>매물번호 #${esc(sp.propNo)}</b>)은 <b>${esc(sp.cleanAddr)}</b> 일대에 위치하고 있습니다. <b>${esc(sp.landmark)}</b> 상권과 인접해 있어 대중교통을 이용하는 임직원 출퇴근은 물론, 내방 고객이나 거래처에 위치를 안내하기에도 매우 뛰어난 접근성을 자랑합니다.
+    본 매물(<b>매물번호 #${esc(sp.propNo)}</b>)은 <b>${esc(sp.cleanAddr)}</b> 일대에 위치하고 있습니다. ${hasSpecificLandmark ? `<b>${esc(sp.landmark)}</b> 및 ` : ''}<b>${esc(locPrefix)}</b> 주요 도로변과 인접해 있어 대중교통을 이용하는 임직원 출퇴근은 물론, 내방 고객이나 거래처에 위치를 안내하기에도 매우 뛰어난 접근성을 자랑합니다.
   </p>
   <p style="margin:0 0 18px 0;font-size:16px;color:#334155;line-height:1.85;">
     주변으로 금융기관, 오피스 빌딩, 상업 편의시설 등 비즈니스 인프라가 탄탄하게 갖춰져 있어 입주 후 업무 효율성과 기업·매장의 대외 이미지를 함께 높이실 수 있는 입지입니다.
@@ -4092,73 +4154,21 @@ function buildNaverBlogContent(post, options = {}) {
     ${detailFeatures.map((ft, i) => `<div style="margin:8px 0;font-size:15px;color:#0f172a;"><b>✔ 체크포인트 ${i + 1}.</b> ${esc(ft)}</div>`).join('')}
   </div>
   <p style="margin:0 0 18px 0;font-size:16px;color:#334155;line-height:1.85;">
-    전체 면적은 <b>${esc(pyeongStr)}</b> 규모이며 해당층은 <b>${esc(sp.floor)}</b>입니다. ${sp.isNoKeyMoney ? '<b>권리금이 없는 무권리 매물</b>로 초기 진입 장벽이 매우 낮으며, ' : ''}내부 공간 활용도가 우수해 입주 시 인테리어 공사 기간과 초기 시설 투자비를 크게 절감하실 수 있습니다.
+    전체 면적은 <b>${esc(pyeongStr)}</b> 규모이며 해당층은 <b>${esc(floorSummaryStr)}</b>입니다. ${sp.isNoKeyMoney ? '<b>권리금이 없는 무권리 매물</b>로 초기 진입 장벽이 매우 낮으며, ' : ''}내부 공간 활용도가 우수해 입주 시 인테리어 공사 기간과 초기 시설 투자비를 크게 절감하실 수 있습니다.
   </p>
 
   ${photoGuideHtml('📸 [사진 배치 ③] 룸/칸막이·탕비실·화장실·주차장 사진 2~3장을 여기에 넣어주세요')}
 
   <h2 style="margin:32px 0 14px 0;padding-bottom:8px;border-bottom:2px solid #003891;font-size:19px;font-weight:800;color:#003891;">
-    3. 한눈에 보는 매물 핵심 스펙 요약표 (매물번호 #${esc(sp.propNo)})
+    3. 한눈에 보는 매물 핵심 스펙 및 광고 명시사항 (매물번호 #${esc(sp.propNo)})
   </h2>
-  <table style="width:100%;border-collapse:collapse;margin:0 0 24px 0;font-size:15px;border:1px solid #cbd5e1;">
-    <tbody>
-      <tr>
-        <th style="width:28%;padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">매물번호 / 구분</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;font-weight:bold;">#${esc(sp.propNo)} (${esc(sp.mainType)} ${esc(sp.trade)})</td>
-      </tr>
-      <tr>
-        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">소재지 (지역)</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.cleanAddr)}</td>
-      </tr>
-      <tr>
-        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">면적 규모</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;font-weight:bold;">${esc(pyeongStr)}</td>
-      </tr>
-      <tr>
-        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">해당층</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.floor)}</td>
-      </tr>
-      <tr>
-        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">${sp.trade === '매매' ? '매매 금액' : '보증금 / 월세'}</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#003891;font-weight:800;">${esc(priceSummary)}</td>
-      </tr>
-      ${sp.trade !== '매매' ? `
-      <tr>
-        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">권리금 (시설비)</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;font-weight:bold;">${esc(sp.keyMoney)}</td>
-      </tr>` : ''}
-      ${sp.maintFee ? `
-      <tr>
-        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">관리비</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.maintFee)}</td>
-      </tr>` : ''}
-      <tr>
-        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">주차 여건</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.parking)}</td>
-      </tr>
-      <tr>
-        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">건축물 용도</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.usage)}</td>
-      </tr>
-      ${sp.direction ? `
-      <tr>
-        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">방향</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.direction)}</td>
-      </tr>` : ''}
-      ${sp.approvalDate ? `
-      <tr>
-        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">사용승인일</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.approvalDate)}</td>
-      </tr>` : ''}
-      <tr>
-        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">입주 가능 시기</th>
-        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.moveIn)}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div style="margin:0 0 24px 0;padding:18px 20px;background-color:#f8fafc;border:1px solid #cbd5e1;border-radius:12px;">
+    <div style="font-size:16px;font-weight:800;color:#003891;margin-bottom:10px;">🏢매물정보🏢</div>
+    ${statutoryHtmlRows}
+  </div>
 
   <h2 style="margin:32px 0 14px 0;padding-bottom:8px;border-bottom:2px solid #003891;font-size:19px;font-weight:800;color:#003891;">
-    4. 추천 업종 및 최이명 대표소장의 종합 코멘트
+    4. 추천 업종 및 최가네부동산의 종합 코멘트
   </h2>
   <p style="margin:0 0 12px 0;font-size:16px;color:#0f172a;"><b>• 추천 업종 :</b> ${esc(recBiz)}</p>
   <p style="margin:0 0 22px 0;font-size:16px;color:#334155;line-height:1.85;">
@@ -4175,11 +4185,11 @@ function buildNaverBlogContent(post, options = {}) {
 
   ${incLegalFooter ? `
   <div style="margin:24px 0;padding:18px 20px;background-color:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;color:#334155;line-height:1.75;">
-    <div style="font-size:16px;font-weight:800;color:#0f172a;margin-bottom:6px;">🏢 최가네부동산 공인중개사사무소</div>
+    <div style="font-size:16px;font-weight:800;color:#0f172a;margin-bottom:6px;">🏢 최가네부동산공인중개사사무소</div>
     <div>• <b>대표소장 공인중개사 :</b> 최이명</div>
     <div>• <b>대표 상담전화 :</b> <b style="color:#003891;">010-3548-4000</b> / 053-746-7114</div>
-    <div>• <b>소재지 :</b> 대구광역시 수성구 수성동1가 72-3번지 (2호선 대구은행역 2번 출구)</div>
-    <div>• <b>등록번호 :</b> 제27260-2024-00085호</div>
+    <div>• <b>중개사무소 소재지 :</b> 대구광역시 수성구 수성동1가 72-3번지 (2호선 대구은행역 2번 출구)</div>
+    <div>• <b>등록번호 :</b> 제27260-2024-00085호 • <b>매수신청대리인 등록번호 :</b> 12-25-21</div>
     <div style="margin-top:8px;padding-top:8px;border-top:1px dashed #cbd5e1;color:#003891;font-weight:bold;">
       📞 문의 시 "블로그에서 매물번호 [${esc(sp.propNo)}번] 보고 연락드렸습니다"라고 말씀해 주시면 즉시 확인해 드립니다!
     </div>
