@@ -3727,4 +3727,745 @@ async function resolveBriefingItemsMissingCoords(briefingObj) {
 }
 window.resolveBriefingItemsMissingCoords = resolveBriefingItemsMissingCoords;
 
+// =========================================================================
+// 🟢 네이버 블로그 상위노출 (C-Rank & DIA+ 최적화) 포스팅 원고 자동 생성기
+// =========================================================================
+
+let _currentNaverBlogPost = null;
+let _currentNaverBlogStyle = 'expert';
+let _currentNaverBlogSelectedTitleIdx = 0;
+let _lastGeneratedBlogData = null;
+
+function extractNaverBlogSpecs(post) {
+    if (!post) return null;
+    const rawContent = String(post.content || '')
+        .replace(/<style[\s\S]*?<\/style>/gi, '')
+        .replace(/<\/(p|div|li|tr|h[1-6])>/gi, '\n')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/!\[.*?\]\(.*?\)/g, '')
+        .replace(/[ \t]+/g, ' ');
+
+    const title = String(post.title || '').replace(/\s+/g, ' ').trim();
+    const propNo = (typeof getPropertyDisplayNumber === 'function' ? getPropertyDisplayNumber(post) : '') || String(post.id || '').slice(-4);
+    const fullText = `${post.address || ''} ${title} ${rawContent}`;
+
+    const mGu = fullText.match(/((?:수성|달서|중|동|서|남|북)구|(?:달성|칠곡)군|경산시)/);
+    const mDong = fullText.match(/([가-힣]{2,6}(?:동[0-9]*가?|읍|면))/);
+    const gu = mGu ? mGu[1] : '수성구';
+    const dong = mDong ? mDong[1] : '';
+
+    const getField = (regex) => {
+        const m = rawContent.match(regex);
+        return m ? m[1].trim() : '';
+    };
+
+    const locField = getField(/(?:소재지|위치|주소)\s*:\s*([^\n]+)/i);
+    const cleanAddr = (locField || post.address || `대구광역시 ${gu} ${dong}`).replace(/\s+/g, ' ').trim();
+    const shortLoc = cleanAddr.replace('대구광역시', '대구').trim();
+
+    const deposit = getField(/보증금\s*:\s*([^\n]+)/i);
+    const rent = getField(/(?:월세|임대료)\s*:\s*([^\n]+)/i);
+    const salePrice = getField(/매매가\s*:\s*([^\n]+)/i);
+    const maintFee = getField(/관리비\s*:\s*([^\n]+)/i);
+    let keyMoney = getField(/권리금\s*:\s*([^\n]+)/i);
+    const isNoKeyMoney = /무권리|권리금\s*없음|권리금\s*0/.test(fullText);
+    if (!keyMoney) keyMoney = isNoKeyMoney ? '무권리 (권리금 없음)' : '현장 협의';
+
+    const trade = (/매매/.test(title) || salePrice) ? '매매' : '임대';
+    let mainType = '상가';
+    if (/사무실/.test(title)) mainType = '사무실';
+    else if (/병의원|병원|의원/.test(title)) mainType = '병의원';
+    else if (/학원|교습소/.test(title)) mainType = '학원·교육시설';
+    else if (/빌딩|건물/.test(title) && trade === '매매') mainType = '수익형 빌딩·상가건물';
+    else if (/공장|창고/.test(title)) mainType = '공장·창고';
+    else if (/상가/.test(title)) mainType = '상가';
+    else if (/사무실/.test(rawContent)) mainType = '사무실';
+
+    const rawArea = getField(/(?:전용면적|공급면적|계약면적|면적|평수)\s*:\s*([^\n]+)/i);
+    let pyeongNum = 0;
+    const pMatch = (rawArea + ' ' + title + ' ' + rawContent).match(/([0-9]+(?:\.[0-9]+)?)\s*평/);
+    if (pMatch) pyeongNum = Math.round(parseFloat(pMatch[1]) * 10) / 10;
+    const m2Match = (rawArea + ' ' + rawContent).match(/([0-9]+(?:\.[0-9]+)?)\s*(?:㎡|m2)/i);
+    let m2Num = m2Match ? Math.round(parseFloat(m2Match[1]) * 10) / 10 : (pyeongNum > 0 ? Math.round(pyeongNum * 3.3058 * 10) / 10 : 0);
+    if (!pyeongNum && m2Num > 0) pyeongNum = Math.round((m2Num / 3.3058) * 10) / 10;
+
+    const floor = getField(/(?:해당층|층수|층)\s*:\s*([^\n]+)/i) || ((title.match(/([0-9]+층|지하[0-9]+층|1층)/) || [])[1] || '상세 문의');
+    const parking = getField(/주차\s*:\s*([^\n]+)/i) || (/주차/.test(title) ? '주차 편리 (전용 주차공간 확보)' : '건물 내 주차 가능');
+    const usage = getField(/(?:건축물\s*용도|용도)\s*:\s*([^\n]+)/i) || (mainType === '사무실' ? '업무시설 / 근린생활시설' : '근린생활시설');
+    const direction = getField(/방향\s*:\s*([^\n]+)/i);
+    const moveIn = getField(/(?:입주\s*가능일|입주시기|입주)\s*:\s*([^\n]+)/i) || (/즉시/.test(fullText) ? '즉시 입주 가능 (상호 협의)' : '상호 협의 가능');
+    const approvalDate = getField(/(?:사용승인일|준공일)\s*:\s*([^\n]+)/i);
+    const restroom = getField(/화장실\s*:\s*([^\n]+)/i) || (/내부화장실/.test(fullText) ? '내부 화장실 완비' : '층별 남녀구분 화장실');
+    const elevator = /엘리베이터|승강기|엘베/.test(fullText) ? '승강기(엘리베이터) 운행 중' : '';
+
+    // Extract feature bullets
+    const featMatches = [...rawContent.matchAll(/(?:🔎|▶|•|✔|✓|★|-)\s*([^\n]+)/g)]
+        .map(m => m[1].trim())
+        .filter(line => line.length >= 4 && !/^(위치|소재지|보증금|월세|매매가|관리비|권리금|전용면적|공급면적|면적|해당층|층수|주차|용도|방향|입주|사용승인일|화장실|매물번호)\s*:/.test(line));
+
+    // Station or main road keyword
+    const stationMatch = fullText.match(/([가-힣0-9]+역)\s*(?:초역세권|역세권|인근|도보)?/);
+    const roadMatch = fullText.match(/(달구벌대로|동대구로|중앙대로|수성로|태평로|국채보상로|들안길|범어네거리|반월당역|동대구역)/);
+    const landmark = (stationMatch ? stationMatch[1] : '') || (roadMatch ? roadMatch[1] : '') || `${gu} ${dong} 핵심상권`;
+
+    const highlights = [];
+    if (isNoKeyMoney) highlights.push('무권리');
+    if (/인테리어/.test(fullText)) highlights.push('인테리어 완비');
+    if (/초역세권|역세권/.test(fullText)) highlights.push('역세권');
+    if (/고정주차|주차편리|주차 편리/.test(fullText)) highlights.push('주차 편리');
+    if (/렌트프리/.test(fullText)) highlights.push('렌트프리 협의');
+    if (/1층/.test(floor) || /1층/.test(title)) highlights.push('1층 매장');
+    if (highlights.length === 0) highlights.push('특급 입지');
+
+    return {
+        id: post.id,
+        propNo,
+        title,
+        gu,
+        dong,
+        cleanAddr,
+        shortLoc,
+        trade,
+        mainType,
+        deposit,
+        rent,
+        salePrice,
+        maintFee,
+        keyMoney,
+        isNoKeyMoney,
+        pyeongNum,
+        m2Num,
+        rawArea,
+        floor,
+        parking,
+        usage,
+        direction,
+        moveIn,
+        approvalDate,
+        restroom,
+        elevator,
+        featMatches,
+        landmark,
+        highlights
+    };
+}
+
+function buildNaverBlogContent(post, options = {}) {
+    const sp = extractNaverBlogSpecs(post);
+    if (!sp) return null;
+
+    const style = options.style || _currentNaverBlogStyle || 'expert';
+    const incPhotoGuide = options.incPhotoGuide !== false;
+    const incM2 = options.incM2 !== false;
+    const incHomepageLinks = options.incHomepageLinks !== false;
+    const incLegalFooter = options.incLegalFooter !== false;
+
+    const pyeongStr = sp.pyeongNum > 0
+        ? (incM2 && sp.m2Num > 0 ? `약 ${sp.pyeongNum}평 (전용 약 ${sp.m2Num}㎡)` : `약 ${sp.pyeongNum}평`)
+        : (sp.rawArea || '상세 면적 문의');
+    const shortPyeong = sp.pyeongNum > 0 ? `${Math.round(sp.pyeongNum)}평` : '';
+    const hlStr = sp.highlights.slice(0, 2).join('·');
+
+    const priceSummary = sp.trade === '매매'
+        ? `매매가 ${sp.salePrice || '별도 문의'}`
+        : `보증금 ${sp.deposit || '문의'} / 월세 ${sp.rent || '문의'}`;
+
+    // 3 Recommended SEO Titles for Naver Blog
+    const locPrefix = sp.dong ? `대구 ${sp.gu} ${sp.dong}` : `대구 ${sp.gu}`;
+    const titleOptions = [
+        `[${locPrefix} ${sp.mainType} ${sp.trade}] ${shortPyeong ? `${shortPyeong} ` : ''}${sp.landmark} ${hlStr} 실매물 현장 브리핑 (매물번호 ${sp.propNo})`,
+        `${locPrefix} ${shortPyeong ? `${shortPyeong}대 ` : ''}${sp.mainType} ${sp.trade} 찾으신다면? ${hlStr}·입지·주차·금액조건 총정리 (#${sp.propNo})`,
+        `대구 ${sp.dong || sp.gu} ${sp.landmark} 인근 ${hlStr} ${sp.mainType} ${sp.trade} 추천! 초기비용 아끼는 실속 매물 상세분석 (NO.${sp.propNo})`
+    ];
+
+    const selectedTitle = titleOptions[_currentNaverBlogSelectedTitleIdx] || titleOptions[0];
+
+    // Intro by style
+    let introParas = [];
+    if (style === 'column') {
+        introParas = [
+            `안녕하세요! 대구 전 지역 상가·사무실 임대 및 수익형 빌딩 매매 전문 파트너, 최가네부동산 공인중개사사무소 최이명 대표소장입니다.`,
+            `최근 ${locPrefix} 및 ${sp.landmark} 일대에서 사업장 이전이나 신규 지점 개설을 준비하시는 대표님들과 상담을 나누다 보면 가장 중요하게 꼽으시는 기준이 명확합니다. 바로 '초기 시설 투자비를 얼마나 절감할 수 있는가'와 '직원 출퇴근 및 방문객 주차가 얼마나 편리한가'입니다.`,
+            `오늘은 이러한 실수요 조건에 정확히 부합하는 [${locPrefix} ${shortPyeong} ${sp.mainType} ${sp.trade} 실매물 (매물번호: ${sp.propNo}번)]의 입지 가치와 내부 컨디션, 그리고 계약 조건까지 현장에서 직접 확인한 내용을 바탕으로 상세히 분석해 드리겠습니다.`
+        ];
+    } else if (style === 'friendly') {
+        introParas = [
+            `반갑습니다 여러분! 대구 상가·사무실 발품 파트너 최가네부동산 최이명 소장입니다 😊`,
+            `새로운 사무실이나 매장 자리를 알아보실 때 사진만 보고 갔다가 막상 현장이 기대와 달라서 아쉬웠던 경험 있으실 텐데요. 그래서 저희 최가네부동산은 제가 직접 현장을 방문해 채광, 층고, 주차장, 화장실 동선까지 꼼꼼하게 체크한 100% 실매물만 엄선해 소개해 드리고 있습니다.`,
+            `오늘 함께 살펴볼 곳은 ${locPrefix} (${sp.landmark} 인근)에 위치한 알짜배기 ${sp.mainType} ${sp.trade} 매물(매물번호 #${sp.propNo})입니다! 어떤 장점들이 있는지 하나씩 살펴볼까요?`
+        ];
+    } else {
+        introParas = [
+            `안녕하세요. 대구 상가·사무실·수익형 부동산 전문 [최가네부동산 공인중개사사무소] 대표소장 최이명입니다.`,
+            `성공적인 비즈니스의 시작은 업종에 꼭 맞는 최적의 입지와 합리적인 임대·매매 조건을 갖춘 공간을 선점하는 데서 출발합니다.`,
+            `오늘 브리핑해 드릴 매물은 [${locPrefix}] 핵심 상권(${sp.landmark})에 위치한 ${pyeongStr} 규모의 [${sp.mainType} ${sp.trade}] 실매물(매물번호: ${sp.propNo}번)입니다. 현장에서 직접 점검한 입지 여건과 내부 시설 포인트를 꼼꼼하게 정리해 드립니다.`
+        ];
+    }
+
+    // Recommend business types based on property traits
+    let recBiz = '일반 법인 지사, IT·디자인·설계 사무소, 세무·법무·노무 등 전문직 사무실, 교육 연구실 및 고객 상담형 오피스';
+    if (sp.mainType.includes('병의원') || /병원|의원|클리닉/.test(sp.title)) {
+        recBiz = '내과·정형외과·통증의학과·피부과·치과·한의원 등 각 과 병의원 및 메디컬 클리닉';
+    } else if (sp.mainType.includes('학원') || /학원|교습소/.test(sp.title)) {
+        recBiz = '입시·보습·어학원, 음악·미술·코딩 학원, 성인 자격증 교육원 및 스터디카페';
+    } else if (sp.mainType === '상가' || /1층|식당|카페/.test(sp.title)) {
+        recBiz = '프랜차이즈 카페·베이커리, 전문 음식점, 브랜드 쇼룸, 판매점, 뷰티샵(미용·네일·에스테틱) 및 근린생활 업종 전반';
+    }
+
+    const detailFeatures = sp.featMatches.length > 0
+        ? sp.featMatches
+        : [
+            `${locPrefix} (${sp.landmark}) 우수한 가시성 및 대중교통·차량 접근성 확보`,
+            `${pyeongStr}의 반듯하고 효율적인 공간 구조로 업종에 맞춘 레이아웃 구성 용이`,
+            `${sp.isNoKeyMoney ? '권리금 없는 무권리 조건으로 초기 입주 자금 부담 대폭 절감' : '기존 시설 및 인테리어 활용도가 높아 초기 창업·이전 비용 절감'}`,
+            `${sp.parking} 여건으로 입주사 및 내방 고객 차량 이용 편리`
+        ];
+
+    const detailUrl = `https://www.choi114.com/news-detail?id=${encodeURIComponent(String(sp.id))}`;
+    const regionHubUrl = `https://www.choi114.com/property-news?category=${encodeURIComponent('매물리스트')}&region=${encodeURIComponent(sp.gu)}`;
+    const mapUrl = `https://www.choi114.com/map`;
+
+    // Generate 18 SEO Hashtags for Naver Blog
+    const cleanDong = sp.dong.replace(/[0-9]+가$/, '동');
+    const rawTags = [
+        `대구${sp.mainType.replace(/·.*$/, '')}${sp.trade}`,
+        `대구상가${sp.trade}`,
+        `대구사무실${sp.trade}`,
+        `${sp.gu}상가${sp.trade}`,
+        `${sp.gu}사무실${sp.trade}`,
+        sp.dong ? `${sp.dong}상가${sp.trade}` : '',
+        sp.dong ? `${sp.dong}사무실${sp.trade}` : '',
+        cleanDong && cleanDong !== sp.dong ? `${cleanDong}사무실` : '',
+        sp.landmark ? `대구${sp.landmark.replace(/\s+/g, '')}${sp.mainType.replace(/·.*$/, '')}` : '',
+        sp.pyeongNum >= 10 ? `대구${Math.floor(sp.pyeongNum / 10) * 10}평대${sp.mainType.replace(/·.*$/, '')}` : '',
+        sp.pyeongNum >= 10 && sp.gu ? `${sp.gu}${Math.floor(sp.pyeongNum / 10) * 10}평대사무실` : '',
+        sp.isNoKeyMoney ? '대구무권리상가' : '',
+        sp.isNoKeyMoney ? '대구무권리사무실' : '',
+        '대구상가전문부동산',
+        '대구사무실전문부동산',
+        '수성구부동산',
+        '최가네부동산',
+        '공인중개사최이명'
+    ].filter(Boolean);
+    const uniqueTags = [...new Set(rawTags)].slice(0, 18);
+    const hashtagStr = uniqueTags.map(t => `#${t}`).join(' ');
+    const commaTagStr = uniqueTags.join(', ');
+
+    // Build Plain Text Version
+    const lines = [];
+    lines.push(`📌 추천 블로그 제목: ${selectedTitle}`);
+    lines.push('────────────────────────────────────────');
+    lines.push('');
+    introParas.forEach(p => {
+        lines.push(p);
+        lines.push('');
+    });
+
+    if (incPhotoGuide) {
+        lines.push('📸 [사진 배치 가이드 ①: 건물 외관 또는 대로변/입구 사진 1~2장을 여기에 넣어주세요]');
+        lines.push('');
+    }
+
+    lines.push(`■ 1. ${locPrefix} (${sp.landmark}) 입지 및 상권 분석`);
+    lines.push('');
+    lines.push(`본 매물(매물번호 #${sp.propNo})은 ${sp.cleanAddr} 일대에 자리 잡고 있습니다. ${sp.landmark} 상권과 인접해 있어 대중교통을 이용하는 임직원의 출퇴근은 물론, 외부에서 찾아오시는 고객이나 거래처 분들께 위치를 설명하기에도 매우 직관적인 입지입니다.`);
+    lines.push('');
+    lines.push(`특히 주변에 금융기관, 오피스 빌딩, 각종 편의시설 등 비즈니스 인프라가 탄탄하게 형성되어 있어 입주 후 업무 효율성과 대외 신뢰도를 동시에 높이실 수 있습니다.`);
+    lines.push('');
+
+    if (incPhotoGuide) {
+        lines.push('📸 [사진 배치 가이드 ②: 메인 내부 홀·인테리어·채광 사진 3~4장을 여기에 넣어주세요]');
+        lines.push('');
+    }
+
+    lines.push(`■ 2. 현장 실물 체크포인트 및 내부 컨디션 상세 해설`);
+    lines.push('');
+    lines.push(`현장에서 직접 확인한 매물번호 #${sp.propNo}번의 핵심 강점은 다음과 같습니다:`);
+    lines.push('');
+    detailFeatures.forEach((ft, i) => {
+        lines.push(`✔ 체크포인트 ${i + 1}. ${ft}`);
+    });
+    lines.push('');
+    lines.push(`전체 면적은 ${pyeongStr} 규모이며, 해당층은 [${sp.floor}]입니다. ${sp.isNoKeyMoney ? '무권리 매물로 초기 권리금 부담이 전혀 없으며, ' : ''}공간 구획과 동선이 잘 잡혀 있어 입주 시 인테리어 공사 기간과 초기 세팅 비용을 크게 아끼실 수 있는 실속형 매물입니다.`);
+    lines.push('');
+
+    if (incPhotoGuide) {
+        lines.push('📸 [사진 배치 가이드 ③: 룸/탕비실/복도/화장실/주차장 사진 2~3장을 여기에 넣어주세요]');
+        lines.push('');
+    }
+
+    lines.push(`■ 3. 한눈에 보는 매물 핵심 스펙 요약 (매물번호: #${sp.propNo})`);
+    lines.push('');
+    lines.push(`• 매물번호 : #${sp.propNo} (문의 시 매물번호를 말씀해 주시면 1초 만에 안내해 드립니다)`);
+    lines.push(`• 소재지 : ${sp.cleanAddr}`);
+    lines.push(`• 거래형태 / 구분 : ${sp.mainType} ${sp.trade}`);
+    lines.push(`• 면적 규모 : ${pyeongStr}`);
+    lines.push(`• 해당층 / 구조 : ${sp.floor}`);
+    if (sp.trade === '매매') {
+        lines.push(`• 매매 금액 : ${sp.salePrice || '유선 문의'}`);
+        if (sp.deposit || sp.rent) lines.push(`• 임대 현황 : 보증금 ${sp.deposit || '-'} / 월세 ${sp.rent || '-'}`);
+    } else {
+        lines.push(`• 보증금 / 월세 : 보증금 ${sp.deposit || '문의'} / 월세 ${sp.rent || '문의'}`);
+        lines.push(`• 권리금(시설비) : ${sp.keyMoney}`);
+    }
+    if (sp.maintFee) lines.push(`• 관리비 : ${sp.maintFee}`);
+    lines.push(`• 주차 여건 : ${sp.parking}`);
+    lines.push(`• 건축물 용도 : ${sp.usage}`);
+    if (sp.direction) lines.push(`• 주출입구 방향 : ${sp.direction}`);
+    if (sp.restroom) lines.push(`• 화장실 : ${sp.restroom}`);
+    if (sp.elevator) lines.push(`• 승강기 : ${sp.elevator}`);
+    if (sp.approvalDate) lines.push(`• 사용승인일 : ${sp.approvalDate}`);
+    lines.push(`• 입주 가능일 : ${sp.moveIn}`);
+    lines.push('');
+
+    lines.push(`■ 4. 추천 업종 및 최이명 대표소장의 종합 의견`);
+    lines.push('');
+    lines.push(`• 추천 업종 : ${recBiz}`);
+    lines.push('');
+    lines.push(`본 매물은 ${locPrefix} 일대에서 [${pyeongStr}] 규모의 깔끔하고 주차 편한 공간을 찾으시는 대표님들께 자신 있게 권해드리는 매물입니다. 보증금·월세 비율 조정이나 렌트프리(무상임대 기간), 입주 시기 조율 등 대표님의 상황에 맞춘 최상의 조건 협의를 최가네부동산이 끝까지 책임지고 도와드리겠습니다.`);
+    lines.push('');
+
+    if (incHomepageLinks) {
+        lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        lines.push(`🌐 [최가네부동산 공식 홈페이지에서 고화질 전체 사진·지도 확인하기]`);
+        lines.push('');
+        lines.push(`👉 본 매물(#${sp.propNo}) 상세 페이지 & 위치 지도 바로가기:`);
+        lines.push(`${detailUrl}`);
+        lines.push('');
+        lines.push(`👉 대구 ${sp.gu} 상가·사무실 다른 실매물 모아보기:`);
+        lines.push(`${regionHubUrl}`);
+        lines.push('');
+        lines.push(`👉 대구 전 지역 위치기반 실시간 매물지도 검색:`);
+        lines.push(`${mapUrl}`);
+    }
+
+    if (incLegalFooter) {
+        lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        lines.push('🏢 최가네부동산 공인중개사사무소 (법정 필수 명시사항)');
+        lines.push('• 대표소장 공인중개사 : 최이명');
+        lines.push('• 대표 상담전화 : 010-3548-4000 / 053-746-7114');
+        lines.push('• 중개사무소 소재지 : 대구광역시 수성구 수성동1가 72-3번지 (2호선 대구은행역 2번 출구)');
+        lines.push('• 등록번호 : 제27260-2024-00085호');
+        lines.push(`※ 전화나 문자로 "블로그에서 매물번호 [${sp.propNo}번] 보고 연락드렸습니다"라고 말씀해 주시면 가장 빠르고 정확하게 상담받으실 수 있습니다.`);
+    }
+
+    lines.push('');
+    lines.push(`🏷️ 추천 태그: ${hashtagStr}`);
+
+    const plainText = lines.join('\n');
+
+    // Build Rich HTML Version for Naver SmartEditor ONE (copy & paste with formatting!)
+    const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const photoGuideHtml = (msg) => incPhotoGuide
+        ? `<div style="margin:22px 0;padding:14px 16px;background-color:#fffbeb;border:1px dashed #f59e0b;border-radius:10px;color:#92400e;font-size:14px;font-weight:bold;text-align:center;">${esc(msg)}</div>`
+        : '';
+
+    const richHtml = `
+<div style="font-family:'Pretendard','Malgun Gothic','나눔고딕',sans-serif;color:#1e293b;line-height:1.85;font-size:16px;letter-spacing:-0.02em;max-width:760px;">
+  <div style="padding:18px 20px;background-color:#f0f5ff;border-left:5px solid #003891;border-radius:8px;margin-bottom:24px;">
+    <div style="font-size:13px;font-weight:bold;color:#003891;margin-bottom:4px;">최가네부동산 현장 검증 실매물 브리핑 · NO.${esc(sp.propNo)}</div>
+    <div style="font-size:20px;font-weight:800;color:#0f172a;line-height:1.4;">${esc(selectedTitle)}</div>
+  </div>
+
+  ${introParas.map(p => `<p style="margin:0 0 16px 0;font-size:16px;color:#334155;line-height:1.85;">${esc(p)}</p>`).join('')}
+
+  ${photoGuideHtml('📸 [사진 배치 ①] 건물 외관·로비 또는 대로변 위치 사진 1~2장을 여기에 넣어주세요')}
+
+  <h2 style="margin:32px 0 14px 0;padding-bottom:8px;border-bottom:2px solid #003891;font-size:19px;font-weight:800;color:#003891;">
+    1. ${esc(locPrefix)} (${esc(sp.landmark)}) 입지 및 상권 분석
+  </h2>
+  <p style="margin:0 0 14px 0;font-size:16px;color:#334155;line-height:1.85;">
+    본 매물(<b>매물번호 #${esc(sp.propNo)}</b>)은 <b>${esc(sp.cleanAddr)}</b> 일대에 위치하고 있습니다. <b>${esc(sp.landmark)}</b> 상권과 인접해 있어 대중교통을 이용하는 임직원 출퇴근은 물론, 내방 고객이나 거래처에 위치를 안내하기에도 매우 뛰어난 접근성을 자랑합니다.
+  </p>
+  <p style="margin:0 0 18px 0;font-size:16px;color:#334155;line-height:1.85;">
+    주변으로 금융기관, 오피스 빌딩, 상업 편의시설 등 비즈니스 인프라가 탄탄하게 갖춰져 있어 입주 후 업무 효율성과 기업·매장의 대외 이미지를 함께 높이실 수 있는 입지입니다.
+  </p>
+
+  ${photoGuideHtml('📸 [사진 배치 ②] 내부 메인 홀·인테리어·채광 사진 3~4장을 여기에 넣어주세요')}
+
+  <h2 style="margin:32px 0 14px 0;padding-bottom:8px;border-bottom:2px solid #003891;font-size:19px;font-weight:800;color:#003891;">
+    2. 현장 실물 체크포인트 및 내부 컨디션 상세 해설
+  </h2>
+  <p style="margin:0 0 12px 0;font-size:16px;color:#334155;">현장에서 직접 확인한 <b>매물번호 #${esc(sp.propNo)}번</b>의 핵심 강점입니다.</p>
+  <div style="margin:0 0 18px 0;padding:16px 20px;background-color:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;">
+    ${detailFeatures.map((ft, i) => `<div style="margin:8px 0;font-size:15px;color:#0f172a;"><b>✔ 체크포인트 ${i + 1}.</b> ${esc(ft)}</div>`).join('')}
+  </div>
+  <p style="margin:0 0 18px 0;font-size:16px;color:#334155;line-height:1.85;">
+    전체 면적은 <b>${esc(pyeongStr)}</b> 규모이며 해당층은 <b>${esc(sp.floor)}</b>입니다. ${sp.isNoKeyMoney ? '<b>권리금이 없는 무권리 매물</b>로 초기 진입 장벽이 매우 낮으며, ' : ''}내부 공간 활용도가 우수해 입주 시 인테리어 공사 기간과 초기 시설 투자비를 크게 절감하실 수 있습니다.
+  </p>
+
+  ${photoGuideHtml('📸 [사진 배치 ③] 룸/칸막이·탕비실·화장실·주차장 사진 2~3장을 여기에 넣어주세요')}
+
+  <h2 style="margin:32px 0 14px 0;padding-bottom:8px;border-bottom:2px solid #003891;font-size:19px;font-weight:800;color:#003891;">
+    3. 한눈에 보는 매물 핵심 스펙 요약표 (매물번호 #${esc(sp.propNo)})
+  </h2>
+  <table style="width:100%;border-collapse:collapse;margin:0 0 24px 0;font-size:15px;border:1px solid #cbd5e1;">
+    <tbody>
+      <tr>
+        <th style="width:28%;padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">매물번호 / 구분</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;font-weight:bold;">#${esc(sp.propNo)} (${esc(sp.mainType)} ${esc(sp.trade)})</td>
+      </tr>
+      <tr>
+        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">소재지 (지역)</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.cleanAddr)}</td>
+      </tr>
+      <tr>
+        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">면적 규모</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;font-weight:bold;">${esc(pyeongStr)}</td>
+      </tr>
+      <tr>
+        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">해당층</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.floor)}</td>
+      </tr>
+      <tr>
+        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">${sp.trade === '매매' ? '매매 금액' : '보증금 / 월세'}</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#003891;font-weight:800;">${esc(priceSummary)}</td>
+      </tr>
+      ${sp.trade !== '매매' ? `
+      <tr>
+        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">권리금 (시설비)</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;font-weight:bold;">${esc(sp.keyMoney)}</td>
+      </tr>` : ''}
+      ${sp.maintFee ? `
+      <tr>
+        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">관리비</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.maintFee)}</td>
+      </tr>` : ''}
+      <tr>
+        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">주차 여건</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.parking)}</td>
+      </tr>
+      <tr>
+        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">건축물 용도</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.usage)}</td>
+      </tr>
+      ${sp.direction ? `
+      <tr>
+        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">방향</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.direction)}</td>
+      </tr>` : ''}
+      ${sp.approvalDate ? `
+      <tr>
+        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">사용승인일</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.approvalDate)}</td>
+      </tr>` : ''}
+      <tr>
+        <th style="padding:11px 14px;background-color:#f1f5f9;border:1px solid #cbd5e1;text-align:left;color:#334155;font-weight:bold;">입주 가능 시기</th>
+        <td style="padding:11px 14px;border:1px solid #cbd5e1;color:#0f172a;">${esc(sp.moveIn)}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 style="margin:32px 0 14px 0;padding-bottom:8px;border-bottom:2px solid #003891;font-size:19px;font-weight:800;color:#003891;">
+    4. 추천 업종 및 최이명 대표소장의 종합 코멘트
+  </h2>
+  <p style="margin:0 0 12px 0;font-size:16px;color:#0f172a;"><b>• 추천 업종 :</b> ${esc(recBiz)}</p>
+  <p style="margin:0 0 22px 0;font-size:16px;color:#334155;line-height:1.85;">
+    본 매물은 <b>${esc(locPrefix)}</b>에서 <b>${esc(pyeongStr)}</b> 규모의 깔끔하고 접근성 좋은 사업장을 찾으시는 대표님께 적극 추천해 드리는 실매물입니다. 보증금·월세 조정, 렌트프리 협의, 입주 시기 조율 등 대표님의 입장에서 가장 유리한 조건으로 계약이 성사될 수 있도록 최가네부동산이 든든하게 보좌하겠습니다.
+  </p>
+
+  ${incHomepageLinks ? `
+  <div style="margin:28px 0;padding:20px;background-color:#f0f5ff;border:2px solid #003891;border-radius:12px;">
+    <div style="font-size:16px;font-weight:800;color:#003891;margin-bottom:12px;">🌐 최가네부동산 공식 홈페이지에서 고화질 전체 사진·지도 확인하기</div>
+    <div style="margin:8px 0;font-size:14px;">👉 <b>본 매물(#${esc(sp.propNo)}) 상세 페이지 &amp; 위치 지도 바로가기:</b><br/><a href="${esc(detailUrl)}" target="_blank" style="color:#003891;text-decoration:underline;font-weight:bold;">${esc(detailUrl)}</a></div>
+    <div style="margin:8px 0;font-size:14px;">👉 <b>대구 ${esc(sp.gu)} 상가·사무실 유사 실매물 한눈에 비교하기:</b><br/><a href="${esc(regionHubUrl)}" target="_blank" style="color:#003891;text-decoration:underline;font-weight:bold;">${esc(regionHubUrl)}</a></div>
+    <div style="margin:8px 0;font-size:14px;">👉 <b>대구 전 지역 위치기반 실시간 매물지도 검색:</b><br/><a href="${esc(mapUrl)}" target="_blank" style="color:#003891;text-decoration:underline;font-weight:bold;">${esc(mapUrl)}</a></div>
+  </div>` : ''}
+
+  ${incLegalFooter ? `
+  <div style="margin:24px 0;padding:18px 20px;background-color:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;color:#334155;line-height:1.75;">
+    <div style="font-size:16px;font-weight:800;color:#0f172a;margin-bottom:6px;">🏢 최가네부동산 공인중개사사무소</div>
+    <div>• <b>대표소장 공인중개사 :</b> 최이명</div>
+    <div>• <b>대표 상담전화 :</b> <b style="color:#003891;">010-3548-4000</b> / 053-746-7114</div>
+    <div>• <b>소재지 :</b> 대구광역시 수성구 수성동1가 72-3번지 (2호선 대구은행역 2번 출구)</div>
+    <div>• <b>등록번호 :</b> 제27260-2024-00085호</div>
+    <div style="margin-top:8px;padding-top:8px;border-top:1px dashed #cbd5e1;color:#003891;font-weight:bold;">
+      📞 문의 시 "블로그에서 매물번호 [${esc(sp.propNo)}번] 보고 연락드렸습니다"라고 말씀해 주시면 즉시 확인해 드립니다!
+    </div>
+  </div>` : ''}
+
+  <p style="margin:18px 0 0 0;font-size:14px;color:#03c75a;font-weight:bold;">${esc(hashtagStr)}</p>
+</div>`.trim();
+
+    return {
+        specs: sp,
+        titleOptions,
+        selectedTitle,
+        plainText,
+        richHtml,
+        hashtagStr,
+        commaTagStr
+    };
+}
+window.buildNaverBlogContent = buildNaverBlogContent;
+
+function ensureNaverBlogModalInDom() {
+    if (document.getElementById('naver-blog-seo-modal')) return;
+    const modalWrap = document.createElement('div');
+    modalWrap.id = 'naver-blog-seo-modal';
+    modalWrap.className = 'fixed inset-0 bg-black/65 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[9999] hidden';
+    modalWrap.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-4xl w-full p-4 sm:p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[92vh] overflow-y-auto space-y-4">
+            <div class="flex items-start justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#03c75a] text-white text-[11px] font-black mb-1">
+                        <span>NAVER BLOG C-Rank &amp; DIA+ 상위노출 최적화</span>
+                    </div>
+                    <h3 class="text-base sm:text-xl font-black text-slate-900 dark:text-white" id="nb-modal-heading">
+                        네이버 블로그 상위노출 포스팅 원고 &amp; 홈페이지 쌍끌이 링크 생성기
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-0.5">
+                        유사문서(저품질) 방지용 서술형 입지·컨디션 해설 + 스펙 요약표 + 공식 홈페이지 유입 링크 + 법정 중개사무소 표기가 자동 완성됩니다.
+                    </p>
+                </div>
+                <button type="button" onclick="closeNaverBlogGeneratorModal()" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
+
+            <!-- 1. Recommended SEO Titles (3 choices) -->
+            <div class="bg-emerald-50/70 dark:bg-slate-800/80 border border-emerald-200 dark:border-slate-700 rounded-xl p-3.5 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-extrabold text-emerald-950 dark:text-emerald-300">1. 네이버 블로그 상위노출 추천 제목 3종 (클릭하여 선택 · 우측 버튼으로 제목만 복사)</span>
+                </div>
+                <div id="nb-title-options-box" class="space-y-1.5"></div>
+            </div>
+
+            <!-- 2. Writing Style & Options -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                <div class="md:col-span-5 flex flex-wrap items-center gap-1.5">
+                    <span class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mr-1">2. 문체:</span>
+                    <button type="button" onclick="setNaverBlogTone('expert')" data-nbtone="expert" class="px-2.5 py-1.5 rounded-lg bg-[#03c75a] text-white text-xs font-extrabold cursor-pointer">🏢 정석 전문가형</button>
+                    <button type="button" onclick="setNaverBlogTone('column')" data-nbtone="column" class="px-2.5 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-300 text-xs font-bold cursor-pointer">📊 상권분석 칼럼형</button>
+                    <button type="button" onclick="setNaverBlogTone('friendly')" data-nbtone="friendly" class="px-2.5 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-300 text-xs font-bold cursor-pointer">✨ 친근한 스토리형</button>
+                </div>
+                <div class="md:col-span-7 flex flex-wrap items-center gap-3 text-xs font-bold text-slate-700 dark:text-slate-200">
+                    <label class="flex items-center gap-1 cursor-pointer">
+                        <input type="checkbox" id="nb-opt-photo" checked onchange="refreshNaverBlogModalContent()" class="rounded text-[#03c75a]" />
+                        <span>📸 사진 넣을 위치 안내</span>
+                    </label>
+                    <label class="flex items-center gap-1 cursor-pointer">
+                        <input type="checkbox" id="nb-opt-m2" checked onchange="refreshNaverBlogModalContent()" class="rounded text-[#03c75a]" />
+                        <span>📐 평·㎡ 병기</span>
+                    </label>
+                    <label class="flex items-center gap-1 cursor-pointer">
+                        <input type="checkbox" id="nb-opt-links" checked onchange="refreshNaverBlogModalContent()" class="rounded text-[#03c75a]" />
+                        <span>🔗 홈페이지 쌍끌이 링크</span>
+                    </label>
+                    <label class="flex items-center gap-1 cursor-pointer">
+                        <input type="checkbox" id="nb-opt-legal" checked onchange="refreshNaverBlogModalContent()" class="rounded text-[#03c75a]" />
+                        <span>⚖️ 중개사 법정표기</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 3. Main Blog Content Preview & Editor -->
+            <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                    <label class="text-xs font-extrabold text-slate-800 dark:text-slate-200">3. 블로그 본문 원고 미리보기 및 자유 수정</label>
+                    <span id="nb-char-count-badge" class="text-[11px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">권장 분량 충족</span>
+                </div>
+                <textarea id="nb-plain-textarea" rows="13" class="w-full rounded-xl border-slate-300 bg-white dark:bg-slate-950 text-xs sm:text-[13px] leading-relaxed font-medium text-slate-800 dark:text-slate-100 p-3.5 focus:ring-[#03c75a] focus:border-[#03c75a]"></textarea>
+            </div>
+
+            <!-- 4. Hashtags Box -->
+            <div class="bg-slate-50 dark:bg-slate-800/70 p-3 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div class="min-w-0 flex-1">
+                    <div class="text-[11px] font-extrabold text-slate-500 mb-0.5">4. 네이버 블로그 태그 입력창용 추천 해시태그 (18개)</div>
+                    <div id="nb-tags-preview" class="text-xs font-bold text-[#03c75a] truncate"></div>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <button type="button" onclick="copyNaverBlogTags('hash')" class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-xs font-extrabold cursor-pointer">#해시태그 복사</button>
+                    <button type="button" onclick="copyNaverBlogTags('comma')" class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-xs font-extrabold cursor-pointer">쉼표(,) 태그 복사</button>
+                </div>
+            </div>
+
+            <!-- 5. Action Buttons -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                <button type="button" onclick="copyNaverBlogRichHtml()" class="py-3.5 px-4 rounded-xl bg-[#03c75a] hover:bg-[#02b350] text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md cursor-pointer transition">
+                    <span class="material-symbols-outlined text-[20px]">article</span>
+                    <span>🟢 네이버 블로그 에디터용 서식+표 통째로 복사 (권장)</span>
+                </button>
+                <button type="button" onclick="copyNaverBlogPlainText()" class="py-3.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm cursor-pointer transition">
+                    <span class="material-symbols-outlined text-[19px]">content_copy</span>
+                    <span>📋 위 수정창의 순수 텍스트로 복사</span>
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modalWrap);
+}
+
+async function openNaverBlogGeneratorModal(postOrId) {
+    ensureNaverBlogModalInDom();
+    let targetPost = null;
+    if (postOrId && typeof postOrId === 'object') {
+        targetPost = postOrId;
+    } else if (postOrId) {
+        const all = await getPosts();
+        targetPost = (all || []).find(p => String(p.id) === String(postOrId));
+    } else if (window.__INITIAL_POST__) {
+        targetPost = window.__INITIAL_POST__;
+    }
+
+    if (!targetPost) {
+        alert('매물 정보를 불러올 수 없습니다.');
+        return;
+    }
+
+    _currentNaverBlogPost = targetPost;
+    _currentNaverBlogSelectedTitleIdx = 0;
+    const modal = document.getElementById('naver-blog-seo-modal');
+    if (modal) modal.classList.remove('hidden');
+    refreshNaverBlogModalContent();
+}
+window.openNaverBlogGeneratorModal = openNaverBlogGeneratorModal;
+
+function closeNaverBlogGeneratorModal() {
+    const modal = document.getElementById('naver-blog-seo-modal');
+    if (modal) modal.classList.add('hidden');
+}
+window.closeNaverBlogGeneratorModal = closeNaverBlogGeneratorModal;
+
+function setNaverBlogTone(tone) {
+    _currentNaverBlogStyle = tone;
+    document.querySelectorAll('#naver-blog-seo-modal button[data-nbtone]').forEach(btn => {
+        if (btn.getAttribute('data-nbtone') === tone) {
+            btn.className = 'px-2.5 py-1.5 rounded-lg bg-[#03c75a] text-white text-xs font-extrabold cursor-pointer';
+        } else {
+            btn.className = 'px-2.5 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-300 text-xs font-bold cursor-pointer';
+        }
+    });
+    refreshNaverBlogModalContent();
+}
+window.setNaverBlogTone = setNaverBlogTone;
+
+function selectNaverBlogTitleIdx(idx) {
+    _currentNaverBlogSelectedTitleIdx = idx;
+    refreshNaverBlogModalContent();
+}
+window.selectNaverBlogTitleIdx = selectNaverBlogTitleIdx;
+
+function copySingleNaverBlogTitle(idx, ev) {
+    if (ev) ev.stopPropagation();
+    if (!_lastGeneratedBlogData || !_lastGeneratedBlogData.titleOptions) return;
+    const t = _lastGeneratedBlogData.titleOptions[idx] || _lastGeneratedBlogData.titleOptions[0];
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(t);
+    }
+    if (typeof showToast === 'function') {
+        showToast('📌 선택한 네이버 블로그 제목이 복사되었습니다!');
+    } else {
+        alert('블로그 제목이 복사되었습니다:\n' + t);
+    }
+}
+window.copySingleNaverBlogTitle = copySingleNaverBlogTitle;
+
+function refreshNaverBlogModalContent() {
+    if (!_currentNaverBlogPost) return;
+    const incPhotoGuide = document.getElementById('nb-opt-photo')?.checked !== false;
+    const incM2 = document.getElementById('nb-opt-m2')?.checked !== false;
+    const incHomepageLinks = document.getElementById('nb-opt-links')?.checked !== false;
+    const incLegalFooter = document.getElementById('nb-opt-legal')?.checked !== false;
+
+    const gen = buildNaverBlogContent(_currentNaverBlogPost, {
+        style: _currentNaverBlogStyle,
+        incPhotoGuide,
+        incM2,
+        incHomepageLinks,
+        incLegalFooter
+    });
+    if (!gen) return;
+    _lastGeneratedBlogData = gen;
+
+    const titleBox = document.getElementById('nb-title-options-box');
+    if (titleBox) {
+        const labels = ['A형(지역·평수 정석)', 'B형(손님 니즈·비교)', 'C형(상권·가성비 강조)'];
+        titleBox.innerHTML = gen.titleOptions.map((t, idx) => {
+            const isSel = idx === _currentNaverBlogSelectedTitleIdx;
+            const safeT = String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return `
+                <div onclick="selectNaverBlogTitleIdx(${idx})" class="flex items-center justify-between gap-2 p-2 rounded-lg border cursor-pointer transition ${isSel ? 'bg-white border-[#03c75a] shadow-2xs' : 'bg-white/60 border-slate-200 hover:border-slate-300'}">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <input type="radio" name="nb_title_pick" ${isSel ? 'checked' : ''} class="text-[#03c75a]" />
+                        <span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-900 text-[10px] font-black shrink-0">${labels[idx] || '추천'}</span>
+                        <span class="text-xs font-extrabold text-slate-900 truncate">${safeT}</span>
+                    </div>
+                    <button type="button" onclick="copySingleNaverBlogTitle(${idx}, event)" class="px-2.5 py-1 rounded bg-[#03c75a] hover:bg-[#02b350] text-white text-[11px] font-extrabold shrink-0 cursor-pointer">제목 복사</button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    const ta = document.getElementById('nb-plain-textarea');
+    if (ta) ta.value = gen.plainText;
+
+    const charBadge = document.getElementById('nb-char-count-badge');
+    if (charBadge) {
+        const len = gen.plainText.length;
+        charBadge.textContent = `공백포함 ${len.toLocaleString()}자 (네이버 DIA+ 최적 분량)`;
+    }
+
+    const tagsEl = document.getElementById('nb-tags-preview');
+    if (tagsEl) tagsEl.textContent = gen.hashtagStr;
+}
+window.refreshNaverBlogModalContent = refreshNaverBlogModalContent;
+
+async function copyNaverBlogRichHtml() {
+    if (!_lastGeneratedBlogData) return;
+    try {
+        if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+            const htmlBlob = new Blob([_lastGeneratedBlogData.richHtml], { type: 'text/html' });
+            const textBlob = new Blob([_lastGeneratedBlogData.plainText], { type: 'text/plain' });
+            await navigator.clipboard.write([
+                new ClipboardItem({
+                    'text/html': htmlBlob,
+                    'text/plain': textBlob
+                })
+            ]);
+            if (typeof showToast === 'function') {
+                showToast('🟢 네이버 블로그 서식(소제목·스펙표·홈페이지 링크)이 통째로 복사되었습니다! 블로그 글쓰기 창에 바로 붙여넣기(Ctrl+V) 하세요.');
+            } else {
+                alert('🟢 네이버 블로그 에디터용 서식+표+홈페이지 링크가 복사되었습니다!\n네이버 블로그 글쓰기 화면에서 Ctrl+V로 바로 붙여넣으세요.');
+            }
+            return;
+        }
+    } catch (e) {}
+    copyNaverBlogPlainText();
+}
+window.copyNaverBlogRichHtml = copyNaverBlogRichHtml;
+
+function copyNaverBlogPlainText() {
+    const ta = document.getElementById('nb-plain-textarea');
+    if (!ta) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(ta.value);
+    } else {
+        ta.select();
+        document.execCommand('copy');
+    }
+    if (typeof showToast === 'function') {
+        showToast('📋 네이버 블로그 포스팅 본문 텍스트가 복사되었습니다!');
+    } else {
+        alert('📋 네이버 블로그 포스팅 본문 텍스트가 복사되었습니다!');
+    }
+}
+window.copyNaverBlogPlainText = copyNaverBlogPlainText;
+
+function copyNaverBlogTags(mode = 'hash') {
+    if (!_lastGeneratedBlogData) return;
+    const str = mode === 'comma' ? _lastGeneratedBlogData.commaTagStr : _lastGeneratedBlogData.hashtagStr;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(str);
+    }
+    if (typeof showToast === 'function') {
+        showToast('🏷️ 네이버 블로그 추천 태그 18개가 복사되었습니다!');
+    } else {
+        alert('추천 태그가 복사되었습니다:\n' + str);
+    }
+}
+window.copyNaverBlogTags = copyNaverBlogTags;
+
+
 

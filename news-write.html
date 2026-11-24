@@ -300,7 +300,10 @@
                 </div>
             </div>
             <div id="error-msg" class="hidden text-error text-sm font-medium"></div>
-            <div class="flex justify-end gap-sm border-t border-hairline pt-lg mt-lg">
+            <div class="flex flex-wrap justify-end gap-sm border-t border-hairline pt-lg mt-lg">
+                <button type="button" onclick="openNaverBlogGeneratorModal({ id: new URLSearchParams(window.location.search).get('id') || Date.now(), title: document.getElementById('title').value, category: document.getElementById('category').value, address: document.getElementById('address').value, content: document.getElementById('content').value })" class="bg-[#03c75a] hover:bg-[#02b350] text-white font-bold text-button px-lg py-3 rounded-lg min-h-[44px] flex items-center gap-xs cursor-pointer shadow-xs">
+                    <span class="material-symbols-outlined text-[18px]">article</span> 네이버 블로그 원고 생성
+                </button>
                 <button type="button" id="cancel-btn" class="bg-surface-container-high hover:bg-surface-dim text-ink font-button text-button px-lg py-3 rounded-lg min-h-[44px]">취소</button>
                 <button type="submit" id="save-btn" class="bg-primary-container text-white font-button text-button px-xl py-3 rounded-lg min-h-[44px] hover:bg-blue-mid flex items-center gap-sm">
                     <span class="material-symbols-outlined text-[18px]">save</span> 저장 완료
@@ -429,7 +432,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261124_v252"></script>
+<script src="db.js?v=20261124_v253"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     requireAdmin();
