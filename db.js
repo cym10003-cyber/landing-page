@@ -3732,7 +3732,7 @@ window.resolveBriefingItemsMissingCoords = resolveBriefingItemsMissingCoords;
 // =========================================================================
 
 let _currentNaverBlogPost = null;
-let _currentNaverBlogSafetyMode = 'skeleton'; // 'skeleton' (🛡️ 지수보호 안전 뼈대모드 - 상투문구 0%) | 'varied' (🔄 문장 자동변주 브리핑모드)
+let _currentNaverBlogSafetyMode = 'dual_guide'; // 'dual_guide' (🖥️ 보조모니터 보고 타이핑용 서술 대본 + 사진 위치 가이드 — 기본값) | 'skeleton' (핵심 뼈대만)
 let _currentNaverBlogLinkMode = 'text'; // 'text' (🛡️ 안전 텍스트 안내 - 클릭링크 0개) | 'single' (🔗 상세링크 1개만) | 'none' (🚫 안내 숨김)
 let _currentNaverBlogVariationSeed = 0;
 let _currentNaverBlogSelectedTitleIdx = 0;
@@ -4027,7 +4027,7 @@ function buildNaverBlogContent(post, options = {}) {
     const sp = extractNaverBlogSpecs(post);
     if (!sp) return null;
 
-    const safetyMode = options.safetyMode || _currentNaverBlogSafetyMode || 'skeleton';
+    const safetyMode = options.safetyMode || _currentNaverBlogSafetyMode || 'dual_guide';
     const linkMode = options.linkMode || _currentNaverBlogLinkMode || 'text';
     const incTypingPrompts = options.incTypingPrompts !== false;
     const incPhotoGuide = options.incPhotoGuide !== false;
@@ -4208,79 +4208,60 @@ function buildNaverBlogContent(post, options = {}) {
     const conditionLine = pick(conditionLinePool, 5);
     const closingLine = pick(closingLinePool, 7);
 
-    // Build Plain Text Content
+    // Extra narrative lines for each photo block in Dual-Monitor Typing Guide mode
+    const photo1SubPool = [
+        `외관과 진입로부터 살펴보겠습니다. 큰 대로변에서 바로 진입할 수 있는 위치라 처음 방문하시는 고객분들이나 거래처에서도 헤매지 않고 찾아오실 수 있습니다.`,
+        `건물 외관과 주출입구 모습입니다. 도로변 가시성이 좋고 건물 관리가 깔끔하게 되어 있어 입주 후 방문객들에게 신뢰감을 주기 좋은 환경입니다.`,
+        `대로변에서 바라본 건물 외관입니다. 주변으로 버스정류장과 주요 도로망이 잘 연결되어 있어 직원분들 출퇴근은 물론 차량 이동이 무척 수월합니다.`,
+        `현장 입구와 주변 도로 여건입니다. 인근에 은행과 편의시설, 상권 인프라가 잘 형성되어 있어 실제로 근무해 보시면 생활 편의성이 뛰어난 곳입니다.`
+    ];
+    const photo2SubPool = [
+        `내부로 들어와 메인 홀과 전체적인 공간 구성을 찍어보았습니다. 기둥 간섭 없이 반듯하게 빠져 있어 책상 배치나 동선 구획이 참 수월합니다.`,
+        `실내 메인 공간과 채광, 천장 컨디션입니다. 전체적으로 깔끔하게 관리되어 있어서 입주 시 초기 인테리어 비용과 공사 기간을 크게 아끼실 수 있습니다.`,
+        `현장에서 직접 문을 열고 촬영한 내부 모습입니다. 사진으로 보는 것보다 실제 층고와 개방감이 훨씬 좋아서 현장에서 보시면 더욱 마음에 드실 공간입니다.`,
+        `내부 바닥과 벽면, 천장 냉난방 설비 등 기본 시설 상태입니다. 별도의 큰 손질 없이 업종에 맞춘 집기류만 세팅해 바로 업무를 시작하시기 좋습니다.`
+    ];
+    const photo3SubPool = [
+        `안쪽 공간과 부대시설, 화장실 및 주차장 여건도 꼼꼼히 확인했습니다. 주차는 [${sp.parking}] 조건이라 대표님과 직원, 방문 차량 모두 편리하게 이용하실 수 있습니다.`,
+        `복도와 화장실, 엘리베이터 및 주차 공간 모습입니다. 공용부 관리가 깨끗하게 이루어지고 있으며 주차 동선도 여유롭게 확보되어 있습니다.`,
+        `세부 공간 및 주차장 사진입니다. 상가나 사무실을 구할 때 가장 신경 쓰이는 부분이 주차와 공용 시설인데, 이 매물은 그 부분에서 만족도가 높습니다.`,
+        `나머지 내부 구석구석과 공용 시설, 주차장까지 살펴보았습니다. 즉시 입주 및 일정 조율이 가능해 원하시는 시기에 맞춰 수월하게 이전하실 수 있습니다.`
+    ];
+
+    const photo1Narrative = pick(photo1SubPool, 1);
+    const photo2Narrative = pick(photo2SubPool, 2);
+    const photo3Narrative = pick(photo3SubPool, 3);
+
+    // Build Plain Text Content (Dual-Monitor Typing Script & Photo Placement Guide)
     const lines = [];
     lines.push(`추천 제목: ${selectedTitle}`);
     lines.push('');
 
-    if (safetyMode === 'skeleton') {
-        // 🛡️ 블로그지수 안전 뼈대모드 (AI 고정 상투문구 0% · 직접 2~3줄 타이핑 가이드 포함)
-        lines.push(greetingLine);
-        lines.push('');
-        if (incTypingPrompts) {
-            lines.push(`✍️ [직접 타이핑 ① : 여기에 오늘 날씨나 현장 다녀온 짧은 인사말 1~2줄을 블로그에서 직접 키보드로 타이핑해 주세요]`);
-            lines.push('');
-        }
-        lines.push(summaryLine);
-        lines.push('');
-
-        if (incPhotoGuide) {
-            lines.push('[사진 넣을 위치 ① : 건물 외관이나 대로변·입구 사진 1~2장]');
-            lines.push('');
-        }
-
-        lines.push(secTitles.feat);
-        lines.push('');
-        detailFeatures.forEach((ft) => {
-            lines.push(`• ${ft}`);
-        });
-        lines.push('');
-        if (incTypingPrompts) {
-            lines.push(`✍️ [직접 타이핑 ② : 사진 보시면서 현장에서 느낀 장점(주차, 채광, 룸 구조 등) 1~2줄만 직접 적어주시면 블로그 지수에 매우 좋습니다]`);
-            lines.push('');
-        }
-
-        if (incPhotoGuide) {
-            lines.push('[사진 넣을 위치 ② : 내부 홀·인테리어·룸·화장실·주차장 사진 4~6장]');
-            lines.push('');
-        }
-
-        lines.push(secTitles.spec);
-        lines.push('');
-        lines.push(`• 매물번호 : ${sp.propNo}번`);
-        statutoryDisclosureList.forEach(item => {
-            lines.push(`• ${item}`);
-        });
-        lines.push('');
-
-        lines.push(secTitles.rec);
-        lines.push('');
-        lines.push(`• 추천 업종 : ${recBiz}`);
-        lines.push('');
-        if (incTypingPrompts) {
-            lines.push(`✍️ [직접 타이핑 ③ : 마무리 한 줄 인사를 직접 타이핑해 주세요 (예: 현장 답사나 조건 조율은 언제든 편하게 연락 주세요!)]`);
-        } else {
-            lines.push(closingLine);
-        }
-        lines.push('');
-    } else {
-        // 🔄 문장 자동변주 브리핑모드 (매물마다 4,096가지 조합으로 문장 구조가 매번 바뀜)
+    if (safetyMode === 'dual_guide') {
+        // 🖥️ 보조 모니터용 서술형 타이핑 대본 & 📸 사진 넣을 위치 가이드 (기본값)
+        lines.push(`━━━ [1단계 : 첫 인사말 & 매물 소개 (보면서 내 말투로 타이핑)] ━━━`);
         lines.push(greetingLine);
         lines.push('');
         lines.push(summaryLine);
         lines.push('');
         if (incPhotoGuide) {
-            lines.push('[사진 넣을 위치 ① : 건물 외관이나 대로변·입구 사진 1~2장]');
+            lines.push(`📸 [사진 넣을 위치 ① : 여기에 건물 외관 · 대로변 · 입구 사진 1~2장을 넣으세요]`);
+            lines.push(`📍 [네이버 지도 넣을 위치 : 에디터 상단 '장소(지도)' 버튼 눌러 '${sp.shortLandmark || sp.dong || sp.gu}' 지도 1개 첨부]`);
             lines.push('');
         }
+        lines.push(`━━━ [2단계 : 사진 ① 아래에 보면서 타이핑할 입지·교통 설명] ━━━`);
         lines.push(locationLine);
         lines.push('');
+        lines.push(photo1Narrative);
+        lines.push('');
         if (incPhotoGuide) {
-            lines.push('[사진 넣을 위치 ② : 내부 메인 공간·채광·인테리어 사진 3~4장]');
+            lines.push(`📸 [사진 넣을 위치 ② : 여기에 내부 메인 홀 · 채광 · 천장 냉난방기 · 인테리어 사진 3~4장을 넣으세요]`);
             lines.push('');
         }
-        lines.push(secTitles.feat);
+        lines.push(`━━━ [3단계 : 사진 ② 아래에 보면서 타이핑할 내부 컨디션 & 현장 특징] ━━━`);
+        lines.push(photo2Narrative);
         lines.push('');
+        lines.push(secTitles.feat);
         detailFeatures.forEach((ft) => {
             lines.push(`• ${ft}`);
         });
@@ -4288,7 +4269,53 @@ function buildNaverBlogContent(post, options = {}) {
         lines.push(conditionLine);
         lines.push('');
         if (incPhotoGuide) {
-            lines.push('[사진 넣을 위치 ③ : 룸·탕비실·화장실·주차장 사진 2~3장]');
+            lines.push(`📸 [사진 넣을 위치 ③ : 여기에 룸 공간 · 탕비실 · 복도/화장실 · 주차장 사진 2~3장을 넣으세요]`);
+            lines.push('');
+        }
+        lines.push(`━━━ [4단계 : 사진 ③ 아래에 보면서 타이핑할 부대시설·추천업종·마무리] ━━━`);
+        lines.push(photo3Narrative);
+        lines.push('');
+        lines.push(`• 추천 업종 : ${recBiz}`);
+        lines.push('');
+        lines.push(closingLine);
+        lines.push('');
+        lines.push(`==================================================`);
+        lines.push(`👇 [여기부터 아래는 직접 타이핑하지 마세요!]`);
+        lines.push(`👇 [하단 초록색 버튼 '📌 매물정보 표(18항목) + 중개사 명함 한 번에 복사' 눌러서 Ctrl+V 붙여넣기!]`);
+        lines.push(`==================================================`);
+        lines.push('');
+        lines.push(secTitles.spec);
+        lines.push(`• 매물번호 : ${sp.propNo}번`);
+        statutoryDisclosureList.forEach(item => {
+            lines.push(`• ${item}`);
+        });
+        lines.push('');
+    } else {
+        // 🛡️ 핵심 뼈대만 보기 모드
+        lines.push(greetingLine);
+        lines.push('');
+        if (incTypingPrompts) {
+            lines.push(`✍️ [직접 타이핑 ① : 오늘 날씨나 현장 다녀온 짧은 인사말 1~2줄을 직접 타이핑해 주세요]`);
+            lines.push('');
+        }
+        lines.push(summaryLine);
+        lines.push('');
+        if (incPhotoGuide) {
+            lines.push('📸 [사진 넣을 위치 ① : 건물 외관이나 대로변·입구 사진 1~2장]');
+            lines.push('');
+        }
+        lines.push(secTitles.feat);
+        lines.push('');
+        detailFeatures.forEach((ft) => {
+            lines.push(`• ${ft}`);
+        });
+        lines.push('');
+        if (incTypingPrompts) {
+            lines.push(`✍️ [직접 타이핑 ② : 사진 보시면서 현장에서 느낀 장점(주차, 채광, 내부 구조 등) 2~3줄을 직접 적어주세요]`);
+            lines.push('');
+        }
+        if (incPhotoGuide) {
+            lines.push('📸 [사진 넣을 위치 ② : 내부 홀·인테리어·룸·화장실·주차장 사진 4~6장]');
             lines.push('');
         }
         lines.push(secTitles.spec);
@@ -4307,22 +4334,28 @@ function buildNaverBlogContent(post, options = {}) {
     }
 
     // Homepage guidance according to Link Safety Mode
+    const homepageTextLines = [];
     if (linkMode === 'text') {
-        lines.push('----------------------------------------');
-        lines.push(`• 본 매물(매물번호 ${sp.propNo}번)의 고화질 전체 사진과 상세 위치 지도는 네이버에서 [ 최가네부동산 ]을 검색하시거나, 인터넷 주소창에 [ choi114.com ] 입력 후 매물번호 [${sp.propNo}]번을 검색하시면 바로 보실 수 있습니다.`);
+        homepageTextLines.push('----------------------------------------');
+        homepageTextLines.push(`• 본 매물(매물번호 ${sp.propNo}번)의 고화질 전체 사진과 상세 위치 지도는 네이버에서 [ 최가네부동산 ]을 검색하시거나, 인터넷 주소창에 [ choi114.com ] 입력 후 매물번호 [${sp.propNo}]번을 검색하시면 바로 보실 수 있습니다.`);
     } else if (linkMode === 'single') {
-        lines.push('----------------------------------------');
-        lines.push(`• 매물번호 ${sp.propNo}번 전체 사진 & 위치 지도 바로보기 :`);
-        lines.push(`${detailUrl}`);
+        homepageTextLines.push('----------------------------------------');
+        homepageTextLines.push(`• 매물번호 ${sp.propNo}번 전체 사진 & 위치 지도 바로보기 :`);
+        homepageTextLines.push(`${detailUrl}`);
     }
+    homepageTextLines.forEach(l => lines.push(l));
+
+    const legalFooterTextLines = [
+        '🏢 최가네부동산공인중개사사무소',
+        '• 대표소장 공인중개사 : 최이명',
+        '• 대표 상담전화 : 010-3548-4000 / 053-746-7114',
+        '• 중개사무소 소재지 : 대구광역시 수성구 수성동1가 72-3번지 (2호선 대구은행역 2번 출구)',
+        '• 등록번호 : 제27260-2024-00085호 • 매수신청대리인 등록번호 : 12-25-21'
+    ];
 
     if (incLegalFooter) {
         lines.push('----------------------------------------');
-        lines.push('🏢 최가네부동산공인중개사사무소');
-        lines.push('• 대표소장 공인중개사 : 최이명');
-        lines.push('• 대표 상담전화 : 010-3548-4000 / 053-746-7114');
-        lines.push('• 중개사무소 소재지 : 대구광역시 수성구 수성동1가 72-3번지 (2호선 대구은행역 2번 출구)');
-        lines.push('• 등록번호 : 제27260-2024-00085호 • 매수신청대리인 등록번호 : 12-25-21');
+        legalFooterTextLines.forEach(l => lines.push(l));
     }
 
     lines.push('');
@@ -4330,7 +4363,7 @@ function buildNaverBlogContent(post, options = {}) {
 
     const plainText = lines.join('\n');
 
-    // Build Clean Table-Only HTML (for [📊 매물정보 표(Table)만 따로 복사])
+    // Build Clean Table-Only HTML (for [📊 매물정보 표(18항목)만 복사])
     const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     const statutoryTableRowsHtml = [
         `<tr>
@@ -4351,84 +4384,55 @@ function buildNaverBlogContent(post, options = {}) {
     const tableOnlyHtml = `<table style="width:100%;border-collapse:collapse;margin:10px 0 20px 0;font-size:15px;border:1px solid #dedede;"><tbody>${statutoryTableRowsHtml}</tbody></table>`;
     const tableOnlyText = [`• 매물번호 : ${sp.propNo}번`, ...statutoryDisclosureList.map(item => `• ${item}`)].join('\n');
 
-    // Build Minimal Native HTML (no outer div wrapper, minimal inline tags, clean 18-row table)
-    const pTag = (text) => `<p>${esc(text)}</p><p><br></p>`;
-    const boldPTag = (text) => `<p><b>${esc(text)}</b></p><p><br></p>`;
+    // Build Legal Footer Only HTML & Text
+    const footerOnlyText = legalFooterTextLines.join('\n');
+    const footerOnlyHtml = [
+        `<p><b>🏢 최가네부동산공인중개사사무소</b></p>`,
+        `<p>• 대표소장 공인중개사 : 최이명</p>`,
+        `<p>• 대표 상담전화 : <b>010-3548-4000</b> / 053-746-7114</p>`,
+        `<p>• 중개사무소 소재지 : 대구광역시 수성구 수성동1가 72-3번지 (2호선 대구은행역 2번 출구)</p>`,
+        `<p>• 등록번호 : 제27260-2024-00085호 • 매수신청대리인 등록번호 : 12-25-21</p>`
+    ].join('\n');
 
-    const htmlParts = [];
-    htmlParts.push(pTag(greetingLine));
-    if (safetyMode === 'skeleton' && incTypingPrompts) {
-        htmlParts.push(pTag(`✍️ [직접 타이핑 ① : 여기에 오늘 날씨나 현장 다녀온 짧은 인사말 1~2줄을 블로그에서 직접 키보드로 타이핑해 주세요]`));
-    }
-    htmlParts.push(pTag(summaryLine));
-    if (incPhotoGuide) {
-        htmlParts.push(pTag(`[사진 넣을 위치 ① : 건물 외관이나 대로변·입구 사진 1~2장]`));
-    }
-    if (safetyMode === 'varied') {
-        htmlParts.push(pTag(locationLine));
-        if (incPhotoGuide) {
-            htmlParts.push(pTag(`[사진 넣을 위치 ② : 내부 메인 공간·채광·인테리어 사진 3~4장]`));
-        }
-    }
-    htmlParts.push(boldPTag(secTitles.feat));
-    detailFeatures.forEach((ft) => {
-        htmlParts.push(`<p>• ${esc(ft)}</p>`);
-    });
-    htmlParts.push(`<p><br></p>`);
-    if (safetyMode === 'skeleton') {
-        if (incTypingPrompts) {
-            htmlParts.push(pTag(`✍️ [직접 타이핑 ② : 사진 보시면서 현장에서 느낀 장점(주차, 채광, 룸 구조 등) 1~2줄만 직접 적어주시면 블로그 지수에 매우 좋습니다]`));
-        }
-        if (incPhotoGuide) {
-            htmlParts.push(pTag(`[사진 넣을 위치 ② : 내부 홀·인테리어·룸·화장실·주차장 사진 4~6장]`));
-        }
-    } else {
-        htmlParts.push(pTag(conditionLine));
-        if (incPhotoGuide) {
-            htmlParts.push(pTag(`[사진 넣을 위치 ③ : 룸·탕비실·화장실·주차장 사진 2~3장]`));
-        }
-    }
-
-    htmlParts.push(boldPTag(secTitles.spec));
-    htmlParts.push(tableOnlyHtml);
-    htmlParts.push(`<p><br></p>`);
-
-    htmlParts.push(boldPTag(secTitles.rec));
-    htmlParts.push(boldPTag(`• 추천 업종 : ${recBiz}`));
-    if (safetyMode === 'skeleton' && incTypingPrompts) {
-        htmlParts.push(pTag(`✍️ [직접 타이핑 ③ : 마무리 한 줄 인사를 직접 타이핑해 주세요 (예: 현장 답사나 조건 조율은 언제든 편하게 연락 주세요!)]`));
-    } else {
-        htmlParts.push(pTag(closingLine));
-    }
-
+    // Build [📌 복붙 100% 안전: 매물정보 표(18항목) + 홈페이지 안내 + 중개사 명함] Combined HTML & Text!
+    const specAndFooterHtmlParts = [];
+    specAndFooterHtmlParts.push(`<p><b>${esc(secTitles.spec)}</b></p>`);
+    specAndFooterHtmlParts.push(tableOnlyHtml);
+    specAndFooterHtmlParts.push(`<p><br></p>`);
     if (linkMode === 'text') {
-        htmlParts.push(`<p>----------------------------------------</p>`);
-        htmlParts.push(pTag(`• 본 매물(매물번호 ${sp.propNo}번)의 고화질 전체 사진과 상세 위치 지도는 네이버에서 [ 최가네부동산 ]을 검색하시거나, 인터넷 주소창에 [ choi114.com ] 입력 후 매물번호 [${sp.propNo}]번을 검색하시면 바로 보실 수 있습니다.`));
+        specAndFooterHtmlParts.push(`<p>----------------------------------------</p>`);
+        specAndFooterHtmlParts.push(`<p>• 본 매물(매물번호 ${esc(sp.propNo)}번)의 고화질 전체 사진과 상세 위치 지도는 네이버에서 [ 최가네부동산 ]을 검색하시거나, 인터넷 주소창에 [ choi114.com ] 입력 후 매물번호 [${esc(sp.propNo)}]번을 검색하시면 바로 보실 수 있습니다.</p><p><br></p>`);
     } else if (linkMode === 'single') {
-        htmlParts.push(`<p>----------------------------------------</p>`);
-        htmlParts.push(`<p>• 매물번호 ${esc(sp.propNo)}번 전체 사진 &amp; 위치 지도 바로보기 :<br><a href="${esc(detailUrl)}" target="_blank">${esc(detailUrl)}</a></p><p><br></p>`);
+        specAndFooterHtmlParts.push(`<p>----------------------------------------</p>`);
+        specAndFooterHtmlParts.push(`<p>• 매물번호 ${esc(sp.propNo)}번 전체 사진 &amp; 위치 지도 바로보기 :<br><a href="${esc(detailUrl)}" target="_blank">${esc(detailUrl)}</a></p><p><br></p>`);
     }
-
     if (incLegalFooter) {
-        htmlParts.push(`<p>----------------------------------------</p>`);
-        htmlParts.push(`<p><b>🏢 최가네부동산공인중개사사무소</b></p>`);
-        htmlParts.push(`<p>• 대표소장 공인중개사 : 최이명</p>`);
-        htmlParts.push(`<p>• 대표 상담전화 : <b>010-3548-4000</b> / 053-746-7114</p>`);
-        htmlParts.push(`<p>• 중개사무소 소재지 : 대구광역시 수성구 수성동1가 72-3번지 (2호선 대구은행역 2번 출구)</p>`);
-        htmlParts.push(`<p>• 등록번호 : 제27260-2024-00085호 • 매수신청대리인 등록번호 : 12-25-21</p><p><br></p>`);
+        specAndFooterHtmlParts.push(`<p>----------------------------------------</p>`);
+        specAndFooterHtmlParts.push(footerOnlyHtml);
     }
-    htmlParts.push(`<p>${esc(hashtagStr)}</p>`);
+    const specAndFooterHtml = specAndFooterHtmlParts.join('\n');
 
-    const richHtml = htmlParts.join('\n');
+    const specAndFooterTextParts = [
+        secTitles.spec,
+        '',
+        tableOnlyText,
+        '',
+        ...homepageTextLines,
+        ...(incLegalFooter ? ['----------------------------------------', ...legalFooterTextLines] : [])
+    ];
+    const specAndFooterText = specAndFooterTextParts.join('\n');
 
     return {
         specs: sp,
         titleOptions,
         selectedTitle,
         plainText,
-        richHtml,
         tableOnlyHtml,
         tableOnlyText,
+        footerOnlyHtml,
+        footerOnlyText,
+        specAndFooterHtml,
+        specAndFooterText,
         hashtagStr,
         commaTagStr
     };
@@ -4445,13 +4449,13 @@ function ensureNaverBlogModalInDom() {
             <div class="flex items-start justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
                 <div>
                     <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#03c75a] text-white text-[11px] font-black mb-1">
-                        <span>🛡️ 블로그 지수(C-Rank · DIA+) 100% 안전모드</span>
+                        <span>🖥️ 보조모니터 타이핑 대본(사진위치 포함) + 📌 법정 스펙 표·명함 원클릭 복사</span>
                     </div>
                     <h3 class="text-base sm:text-xl font-black text-slate-900 dark:text-white" id="nb-modal-heading">
-                        네이버 블로그 저품질·유사문서 방지 안전 원고 &amp; 매물정보 표 생성기
+                        네이버 블로그 지수 100% 보호 (서술형 타이핑 가이드 &amp; 스펙·명함 붙여넣기)
                     </h3>
                     <p class="text-xs text-slate-500 mt-0.5">
-                        외부 HTML/CSS 태그 오염 제로(0%), AI 고정 상투문구 제거, 외부 링크 도배 감점 차단으로 내 블로그 지수를 안전하게 지킵니다.
+                        서술형 문장과 사진 위치는 옆 모니터로 보면서 조금씩 바꿔 타이핑하시고, <b>매물정보 18항목 표 + 중개사 명함 + 태그</b>는 하단 버튼으로 1초 만에 붙여넣으세요!
                     </p>
                 </div>
                 <button type="button" onclick="closeNaverBlogGeneratorModal()" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer">
@@ -4459,80 +4463,76 @@ function ensureNaverBlogModalInDom() {
                 </button>
             </div>
 
-            <!-- 🛡️ 블로그 지수 보호 4계명 체크리스트 배너 -->
+            <!-- 🛡️ 듀얼 모니터 황금 작업 순서 안내 배너 -->
             <div class="bg-amber-50/90 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 rounded-xl p-3 text-xs text-amber-950 dark:text-amber-200 space-y-1">
                 <div class="font-black text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
-                    <span>🛡️ 광고대행사 저품질(스팸) 블로그 방지 · 내 블로그 지수 지키는 4계명</span>
+                    <span>🖥️ 대표님 전용 듀얼 모니터 블로그 작성 황금 순서 (저품질·유사문서 위험 0%)</span>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-[11.5px] font-bold leading-snug pt-0.5">
-                    <div>1️⃣ <b>직접 타이핑 섞기</b>: 붙여넣기 후 <b>첫 인사말 1~2줄과 사진 설명 1줄</b>은 블로그에서 직접 키보드로 치세요.</div>
-                    <div>2️⃣ <b>네이버 지도 첨부</b>: 블로그 에디터 상단 <b>[장소(지도)]</b> 버튼으로 매물 동네 지도를 1개 꼭 넣으세요.</div>
-                    <div>3️⃣ <b>3분 이상 체류 후 발행</b>: 붙여넣고 10초 만에 발행하면 봇으로 의심받습니다. 사진 넣으며 3분 이상 머무르세요.</div>
-                    <div>4️⃣ <b>외부 링크 도배 금지</b>: 본문에 http:// 클릭 링크 여러 개 대신 기본 설정된 <b>안전 텍스트 안내(choi114.com)</b>를 쓰세요.</div>
+                    <div>1️⃣ <b>서술형 본문 + 사진 배치</b>: 아래 3번 창을 옆 모니터에 띄워놓고 <b>📸 사진 넣을 위치 ①·②·③</b>에 맞춰 사진을 넣으며 내 말투로 조금씩 수정해 타이핑하세요.</div>
+                    <div>2️⃣ <b>네이버 지도 1개 첨부</b>: 사진 ① 밑에서 블로그 에디터 상단 <b>[장소(지도)]</b> 버튼으로 매물 동네 지도를 1개 넣으세요.</div>
+                    <div>3️⃣ <b>스펙 표(18항목) + 명함 붙여넣기</b>: 본문 타이핑이 끝나면 맨 아래 <b>[📌 매물정보 표(18항목) + 중개사 명함 한 번에 복사]</b> 버튼을 눌러 Ctrl+V 하세요.</div>
+                    <div>4️⃣ <b>해시태그 붙여넣기</b>: 4번의 <b>[쉼표(,) 태그 복사]</b> 또는 <b>[#해시태그 복사]</b>를 눌러 태그 입력창에 Ctrl+V 하시면 끝납니다!</div>
                 </div>
             </div>
 
             <!-- 1. Recommended SEO Titles (3 choices) -->
             <div class="bg-emerald-50/70 dark:bg-slate-800/80 border border-emerald-200 dark:border-slate-700 rounded-xl p-3 space-y-1.5">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-extrabold text-emerald-950 dark:text-emerald-300">1. 네이버 블로그 상위노출 추천 제목 3종 (클릭하여 선택 · 우측 버튼으로 제목만 복사)</span>
+                    <span class="text-xs font-extrabold text-emerald-950 dark:text-emerald-300">1. 네이버 블로그 상위노출 추천 제목 3종 (보면서 타이핑하거나 복사 후 단어 1~2개 수정)</span>
                 </div>
                 <div id="nb-title-options-box" class="space-y-1.5"></div>
             </div>
 
             <!-- 2. Safety Mode, Link Safety & Options -->
-            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2.5">
+            <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <div class="flex flex-wrap items-center gap-1.5">
-                        <span class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mr-1">2. 블로그 지수 안전모드:</span>
-                        <button type="button" onclick="setNaverBlogSafetyMode('skeleton')" data-nbsafety="skeleton" class="px-2.5 py-1.5 rounded-lg bg-[#03c75a] text-white text-xs font-extrabold cursor-pointer">🛡️ 안전 뼈대모드 (상투문구 0% · 직접 2줄 첨삭 — 추천)</button>
-                        <button type="button" onclick="setNaverBlogSafetyMode('varied')" data-nbsafety="varied" class="px-2.5 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-300 text-xs font-bold cursor-pointer">🔄 문장 자동변주 완성모드 (매물별 4,096가지 다른 문장)</button>
-                        <button type="button" onclick="shuffleNaverBlogVariation()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-extrabold cursor-pointer flex items-center gap-1" title="클릭할 때마다 인사말·본문·소제목 표현이 완전히 새로운 문장으로 바뀝니다">
-                            <span>🎲 문장 표현 새로고침</span>
+                        <span class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mr-1">2. 대본 보기 방식:</span>
+                        <button type="button" onclick="setNaverBlogSafetyMode('dual_guide')" data-nbsafety="dual_guide" class="px-2.5 py-1.5 rounded-lg bg-[#03c75a] text-white text-xs font-extrabold cursor-pointer">🖥️ 보조모니터 타이핑 대본 + 📸 사진 넣을 위치 안내 (기본)</button>
+                        <button type="button" onclick="setNaverBlogSafetyMode('skeleton')" data-nbsafety="skeleton" class="px-2.5 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-300 text-xs font-bold cursor-pointer">🛡️ 짧은 요약 뼈대만 보기</button>
+                        <button type="button" onclick="shuffleNaverBlogVariation()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-extrabold cursor-pointer flex items-center gap-1" title="클릭할 때마다 서술형 대본의 인사말·입지·내부 설명 문장이 새로운 표현으로 바뀝니다">
+                            <span>🎲 서술형 문장 표현 새로고침</span>
                         </button>
                     </div>
                 </div>
                 <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5 border-t border-slate-200 dark:border-slate-700">
                     <div class="flex flex-wrap items-center gap-1.5">
-                        <span class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mr-1">홈페이지 안내 방식:</span>
+                        <span class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mr-1">스펙 하단 홈페이지 안내:</span>
                         <button type="button" onclick="setNaverBlogLinkMode('text')" data-nblink="text" class="px-2.5 py-1 rounded-lg bg-[#03c75a] text-white text-[11.5px] font-extrabold cursor-pointer">🛡️ 안전 텍스트 안내 (클릭링크 0개 · 저품질 방지)</button>
                         <button type="button" onclick="setNaverBlogLinkMode('single')" data-nblink="single" class="px-2.5 py-1 rounded-lg bg-white text-slate-700 border border-slate-300 text-[11.5px] font-bold cursor-pointer">🔗 상세 링크 1개만</button>
                         <button type="button" onclick="setNaverBlogLinkMode('none')" data-nblink="none" class="px-2.5 py-1 rounded-lg bg-white text-slate-700 border border-slate-300 text-[11.5px] font-bold cursor-pointer">🚫 홈페이지 언급 안 함</button>
                     </div>
-                </div>
-                <div class="flex flex-wrap items-center gap-3 pt-1.5 border-t border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200">
-                    <label class="flex items-center gap-1 cursor-pointer">
-                        <input type="checkbox" id="nb-opt-typing" checked onchange="refreshNaverBlogModalContent()" class="rounded text-[#03c75a]" />
-                        <span>✍️ 직접 타이핑할 위치 표시 (뼈대모드)</span>
-                    </label>
-                    <label class="flex items-center gap-1 cursor-pointer">
-                        <input type="checkbox" id="nb-opt-photo" checked onchange="refreshNaverBlogModalContent()" class="rounded text-[#03c75a]" />
-                        <span>📸 사진 넣을 위치 안내</span>
-                    </label>
-                    <label class="flex items-center gap-1 cursor-pointer">
-                        <input type="checkbox" id="nb-opt-m2" checked onchange="refreshNaverBlogModalContent()" class="rounded text-[#03c75a]" />
-                        <span>📐 평·㎡ 병기</span>
-                    </label>
-                    <label class="flex items-center gap-1 cursor-pointer">
-                        <input type="checkbox" id="nb-opt-legal" checked onchange="refreshNaverBlogModalContent()" class="rounded text-[#03c75a]" />
-                        <span>⚖️ 중개사무소 법정표기</span>
-                    </label>
+                    <div class="flex flex-wrap items-center gap-3 text-xs font-bold text-slate-700 dark:text-slate-200">
+                        <label class="flex items-center gap-1 cursor-pointer">
+                            <input type="checkbox" id="nb-opt-photo" checked onchange="refreshNaverBlogModalContent()" class="rounded text-[#03c75a]" />
+                            <span>📸 사진·지도 위치 표시</span>
+                        </label>
+                        <label class="flex items-center gap-1 cursor-pointer">
+                            <input type="checkbox" id="nb-opt-m2" checked onchange="refreshNaverBlogModalContent()" class="rounded text-[#03c75a]" />
+                            <span>📐 평·㎡ 병기</span>
+                        </label>
+                        <label class="flex items-center gap-1 cursor-pointer">
+                            <input type="checkbox" id="nb-opt-legal" checked onchange="refreshNaverBlogModalContent()" class="rounded text-[#03c75a]" />
+                            <span>⚖️ 중개사 명함 포함</span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <!-- 3. Main Blog Content Preview & Editor -->
+            <!-- 3. Dual-Monitor Narrative Typing Script & Photo Guide -->
             <div class="space-y-1.5">
                 <div class="flex items-center justify-between">
-                    <label class="text-xs font-extrabold text-slate-800 dark:text-slate-200">3. 블로그 본문 원고 미리보기 및 자유 수정 (외부 HTML 태그 없는 100% 순수 텍스트)</label>
-                    <span id="nb-char-count-badge" class="text-[11px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">지수 안전모드 적용됨</span>
+                    <label class="text-xs font-extrabold text-slate-800 dark:text-slate-200">3. 🖥️ 보조 모니터용 서술형 타이핑 대본 &amp; 📸 사진 배치 가이드 (이 창을 보면서 조금씩 수정해 타이핑하세요)</label>
+                    <span id="nb-char-count-badge" class="text-[11px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">듀얼모니터 타이핑 가이드</span>
                 </div>
-                <textarea id="nb-plain-textarea" rows="12" class="w-full rounded-xl border-slate-300 bg-white dark:bg-slate-950 text-xs sm:text-[13px] leading-relaxed font-medium text-slate-800 dark:text-slate-100 p-3.5 focus:ring-[#03c75a] focus:border-[#03c75a]"></textarea>
+                <textarea id="nb-plain-textarea" rows="13" class="w-full rounded-xl border-slate-300 bg-white dark:bg-slate-950 text-xs sm:text-[13px] leading-relaxed font-medium text-slate-800 dark:text-slate-100 p-3.5 focus:ring-[#03c75a] focus:border-[#03c75a]"></textarea>
             </div>
 
-            <!-- 4. Hashtags Box -->
+            <!-- 4. Hashtags Box (Ctrl+V Safe) -->
             <div class="bg-slate-50 dark:bg-slate-800/70 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div class="min-w-0 flex-1">
-                    <div class="text-[11px] font-extrabold text-slate-500 mb-0.5">4. 네이버 블로그 태그 입력창용 추천 해시태그 (18개)</div>
+                    <div class="text-[11px] font-extrabold text-slate-500 mb-0.5">4. [붙여넣기 안전 100%] 네이버 블로그 태그 입력창용 추천 해시태그 (18개)</div>
                     <div id="nb-tags-preview" class="text-xs font-bold text-[#03c75a] truncate"></div>
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
@@ -4541,20 +4541,26 @@ function ensureNaverBlogModalInDom() {
                 </div>
             </div>
 
-            <!-- 5. Safe Mode Action Buttons -->
-            <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 pt-1">
-                <button type="button" onclick="copyNaverBlogPlainText()" class="sm:col-span-5 py-3.5 px-3 rounded-xl bg-[#03c75a] hover:bg-[#02b350] text-white font-black text-xs sm:text-[13px] flex items-center justify-center gap-1.5 shadow-md cursor-pointer transition">
-                    <span class="material-symbols-outlined text-[19px]">verified_user</span>
-                    <span>🛡️ 지수안전 순수 텍스트만 복사 (1순위 권장)</span>
-                </button>
-                <button type="button" onclick="copyNaverBlogTableOnly()" class="sm:col-span-4 py-3.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-[13px] flex items-center justify-center gap-1.5 shadow-sm cursor-pointer transition">
-                    <span class="material-symbols-outlined text-[18px]">table_chart</span>
-                    <span>📊 매물정보 표(18항목)만 따로 복사</span>
-                </button>
-                <button type="button" onclick="copyNaverBlogRichHtml()" class="sm:col-span-3 py-3.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 font-extrabold text-xs flex items-center justify-center gap-1 cursor-pointer transition">
-                    <span class="material-symbols-outlined text-[17px]">article</span>
-                    <span>본문+표 한 번에 복사</span>
-                </button>
+            <!-- 5. 100% Safe Spec & Legal Footer Paste Buttons -->
+            <div class="bg-emerald-50/80 dark:bg-emerald-950/30 p-3 rounded-xl border-2 border-[#03c75a] space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-emerald-950 dark:text-emerald-200">5. 📌 [붙여넣기 100% 안전] 숫자·법정 스펙 데이터 (매물정보 18항목 표 + 중개사 명함) 원클릭 복사</span>
+                    <span class="text-[11px] font-bold text-emerald-700 dark:text-emerald-300">일일이 치지 말고 Ctrl+V로 붙여넣으세요!</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                    <button type="button" onclick="copyNaverBlogSpecAndFooterHtml()" class="sm:col-span-6 py-3.5 px-3 rounded-xl bg-[#03c75a] hover:bg-[#02b350] text-white font-black text-xs sm:text-[13px] flex items-center justify-center gap-1.5 shadow-md cursor-pointer transition">
+                        <span class="material-symbols-outlined text-[19px]">fact_check</span>
+                        <span>📌 매물정보 표(18항목) + 중개사 명함 한 번에 복사 (추천)</span>
+                    </button>
+                    <button type="button" onclick="copyNaverBlogTableOnly()" class="sm:col-span-3 py-3.5 px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs flex items-center justify-center gap-1 shadow-sm cursor-pointer transition">
+                        <span class="material-symbols-outlined text-[17px]">table_chart</span>
+                        <span>📊 표(18항목)만 복사</span>
+                    </button>
+                    <button type="button" onclick="copyNaverBlogFooterOnly()" class="sm:col-span-3 py-3.5 px-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-extrabold text-xs flex items-center justify-center gap-1 cursor-pointer transition">
+                        <span class="material-symbols-outlined text-[17px]">badge</span>
+                        <span>🏢 중개사 명함만 복사</span>
+                    </button>
+                </div>
             </div>
         </div>
     `;
@@ -4623,7 +4629,7 @@ function shuffleNaverBlogVariation() {
     _currentNaverBlogVariationSeed = (_currentNaverBlogVariationSeed + 1) % 64;
     refreshNaverBlogModalContent();
     if (typeof showToast === 'function') {
-        showToast('🎲 인사말·본문·소제목 문장 구조가 새로운 표현으로 변경되었습니다! (유사문서 방지)');
+        showToast('🎲 서술형 타이핑 대본의 인사말·입지·내부 설명 문장이 새로운 표현으로 바뀌었습니다!');
     }
 }
 window.shuffleNaverBlogVariation = shuffleNaverBlogVariation;
@@ -4692,14 +4698,40 @@ function refreshNaverBlogModalContent() {
     const charBadge = document.getElementById('nb-char-count-badge');
     if (charBadge) {
         const len = gen.plainText.length;
-        const modeLabel = _currentNaverBlogSafetyMode === 'skeleton' ? '🛡️ 안전 뼈대모드 (상투문구 0%)' : '🔄 문장 자동변주모드';
-        charBadge.textContent = `${modeLabel} · 공백포함 ${len.toLocaleString()}자`;
+        const modeLabel = _currentNaverBlogSafetyMode === 'dual_guide' ? '🖥️ 보조모니터 서술 대본 + 사진가이드' : '🛡️ 요약 뼈대모드';
+        charBadge.textContent = `${modeLabel} · ${len.toLocaleString()}자`;
     }
 
     const tagsEl = document.getElementById('nb-tags-preview');
     if (tagsEl) tagsEl.textContent = gen.hashtagStr;
 }
 window.refreshNaverBlogModalContent = refreshNaverBlogModalContent;
+
+async function copyNaverBlogSpecAndFooterHtml() {
+    if (!_lastGeneratedBlogData) return;
+    try {
+        if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+            const htmlBlob = new Blob([_lastGeneratedBlogData.specAndFooterHtml], { type: 'text/html' });
+            const textBlob = new Blob([_lastGeneratedBlogData.specAndFooterText], { type: 'text/plain' });
+            await navigator.clipboard.write([
+                new ClipboardItem({
+                    'text/html': htmlBlob,
+                    'text/plain': textBlob
+                })
+            ]);
+            if (typeof showToast === 'function') {
+                showToast('📌 [매물정보 18항목 표 + 중개사 법정 명함]이 한 번에 복사되었습니다! 서술형 타이핑 아래에 Ctrl+V로 붙여넣으세요.');
+            } else {
+                alert('📌 [매물정보 18항목 표 + 중개사 법정 명함]이 한 번에 복사되었습니다!\n블로그 에디터 하단에 Ctrl+V로 붙여넣으세요.');
+            }
+            return;
+        }
+    } catch (e) {}
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(_lastGeneratedBlogData.specAndFooterText);
+    }
+}
+window.copyNaverBlogSpecAndFooterHtml = copyNaverBlogSpecAndFooterHtml;
 
 async function copyNaverBlogTableOnly() {
     if (!_lastGeneratedBlogData) return;
@@ -4727,12 +4759,12 @@ async function copyNaverBlogTableOnly() {
 }
 window.copyNaverBlogTableOnly = copyNaverBlogTableOnly;
 
-async function copyNaverBlogRichHtml() {
+async function copyNaverBlogFooterOnly() {
     if (!_lastGeneratedBlogData) return;
     try {
         if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
-            const htmlBlob = new Blob([_lastGeneratedBlogData.richHtml], { type: 'text/html' });
-            const textBlob = new Blob([_lastGeneratedBlogData.plainText], { type: 'text/plain' });
+            const htmlBlob = new Blob([_lastGeneratedBlogData.footerOnlyHtml], { type: 'text/html' });
+            const textBlob = new Blob([_lastGeneratedBlogData.footerOnlyText], { type: 'text/plain' });
             await navigator.clipboard.write([
                 new ClipboardItem({
                     'text/html': htmlBlob,
@@ -4740,35 +4772,18 @@ async function copyNaverBlogRichHtml() {
                 })
             ]);
             if (typeof showToast === 'function') {
-                showToast('📋 본문 + 매물정보 표(Table)가 함께 복사되었습니다! 붙여넣기 후 첫 인사말 1~2줄은 꼭 직접 타이핑해 주세요.');
+                showToast('🏢 최가네부동산 법정 의무 명시사항(명함 5줄)이 복사되었습니다! 글 맨 끝에 Ctrl+V로 붙여넣으세요.');
             } else {
-                alert('📋 본문 + 매물정보 표(Table)가 함께 복사되었습니다!\n붙여넣기 후 첫 인사말 1~2줄은 꼭 직접 타이핑해 주세요.');
+                alert('🏢 최가네부동산 법정 의무 명시사항(명함 5줄)이 복사되었습니다!');
             }
             return;
         }
     } catch (e) {}
-    copyNaverBlogPlainText();
-}
-window.copyNaverBlogRichHtml = copyNaverBlogRichHtml;
-
-function copyNaverBlogPlainText() {
-    const ta = document.getElementById('nb-plain-textarea');
-    if (!ta) return;
-    // Strip the first line "추천 제목: ..." when copying body text so broker doesn't have to delete it manually in blog body!
-    const cleanBodyText = ta.value.replace(/^추천\s*제목\s*:[^\n]*\n+/, '');
     if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(cleanBodyText);
-    } else {
-        ta.select();
-        document.execCommand('copy');
-    }
-    if (typeof showToast === 'function') {
-        showToast('🛡️ 외부 HTML 태그가 전혀 없는 100% 순수 텍스트 본문이 복사되었습니다! (추천 제목 줄 자동 제외)');
-    } else {
-        alert('🛡️ 외부 HTML 태그가 전혀 없는 100% 순수 텍스트 본문이 복사되었습니다!');
+        navigator.clipboard.writeText(_lastGeneratedBlogData.footerOnlyText);
     }
 }
-window.copyNaverBlogPlainText = copyNaverBlogPlainText;
+window.copyNaverBlogFooterOnly = copyNaverBlogFooterOnly;
 
 function copyNaverBlogTags(mode = 'hash') {
     if (!_lastGeneratedBlogData) return;
