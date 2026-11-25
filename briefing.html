@@ -614,7 +614,7 @@
             font-size: 20px !important;
             line-height: 1.2 !important;
         }
-        /* Optical vertical centering compensation for html2canvas CJK (Pretendard) baseline shift inside pills/headers */
+        /* Clean symmetric vertical centering for pills/headers inside A4 capture (paired with Tailwind img preflight fix during html2canvas) */
         .pdf-capture-a4 #header-customer-badge-wrap,
         .pdf-capture-a4 #header-count-badge,
         .pdf-capture-a4 .briefing-card-badge,
@@ -624,65 +624,29 @@
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
-            line-height: 1 !important;
-            padding-top: 2px !important;
-            padding-bottom: 10px !important;
-            padding-left: 10px !important;
-            padding-right: 10px !important;
+            line-height: 1.2 !important;
+            padding: 4px 10px !important;
             vertical-align: middle !important;
             box-sizing: border-box !important;
         }
         .pdf-capture-a4 #header-customer-badge-wrap,
         .pdf-capture-a4 #header-count-badge {
-            padding-top: 3px !important;
-            padding-bottom: 11px !important;
-            padding-left: 12px !important;
-            padding-right: 12px !important;
-        }
-        .pdf-capture-a4 #header-date,
-        .pdf-capture-a4 .briefing-cover-sub {
-            line-height: 1 !important;
-            padding-bottom: 7px !important;
-        }
-        .pdf-capture-a4 .briefing-rank-badge {
-            line-height: 1 !important;
-            padding-bottom: 6px !important;
+            padding: 5px 12px !important;
         }
         .pdf-capture-a4 .briefing-card-header-bar {
             padding-top: 10px !important;
             padding-bottom: 10px !important;
             align-items: center !important;
         }
-        .pdf-capture-a4 .briefing-card-header-title {
-            display: inline-block !important;
-            line-height: 1 !important;
-            padding-bottom: 7px !important;
-        }
         .pdf-capture-a4 .briefing-map-header {
             padding-top: 9px !important;
             padding-bottom: 9px !important;
             align-items: center !important;
         }
-        .pdf-capture-a4 .briefing-map-title {
-            display: inline-block !important;
-            line-height: 1 !important;
-            padding-bottom: 7px !important;
-        }
         .pdf-capture-a4 .briefing-photo-caption {
-            padding-top: 3px !important;
-            padding-bottom: 10px !important;
-            line-height: 1 !important;
-        }
-        .pdf-capture-a4 .briefing-comment-heading,
-        .pdf-capture-a4 .briefing-photos-header {
-            padding-bottom: 10px !important;
-        }
-        .pdf-capture-a4 .material-symbols-outlined {
-            position: relative !important;
-            top: 2px !important;
-        }
-        .pdf-capture-a4 .briefing-map-header .material-symbols-outlined {
-            top: -1px !important;
+            padding-top: 6px !important;
+            padding-bottom: 6px !important;
+            line-height: 1.2 !important;
         }
     </style>
 </head>
@@ -1580,7 +1544,16 @@
             setMobilePdfProgress(8, 'PDF 엔진을 준비하고 있습니다...');
 
             let stageHost = null;
+            let tailwindImgFixStyle = null;
             try {
+                // Fix well-known html2canvas v1.4.1 + Tailwind Preflight bug:
+                // Tailwind sets `img { display: block; }` which breaks html2canvas FontMetrics baseline probing
+                // (`<span>` + `1x1 <img>` inside document.body), shifting ALL rendered text downward by ~6-9px!
+                tailwindImgFixStyle = document.createElement('style');
+                tailwindImgFixStyle.id = 'html2canvas-tailwind-img-fix';
+                tailwindImgFixStyle.textContent = 'img { display: inline !important; } .pdf-capture-a4 img { display: block !important; }';
+                document.head.appendChild(tailwindImgFixStyle);
+
                 await Promise.all([
                     loadExternalScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', () => typeof window.html2canvas === 'function'),
                     loadExternalScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', () => Boolean(window.jspdf && window.jspdf.jsPDF))
@@ -1743,7 +1716,12 @@
                         backgroundColor: '#ffffff',
                         width: 794,
                         windowWidth: 1024,
-                        logging: false
+                        logging: false,
+                        onclone: (clonedDoc) => {
+                            const fix = clonedDoc.createElement('style');
+                            fix.textContent = 'img { display: inline !important; } .pdf-capture-a4 img { display: block !important; }';
+                            clonedDoc.head.appendChild(fix);
+                        }
                     });
 
                     const imgHeightMm = (canvas.height / canvas.width) * contentW;
@@ -1833,6 +1811,9 @@
             } finally {
                 _isGeneratingMobilePdf = false;
                 if (closeX) closeX.classList.remove('hidden');
+                if (tailwindImgFixStyle && tailwindImgFixStyle.parentNode) {
+                    tailwindImgFixStyle.parentNode.removeChild(tailwindImgFixStyle);
+                }
                 if (stageHost && stageHost.parentNode) {
                     stageHost.parentNode.removeChild(stageHost);
                 }
