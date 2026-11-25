@@ -1385,7 +1385,7 @@
                 img.onload = () => { clearTimeout(timer); resolve({ img, tx, ty }); };
                 img.onerror = () => { clearTimeout(timer); resolve(null); };
                 const osmUrl = `https://tile.openstreetmap.org/${zoom}/${tx}/${ty}.png`;
-                img.src = `/api/img-proxy?url=${encodeURIComponent(osmUrl)}`;
+                img.src = `/api/briefing?action=img_proxy&url=${encodeURIComponent(osmUrl)}`;
             });
 
             const jobs = [];
@@ -1448,8 +1448,8 @@
                     return;
                 }
                 let finalSrc = rawSrc;
-                if (/^https?:\/\//i.test(rawSrc) && !rawSrc.includes(window.location.origin + '/api/img-proxy')) {
-                    finalSrc = `/api/img-proxy?url=${encodeURIComponent(rawSrc)}`;
+                if (/^https?:\/\//i.test(rawSrc) && !rawSrc.includes('action=img_proxy')) {
+                    finalSrc = `/api/briefing?action=img_proxy&url=${encodeURIComponent(rawSrc)}`;
                 }
                 const timer = setTimeout(() => resolve(), 6500);
                 const finish = () => {
