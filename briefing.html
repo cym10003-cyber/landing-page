@@ -1182,9 +1182,9 @@
             if (isNaN(n) || n <= 0) return '-';
             const eok = Math.floor(n / 10000);
             const rem = Math.round((n % 10000) * 10) / 10;
-            if (eok > 0 && rem > 0) return `${eok}억 ${rem.toLocaleString()}만 원`;
-            if (eok > 0) return `${eok}억 원`;
-            return `${rem.toLocaleString()}만 원`;
+            if (eok > 0 && rem > 0) return `${eok}억 ${rem.toLocaleString()}만원`;
+            if (eok > 0) return `${eok}억원`;
+            return `${rem.toLocaleString()}만원`;
         }
 
         function getFloorParts(item) {
