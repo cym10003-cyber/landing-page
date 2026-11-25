@@ -325,7 +325,7 @@ h1, h2, h3, h4, #post-title, #article-title, .main-title, .hero-title {
             <button id="share-btn" class="inline-flex items-center justify-center gap-1 bg-surface-container-high hover:bg-surface-dim text-ink px-2.5 sm:px-3.5 py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm transition-all h-9 whitespace-nowrap cursor-pointer">
                 <span class="material-symbols-outlined text-[16px]">share</span> 공유
             </button>
-            <button id="print-btn" onclick="window.print()" class="inline-flex items-center justify-center gap-1 bg-surface-container-high hover:bg-surface-dim text-ink px-2.5 sm:px-3.5 py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm transition-all h-9 whitespace-nowrap cursor-pointer">
+            <button id="print-btn" onclick="handleDetailPrintOrPdf()" class="inline-flex items-center justify-center gap-1 bg-surface-container-high hover:bg-surface-dim text-ink px-2.5 sm:px-3.5 py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm transition-all h-9 whitespace-nowrap cursor-pointer">
                 <span class="material-symbols-outlined text-[16px]">print</span> 인쇄/PDF
             </button>
         </div>
@@ -741,6 +741,19 @@ function showToast(msg) {
     }, 3500);
 }
 window.showToast = showToast;
+
+window.handleDetailPrintOrPdf = function() {
+    const ua = navigator.userAgent || '';
+    if (/KAKAOTALK/i.test(ua)) {
+        const target = window.location.href;
+        showToast('카카오톡 내부에서는 인쇄/PDF가 제한되어 기본 브라우저로 엽니다...');
+        setTimeout(() => {
+            window.location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(target);
+        }, 250);
+        return;
+    }
+    window.print();
+};
 
 window.copyKakaoBriefing = async function() {
     if (!currentLoadedPost) {

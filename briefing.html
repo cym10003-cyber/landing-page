@@ -474,6 +474,146 @@
             justify-content: center;
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.35);
         }
+
+        /* Off-Screen A4 Executive Capture Stage for Mobile Direct PDF Generation (Exact Desktop A4 Proportions even on 360px/390px phones!) */
+        .pdf-capture-a4 {
+            width: 794px !important;
+            max-width: 794px !important;
+            background: #ffffff !important;
+            color: #0f172a !important;
+            padding: 2px !important;
+            box-sizing: border-box !important;
+            font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Malgun Gothic", sans-serif !important;
+        }
+        .pdf-capture-a4 .no-print {
+            display: none !important;
+        }
+        .pdf-capture-a4.internal-report-mode .brand-only-block,
+        .pdf-capture-a4.internal-report-mode .brand-name-text {
+            display: none !important;
+        }
+        .pdf-capture-a4 .shadow-sm,
+        .pdf-capture-a4 .shadow-md,
+        .pdf-capture-a4 .shadow-lg,
+        .pdf-capture-a4 .shadow-xs,
+        .pdf-capture-a4 .shadow-2xs {
+            box-shadow: none !important;
+        }
+        .pdf-capture-a4 #cover-masthead-section {
+            padding: 16px 20px !important;
+            border-radius: 8px !important;
+        }
+        .pdf-capture-a4 #header-title {
+            font-size: 22px !important;
+            line-height: 1.32 !important;
+        }
+        .pdf-capture-a4 #header-note-text {
+            font-size: 15.5px !important;
+            font-weight: 700 !important;
+            line-height: 1.55 !important;
+            color: #0f172a !important;
+        }
+        .pdf-capture-a4 .briefing-spec-strip {
+            display: grid !important;
+            grid-template-columns: minmax(0, 1.58fr) minmax(0, 0.82fr) minmax(0, 1.3fr) !important;
+        }
+        .pdf-capture-a4 .briefing-spec-strip > div {
+            border-top: 0 !important;
+            border-left: 1px solid #e2e8f0 !important;
+            padding: 8px 10px !important;
+        }
+        .pdf-capture-a4 .briefing-spec-strip > div:first-child {
+            border-left: 0 !important;
+        }
+        .pdf-capture-a4 .briefing-spec-val {
+            font-size: 13.5px !important;
+            line-height: 1.35 !important;
+        }
+        .pdf-capture-a4 .briefing-prop-title {
+            font-size: 18px !important;
+            line-height: 1.32 !important;
+        }
+        .pdf-capture-a4 .briefing-kpi-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+        }
+        .pdf-capture-a4 .briefing-kpi-grid.pdf-kpi-5col {
+            grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+        }
+        .pdf-capture-a4 .briefing-kpi-card {
+            padding: 10px 11px !important;
+            grid-column: auto !important;
+        }
+        .pdf-capture-a4 .briefing-kpi-value {
+            font-size: 16.5px !important;
+            line-height: 1.25 !important;
+        }
+        .pdf-capture-a4 .briefing-kpi-sub {
+            font-size: 11.5px !important;
+        }
+        .pdf-capture-a4 .briefing-comment-box {
+            padding: 12px 15px !important;
+        }
+        .pdf-capture-a4 .briefing-comment-heading {
+            font-size: 14.5px !important;
+            font-weight: 900 !important;
+        }
+        .pdf-capture-a4 .briefing-comment-line {
+            font-size: 15px !important;
+            font-weight: 700 !important;
+            line-height: 1.58 !important;
+            color: #0f172a !important;
+        }
+        .pdf-capture-a4 .print-photos-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 12px !important;
+        }
+        .pdf-capture-a4 .print-photos-grid.single-photo-grid {
+            grid-template-columns: minmax(0, 1fr) !important;
+        }
+        .pdf-capture-a4 #comparison-mobile-cards {
+            display: none !important;
+        }
+        .pdf-capture-a4 #comparison-table-wrapper {
+            display: block !important;
+            overflow: visible !important;
+            width: 100% !important;
+        }
+        .pdf-capture-a4 #comparison-table {
+            display: table !important;
+            width: 100% !important;
+            table-layout: fixed !important;
+            font-size: 12px !important;
+        }
+        .pdf-capture-a4 #broker-footer-card {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            padding: 14px 18px !important;
+            gap: 16px !important;
+            border-radius: 8px !important;
+        }
+        .pdf-capture-a4 #broker-footer-meta-row {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        .pdf-capture-a4 #broker-footer-meta-sep {
+            display: inline !important;
+        }
+        .pdf-capture-a4 #broker-footer-card .footer-contact-box {
+            text-align: right !important;
+            white-space: nowrap !important;
+            min-width: 175px !important;
+        }
+        .pdf-capture-a4 #broker-footer-phone {
+            font-size: 20px !important;
+            line-height: 1.2 !important;
+        }
     </style>
 </head>
 <body class="bg-[#f1f5f9] text-slate-900 min-h-screen pb-24 overflow-x-hidden">
@@ -497,10 +637,11 @@
                     <span class="material-symbols-outlined text-[15px] sm:text-[16px]">share</span>
                     <span>링크복사</span>
                 </button>
-                <!-- Customer Standard Print Button (Shown on customer share URLs; hidden when Admin preview toolbar is active) -->
+                <!-- Customer Standard Print / Mobile Direct PDF Button (Shown on customer share URLs; hidden when Admin preview toolbar is active) -->
                 <button type="button" id="customer-default-print-btn" onclick="printBriefingReport('branded')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg bg-[#0B2545] hover:bg-[#003891] text-white text-[11px] sm:text-xs md:text-sm font-extrabold flex items-center gap-1 sm:gap-1.5 shadow-xs transition cursor-pointer whitespace-nowrap shrink-0">
-                    <span class="material-symbols-outlined text-[16px] sm:text-[18px]">print</span>
-                    <span class="sm:hidden">인쇄/PDF</span>
+                    <span class="material-symbols-outlined text-[16px] sm:text-[18px] sm:hidden">picture_as_pdf</span>
+                    <span class="material-symbols-outlined text-[16px] sm:text-[18px] hidden sm:inline">print</span>
+                    <span class="sm:hidden">PDF 저장</span>
                     <span class="hidden sm:inline">제안서 출력 (A4 인쇄/PDF)</span>
                 </button>
             </div>
@@ -861,6 +1002,100 @@
         </div>
     </div>
 
+    <!-- Mobile PDF Generation Progress & Completion Modal -->
+    <div id="mobile-pdf-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-[9999] hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 id="mobile-pdf-modal-title" class="text-base font-black text-[#0B2545] flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[#003891] text-[22px]">picture_as_pdf</span>
+                    <span>A4 PDF 제안서 저장</span>
+                </h3>
+                <button type="button" id="mobile-pdf-close-x" onclick="closeMobilePdfModal()" class="text-slate-400 hover:text-slate-700 cursor-pointer">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Progress State -->
+            <div id="mobile-pdf-progress-view" class="space-y-3 py-2 text-center">
+                <div class="inline-block w-10 h-10 border-4 border-[#0B2545] border-t-transparent rounded-full animate-spin"></div>
+                <div id="mobile-pdf-status-text" class="text-sm font-extrabold text-slate-800">A4 PDF 제안서를 생성하고 있습니다...</div>
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="mobile-pdf-progress-bar" class="h-full bg-[#003891] rounded-full transition-all duration-300" style="width: 10%"></div>
+                </div>
+                <p class="text-xs text-slate-500">고화질 사진·지도를 A4 규격에 맞춰 정리 중입니다.<br/>잠시만 기다려 주세요 (약 3~8초 소요)</p>
+            </div>
+
+            <!-- Done State -->
+            <div id="mobile-pdf-done-view" class="hidden space-y-3">
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 text-center space-y-1">
+                    <div class="text-emerald-800 font-black text-sm flex items-center justify-center gap-1">
+                        <span class="material-symbols-outlined text-[19px]">check_circle</span>
+                        <span>A4 PDF 파일이 준비되었습니다!</span>
+                    </div>
+                    <div id="mobile-pdf-file-meta" class="text-xs font-bold text-emerald-700/90">총 0페이지 · 다운로드 폴더를 확인해 주세요.</div>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <button type="button" onclick="triggerLastPdfDownload()" class="w-full py-3 px-4 rounded-xl bg-[#0B2545] hover:bg-[#003891] text-white font-extrabold text-sm flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+                        <span class="material-symbols-outlined text-[18px]">download</span>
+                        <span>PDF 파일 다운로드</span>
+                    </button>
+                    <button type="button" id="mobile-pdf-share-btn" onclick="shareLastGeneratedPdf()" class="hidden w-full py-3 px-4 rounded-xl bg-[#fee500] hover:bg-[#fdd835] text-[#191600] font-extrabold text-sm flex items-center justify-center gap-1.5 shadow-xs cursor-pointer border border-[#d4be00]">
+                        <span class="material-symbols-outlined text-[18px]">ios_share</span>
+                        <span>카카오톡 / 파일 앱으로 보내기</span>
+                    </button>
+                    <button type="button" onclick="closeMobilePdfModal(); setTimeout(() => window.print(), 150);" class="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-1 cursor-pointer">
+                        <span class="material-symbols-outlined text-[16px]">print</span>
+                        <span>기기 인쇄 화면 열기</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="mobile-pdf-error-view" class="hidden space-y-3 text-center">
+                <div class="bg-rose-50 border border-rose-200 rounded-xl p-3.5 text-xs text-rose-800 font-bold leading-relaxed" id="mobile-pdf-error-text">
+                    PDF 생성 중 일시적인 오류가 발생했습니다.
+                </div>
+                <div class="flex flex-col gap-2">
+                    <button type="button" onclick="openInExternalBrowserForPdf(_pendingPdfMode)" class="w-full py-2.5 px-4 rounded-xl bg-[#0B2545] text-white font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span class="material-symbols-outlined text-[16px]">open_in_browser</span>
+                        <span>기본 브라우저(크롬·사파리)에서 열기</span>
+                    </button>
+                    <button type="button" onclick="closeMobilePdfModal()" class="w-full py-2.5 px-4 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs cursor-pointer">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KakaoTalk / Restricted In-App Browser PDF Handoff Modal -->
+    <div id="kakao-external-pdf-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-[9999] hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="text-base font-black text-[#0B2545] flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[#003891] text-[22px]">picture_as_pdf</span>
+                    <span>모바일 PDF 저장 안내</span>
+                </h3>
+                <button type="button" onclick="closeKakaoExternalPdfModal()" class="text-slate-400 hover:text-slate-700 cursor-pointer">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-3.5 text-xs sm:text-[13px] text-slate-800 font-bold leading-relaxed space-y-1.5">
+                <p>카카오톡 내부 화면에서는 보안 정책상 인쇄·PDF 파일 저장이 제한됩니다.</p>
+                <p class="text-[#003891]">아래 버튼을 누르시면 휴대폰 기본 브라우저(삼성 인터넷·크롬·사파리)로 열리며 <strong>A4 PDF 파일이 자동으로 저장</strong>됩니다.</p>
+            </div>
+            <div class="flex flex-col gap-2">
+                <button type="button" onclick="openInExternalBrowserForPdf(_pendingPdfMode)" class="w-full py-3.5 px-4 rounded-xl bg-[#0B2545] hover:bg-[#003891] text-white font-black text-sm flex items-center justify-center gap-1.5 shadow-md cursor-pointer">
+                    <span class="material-symbols-outlined text-[19px]">open_in_browser</span>
+                    <span>기본 브라우저로 열어 PDF 저장</span>
+                </button>
+                <button type="button" onclick="closeKakaoExternalPdfModal(); generateAndDownloadMobilePdf(_pendingPdfMode);" class="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1 cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">download</span>
+                    <span>현재 화면에서 바로 PDF 생성 시도</span>
+                </button>
+            </div>
+            <p class="text-[11px] text-slate-500 text-center leading-snug">우측 하단 <strong>⋮</strong> 버튼 → <strong>[다른 브라우저로 열기]</strong>를 눌러도 동일하게 PDF 저장이 가능합니다.</p>
+        </div>
+    </div>
+
     <script src="db.js?v=20261125_v261"></script>
     <script>
         let _briefing = null;
@@ -1000,9 +1235,562 @@
         }
         window.toggleInternalReportScreenMode = toggleInternalReportScreenMode;
 
-        function printBriefingReport(mode = 'branded') {
+        let _pendingPdfMode = 'branded';
+        let _lastGeneratedPdfBlob = null;
+        let _lastGeneratedPdfName = '매물_브리핑.pdf';
+        let _isGeneratingMobilePdf = false;
+
+        function isKakaoTalkInApp() {
+            return /KAKAOTALK/i.test(navigator.userAgent || '');
+        }
+        function isRestrictedInAppBrowser() {
+            return /KAKAOTALK|NAVER\(|Instagram|FBAN|FBAV|Line\/|BAND\/|DaumApps/i.test(navigator.userAgent || '');
+        }
+        function isMobilePdfEnvironment() {
+            return isRestrictedInAppBrowser() || window.innerWidth < 900 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
+        }
+
+        function loadExternalScriptOnce(src, globalCheckFn) {
+            if (globalCheckFn && globalCheckFn()) return Promise.resolve();
+            return new Promise((resolve, reject) => {
+                const existing = document.querySelector(`script[src="${src}"]`);
+                if (existing) {
+                    const check = setInterval(() => {
+                        if (!globalCheckFn || globalCheckFn()) {
+                            clearInterval(check);
+                            resolve();
+                        }
+                    }, 60);
+                    setTimeout(() => { clearInterval(check); resolve(); }, 8000);
+                    return;
+                }
+                const s = document.createElement('script');
+                s.src = src;
+                s.async = true;
+                s.onload = () => resolve();
+                s.onerror = () => reject(new Error('라이브러리 로드 실패: ' + src));
+                document.head.appendChild(s);
+            });
+        }
+
+        function openInExternalBrowserForPdf(mode = 'branded') {
+            const urlObj = new URL(window.location.href);
+            urlObj.searchParams.set('autopdf', mode === 'internal' ? 'internal' : 'branded');
+            if (mode === 'internal' && _isAdminViewer) {
+                urlObj.searchParams.set('mode', 'internal');
+            }
+            const targetUrl = urlObj.toString();
+            const ua = navigator.userAgent || '';
+
+            if (/KAKAOTALK/i.test(ua)) {
+                window.location.href = `kakaotalk://web/openExternal?url=${encodeURIComponent(targetUrl)}`;
+                return;
+            }
+            if (/Android/i.test(ua)) {
+                const noProto = targetUrl.replace(/^https?:\/\//i, '');
+                window.location.href = `intent://${noProto}#Intent;scheme=https;package=com.android.chrome;end`;
+                return;
+            }
+            window.open(targetUrl, '_blank');
+        }
+        window.openInExternalBrowserForPdf = openInExternalBrowserForPdf;
+
+        function closeKakaoExternalPdfModal() {
+            const m = document.getElementById('kakao-external-pdf-modal');
+            if (m) m.classList.add('hidden');
+        }
+        window.closeKakaoExternalPdfModal = closeKakaoExternalPdfModal;
+
+        function closeMobilePdfModal() {
+            if (_isGeneratingMobilePdf) return;
+            const m = document.getElementById('mobile-pdf-modal');
+            if (m) m.classList.add('hidden');
+        }
+        window.closeMobilePdfModal = closeMobilePdfModal;
+
+        function setMobilePdfProgress(pct, statusText) {
+            const bar = document.getElementById('mobile-pdf-progress-bar');
+            const txt = document.getElementById('mobile-pdf-status-text');
+            if (bar) bar.style.width = `${Math.max(5, Math.min(100, pct))}%`;
+            if (txt && statusText) txt.textContent = statusText;
+        }
+
+        function triggerLastPdfDownload() {
+            if (!_lastGeneratedPdfBlob) return;
+            const blobUrl = URL.createObjectURL(_lastGeneratedPdfBlob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = _lastGeneratedPdfName;
+            a.rel = 'noopener';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                try { document.body.removeChild(a); } catch (e) {}
+                setTimeout(() => { try { URL.revokeObjectURL(blobUrl); } catch (e) {} }, 15000);
+            }, 250);
+        }
+        window.triggerLastPdfDownload = triggerLastPdfDownload;
+
+        async function shareLastGeneratedPdf() {
+            if (!_lastGeneratedPdfBlob || !navigator.share) return;
+            try {
+                const file = new File([_lastGeneratedPdfBlob], _lastGeneratedPdfName, { type: 'application/pdf' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        title: _lastGeneratedPdfName.replace(/\.pdf$/i, ''),
+                        files: [file]
+                    });
+                    return;
+                }
+            } catch (e) {
+                if (e && e.name === 'AbortError') return;
+            }
+            triggerLastPdfDownload();
+        }
+        window.shareLastGeneratedPdf = shareLastGeneratedPdf;
+
+        // Render a crisp centered OpenStreetMap street-map canvas via same-origin /api/img-proxy (100% CORS-safe & mathematically centered pin!)
+        async function renderStaticOsmMapDataUrl(lat, lng, pinLabel = '1') {
+            const zoom = 16;
+            const cssW = 752;
+            const cssH = 212;
+            const dpr = 2;
+            const canvas = document.createElement('canvas');
+            canvas.width = cssW * dpr;
+            canvas.height = cssH * dpr;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            ctx.fillStyle = '#e5e7eb';
+            ctx.fillRect(0, 0, cssW, cssH);
+
+            const n = Math.pow(2, zoom);
+            const tileXFloat = ((lng + 180) / 360) * n;
+            const latRad = (lat * Math.PI) / 180;
+            const tileYFloat = ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n;
+
+            const centerPxX = tileXFloat * 256;
+            const centerPxY = tileYFloat * 256;
+            const topLeftPxX = centerPxX - cssW / 2;
+            const topLeftPxY = centerPxY - cssH / 2;
+
+            const startTileX = Math.floor(topLeftPxX / 256);
+            const endTileX = Math.floor((topLeftPxX + cssW) / 256);
+            const startTileY = Math.floor(topLeftPxY / 256);
+            const endTileY = Math.floor((topLeftPxY + cssH) / 256);
+
+            const loadTile = (tx, ty) => new Promise((resolve) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                const timer = setTimeout(() => resolve(null), 4000);
+                img.onload = () => { clearTimeout(timer); resolve({ img, tx, ty }); };
+                img.onerror = () => { clearTimeout(timer); resolve(null); };
+                const osmUrl = `https://tile.openstreetmap.org/${zoom}/${tx}/${ty}.png`;
+                img.src = `/api/img-proxy?url=${encodeURIComponent(osmUrl)}`;
+            });
+
+            const jobs = [];
+            for (let tx = startTileX; tx <= endTileX; tx++) {
+                for (let ty = startTileY; ty <= endTileY; ty++) {
+                    jobs.push(loadTile(tx, ty));
+                }
+            }
+
+            const tiles = await Promise.all(jobs);
+            tiles.forEach(t => {
+                if (!t || !t.img) return;
+                const drawX = Math.round(t.tx * 256 - topLeftPxX);
+                const drawY = Math.round(t.ty * 256 - topLeftPxY);
+                try { ctx.drawImage(t.img, drawX, drawY, 256, 256); } catch (e) {}
+            });
+
+            // Draw translucent navy highlight radius circle + centered marker pin
+            const cx = cssW / 2;
+            const cy = cssH / 2;
+            ctx.beginPath();
+            ctx.arc(cx, cy, 42, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(0, 56, 145, 0.14)';
+            ctx.fill();
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = '#003891';
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, 16, 0, Math.PI * 2);
+            ctx.fillStyle = '#0B2545';
+            ctx.fill();
+            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = '#ffffff';
+            ctx.stroke();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '800 13px Pretendard, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(String(pinLabel), cx, cy + 0.5);
+
+            // Subtle OSM attribution pill
+            ctx.fillStyle = 'rgba(255,255,255,0.85)';
+            ctx.fillRect(cssW - 118, cssH - 18, 118, 18);
+            ctx.fillStyle = '#475569';
+            ctx.font = '600 10px sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText('© OpenStreetMap', cssW - 6, cssH - 9);
+
+            return canvas.toDataURL('image/jpeg', 0.92);
+        }
+
+        async function prepareCloneImagesForPdf(rootEl) {
+            const imgs = Array.from(rootEl.querySelectorAll('img'));
+            const waitPromises = imgs.map(img => new Promise((resolve) => {
+                const rawSrc = img.getAttribute('src') || '';
+                if (!rawSrc || rawSrc.startsWith('data:') || rawSrc.startsWith('blob:')) {
+                    resolve();
+                    return;
+                }
+                let finalSrc = rawSrc;
+                if (/^https?:\/\//i.test(rawSrc) && !rawSrc.includes(window.location.origin + '/api/img-proxy')) {
+                    finalSrc = `/api/img-proxy?url=${encodeURIComponent(rawSrc)}`;
+                }
+                const timer = setTimeout(() => resolve(), 6500);
+                const finish = () => {
+                    clearTimeout(timer);
+                    // Pre-crop object-cover photos to exact 4:3 canvas so html2canvas NEVER stretches aspect ratio and saves mobile RAM!
+                    try {
+                        if (img.classList.contains('object-cover') && img.naturalWidth > 0 && img.naturalHeight > 0 && img.closest('.print-photo-item')) {
+                            const tw = 800, th = 600;
+                            const c = document.createElement('canvas');
+                            c.width = tw;
+                            c.height = th;
+                            const cx = c.getContext('2d');
+                            cx.fillStyle = '#f1f5f9';
+                            cx.fillRect(0, 0, tw, th);
+                            const scale = Math.max(tw / img.naturalWidth, th / img.naturalHeight);
+                            const dw = img.naturalWidth * scale;
+                            const dh = img.naturalHeight * scale;
+                            const dx = (tw - dw) / 2;
+                            const dy = (th - dh) / 2;
+                            cx.drawImage(img, dx, dy, dw, dh);
+                            img.onload = null;
+                            img.onerror = null;
+                            img.src = c.toDataURL('image/jpeg', 0.90);
+                        }
+                    } catch (e) {}
+                    if (typeof img.decode === 'function') {
+                        img.decode().catch(() => {}).finally(() => resolve());
+                    } else {
+                        resolve();
+                    }
+                };
+                img.crossOrigin = 'anonymous';
+                img.onload = finish;
+                img.onerror = () => { clearTimeout(timer); resolve(); };
+                img.src = finalSrc;
+            }));
+            await Promise.all(waitPromises);
+        }
+
+        async function generateAndDownloadMobilePdf(mode = 'branded') {
+            if (_isGeneratingMobilePdf) return;
+            _isGeneratingMobilePdf = true;
+            _pendingPdfMode = mode;
+
             const wantInternal = mode === 'internal';
             setInternalReportScreenMode(wantInternal);
+
+            const modal = document.getElementById('mobile-pdf-modal');
+            const progView = document.getElementById('mobile-pdf-progress-view');
+            const doneView = document.getElementById('mobile-pdf-done-view');
+            const errView = document.getElementById('mobile-pdf-error-view');
+            const closeX = document.getElementById('mobile-pdf-close-x');
+            if (modal) modal.classList.remove('hidden');
+            if (progView) progView.classList.remove('hidden');
+            if (doneView) doneView.classList.add('hidden');
+            if (errView) errView.classList.add('hidden');
+            if (closeX) closeX.classList.add('hidden');
+            setMobilePdfProgress(8, 'PDF 엔진을 준비하고 있습니다...');
+
+            let stageHost = null;
+            try {
+                await Promise.all([
+                    loadExternalScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', () => typeof window.html2canvas === 'function'),
+                    loadExternalScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', () => Boolean(window.jspdf && window.jspdf.jsPDF))
+                ]);
+                if (document.fonts && document.fonts.ready) {
+                    await document.fonts.ready;
+                }
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
+                const pageW = 210;
+                const pageH = 297;
+                const marginX = 10;
+                const marginTop = 10;
+                const marginBottom = 10;
+                const contentW = pageW - marginX * 2; // 190mm
+                const usableH = pageH - marginTop - marginBottom; // 277mm
+
+                stageHost = document.createElement('div');
+                stageHost.style.cssText = 'position:fixed; left:-12000px; top:0; width:794px; background:#ffffff; z-index:-1; pointer-events:none;';
+                document.body.appendChild(stageHost);
+
+                // Collect atomic A4 blocks so NO sentence or photo is ever sliced in half!
+                const blocks = [];
+
+                const coverSrc = document.getElementById('cover-masthead-section');
+                if (coverSrc && !coverSrc.classList.contains('hidden')) {
+                    blocks.push({ label: '표지 및 종합 요약 정리 중...', node: coverSrc.cloneNode(true), forceNewPage: false, gapMm: 0 });
+                }
+
+                const compSrc = document.getElementById('comparison-table-section');
+                if (compSrc && !compSrc.classList.contains('hidden')) {
+                    blocks.push({ label: '매물 비교표 정리 중...', node: compSrc.cloneNode(true), forceNewPage: false, gapMm: 3.5 });
+                }
+
+                const items = (_briefing && Array.isArray(_briefing.items)) ? _briefing.items : [];
+                for (let idx = 0; idx < items.length; idx++) {
+                    const cardEl = document.getElementById(`prop-card-${idx}`);
+                    if (!cardEl) continue;
+                    const item = items[idx];
+
+                    // 1) Card Top + Field Commentary
+                    const topBlockShell = document.createElement('div');
+                    topBlockShell.className = 'briefing-card bg-white rounded-lg border border-slate-300 overflow-hidden';
+                    const topSub = cardEl.querySelector(':scope > .print-subblock-avoid');
+                    if (topSub) topBlockShell.appendChild(topSub.cloneNode(true));
+                    const commentBox = cardEl.querySelector('.briefing-comment-box');
+                    if (commentBox) {
+                        const cWrap = document.createElement('div');
+                        cWrap.className = 'px-5 pb-4 pt-1';
+                        cWrap.appendChild(commentBox.cloneNode(true));
+                        topBlockShell.appendChild(cWrap);
+                    }
+                    blocks.push({
+                        label: `${idx + 1}번 매물 핵심 조건 정리 중...`,
+                        node: topBlockShell,
+                        forceNewPage: idx > 0,
+                        gapMm: idx === 0 ? 3.5 : 0
+                    });
+
+                    // 2) Card Map (with mathematically centered OSM canvas snapshot!)
+                    const mapBoxEl = document.getElementById(`card-map-box-${idx}`);
+                    if (mapBoxEl && Array.isArray(item.coordinates) && item.coordinates.length === 2) {
+                        const mapClone = mapBoxEl.cloneNode(true);
+                        const mapCanvasSlot = mapClone.querySelector(`#card-map-${idx}`);
+                        if (mapCanvasSlot) {
+                            const lat = Number(item.coordinates[0]);
+                            const lng = Number(item.coordinates[1]);
+                            mapCanvasSlot.innerHTML = '';
+                            mapCanvasSlot.removeAttribute('id');
+                            mapCanvasSlot.className = 'w-full h-[212px] bg-slate-100 overflow-hidden';
+                            const imgEl = document.createElement('img');
+                            imgEl.className = 'w-full h-full object-cover block';
+                            imgEl.dataset.osmLat = String(lat);
+                            imgEl.dataset.osmLng = String(lng);
+                            imgEl.dataset.osmPin = String(idx + 1);
+                            mapCanvasSlot.appendChild(imgEl);
+                        }
+                        blocks.push({
+                            label: `${idx + 1}번 매물 위치 지도 렌더링 중...`,
+                            node: mapClone,
+                            forceNewPage: false,
+                            gapMm: 3
+                        });
+                    }
+
+                    // 3) Field Photos split cleanly into 2-photo rows (Header locked with Row 1!)
+                    const photoItems = Array.from(cardEl.querySelectorAll('.print-photo-item'));
+                    const photosHeader = cardEl.querySelector('.briefing-photos-header');
+                    if (photoItems.length > 0) {
+                        const firstRowWrap = document.createElement('div');
+                        firstRowWrap.className = 'bg-white space-y-2.5 pt-1';
+                        if (photosHeader) firstRowWrap.appendChild(photosHeader.cloneNode(true));
+                        const g1 = document.createElement('div');
+                        g1.className = photoItems.length === 1 ? 'print-photos-grid single-photo-grid' : 'print-photos-grid';
+                        photoItems.slice(0, 2).forEach(pi => g1.appendChild(pi.cloneNode(true)));
+                        firstRowWrap.appendChild(g1);
+                        blocks.push({
+                            label: `${idx + 1}번 매물 현장 사진 배치 중...`,
+                            node: firstRowWrap,
+                            forceNewPage: false,
+                            gapMm: 3
+                        });
+
+                        for (let p = 2; p < photoItems.length; p += 2) {
+                            const rowGrid = document.createElement('div');
+                            rowGrid.className = 'print-photos-grid bg-white';
+                            photoItems.slice(p, p + 2).forEach(pi => rowGrid.appendChild(pi.cloneNode(true)));
+                            blocks.push({
+                                label: `${idx + 1}번 매물 현장 사진 배치 중 (${Math.min(p + 2, photoItems.length)}/${photoItems.length})...`,
+                                node: rowGrid,
+                                forceNewPage: false,
+                                gapMm: 3
+                            });
+                        }
+                    }
+                }
+
+                const memoSrc = document.getElementById('memo-warehouse-section');
+                if (memoSrc && !memoSrc.classList.contains('hidden')) {
+                    blocks.push({ label: '계약 전 필수 안내 정리 중...', node: memoSrc.cloneNode(true), forceNewPage: false, gapMm: 3.5 });
+                }
+
+                const footerSrc = document.getElementById('broker-footer-card');
+                if (footerSrc && !wantInternal) {
+                    blocks.push({ label: '최종 페이지 마감 중...', node: footerSrc.cloneNode(true), forceNewPage: false, gapMm: 4 });
+                }
+
+                let cursorY = marginTop;
+                let pageCount = 1;
+
+                for (let bIdx = 0; bIdx < blocks.length; bIdx++) {
+                    const blk = blocks[bIdx];
+                    const pct = 12 + Math.round(((bIdx + 1) / Math.max(blocks.length, 1)) * 82);
+                    setMobilePdfProgress(pct, blk.label);
+
+                    const frame = document.createElement('div');
+                    frame.className = 'pdf-capture-a4' + (wantInternal ? ' internal-report-mode' : '');
+                    frame.appendChild(blk.node);
+                    stageHost.innerHTML = '';
+                    stageHost.appendChild(frame);
+
+                    // Populate any OSM static canvas map placeholder inside this block
+                    const mapImgs = Array.from(frame.querySelectorAll('img[data-osm-lat]'));
+                    for (const mImg of mapImgs) {
+                        const mDataUrl = await renderStaticOsmMapDataUrl(
+                            parseFloat(mImg.dataset.osmLat),
+                            parseFloat(mImg.dataset.osmLng),
+                            mImg.dataset.osmPin || '1'
+                        );
+                        mImg.src = mDataUrl;
+                    }
+
+                    await prepareCloneImagesForPdf(frame);
+
+                    const canvas = await window.html2canvas(frame, {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: false,
+                        backgroundColor: '#ffffff',
+                        width: 794,
+                        windowWidth: 1024,
+                        logging: false
+                    });
+
+                    const imgHeightMm = (canvas.height / canvas.width) * contentW;
+                    const gapBefore = (cursorY === marginTop) ? 0 : (blk.gapMm || 3);
+
+                    if ((blk.forceNewPage && cursorY > marginTop) || (cursorY + gapBefore + imgHeightMm > marginTop + usableH && cursorY > marginTop)) {
+                        pdf.addPage();
+                        pageCount++;
+                        cursorY = marginTop;
+                    } else {
+                        cursorY += gapBefore;
+                    }
+
+                    if (imgHeightMm <= usableH) {
+                        const jpegData = canvas.toDataURL('image/jpeg', 0.92);
+                        pdf.addImage(jpegData, 'JPEG', marginX, cursorY, contentW, imgHeightMm, undefined, 'FAST');
+                        cursorY += imgHeightMm;
+                    } else {
+                        // Tall single-block safe pagination slice
+                        const pxPerMm = canvas.width / contentW;
+                        let offsetPx = 0;
+                        while (offsetPx < canvas.height) {
+                            const remainMm = (marginTop + usableH) - cursorY;
+                            const slicePx = Math.min(canvas.height - offsetPx, Math.floor(remainMm * pxPerMm));
+                            if (slicePx <= 0) {
+                                pdf.addPage();
+                                pageCount++;
+                                cursorY = marginTop;
+                                continue;
+                            }
+                            const sliceCanvas = document.createElement('canvas');
+                            sliceCanvas.width = canvas.width;
+                            sliceCanvas.height = slicePx;
+                            const sCtx = sliceCanvas.getContext('2d');
+                            sCtx.fillStyle = '#ffffff';
+                            sCtx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
+                            sCtx.drawImage(canvas, 0, offsetPx, canvas.width, slicePx, 0, 0, canvas.width, slicePx);
+                            const sliceH = slicePx / pxPerMm;
+                            pdf.addImage(sliceCanvas.toDataURL('image/jpeg', 0.92), 'JPEG', marginX, cursorY, contentW, sliceH, undefined, 'FAST');
+                            offsetPx += slicePx;
+                            cursorY += sliceH;
+                            if (offsetPx < canvas.height) {
+                                pdf.addPage();
+                                pageCount++;
+                                cursorY = marginTop;
+                            }
+                        }
+                    }
+                }
+
+                setMobilePdfProgress(100, 'PDF 파일 저장 중...');
+                const baseLabel = ((_briefing && (_briefing.title || _briefing.customerName)) || '매물_브리핑')
+                    .replace(/[\\/:*?"<>|]/g, '_')
+                    .replace(/\s+/g, '_')
+                    .slice(0, 48);
+                _lastGeneratedPdfName = wantInternal
+                    ? `${baseLabel}_내부보고용.pdf`
+                    : `${baseLabel}_최가네부동산.pdf`;
+                _lastGeneratedPdfBlob = pdf.output('blob');
+
+                // Auto-trigger download immediately
+                triggerLastPdfDownload();
+
+                // Update completion modal + check Web Share File support (great for iOS Safari / Android Chrome!)
+                const metaEl = document.getElementById('mobile-pdf-file-meta');
+                const sizeMb = (_lastGeneratedPdfBlob.size / (1024 * 1024)).toFixed(1);
+                if (metaEl) metaEl.textContent = `총 ${pageCount}페이지 (${sizeMb}MB) · 다운로드 폴더를 확인해 주세요.`;
+
+                const shareBtn = document.getElementById('mobile-pdf-share-btn');
+                if (shareBtn) {
+                    let canSharePdf = false;
+                    try {
+                        const testFile = new File([_lastGeneratedPdfBlob], _lastGeneratedPdfName, { type: 'application/pdf' });
+                        canSharePdf = Boolean(navigator.share && navigator.canShare && navigator.canShare({ files: [testFile] }));
+                    } catch (e) {}
+                    shareBtn.classList.toggle('hidden', !canSharePdf);
+                }
+
+                if (progView) progView.classList.add('hidden');
+                if (doneView) doneView.classList.remove('hidden');
+            } catch (err) {
+                console.error('Mobile PDF generation error:', err);
+                const errText = document.getElementById('mobile-pdf-error-text');
+                if (errText) errText.textContent = '현재 브라우저에서 PDF 생성이 원활하지 않습니다. 기본 브라우저(삼성 인터넷·크롬·사파리)에서 열어 다시 시도해 주세요.';
+                if (progView) progView.classList.add('hidden');
+                if (errView) errView.classList.remove('hidden');
+            } finally {
+                _isGeneratingMobilePdf = false;
+                if (closeX) closeX.classList.remove('hidden');
+                if (stageHost && stageHost.parentNode) {
+                    stageHost.parentNode.removeChild(stageHost);
+                }
+            }
+        }
+        window.generateAndDownloadMobilePdf = generateAndDownloadMobilePdf;
+
+        function printBriefingReport(mode = 'branded') {
+            _pendingPdfMode = mode;
+            const wantInternal = mode === 'internal';
+            setInternalReportScreenMode(wantInternal);
+
+            // 1. KakaoTalk In-App Browser: window.print() & blob downloads are blocked by Kakao WebView!
+            // Immediately hand off to Samsung Internet / Chrome / Safari with &autopdf=... so PDF downloads automatically!
+            if (isKakaoTalkInApp()) {
+                const kModal = document.getElementById('kakao-external-pdf-modal');
+                if (kModal) kModal.classList.remove('hidden');
+                setTimeout(() => openInExternalBrowserForPdf(mode), 120);
+                return;
+            }
+
+            // 2. Mobile / Tablet Browsers (Chrome, Samsung Internet, Safari, Naver App, etc.): Generate real A4 PDF file directly!
+            if (isMobilePdfEnvironment()) {
+                generateAndDownloadMobilePdf(mode);
+                return;
+            }
+
+            // 3. PC Desktop Browsers: Crisp native vector A4 print/PDF dialog!
             setTimeout(() => {
                 Object.values(_cardMapInstances).forEach(entry => {
                     try {
@@ -1120,6 +1908,18 @@
 
                 if (_isAdminViewer && wantInternalMode) {
                     setInternalReportScreenMode(true);
+                }
+
+                // Auto-download A4 PDF when handed off from KakaoTalk In-App Browser (?autopdf=branded|internal)
+                const autoPdfParam = params.get('autopdf');
+                if ((autoPdfParam === 'branded' || autoPdfParam === 'internal') && !isKakaoTalkInApp()) {
+                    try {
+                        const cleanUrl = new URL(window.location.href);
+                        cleanUrl.searchParams.delete('autopdf');
+                        window.history.replaceState({}, '', cleanUrl.toString());
+                    } catch (e) {}
+                    const autoMode = (autoPdfParam === 'internal' && _isAdminViewer) ? 'internal' : 'branded';
+                    setTimeout(() => generateAndDownloadMobilePdf(autoMode), 500);
                 }
 
                 setTimeout(() => {
@@ -1643,7 +2443,7 @@
                     </div>
                 ` : '';
 
-                const gridColsClass = (showMonthlyCost && !isSale) ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-2 sm:grid-cols-4';
+                const gridColsClass = (showMonthlyCost && !isSale) ? 'grid-cols-2 sm:grid-cols-5 pdf-kpi-5col' : 'grid-cols-2 sm:grid-cols-4';
                 const premSubLine = prem > 0
                     ? (item.premiumText && !item.premiumText.includes('무권리') ? `권리금 ${formatManwon(prem)} (${escHtml(item.premiumText)})` : `권리금 ${formatManwon(prem)}`)
                     : `권리금 : ${escHtml(item.premiumText || '무권리')}`;
