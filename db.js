@@ -1,6 +1,6 @@
-console.log("Antigravity db.js version: 20260715_v237");
-// Force clear localStorage posts cache if version changes to prevent corrupted emoji cache persistence
-const APP_VERSION = "20260715_v240";
+console.log("Antigravity db.js version: 20261125_v261");
+// Force clear localStorage posts cache if version changes to flush stale client isPrivate cache
+const APP_VERSION = "20261125_v261";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
   localStorage.removeItem('posts_cache');
   localStorage.removeItem('choi_briefings_cache');
@@ -130,41 +130,43 @@ async function getPosts() {
       }
     } catch(e) {}
 
-    // Merge any locally saved or edited post from the last 30 minutes that GitHub CDN hasn't propagated yet
-    let latestSaved = null;
-    try {
-      const ls = localStorage.getItem('latest_saved_post');
-      if (ls) latestSaved = JSON.parse(ls);
-    } catch(e) {}
+    // Only merge very recent local admin edits (within 30 min) so CDN propagation never flickers for the broker,
+    // while NEVER allowing stale localStorage caches on other devices/customers to overwrite server isPrivate/post truth!
+    if (isAdmin()) {
+      let latestSaved = null;
+      try {
+        const ls = localStorage.getItem('latest_saved_post');
+        if (ls) latestSaved = JSON.parse(ls);
+      } catch(e) {}
 
-    const now = Date.now();
-    const cachedMap = new Map();
+      const now = Date.now();
+      const cachedMap = new Map();
 
-    if (Array.isArray(cachedPosts)) {
-      for (let cp of cachedPosts) {
-        if (cp && cp.id) cachedMap.set(String(cp.id), cp);
-      }
-    }
-    if (latestSaved && latestSaved.id) {
-      cachedMap.set(String(latestSaved.id), latestSaved);
-    }
-
-    for (let [cpId, cp] of cachedMap.entries()) {
-      const idx = remotePosts.findIndex(rp => String(rp.id) === cpId);
-      if (idx !== -1) {
-        // If locally edited within last 30 min or matches latestSaved, merge local edits onto remote object
-        if (latestSaved && String(latestSaved.id) === cpId) {
-          remotePosts[idx] = { ...remotePosts[idx], ...latestSaved };
-        } else if (cp.updatedAt && (now - cp.updatedAt < 1800000)) {
-          remotePosts[idx] = { ...remotePosts[idx], ...cp };
-        } else if (typeof cp.isPrivate !== 'undefined' && cp.isPrivate !== remotePosts[idx].isPrivate) {
-          remotePosts[idx].isPrivate = cp.isPrivate;
+      if (Array.isArray(cachedPosts)) {
+        for (let cp of cachedPosts) {
+          if (cp && cp.id) cachedMap.set(String(cp.id), cp);
         }
-      } else {
-        // Brand new post created locally in last 30 min
-        const postAge = now - Number(cp.id);
-        if (!isNaN(postAge) && postAge < 1800000) {
-          remotePosts.unshift(cp);
+      }
+      if (latestSaved && latestSaved.id) {
+        cachedMap.set(String(latestSaved.id), latestSaved);
+      }
+
+      for (let [cpId, cp] of cachedMap.entries()) {
+        const idx = remotePosts.findIndex(rp => String(rp.id) === cpId);
+        if (idx !== -1) {
+          const remoteUpdatedAt = Number(remotePosts[idx].updatedAt || 0);
+          const localUpdatedAt = Number(cp.updatedAt || 0);
+          if (latestSaved && String(latestSaved.id) === cpId && localUpdatedAt > remoteUpdatedAt && (now - localUpdatedAt < 1800000)) {
+            remotePosts[idx] = { ...remotePosts[idx], ...latestSaved };
+          } else if (localUpdatedAt > remoteUpdatedAt && (now - localUpdatedAt < 1800000)) {
+            remotePosts[idx] = { ...remotePosts[idx], ...cp };
+          }
+        } else {
+          // Brand new post created locally by admin in last 30 min
+          const postAge = now - Number(cp.id);
+          if (!isNaN(postAge) && postAge < 1800000) {
+            remotePosts.unshift(cp);
+          }
         }
       }
     }
