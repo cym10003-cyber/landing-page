@@ -614,6 +614,76 @@
             font-size: 20px !important;
             line-height: 1.2 !important;
         }
+        /* Optical vertical centering compensation for html2canvas CJK (Pretendard) baseline shift inside pills/headers */
+        .pdf-capture-a4 #header-customer-badge-wrap,
+        .pdf-capture-a4 #header-count-badge,
+        .pdf-capture-a4 .briefing-card-badge,
+        .pdf-capture-a4 .briefing-feature-pill,
+        .pdf-capture-a4 .briefing-map-addr-pill,
+        .pdf-capture-a4 .briefing-memo-badge {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            line-height: 1 !important;
+            padding-top: 2px !important;
+            padding-bottom: 10px !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            vertical-align: middle !important;
+            box-sizing: border-box !important;
+        }
+        .pdf-capture-a4 #header-customer-badge-wrap,
+        .pdf-capture-a4 #header-count-badge {
+            padding-top: 3px !important;
+            padding-bottom: 11px !important;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+        }
+        .pdf-capture-a4 #header-date,
+        .pdf-capture-a4 .briefing-cover-sub {
+            line-height: 1 !important;
+            padding-bottom: 7px !important;
+        }
+        .pdf-capture-a4 .briefing-rank-badge {
+            line-height: 1 !important;
+            padding-bottom: 6px !important;
+        }
+        .pdf-capture-a4 .briefing-card-header-bar {
+            padding-top: 10px !important;
+            padding-bottom: 10px !important;
+            align-items: center !important;
+        }
+        .pdf-capture-a4 .briefing-card-header-title {
+            display: inline-block !important;
+            line-height: 1 !important;
+            padding-bottom: 7px !important;
+        }
+        .pdf-capture-a4 .briefing-map-header {
+            padding-top: 9px !important;
+            padding-bottom: 9px !important;
+            align-items: center !important;
+        }
+        .pdf-capture-a4 .briefing-map-title {
+            display: inline-block !important;
+            line-height: 1 !important;
+            padding-bottom: 7px !important;
+        }
+        .pdf-capture-a4 .briefing-photo-caption {
+            padding-top: 3px !important;
+            padding-bottom: 10px !important;
+            line-height: 1 !important;
+        }
+        .pdf-capture-a4 .briefing-comment-heading,
+        .pdf-capture-a4 .briefing-photos-header {
+            padding-bottom: 10px !important;
+        }
+        .pdf-capture-a4 .material-symbols-outlined {
+            position: relative !important;
+            top: 2px !important;
+        }
+        .pdf-capture-a4 .briefing-map-header .material-symbols-outlined {
+            top: -1px !important;
+        }
     </style>
 </head>
 <body class="bg-[#f1f5f9] text-slate-900 min-h-screen pb-24 overflow-x-hidden">
@@ -715,7 +785,7 @@
                         <span id="header-count-badge" class="hidden bg-slate-100 text-[#0B2545] text-xs sm:text-sm font-extrabold px-2.5 py-1 rounded-md border border-slate-300 whitespace-nowrap">
                             추천 매물 총 0건
                         </span>
-                        <span class="hidden sm:inline-block text-[10px] font-bold tracking-[0.14em] text-slate-400 uppercase pl-1">
+                        <span class="briefing-cover-sub hidden sm:inline-block text-[10px] font-bold tracking-[0.14em] text-slate-400 uppercase pl-1">
                             COMMERCIAL REAL ESTATE PROPOSAL
                         </span>
                     </div>
@@ -841,7 +911,7 @@
         <!-- 5. Attached Memo Warehouse Cards -->
         <section id="memo-warehouse-section" class="hidden bg-white rounded-2xl p-4 sm:p-6 shadow-xs border border-slate-200 space-y-4 print-break-inside-avoid">
             <div class="border-b border-slate-200 pb-3">
-                <span class="inline-block text-[11px] font-extrabold bg-[#f0f5ff] text-[#003891] px-2.5 py-0.5 rounded border border-blue-200 mb-1"><span class="brand-name-text">최가네부동산 </span>필수 체크 안내</span>
+                <span class="briefing-memo-badge inline-block text-[11px] font-extrabold bg-[#f0f5ff] text-[#003891] px-2.5 py-0.5 rounded border border-blue-200 mb-1"><span class="brand-name-text">최가네부동산 </span>필수 체크 안내</span>
                 <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-[#003891] shrink-0">fact_check</span>
                     <span>계약 전 꼭 확인하세요! (준비서류 · 필수특약 · 세무 안내)</span>
@@ -2168,7 +2238,7 @@
                             <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="scrollToCard('prop-card-${idx}')">
                                 <td class="comp-col-rank-addr py-3 px-2.5 sm:px-3 align-middle">
                                     <div class="flex items-center gap-2">
-                                        <span class="w-6 h-6 rounded-md bg-[#003891] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">${num}</span>
+                                        <span class="briefing-rank-badge w-6 h-6 rounded-md bg-[#003891] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">${num}</span>
                                         <div class="min-w-0">
                                             <div class="font-extrabold text-slate-900 hover:text-[#003891] transition text-sm sm:text-[15px] leading-snug">${escHtml(addr)}</div>
                                             <div class="text-xs text-slate-500 flex flex-wrap items-center gap-1.5 mt-0.5">
@@ -2263,7 +2333,7 @@
                             <div class="bg-white rounded-xl border border-slate-200 p-3.5 shadow-xs space-y-2.5 cursor-pointer hover:border-[#003891] transition" onclick="scrollToCard('prop-card-${idx}')">
                                 <div class="flex items-start justify-between gap-2 border-b border-slate-100 pb-2">
                                     <div class="flex items-center gap-2 min-w-0">
-                                        <span class="w-6 h-6 rounded-md bg-[#003891] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">${num}</span>
+                                        <span class="briefing-rank-badge w-6 h-6 rounded-md bg-[#003891] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">${num}</span>
                                         <div class="min-w-0">
                                             <div class="font-extrabold text-slate-900 text-sm hover:text-[#003891] transition leading-tight truncate">${escHtml(addr)}</div>
                                             <div class="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1.5 flex-wrap">
@@ -2345,7 +2415,7 @@
                 if (isSale && showYield && saleP > 0 && rent > 0 && (saleP - dep) > 0) {
                     const annualYield = (((rent * 12) / (saleP - dep)) * 100).toFixed(2);
                     yieldBadgeHtml = `
-                        <div class="bg-amber-400 text-[#0B2545] px-2.5 py-0.5 rounded text-xs font-black flex items-center gap-1 whitespace-nowrap">
+                        <div class="briefing-card-badge bg-amber-400 text-[#0B2545] px-2.5 py-0.5 rounded text-xs font-black flex items-center gap-1 whitespace-nowrap">
                             <span>예상 연 수익률 ${annualYield}%</span>
                         </div>
                     `;
@@ -2363,7 +2433,7 @@
                                 <span>원본 확대</span>
                             </span>
                         </div>
-                        <div class="px-3 py-1.5 bg-[#F8FAFC] border-t border-slate-200 flex items-center justify-between text-xs font-bold text-slate-600">
+                        <div class="briefing-photo-caption px-3 py-1.5 bg-[#F8FAFC] border-t border-slate-200 flex items-center justify-between text-xs font-bold text-slate-600">
                             <span>현장 사진 ${String(pIdx + 1).padStart(2, '0')}</span>
                             <span class="text-slate-400 tabular-nums">${pIdx + 1} / ${photos.length}</span>
                         </div>
@@ -2418,11 +2488,11 @@
                 const kakaoMapUrl = `https://map.kakao.com/link/map/${encodeURIComponent(addr)},${lat},${lng}`;
                 const cardMapHtml = hasValidCoords ? `
                     <div id="card-map-box-${idx}" class="rounded-lg border border-slate-300 overflow-hidden bg-slate-50 print-subblock-avoid">
-                        <div class="px-3.5 py-2.5 bg-[#F8FAFC] border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                        <div class="briefing-map-header px-3.5 py-2.5 bg-[#F8FAFC] border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
                             <div class="flex flex-wrap items-center gap-2 text-sm sm:text-base font-black text-[#0B2545]">
                                 <span class="material-symbols-outlined text-[18px] text-[#003891]">location_on</span>
-                                <span>${mapLabel}</span>
-                                <span class="text-xs sm:text-sm font-bold text-[#003891] bg-white px-2.5 py-0.5 rounded border border-slate-300">${escHtml(addr)}</span>
+                                <span class="briefing-map-title">${mapLabel}</span>
+                                <span class="briefing-map-addr-pill text-xs sm:text-sm font-bold text-[#003891] bg-white px-2.5 py-0.5 rounded border border-slate-300">${escHtml(addr)}</span>
                             </div>
                             <div class="flex items-center gap-1.5 no-print">
                                 <button type="button" onclick="recenterCardMap(${idx}, ${lat}, ${lng})" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-[11px] font-extrabold flex items-center gap-1 transition cursor-pointer">
@@ -2453,14 +2523,14 @@
                         <!-- Top Executive Overview & Financial KPI Sub-block (Kept intact across page breaks) -->
                         <div class="print-subblock-avoid">
                             <!-- Deep Royal Navy Institutional Header Bar -->
-                            <div class="bg-[#0B2545] text-white px-4 sm:px-6 py-2.5 sm:py-3 flex flex-wrap items-center justify-between gap-2">
+                            <div class="briefing-card-header-bar bg-[#0B2545] text-white px-4 sm:px-6 py-2.5 sm:py-3 flex flex-wrap items-center justify-between gap-2">
                                 <div class="flex items-center gap-2">
-                                    <span class="font-black text-sm sm:text-base tracking-tight">${numLabel}</span>
+                                    <span class="briefing-card-header-title font-black text-sm sm:text-base tracking-tight">${numLabel}</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     ${yieldBadgeHtml}
-                                    <span class="text-xs font-bold bg-white/15 text-white px-2.5 py-0.5 rounded border border-white/20 tabular-nums whitespace-nowrap">매물번호 NO.${escHtml(item.propNo || '-')}</span>
-                                    <span class="text-xs font-black bg-white text-[#0B2545] px-2.5 py-0.5 rounded whitespace-nowrap">${isSale ? '매매' : '임대'}</span>
+                                    <span class="briefing-card-badge text-xs font-bold bg-white/15 text-white px-2.5 py-0.5 rounded border border-white/20 tabular-nums whitespace-nowrap">매물번호 NO.${escHtml(item.propNo || '-')}</span>
+                                    <span class="briefing-card-badge text-xs font-black bg-white text-[#0B2545] px-2.5 py-0.5 rounded whitespace-nowrap">${isSale ? '매매' : '임대'}</span>
                                 </div>
                             </div>
 
