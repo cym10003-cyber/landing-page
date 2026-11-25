@@ -1642,8 +1642,8 @@ function getAnalyticsSummary(remoteData = null) {
             totalSearches: searchLogs.length,
             mobileCount,
             desktopCount,
-            totalPageviews: pageData.total || 0,
-            todayPageviews: pageData.today || 0,
+            totalPageviews: Math.max(pageData.total || 0, allVisitsSum || 0),
+            todayPageviews: todayVisitCount,
             postViewsMap: postViews,
             likes: (remoteData && remoteData.likes) ? remoteData.likes : {},
             totalLikes: (remoteData && remoteData.totalLikes) ? remoteData.totalLikes : 0,
@@ -1754,16 +1754,8 @@ async function syncAnalyticsWithRemote() {
         localStorage.setItem('analytics_daily_history', JSON.stringify(localDaily));
         localStorage.setItem('analytics_search_logs', JSON.stringify(localLogs));
         localStorage.setItem('analytics_post_views', JSON.stringify(localViews));
-
-        if (isAdmin() && config.github_token && config.github_owner && config.github_repo) {
-            pushAnalyticsToGithub(config, {
-                totalPageviews: localPageData.total,
-                todayPageviews: localPageData.today,
-                dailyHistory: localDaily,
-                searchLogs: localLogs.slice(0, 100),
-                postViews: localViews
-            });
-        }
+        // NOTE: Never overwrite remote GitHub analytics.json from client localStorage!
+        // All analytics writes (pageview, postview, like, inflowLandings) are handled atomically server-side via /api/analytics.
     } catch(e) {}
 }
 

@@ -61,20 +61,19 @@ export default async function handler(req, res) {
       if (type === 'pageview' || type === 'postview' || type === 'like') {
         const updateAnalyticsData = (analytics) => {
           const todayStr = new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0];
-          if (analytics.todayDate !== todayStr) {
-            analytics.todayDate = todayStr;
-            analytics.todayPageviews = 0;
-          }
-
           if (!analytics.dailyHistory) analytics.dailyHistory = {};
           if (!analytics.dailyHistory[todayStr]) {
             analytics.dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {}, likes: {}, inflowLandings: {} };
           }
+          if (analytics.todayDate !== todayStr) {
+            analytics.todayDate = todayStr;
+            analytics.todayPageviews = analytics.dailyHistory[todayStr].count || 0;
+          }
 
           if (type === 'pageview') {
             analytics.totalPageviews = (analytics.totalPageviews || 0) + 1;
-            analytics.todayPageviews = (analytics.todayPageviews || 0) + 1;
             analytics.dailyHistory[todayStr].count = (analytics.dailyHistory[todayStr].count || 0) + 1;
+            analytics.todayPageviews = Math.max((analytics.todayPageviews || 0) + 1, analytics.dailyHistory[todayStr].count);
 
             const referrer = bodyData.referrer || '직접 접속 / 카카오톡 링크';
             if (referrer !== '내부 이동' && !referrer.includes('vercel.app') && !referrer.includes('choi114.com') && !referrer.includes('localhost') && !referrer.includes('127.0.0.1')) {

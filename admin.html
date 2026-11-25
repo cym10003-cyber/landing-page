@@ -1262,7 +1262,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261125_v258"></script>
+<script src="db.js?v=20261125_v259"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -1577,7 +1577,7 @@ async function renderAnalyticsView() {
         const maxDaily = Math.max(...summary.recent7Days.map(d => d.count), 1);
         dailyChartContainer.innerHTML = summary.recent7Days.map(d => {
             const pct = Math.round((d.count / maxDaily) * 100);
-            const isToday = d.fullDate === new Date().toISOString().split('T')[0];
+            const isToday = d.fullDate === (summary.todayDate || new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0]);
             const dateLabel = isToday ? `${d.date} (오늘)` : d.date;
             const barColor = isToday ? 'bg-primary' : 'bg-blue-mid/70';
             return `
