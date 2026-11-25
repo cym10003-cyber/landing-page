@@ -127,6 +127,7 @@
         .print-body-cell {
             display: block;
             width: 100%;
+            max-width: 100%;
         }
         .print-frame-head,
         .print-frame-foot {
@@ -438,23 +439,23 @@
         }
     </style>
 </head>
-<body class="bg-[#f1f5f9] text-slate-900 min-h-screen pb-24">
+<body class="bg-[#f1f5f9] text-slate-900 min-h-screen pb-24 overflow-x-hidden">
 
-    <!-- Top Sticky Bar (Bright & High-Visibility, Clean Mobile Single-Line Buttons) -->
+    <!-- Top Sticky Bar (Bright & High-Visibility, 100% Zero Horizontal Overflow on Mobile) -->
     <header class="bg-white text-slate-900 sticky top-0 z-50 border-b border-slate-200 shadow-xs no-print">
-        <div class="max-w-6xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex flex-wrap items-center justify-between gap-2">
+        <div class="max-w-6xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2">
             <a href="index.html" class="flex items-center gap-2 sm:gap-2.5 group min-w-0">
                 <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#0B2545] text-white font-black flex items-center justify-center text-sm sm:text-base shadow-xs shrink-0 brand-only-block">최</div>
                 <div class="min-w-0">
                     <div class="font-extrabold text-sm sm:text-base tracking-tight flex items-center gap-1.5 text-slate-900 whitespace-nowrap">
                         <span class="text-[#0B2545] brand-name-text">최가네부동산</span>
-                        <span class="text-[10px] sm:text-[11px] font-extrabold bg-[#f0f5ff] text-[#003891] px-1.5 sm:px-2 py-0.5 rounded border border-blue-200 whitespace-nowrap">매물 브리핑 리포트</span>
+                        <span class="text-[10px] sm:text-[11px] font-extrabold bg-[#f0f5ff] text-[#003891] px-1.5 sm:px-2 py-0.5 rounded border border-blue-200 whitespace-nowrap">매물 브리핑</span>
                     </div>
-                    <div class="hidden md:block text-[11px] text-slate-500 font-medium whitespace-nowrap brand-only-block">COMMERCIAL REAL ESTATE ADVISORY · 010-3548-4000</div>
+                    <div class="hidden md:block text-[11px] text-slate-500 font-medium whitespace-nowrap brand-only-block">상가 · 사무실 · 병의원 · 빌딩 임대·매매 전문 · 010-3548-4000</div>
                 </div>
             </a>
 
-            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 shrink-0">
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <button type="button" onclick="copyCurrentBriefingLink()" class="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] sm:text-xs font-extrabold flex items-center gap-1 border border-slate-300 transition cursor-pointer whitespace-nowrap shrink-0">
                     <span class="material-symbols-outlined text-[15px] sm:text-[16px]">share</span>
                     <span>링크복사</span>
@@ -462,24 +463,27 @@
                 <!-- Customer Standard Print Button (Shown on customer share URLs; hidden when Admin preview toolbar is active) -->
                 <button type="button" id="customer-default-print-btn" onclick="printBriefingReport('branded')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg bg-[#0B2545] hover:bg-[#003891] text-white text-[11px] sm:text-xs md:text-sm font-extrabold flex items-center gap-1 sm:gap-1.5 shadow-xs transition cursor-pointer whitespace-nowrap shrink-0">
                     <span class="material-symbols-outlined text-[16px] sm:text-[18px]">print</span>
-                    <span class="sm:hidden">인쇄 / PDF</span>
+                    <span class="sm:hidden">인쇄/PDF</span>
                     <span class="hidden sm:inline">제안서 출력 (A4 인쇄/PDF)</span>
                 </button>
-                <!-- Admin-Only Dual Print Buttons (ONLY visible when opened via ?preview=admin while logged in as admin) -->
-                <div id="admin-dual-print-btns" class="hidden items-center gap-1.5 sm:gap-2">
-                    <button type="button" onclick="printBriefingReport('branded')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg bg-[#0B2545] hover:bg-[#003891] text-white text-[11px] sm:text-xs font-extrabold flex items-center gap-1 shadow-xs transition cursor-pointer whitespace-nowrap" title="최가네부동산 상호·연락처·명함이 포함된 공식 브리핑 자료 출력">
-                        <span class="material-symbols-outlined text-[16px]">print</span>
-                        <span>최가네부동산 브리핑 출력</span>
-                    </button>
-                    <button type="button" onclick="printBriefingReport('internal')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] sm:text-xs font-extrabold flex items-center gap-1 shadow-xs transition cursor-pointer whitespace-nowrap" title="최가네부동산 상호·연락처·하단 명함을 모두 숨긴 기업 내부 보고용 PDF 출력">
-                        <span class="material-symbols-outlined text-[16px]">domain_verification</span>
-                        <span>내부 보고용 출력 (최가네 숨김)</span>
-                    </button>
-                    <button type="button" id="admin-toggle-internal-preview-btn" onclick="toggleInternalReportScreenMode()" class="px-2.5 py-1.5 sm:py-2 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-[11px] sm:text-xs font-extrabold flex items-center gap-1 transition cursor-pointer whitespace-nowrap" title="화면에서도 최가네부동산 숨김 상태를 미리 확인합니다">
-                        <span class="material-symbols-outlined text-[15px]">visibility_off</span>
-                        <span id="admin-toggle-internal-label">최가네 숨김 미리보기</span>
-                    </button>
-                </div>
+            </div>
+        </div>
+
+        <!-- Admin-Only Dual Print Control Bar (Strictly ?preview=admin only; 100% fits inside mobile screen with zero horizontal overflow!) -->
+        <div id="admin-dual-print-btns" class="hidden border-t border-slate-200 bg-slate-50/95">
+            <div class="max-w-6xl mx-auto px-3 sm:px-6 py-2 grid grid-cols-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end gap-1.5 sm:gap-2">
+                <button type="button" onclick="printBriefingReport('branded')" class="px-2.5 sm:px-3.5 py-2 rounded-lg bg-[#0B2545] hover:bg-[#003891] text-white text-[11px] sm:text-xs font-extrabold flex items-center justify-center gap-1 shadow-xs transition cursor-pointer" title="최가네부동산 상호·연락처·명함이 포함된 공식 브리핑 자료 출력">
+                    <span class="material-symbols-outlined text-[15px] sm:text-[16px] shrink-0">print</span>
+                    <span class="truncate">최가네 브리핑 출력</span>
+                </button>
+                <button type="button" onclick="printBriefingReport('internal')" class="px-2.5 sm:px-3.5 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] sm:text-xs font-extrabold flex items-center justify-center gap-1 shadow-xs transition cursor-pointer" title="최가네부동산 상호·연락처·하단 명함을 모두 숨긴 내부 보고용 PDF 출력">
+                    <span class="material-symbols-outlined text-[15px] sm:text-[16px] shrink-0">domain_verification</span>
+                    <span class="truncate">내부보고용 (최가네숨김)</span>
+                </button>
+                <button type="button" id="admin-toggle-internal-preview-btn" onclick="toggleInternalReportScreenMode()" class="col-span-2 sm:col-span-1 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-[11px] sm:text-xs font-extrabold flex items-center justify-center gap-1 transition cursor-pointer" title="화면에서도 최가네부동산 숨김 상태를 미리 확인합니다">
+                    <span class="material-symbols-outlined text-[15px] shrink-0">visibility_off</span>
+                    <span id="admin-toggle-internal-label">최가네 숨김 미리보기</span>
+                </button>
             </div>
         </div>
     </header>
@@ -527,7 +531,7 @@
             <div class="relative z-10 flex flex-col gap-3 sm:gap-4 masthead-stack">
                 <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-200">
                     <div class="flex flex-wrap items-center gap-2">
-                        <span id="header-customer-badge-wrap" class="bg-[#0B2545] text-white text-xs sm:text-sm font-black px-3 py-1 rounded-md tracking-tight shadow-2xs whitespace-nowrap">
+                        <span id="header-customer-badge-wrap" class="bg-[#0B2545] text-white text-xs sm:text-sm font-black px-3 py-1 rounded-md tracking-tight shadow-2xs max-w-full">
                             <span id="header-customer-badge">매물 브리핑</span>
                         </span>
                         <span id="header-count-badge" class="hidden bg-slate-100 text-[#0B2545] text-xs sm:text-sm font-extrabold px-2.5 py-1 rounded-md border border-slate-300 whitespace-nowrap">
@@ -676,7 +680,7 @@
             <div class="space-y-1 min-w-0">
                 <div class="flex flex-wrap items-center gap-2">
                     <span class="font-black text-base sm:text-lg text-[#0B2545] tracking-tight">최가네부동산공인중개사사무소</span>
-                    <span class="text-[10px] font-bold tracking-[0.1em] text-slate-400 uppercase">COMMERCIAL REAL ESTATE ADVISORY</span>
+                    <span class="text-[10px] font-bold tracking-[0.08em] text-slate-400 uppercase">COMMERCIAL REAL ESTATE</span>
                 </div>
                 <div class="text-xs sm:text-sm text-slate-700 font-medium">대구광역시 수성구 수성동1가 72-3번지 (2호선 대구은행역 2번 출구)</div>
                 <div class="text-xs sm:text-sm text-slate-600 font-medium flex items-center gap-2 flex-wrap">
@@ -684,9 +688,10 @@
                     <span class="text-slate-300">|</span>
                     <span>등록번호: <strong class="text-slate-800 tabular-nums">제27260-2024-00085호</strong></span>
                 </div>
+                <div class="text-xs text-slate-500 font-medium">대구 전 지역 상가 · 사무실 · 병의원 · 빌딩 임대·매매 전문</div>
             </div>
-            <div class="footer-contact-box text-left sm:text-right shrink-0 whitespace-nowrap min-w-[190px]">
-                <div class="text-xs text-slate-500 font-bold whitespace-nowrap">기업 이전 · 임대차 자문 직통</div>
+            <div class="footer-contact-box text-left sm:text-right shrink-0 whitespace-nowrap sm:min-w-[190px]">
+                <div class="text-xs text-slate-600 font-bold whitespace-nowrap">매물 상담 및 조건 협의 직통</div>
                 <div id="broker-footer-phone" class="text-xl sm:text-2xl font-black text-[#0B2545] whitespace-nowrap leading-tight mt-0.5 tracking-tight tabular-nums">010-3548-4000</div>
                 <div class="text-xs text-slate-500 font-semibold whitespace-nowrap mt-0.5">www.choi114.com</div>
             </div>
@@ -919,10 +924,10 @@
             const toggleLabel = document.getElementById('admin-toggle-internal-label');
             if (toggleBtn && toggleLabel) {
                 if (_isInternalReportMode) {
-                    toggleBtn.className = 'px-2.5 py-1.5 sm:py-2 rounded-lg bg-amber-600 text-white border border-amber-700 text-[11px] sm:text-xs font-extrabold flex items-center gap-1 transition cursor-pointer whitespace-nowrap shadow-xs';
+                    toggleBtn.className = 'col-span-2 sm:col-span-1 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-amber-600 text-white border border-amber-700 text-[11px] sm:text-xs font-extrabold flex items-center justify-center gap-1 transition cursor-pointer shadow-xs';
                     toggleLabel.textContent = '내부보고용(최가네 숨김) 켜짐';
                 } else {
-                    toggleBtn.className = 'px-2.5 py-1.5 sm:py-2 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-[11px] sm:text-xs font-extrabold flex items-center gap-1 transition cursor-pointer whitespace-nowrap';
+                    toggleBtn.className = 'col-span-2 sm:col-span-1 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-[11px] sm:text-xs font-extrabold flex items-center justify-center gap-1 transition cursor-pointer';
                     toggleLabel.textContent = '최가네 숨김 미리보기';
                 }
             }
@@ -969,7 +974,6 @@
                 if (custPrintBtn) custPrintBtn.classList.add('hidden');
                 if (adminPrintBtns) {
                     adminPrintBtns.classList.remove('hidden');
-                    adminPrintBtns.classList.add('flex');
                 }
             }
 
@@ -1579,55 +1583,55 @@
                                     ${badgesHtml}
                                 </div>
 
-                                <!-- Zero-Overflow 3-Tier Financial KPI Grid -->
-                                <div class="briefing-kpi-grid grid ${gridColsClass} gap-2.5">
+                                <!-- Zero-Overflow 3-Tier Financial KPI Grid (Mobile-Safe 2-Col & Desktop 4/5-Col) -->
+                                <div class="briefing-kpi-grid grid ${gridColsClass} gap-2 sm:gap-2.5">
                                     ${isSale ? `
-                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-3 sm:p-3.5 border border-slate-200 flex flex-col justify-between">
-                                            <div class="text-xs font-extrabold text-slate-500">매매가</div>
-                                            <div class="briefing-kpi-value text-lg sm:text-xl font-black text-slate-900 mt-1 tabular-nums">${formatManwon(saleP)}</div>
-                                            <div class="briefing-kpi-sub text-xs text-slate-500 font-semibold mt-0.5">매도 희망가</div>
+                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-2.5 sm:p-3.5 border border-slate-200 flex flex-col justify-between min-w-0">
+                                            <div class="text-[11px] sm:text-xs font-extrabold text-slate-500">매매가</div>
+                                            <div class="briefing-kpi-value text-base sm:text-xl font-black text-slate-900 mt-1 tabular-nums">${formatManwon(saleP)}</div>
+                                            <div class="briefing-kpi-sub text-[11px] sm:text-xs text-slate-500 font-semibold mt-0.5">매도 희망가</div>
                                         </div>
-                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-3 sm:p-3.5 border border-slate-200 flex flex-col justify-between">
-                                            <div class="text-xs font-extrabold text-slate-500">기보증금</div>
-                                            <div class="briefing-kpi-value text-lg sm:text-xl font-black text-slate-900 mt-1 tabular-nums">${formatManwon(dep)}</div>
-                                            <div class="briefing-kpi-sub text-xs text-slate-500 font-semibold mt-0.5">인수 보증금</div>
+                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-2.5 sm:p-3.5 border border-slate-200 flex flex-col justify-between min-w-0">
+                                            <div class="text-[11px] sm:text-xs font-extrabold text-slate-500">기보증금</div>
+                                            <div class="briefing-kpi-value text-base sm:text-xl font-black text-slate-900 mt-1 tabular-nums">${formatManwon(dep)}</div>
+                                            <div class="briefing-kpi-sub text-[11px] sm:text-xs text-slate-500 font-semibold mt-0.5">인수 보증금</div>
                                         </div>
-                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-3 sm:p-3.5 border border-slate-200 flex flex-col justify-between">
-                                            <div class="text-xs font-extrabold text-slate-500">월 임대수익</div>
-                                            <div class="briefing-kpi-value text-lg sm:text-xl font-black text-slate-900 mt-1 tabular-nums">${formatManwon(rent)}</div>
-                                            <div class="briefing-kpi-sub text-xs text-slate-500 font-semibold mt-0.5">현재 월세 수입</div>
+                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-2.5 sm:p-3.5 border border-slate-200 flex flex-col justify-between min-w-0">
+                                            <div class="text-[11px] sm:text-xs font-extrabold text-slate-500">월 임대수익</div>
+                                            <div class="briefing-kpi-value text-base sm:text-xl font-black text-slate-900 mt-1 tabular-nums">${formatManwon(rent)}</div>
+                                            <div class="briefing-kpi-sub text-[11px] sm:text-xs text-slate-500 font-semibold mt-0.5">현재 월세 수입</div>
                                         </div>
-                                        <div class="briefing-kpi-card bg-[#F0F5FF] rounded-lg p-3 sm:p-3.5 border border-[#003891]/30 flex flex-col justify-between">
-                                            <div class="text-xs font-extrabold text-[#003891]">실투자금 합계</div>
-                                            <div class="briefing-kpi-value text-lg sm:text-xl font-black text-[#003891] mt-1 tabular-nums">${formatManwon(totalInit)}</div>
-                                            <div class="briefing-kpi-sub text-xs text-[#003891]/80 font-bold mt-0.5">매매가 - 기보증금</div>
+                                        <div class="briefing-kpi-card bg-[#F0F5FF] rounded-lg p-2.5 sm:p-3.5 border border-[#003891]/30 flex flex-col justify-between min-w-0">
+                                            <div class="text-[11px] sm:text-xs font-extrabold text-[#003891]">실투자금 합계</div>
+                                            <div class="briefing-kpi-value text-base sm:text-xl font-black text-[#003891] mt-1 tabular-nums">${formatManwon(totalInit)}</div>
+                                            <div class="briefing-kpi-sub text-[11px] sm:text-xs text-[#003891]/80 font-bold mt-0.5">매매가 - 기보증금</div>
                                         </div>
                                     ` : `
-                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-3 sm:p-3.5 border border-slate-200 flex flex-col justify-between">
-                                            <div class="text-xs font-extrabold text-slate-500">보증금</div>
-                                            <div class="briefing-kpi-value text-lg sm:text-xl font-black text-slate-900 mt-1 tabular-nums">${formatManwon(dep)}</div>
-                                            <div class="briefing-kpi-sub text-xs text-slate-500 font-semibold mt-0.5">임대차 보증금</div>
+                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-2.5 sm:p-3.5 border border-slate-200 flex flex-col justify-between min-w-0">
+                                            <div class="text-[11px] sm:text-xs font-extrabold text-slate-500">보증금</div>
+                                            <div class="briefing-kpi-value text-base sm:text-xl font-black text-slate-900 mt-1 tabular-nums">${formatManwon(dep)}</div>
+                                            <div class="briefing-kpi-sub text-[11px] sm:text-xs text-slate-500 font-semibold mt-0.5">임대차 보증금</div>
                                         </div>
-                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-3 sm:p-3.5 border border-slate-200 flex flex-col justify-between">
-                                            <div class="text-xs font-extrabold text-slate-500">월세 (임대료)</div>
-                                            <div class="briefing-kpi-value text-lg sm:text-xl font-black text-slate-900 mt-1 tabular-nums">${formatManwon(rent)}</div>
-                                            <div class="briefing-kpi-sub text-xs ${hasRentVat && rent > 0 ? 'text-[#003891] font-extrabold' : 'text-slate-500 font-semibold'} mt-0.5">${hasRentVat && rent > 0 ? '부가세 별도' : '월 임대료'}</div>
+                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-2.5 sm:p-3.5 border border-slate-200 flex flex-col justify-between min-w-0">
+                                            <div class="text-[11px] sm:text-xs font-extrabold text-slate-500">월세 (임대료)</div>
+                                            <div class="briefing-kpi-value text-base sm:text-xl font-black text-slate-900 mt-1 tabular-nums">${formatManwon(rent)}</div>
+                                            <div class="briefing-kpi-sub text-[11px] sm:text-xs ${hasRentVat && rent > 0 ? 'text-[#003891] font-extrabold' : 'text-slate-500 font-semibold'} mt-0.5">${hasRentVat && rent > 0 ? '부가세 별도' : '월 임대료'}</div>
                                         </div>
-                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-3 sm:p-3.5 border border-slate-200 flex flex-col justify-between">
-                                            <div class="text-xs font-extrabold text-slate-500">공용관리비 / 권리금</div>
-                                            <div class="briefing-kpi-value text-base sm:text-lg font-black text-slate-900 mt-1 tabular-nums">${maint > 0 ? formatManwon(maint) : '별도/없음'}${maint > 0 && hasMaintVat ? ` <span class="text-[11px] text-[#003891] font-bold">(VAT별도)</span>` : ''}</div>
-                                            <div class="briefing-kpi-sub text-xs text-slate-700 font-bold mt-0.5">${premSubLine}</div>
+                                        <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-2.5 sm:p-3.5 border border-slate-200 flex flex-col justify-between min-w-0">
+                                            <div class="text-[11px] sm:text-xs font-extrabold text-slate-500">공용관리비 / 권리금</div>
+                                            <div class="briefing-kpi-value text-[15px] sm:text-lg font-black text-slate-900 mt-1 tabular-nums">${maint > 0 ? formatManwon(maint) : '별도/없음'}${maint > 0 && hasMaintVat ? ` <span class="text-[10px] sm:text-[11px] text-[#003891] font-bold">(VAT별도)</span>` : ''}</div>
+                                            <div class="briefing-kpi-sub text-[11px] sm:text-xs text-slate-700 font-bold mt-0.5">${premSubLine}</div>
                                         </div>
-                                        <div class="briefing-kpi-card bg-[#F0F5FF] rounded-lg p-3 sm:p-3.5 border border-[#003891]/30 flex flex-col justify-between">
-                                            <div class="text-xs font-extrabold text-[#003891]">초기 필요자금 합계</div>
-                                            <div class="briefing-kpi-value text-lg sm:text-xl font-black text-[#003891] mt-1 tabular-nums">${formatManwon(totalInit)}</div>
-                                            <div class="briefing-kpi-sub text-xs text-[#003891]/80 font-bold mt-0.5">보증금 + 권리금</div>
+                                        <div class="briefing-kpi-card bg-[#F0F5FF] rounded-lg p-2.5 sm:p-3.5 border border-[#003891]/30 flex flex-col justify-between min-w-0">
+                                            <div class="text-[11px] sm:text-xs font-extrabold text-[#003891]">초기 필요자금 합계</div>
+                                            <div class="briefing-kpi-value text-base sm:text-xl font-black text-[#003891] mt-1 tabular-nums">${formatManwon(totalInit)}</div>
+                                            <div class="briefing-kpi-sub text-[11px] sm:text-xs text-[#003891]/80 font-bold mt-0.5">보증금 + 권리금</div>
                                         </div>
                                         ${showMonthlyCost ? `
-                                        <div class="briefing-kpi-card bg-slate-100 rounded-lg p-3 sm:p-3.5 border border-slate-300 col-span-2 sm:col-span-1 flex flex-col justify-between">
-                                            <div class="text-xs font-extrabold text-slate-700">월 실제 고정비</div>
-                                            <div class="briefing-kpi-value text-lg sm:text-xl font-black text-slate-900 mt-1 tabular-nums">월 ${formatManwon(totalMonthly)}</div>
-                                            <div class="briefing-kpi-sub text-xs text-slate-600 font-semibold mt-0.5">${((includeVat && hasRentVat) || (hasMaintVat && maint > 0)) ? '부가세 포함 기준' : '월세+관리비(VAT별도)'}</div>
+                                        <div class="briefing-kpi-card bg-slate-100 rounded-lg p-2.5 sm:p-3.5 border border-slate-300 col-span-2 sm:col-span-1 flex flex-col justify-between min-w-0">
+                                            <div class="text-[11px] sm:text-xs font-extrabold text-slate-700">월 실제 고정비</div>
+                                            <div class="briefing-kpi-value text-base sm:text-xl font-black text-slate-900 mt-1 tabular-nums">월 ${formatManwon(totalMonthly)}</div>
+                                            <div class="briefing-kpi-sub text-[11px] sm:text-xs text-slate-600 font-semibold mt-0.5">${((includeVat && hasRentVat) || (hasMaintVat && maint > 0)) ? '부가세 포함 기준' : '월세+관리비(VAT별도)'}</div>
                                         </div>
                                         ` : ''}
                                     `}
