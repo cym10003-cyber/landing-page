@@ -131,14 +131,17 @@
             }
         }
 
-        /* Screen Layout for Print Margin Frame (invisible table wrapper on screen) */
-        .print-page-frame,
-        .print-frame-body,
-        .print-frame-body > tr,
-        .print-body-cell {
-            display: block;
+        /* Screen Layout for Print Margin Frame (100% full-width table so max-w-6xl mx-auto centers cleanly on every PC viewport) */
+        .print-page-frame {
             width: 100%;
             max-width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            table-layout: fixed;
+        }
+        .print-body-cell {
+            padding: 0;
+            vertical-align: top;
         }
         .print-frame-head,
         .print-frame-foot {
@@ -209,7 +212,7 @@
             .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .shadow-xs, .shadow-2xs {
                 box-shadow: none !important;
             }
-            #floating-quick-bar, #scroll-nav-up-down, #mobile-bottom-nav, #mobile-bottom-cta, #mobile-comparison-toggle-bar, #admin-print-toolbar {
+            #floating-quick-bar, #scroll-nav-up-down, #mobile-bottom-nav, #mobile-bottom-bar, #mobile-bottom-cta, #mobile-comparison-toggle-bar, #admin-print-toolbar {
                 display: none !important;
             }
             #briefing-main {
@@ -447,8 +450,16 @@
                 line-height: 1.2 !important;
                 display: block !important;
             }
+            #broker-footer-meta-row {
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 8px !important;
+            }
+            #broker-footer-meta-sep {
+                display: inline !important;
+            }
         }
-        #floating-quick-bar, #scroll-nav-up-down, #mobile-bottom-nav {
+        #floating-quick-bar, #scroll-nav-up-down, #mobile-bottom-nav, #mobile-bottom-bar {
             display: none !important;
         }
         .briefing-marker-pin {
@@ -541,16 +552,16 @@
         </div>
     </div>
 
-    <!-- Print-Safe Margin Frame Table (Invisible block on screen; repeats exact top/bottom margins on every A4 page while @page margin:0 hides browser date/URL!) -->
-    <table class="print-page-frame">
+    <!-- Print-Safe Margin Frame Table (100% full-width on screen; repeats exact top/bottom margins on every A4 page while @page margin:0 hides browser date/URL!) -->
+    <table class="print-page-frame w-full border-collapse table-fixed">
         <thead class="print-frame-head">
             <tr><td><div class="print-margin-top-spacer"></div></td></tr>
         </thead>
         <tbody class="print-frame-body">
             <tr>
-                <td class="print-body-cell">
+                <td class="print-body-cell p-0 align-top">
     <!-- Main Briefing Content -->
-    <main id="briefing-main" class="hidden max-w-6xl mx-auto px-3 sm:px-6 pt-4 sm:pt-5 space-y-4 sm:space-y-5">
+    <main id="briefing-main" class="hidden w-full max-w-6xl mx-auto px-3 sm:px-6 pt-4 sm:pt-5 space-y-4 sm:space-y-5">
 
         <!-- 1. Executive Advisory Proposal Cover Masthead (Tier-1 Commercial Real Estate Report Look) -->
         <section id="cover-masthead-section" class="bg-white text-slate-900 rounded-xl p-5 sm:p-7 shadow-xs relative overflow-hidden print-break-inside-avoid border border-slate-300 border-t-[5px] border-t-[#0B2545]">
@@ -588,7 +599,7 @@
                     <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-3 gap-y-1">
                         <span class="font-black text-[#0B2545] whitespace-nowrap">자문 · 중개 : 최가네부동산 공인중개사사무소</span>
                         <span class="hidden sm:inline text-slate-300">|</span>
-                        <span class="text-slate-600 font-medium">대구광역시 수성구 수성동1가 72-3 (대구은행역 2번 출구)</span>
+                        <span class="text-slate-600 font-medium">대구광역시 수성구 수성동1가 72-3 <span class="whitespace-nowrap">(대구은행역 2번 출구)</span></span>
                         <span class="hidden sm:inline text-slate-300">|</span>
                         <span class="font-extrabold text-[#003891] tabular-nums whitespace-nowrap">010-3548-4000</span>
                     </div>
@@ -660,9 +671,9 @@
         <!-- 3. Mini Map Comparing Briefed Properties -->
         <section id="map-section" class="bg-white rounded-2xl p-4 sm:p-6 shadow-xs border border-slate-200 space-y-3 no-print">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                    <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-1.5">
-                        <span class="material-symbols-outlined text-[#003891]">map</span>
+                <div class="shrink-0">
+                    <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-1.5 whitespace-nowrap">
+                        <span class="material-symbols-outlined text-[#003891] shrink-0">map</span>
                         <span>매물 위치 비교 지도</span>
                     </h2>
                 </div>
@@ -708,11 +719,11 @@
                     <span class="font-black text-base sm:text-lg text-[#0B2545] tracking-tight">최가네부동산공인중개사사무소</span>
                     <span class="text-[10px] font-bold tracking-[0.08em] text-slate-400 uppercase">COMMERCIAL REAL ESTATE</span>
                 </div>
-                <div class="text-xs sm:text-sm text-slate-700 font-medium">대구광역시 수성구 수성동1가 72-3번지 (2호선 대구은행역 2번 출구)</div>
-                <div class="text-xs sm:text-sm text-slate-600 font-medium flex items-center gap-2 flex-wrap">
-                    <span>대표 공인중개사: <strong class="text-slate-900">최이명</strong></span>
-                    <span class="text-slate-300">|</span>
-                    <span>등록번호: <strong class="text-slate-800 tabular-nums">제27260-2024-00085호</strong></span>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">대구광역시 수성구 수성동1가 72-3번지 <span class="whitespace-nowrap">(2호선 대구은행역 2번 출구)</span></div>
+                <div id="broker-footer-meta-row" class="text-xs sm:text-sm text-slate-600 font-medium flex flex-col sm:flex-row sm:items-center gap-y-0.5 sm:gap-x-2">
+                    <span class="whitespace-nowrap">대표 공인중개사: <strong class="text-slate-900">최이명</strong></span>
+                    <span id="broker-footer-meta-sep" class="hidden sm:inline text-slate-300">|</span>
+                    <span class="whitespace-nowrap">등록번호: <strong class="text-slate-800 tabular-nums">제27260-2024-00085호</strong></span>
                 </div>
                 <div class="text-xs text-slate-500 font-medium">대구 전 지역 상가 · 사무실 · 병의원 · 빌딩 임대·매매 전문</div>
             </div>
@@ -732,8 +743,8 @@
         </tfoot>
     </table>
 
-    <!-- Bottom Sticky Bar for Mobile Customer Action (No Print) -->
-    <div id="mobile-bottom-cta" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-3 sm:px-4 py-2.5 z-40 no-print shadow-lg">
+    <!-- Bottom Sticky Bar for Mobile Customer Action (No Print & Hidden in Internal Report Mode) -->
+    <div id="mobile-bottom-cta" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-3 sm:px-4 py-2.5 z-40 no-print brand-only-block shadow-lg">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
             <div class="hidden sm:block">
                 <div class="text-xs font-extrabold text-slate-900">마음에 드는 매물이 있으신가요?</div>
@@ -785,7 +796,7 @@
             </button>
 
             <div id="lightbox-scroll-box" class="w-full h-full max-h-[82vh] overflow-auto flex items-center justify-center p-1 sm:p-2" onclick="handleLightboxBackdropClick(event)">
-                <img id="lightbox-img" src="" alt="매물 상세 이미지" onerror="handleLightboxMainImgError(this)" onclick="event.stopPropagation(); toggleLightboxClickZoom()" class="max-w-full max-h-[78vh] object-contain rounded-xl shadow-2xl transition-all duration-150 cursor-zoom-in" style="image-rendering: -webkit-optimize-contrast;" />
+                <img id="lightbox-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="매물 상세 이미지" onerror="if(typeof handleLightboxMainImgError==='function') handleLightboxMainImgError(this)" onclick="event.stopPropagation(); toggleLightboxClickZoom()" class="max-w-full max-h-[78vh] object-contain rounded-xl shadow-2xl transition-all duration-150 cursor-zoom-in" style="image-rendering: -webkit-optimize-contrast;" />
             </div>
 
             <!-- Next Arrow Button -->
@@ -855,6 +866,7 @@
         let _briefing = null;
         let _attachedMemos = [];
         let _mapInstance = null;
+        let _mapAllBounds = [];
         let _cardMapInstances = {};
         let _selectedPickPropNo = '';
         let _selectedPickTitle = '';
@@ -962,11 +974,23 @@
                 reRenderComparisonAndCards();
                 renderAttachedMemos();
                 setTimeout(() => {
-                    try { if (_mapInstance) _mapInstance.invalidateSize(); } catch (e) {}
+                    try {
+                        if (_mapInstance) {
+                            _mapInstance.invalidateSize();
+                            if (_mapAllBounds && _mapAllBounds.length > 1) {
+                                _mapInstance.fitBounds(_mapAllBounds, { padding: [45, 45], maxZoom: 15, animate: false });
+                            }
+                        }
+                    } catch (e) {}
                     Object.values(_cardMapInstances).forEach(entry => {
-                        try { if (entry && entry.map) entry.map.invalidateSize(); } catch (e) {}
+                        try {
+                            if (entry && entry.map) {
+                                entry.map.invalidateSize();
+                                entry.map.setView([entry.lat, entry.lng], 16, { animate: false });
+                            }
+                        } catch (e) {}
                     });
-                }, 80);
+                }, 100);
             }
         }
         window.setInternalReportScreenMode = setInternalReportScreenMode;
@@ -980,10 +1004,49 @@
             const wantInternal = mode === 'internal';
             setInternalReportScreenMode(wantInternal);
             setTimeout(() => {
+                Object.values(_cardMapInstances).forEach(entry => {
+                    try {
+                        if (entry && entry.map) {
+                            entry.map.invalidateSize(false);
+                            entry.map.setView([entry.lat, entry.lng], 16, { animate: false });
+                        }
+                    } catch (e) {}
+                });
                 window.print();
-            }, 150);
+            }, 180);
         }
         window.printBriefingReport = printBriefingReport;
+
+        window.addEventListener('beforeprint', () => {
+            Object.values(_cardMapInstances).forEach(entry => {
+                try {
+                    if (entry && entry.map) {
+                        entry.map.invalidateSize(false);
+                        entry.map.setView([entry.lat, entry.lng], 16, { animate: false });
+                    }
+                } catch (e) {}
+            });
+        });
+        window.addEventListener('afterprint', () => {
+            setTimeout(() => {
+                try {
+                    if (_mapInstance) {
+                        _mapInstance.invalidateSize(false);
+                        if (_mapAllBounds && _mapAllBounds.length > 1) {
+                            _mapInstance.fitBounds(_mapAllBounds, { padding: [45, 45], maxZoom: 15, animate: false });
+                        }
+                    }
+                } catch (e) {}
+                Object.values(_cardMapInstances).forEach(entry => {
+                    try {
+                        if (entry && entry.map) {
+                            entry.map.invalidateSize(false);
+                            entry.map.setView([entry.lat, entry.lng], 16, { animate: false });
+                        }
+                    } catch (e) {}
+                });
+            }, 120);
+        });
 
         async function initCustomerBriefingPage() {
             const params = new URLSearchParams(window.location.search);
@@ -1047,6 +1110,9 @@
                     document.body.classList.add('internal-report-mode');
                 }
 
+                document.getElementById('briefing-loading').classList.add('hidden');
+                document.getElementById('briefing-main').classList.remove('hidden');
+
                 renderHeaderSection();
                 reRenderComparisonAndCards();
                 renderMiniMap();
@@ -1056,13 +1122,22 @@
                     setInternalReportScreenMode(true);
                 }
 
-                document.getElementById('briefing-loading').classList.add('hidden');
-                document.getElementById('briefing-main').classList.remove('hidden');
-
                 setTimeout(() => {
-                    try { if (_mapInstance) _mapInstance.invalidateSize(); } catch (e) {}
+                    try {
+                        if (_mapInstance) {
+                            _mapInstance.invalidateSize();
+                            if (_mapAllBounds && _mapAllBounds.length > 1) {
+                                _mapInstance.fitBounds(_mapAllBounds, { padding: [45, 45], maxZoom: 15, animate: false });
+                            }
+                        }
+                    } catch (e) {}
                     Object.values(_cardMapInstances).forEach(entry => {
-                        try { if (entry && entry.map) entry.map.invalidateSize(); } catch (e) {}
+                        try {
+                            if (entry && entry.map) {
+                                entry.map.invalidateSize();
+                                entry.map.setView([entry.lat, entry.lng], 16, { animate: false });
+                            }
+                        } catch (e) {}
                     });
                 }, 250);
             } catch (e) {
@@ -1483,8 +1558,8 @@
                     <div class="print-photo-item rounded-lg overflow-hidden bg-white border border-slate-300 cursor-pointer group flex flex-col" onclick="openPhotoLightbox(${idx}, ${pIdx})">
                         <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden">
                             <img src="${escHtml(url)}" alt="${escHtml(title)} 사진 ${pIdx + 1}" loading="eager" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'" />
-                            <span class="absolute bottom-2 right-2 bg-slate-900/75 text-white text-xs font-bold px-2.5 py-1 rounded no-print flex items-center gap-1 whitespace-nowrap">
-                                <span class="material-symbols-outlined text-[14px]">zoom_in</span>
+                            <span class="absolute top-2 right-2 bg-slate-900/65 backdrop-blur-xs text-white text-[11px] font-bold px-2 py-1 rounded no-print flex items-center gap-1 whitespace-nowrap">
+                                <span class="material-symbols-outlined text-[13px]">zoom_in</span>
                                 <span>원본 확대</span>
                             </span>
                         </div>
@@ -1651,8 +1726,8 @@
                                         </div>
                                         <div class="briefing-kpi-card bg-[#F8FAFC] rounded-lg p-2.5 sm:p-3.5 border border-slate-200 flex flex-col justify-between min-w-0">
                                             <div class="text-[11px] sm:text-xs font-extrabold text-slate-500">공용관리비 / 권리금</div>
-                                            <div class="briefing-kpi-value text-[15px] sm:text-lg font-black text-slate-900 mt-1 tabular-nums">${maint > 0 ? formatManwon(maint) : '별도/없음'}${maint > 0 && hasMaintVat ? ` <span class="text-[10px] sm:text-[11px] text-[#003891] font-bold">(VAT별도)</span>` : ''}</div>
-                                            <div class="briefing-kpi-sub text-[11px] sm:text-xs text-slate-700 font-bold mt-0.5">${premSubLine}</div>
+                                            <div class="briefing-kpi-value text-base sm:text-xl font-black text-slate-900 mt-1 tabular-nums">${maint > 0 ? formatManwon(maint) : '별도/없음'}</div>
+                                            <div class="briefing-kpi-sub text-[11px] sm:text-xs text-slate-700 font-bold mt-0.5">${premSubLine}${maint > 0 && hasMaintVat ? ` <span class="text-[#003891] font-extrabold">· VAT별도</span>` : ''}</div>
                                         </div>
                                         <div class="briefing-kpi-card bg-[#F0F5FF] rounded-lg p-2.5 sm:p-3.5 border border-[#003891]/30 flex flex-col justify-between min-w-0">
                                             <div class="text-[11px] sm:text-xs font-extrabold text-[#003891]">초기 필요자금 합계</div>
@@ -1888,22 +1963,35 @@
 
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = 'px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-[#003891] hover:text-white text-slate-800 text-xs font-extrabold transition cursor-pointer border border-slate-200';
+                btn.className = 'map-jump-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-[#003891] hover:text-white text-slate-800 text-xs font-extrabold transition cursor-pointer border border-slate-200';
                 btn.textContent = `${num}번 ${addr}`;
                 btn.onclick = () => {
+                    jumpBtns.querySelectorAll('.map-jump-btn').forEach(bEl => {
+                        bEl.className = 'map-jump-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-[#003891] hover:text-white text-slate-800 text-xs font-extrabold transition cursor-pointer border border-slate-200';
+                    });
+                    btn.className = 'map-jump-btn px-2.5 py-1 rounded-lg bg-[#003891] text-white text-xs font-extrabold transition cursor-pointer border border-[#003891]';
                     _mapInstance.setView([lat, lng], 16, { animate: true });
                     marker.openPopup();
                 };
                 jumpBtns.appendChild(btn);
             });
 
+            _mapAllBounds = bounds;
             if (bounds.length > 1) {
-                _mapInstance.fitBounds(bounds, { padding: [45, 45], maxZoom: 16 });
+                _mapInstance.invalidateSize();
+                _mapInstance.fitBounds(bounds, { padding: [45, 45], maxZoom: 15, animate: false });
                 const allBtn = document.createElement('button');
                 allBtn.type = 'button';
-                allBtn.className = 'px-2.5 py-1 rounded-lg bg-[#003891] text-white text-xs font-extrabold transition cursor-pointer';
+                allBtn.className = 'map-jump-btn px-2.5 py-1 rounded-lg bg-[#003891] text-white text-xs font-extrabold transition cursor-pointer border border-[#003891]';
                 allBtn.textContent = '전체 한눈에 보기';
-                allBtn.onclick = () => _mapInstance.fitBounds(bounds, { padding: [45, 45], maxZoom: 16 });
+                allBtn.onclick = () => {
+                    jumpBtns.querySelectorAll('.map-jump-btn').forEach(bEl => {
+                        bEl.className = 'map-jump-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-[#003891] hover:text-white text-slate-800 text-xs font-extrabold transition cursor-pointer border border-slate-200';
+                    });
+                    allBtn.className = 'map-jump-btn px-2.5 py-1 rounded-lg bg-[#003891] text-white text-xs font-extrabold transition cursor-pointer border border-[#003891]';
+                    _mapInstance.invalidateSize();
+                    _mapInstance.fitBounds(bounds, { padding: [45, 45], maxZoom: 15 });
+                };
                 jumpBtns.appendChild(allBtn);
             }
         }
@@ -2079,19 +2167,21 @@
                             <div class="text-xs font-bold text-slate-800 truncate" title="${escHtml(fileName)}">${escHtml(fileName)}</div>
                             ${thumbsPreviewHtml}
                         </div>
-                        <div class="flex items-center gap-1.5 pt-1 border-t border-slate-100 no-print">
-                            <button type="button" onclick="openOfficialDocLightbox(${itemIdx}, ${docIdx}, 0)" class="flex-1 px-2.5 py-2 rounded-lg bg-[#f0f5ff] hover:bg-[#003891] text-[#003891] hover:text-white border border-blue-200 font-extrabold text-xs flex items-center justify-center gap-1 transition cursor-pointer whitespace-nowrap">
-                                <span class="material-symbols-outlined text-[15px] shrink-0">photo_library</span>
-                                <span>사진으로 크게 보기 (${pageCount}장)</span>
+                        <div class="flex items-center gap-1.5 pt-1 border-t border-slate-100 no-print min-w-0">
+                            <button type="button" onclick="openOfficialDocLightbox(${itemIdx}, ${docIdx}, 0)" class="flex-1 min-w-0 px-2 sm:px-2.5 py-2 rounded-lg bg-[#f0f5ff] hover:bg-[#003891] text-[#003891] hover:text-white border border-blue-200 font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1 transition cursor-pointer whitespace-nowrap overflow-hidden">
+                                <span class="material-symbols-outlined text-[14px] sm:text-[15px] shrink-0">photo_library</span>
+                                <span class="sm:hidden truncate">사진 보기 (${pageCount}장)</span>
+                                <span class="hidden sm:inline truncate">사진으로 크게 보기 (${pageCount}장)</span>
                             </button>
                             ${hasPdf ? `
-                            <button type="button" onclick="downloadOfficialDocFile(${itemIdx}, ${docIdx})" class="px-2.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center gap-1 transition cursor-pointer whitespace-nowrap shrink-0" title="PDF 원본 파일 다운로드">
-                                <span class="material-symbols-outlined text-[15px] shrink-0">download</span>
-                                <span>PDF 원본 다운</span>
+                            <button type="button" onclick="downloadOfficialDocFile(${itemIdx}, ${docIdx})" class="px-2 sm:px-2.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1 transition cursor-pointer whitespace-nowrap shrink-0" title="PDF 원본 파일 다운로드">
+                                <span class="material-symbols-outlined text-[14px] sm:text-[15px] shrink-0">download</span>
+                                <span class="sm:hidden">PDF 다운</span>
+                                <span class="hidden sm:inline">PDF 원본 다운</span>
                             </button>
                             ` : (firstThumb ? `
-                            <button type="button" onclick="downloadOfficialDocFile(${itemIdx}, ${docIdx})" class="px-2.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center gap-1 transition cursor-pointer whitespace-nowrap shrink-0" title="원본 파일 다운로드">
-                                <span class="material-symbols-outlined text-[15px] shrink-0">download</span>
+                            <button type="button" onclick="downloadOfficialDocFile(${itemIdx}, ${docIdx})" class="px-2 sm:px-2.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1 transition cursor-pointer whitespace-nowrap shrink-0" title="원본 파일 다운로드">
+                                <span class="material-symbols-outlined text-[14px] sm:text-[15px] shrink-0">download</span>
                                 <span>원본 다운</span>
                             </button>
                             ` : '')}
