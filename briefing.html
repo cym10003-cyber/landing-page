@@ -120,6 +120,17 @@
             font-variant-numeric: tabular-nums;
         }
 
+        /* Proportional 3-Column Spec Strip (Wide Address + Compact Area + Crisp Floor so 100% stays on 1 clean line) */
+        .briefing-spec-strip {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+        }
+        @media (min-width: 640px) {
+            .briefing-spec-strip {
+                grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.85fr) minmax(0, 1.3fr);
+            }
+        }
+
         /* Screen Layout for Print Margin Frame (invisible table wrapper on screen) */
         .print-page-frame,
         .print-frame-body,
@@ -281,6 +292,21 @@
             }
             .briefing-map-canvas {
                 height: 215px !important;
+            }
+            .briefing-spec-strip {
+                display: grid !important;
+                grid-template-columns: minmax(0, 1.58fr) minmax(0, 0.82fr) minmax(0, 1.3fr) !important;
+            }
+            .briefing-spec-cell {
+                padding: 7px 10px !important;
+            }
+            .briefing-spec-val {
+                font-size: 13.5px !important;
+                line-height: 1.35 !important;
+            }
+            .briefing-photos-header {
+                break-after: avoid !important;
+                page-break-after: avoid !important;
             }
 
             /* 1. Comparison Table 100% Full-Width Fitting in Print (Zero horizontal cutoff) */
@@ -1451,8 +1477,9 @@
                 }
 
                 // Photos Grid (Large 2-Column Executive Gallery on Screen & A4 Print)
+                // Split first row (photos 1-2) with the section header inside print-subblock-avoid so the header is NEVER orphaned alone at the bottom of a page!
                 const photos = (item.photos && item.photos.length > 0) ? item.photos : ['https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'];
-                const photosHtml = photos.map((url, pIdx) => `
+                const renderPhotoCard = (url, pIdx) => `
                     <div class="print-photo-item rounded-lg overflow-hidden bg-white border border-slate-300 cursor-pointer group flex flex-col" onclick="openPhotoLightbox(${idx}, ${pIdx})">
                         <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden">
                             <img src="${escHtml(url)}" alt="${escHtml(title)} 사진 ${pIdx + 1}" loading="eager" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'" />
@@ -1466,7 +1493,12 @@
                             <span class="text-slate-400 tabular-nums">${pIdx + 1} / ${photos.length}</span>
                         </div>
                     </div>
-                `).join('');
+                `;
+                const firstRowPhotosHtml = photos.slice(0, 2).map((u, i) => renderPhotoCard(u, i)).join('');
+                const restPhotosHtml = photos.slice(2).map((u, i) => renderPhotoCard(u, i + 2)).join('');
+                const safeAddrHtml = escHtml(addr).replace(/(\d+-\d+\s*번지?)/g, '<span class="whitespace-nowrap">$1</span>');
+                const cleanCurFloor = escHtml(String(floors.currentFloor || '-').replace(/^해당층\s*:?\s*/, ''));
+                const cleanTotFloor = escHtml(String(floors.totalFloor || '-').replace(/\s*~\s*/g, '~'));
 
                 // Clean Refined Feature Tags
                 const badges = Array.isArray(item.badges) ? item.badges.map(cleanBadgeText).filter(Boolean) : [];
@@ -1558,22 +1590,22 @@
                             </div>
 
                             <div class="briefing-card-pad-top p-4 sm:p-6 pb-2.5 sm:pb-3 space-y-3.5">
-                                <!-- Structured 3-Column Executive Spec Table Strip -->
-                                <div class="grid grid-cols-1 sm:grid-cols-3 border border-slate-200 rounded-lg bg-[#F8FAFC] divide-y sm:divide-y-0 sm:divide-x divide-slate-200 overflow-hidden">
-                                    <div onclick="const el=document.getElementById('card-map-box-${idx}'); if(el) el.scrollIntoView({behavior:'smooth', block:'center'});" class="px-3.5 py-2 cursor-pointer hover:bg-blue-50/50 transition" title="클릭 시 위치 지도로 이동">
+                                <!-- Structured Proportional 3-Column Executive Spec Table Strip (1-Line Address, Area & Floor) -->
+                                <div class="briefing-spec-strip border border-slate-200 rounded-lg bg-[#F8FAFC] divide-y sm:divide-y-0 sm:divide-x divide-slate-200 overflow-hidden">
+                                    <div onclick="const el=document.getElementById('card-map-box-${idx}'); if(el) el.scrollIntoView({behavior:'smooth', block:'center'});" class="briefing-spec-cell px-3.5 py-2 cursor-pointer hover:bg-blue-50/50 transition min-w-0" title="클릭 시 위치 지도로 이동">
                                         <div class="text-[11px] font-bold text-slate-500">소재지 (위치)</div>
-                                        <div class="text-sm sm:text-[15px] font-black text-[#0B2545] mt-0.5 flex items-center gap-1">
+                                        <div class="briefing-spec-val text-sm sm:text-[14.5px] font-black text-[#0B2545] mt-0.5 flex items-center gap-1">
                                             <span class="material-symbols-outlined text-[15px] text-[#003891] shrink-0">location_on</span>
-                                            <span>${escHtml(addr)}</span>
+                                            <span>${safeAddrHtml}</span>
                                         </div>
                                     </div>
-                                    <div class="px-3.5 py-2">
+                                    <div class="briefing-spec-cell px-3.5 py-2 min-w-0">
                                         <div class="text-[11px] font-bold text-slate-500">면적 규모</div>
-                                        <div class="text-sm sm:text-[15px] font-black text-[#003891] mt-0.5 tabular-nums">${escHtml(item.area || '-')}</div>
+                                        <div class="briefing-spec-val text-sm sm:text-[14.5px] font-black text-[#003891] mt-0.5 tabular-nums whitespace-nowrap">${escHtml(item.area || '-')}</div>
                                     </div>
-                                    <div class="px-3.5 py-2">
+                                    <div class="briefing-spec-cell px-3.5 py-2 min-w-0">
                                         <div class="text-[11px] font-bold text-slate-500">해당층 / 건물 총층</div>
-                                        <div class="text-sm sm:text-[15px] font-black text-slate-900 mt-0.5">해당층 ${escHtml(floors.currentFloor)} <span class="text-slate-400 font-normal">/</span> <span class="text-slate-700 font-bold">총 ${escHtml(floors.totalFloor)}</span></div>
+                                        <div class="briefing-spec-val text-sm sm:text-[14.5px] font-black text-slate-900 mt-0.5">${cleanCurFloor} <span class="text-slate-400 font-normal">/</span> <span class="text-slate-700 font-bold">총 ${cleanTotFloor}</span></div>
                                     </div>
                                 </div>
 
@@ -1646,18 +1678,25 @@
                             <!-- Individual Property Location Map -->
                             ${cardMapHtml}
 
-                            <!-- Large 2-Column Field Photos & Floor Plan Grid -->
-                            <div class="space-y-2.5 pt-1">
-                                <div class="flex items-center justify-between pb-1.5 border-b border-slate-200">
-                                    <div class="text-sm sm:text-base font-black text-[#0B2545] flex items-center gap-1.5">
-                                        <span class="material-symbols-outlined text-[19px] text-[#003891]">photo_library</span>
-                                        <span>현장 실물 사진 및 도면 (${photos.length}장)</span>
+                            <!-- Large 2-Column Field Photos & Floor Plan Grid (Header locked with 1st photo row so heading is never orphaned!) -->
+                            <div class="space-y-3 pt-1">
+                                <div class="print-subblock-avoid space-y-2.5">
+                                    <div class="briefing-photos-header flex items-center justify-between pb-1.5 border-b border-slate-200">
+                                        <div class="text-sm sm:text-base font-black text-[#0B2545] flex items-center gap-1.5">
+                                            <span class="material-symbols-outlined text-[19px] text-[#003891]">photo_library</span>
+                                            <span>현장 실물 사진 및 도면 (${photos.length}장)</span>
+                                        </div>
+                                        <span class="text-xs text-slate-500 font-bold no-print">클릭하면 원본 크기로 크게 확대됩니다</span>
                                     </div>
-                                    <span class="text-xs text-slate-500 font-bold no-print">클릭하면 원본 크기로 크게 확대됩니다</span>
+                                    <div class="grid ${photos.length === 1 ? 'grid-cols-1 single-photo-grid' : 'grid-cols-1 sm:grid-cols-2'} gap-3.5 print-photos-grid">
+                                        ${firstRowPhotosHtml}
+                                    </div>
                                 </div>
-                                <div class="grid ${photos.length === 1 ? 'grid-cols-1 single-photo-grid' : 'grid-cols-1 sm:grid-cols-2'} gap-3.5 print-photos-grid">
-                                    ${photosHtml}
+                                ${restPhotosHtml ? `
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 print-photos-grid">
+                                    ${restPhotosHtml}
                                 </div>
+                                ` : ''}
                             </div>
 
                             <!-- Official Public Records & Floor Plans (Hidden on PDF Print per Broker Request) -->
