@@ -16,7 +16,6 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>매물지도 - 최가네부동산공인중개사사무소</title><meta name="description" content="최가네부동산 상가 및 사무실 매물의 대략적인 위치를 지도로 확인하실 수 있는 매물지도 서비스입니다." /><meta name="keywords" content="대구상가임대, 대구사무실임대, 대구상가매매, 대구건물매매, 수성구상가, 달서구상가, 중구상가, 동구상가, 북구상가, 서구상가, 남구상가, 달성군상가, 매물지도, 최가네부동산" /><meta property="og:type" content="website" /><meta property="og:title" content="매물지도 - 최가네부동산공인중개사사무소" /><meta property="og:description" content="대구 수성구 및 달구벌대로 상업용 부동산 매물을 위치 기반 지도로 편리하게 확인해 보세요." /><meta property="og:image" content="https://www.choi114.com/og_map_v2b.jpg" /><meta property="og:url" content="https://www.choi114.com/map" /><link rel="image_src" href="https://www.choi114.com/og_map_v2b.jpg" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="매물지도 - 최가네부동산공인중개사사무소" /><meta name="twitter:description" content="대구 위치 기반 상가 및 사무실 매물지도 서비스입니다." /><meta name="twitter:image" content="https://www.choi114.com/og_map_v2b.jpg" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -140,10 +139,16 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
         } catch (_e) {}
     </script>
     <style>
-        body, button, input, select, textarea, .leaflet-popup, .leaflet-popup-content {
+        body, button, input, select, textarea, h1, h2, h3, h4, p, span, a, .leaflet-popup, .leaflet-popup-content {
             font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif !important;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined' !important;
+            letter-spacing: normal !important;
         }
         .custom-scrollbar::-webkit-scrollbar {
             width: 5px;
@@ -325,7 +330,8 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
 </nav>
 
 <!-- Main Interactive Panel Area -->
-<div class="flex flex-col md:flex-row flex-grow w-full overflow-hidden relative">
+<main class="flex flex-col md:flex-row flex-grow w-full overflow-hidden relative">
+    <h1 class="sr-only">대구 상가·사무실 매물지도 - 최가네부동산공인중개사사무소</h1>
     
     <!-- Sidebar / List Panel -->
     <div id="list-panel" class="hidden md:flex w-full md:w-[420px] h-full flex-col bg-surface border-r border-hairline shrink-0 z-20 transition-all duration-300">
@@ -389,7 +395,7 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
         </div>
         <div id="map" class="w-full h-full"></div>
     </div>
-</div>
+</main>
 
 <!-- Mobile Menu Drawer -->
 <div id="mobile-drawer" class="fixed inset-0 bg-ink/50 z-50 hidden transition-opacity duration-300 opacity-0">
@@ -418,28 +424,28 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
   </div>
 </div>
 
-<!-- Mobile Bottom Bar Navigation -->
-<div class="bg-surface-container-lowest border-t border-hairline flex justify-around items-center py-2 z-50 md:hidden shadow-lg shrink-0">
-  <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">home</span>
+<!-- Mobile Bottom Bar Navigation (Unified High Converting Call Bar) -->
+<div class="bg-surface-container-lowest/95 backdrop-blur-md border-t border-hairline py-2 px-3 z-50 md:hidden flex items-center gap-2 shadow-strong-elevated shrink-0">
+  <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-11 h-11 shrink-0">
+    <span class="material-symbols-outlined text-[22px]">home</span>
     <span class="text-[10px] font-medium">홈</span>
   </a>
-  <a href="about.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">info</span>
-    <span class="text-[10px] font-medium">소개</span>
+  <a href="property-news.html?category=매물리스트" class="flex flex-col items-center justify-center text-muted hover:text-primary w-11 h-11 shrink-0">
+    <span class="material-symbols-outlined text-[22px]">apartment</span>
+    <span class="text-[10px] font-medium">매물</span>
   </a>
-  <a href="map.html" class="flex flex-col items-center justify-center text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">map</span>
-    <span class="text-[10px] font-medium font-bold">매물지도</span>
+  <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-1 bg-[#fee500] hover:bg-[#fdd835] text-[#3c1e1e] py-2.5 px-2 rounded-xl shadow-xs font-black text-xs active:scale-95 whitespace-nowrap">
+    <span class="material-symbols-outlined text-[17px]">chat</span>
+    <span>카톡상담</span>
   </a>
-  <a href="tel:010-3548-4000" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">call</span>
-    <span class="text-[10px] font-medium">전화</span>
+  <a href="tel:010-3548-4000" class="flex-[1.2] flex items-center justify-center gap-1.5 bg-[#003891] hover:bg-blue-800 text-white py-2.5 px-3 rounded-xl shadow-md font-black text-xs active:scale-95 whitespace-nowrap">
+    <span class="material-symbols-outlined text-[18px] text-amber-300">call</span>
+    <span>010-3548-4000</span>
   </a>
 </div>
 
 <!-- Load Database and Page Logic -->
-<script src="db.js?v=20261125_v259"></script>
+<script src="db.js?v=20261125_v260"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Setup Mobile Menu Drawer
@@ -503,12 +509,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         listPanel.classList.add('flex');
     });
 
-    // 3. Initialize Leaflet Map with Canvas Hardware Acceleration
+    // 3. Initialize Leaflet Map with Canvas Hardware Acceleration & Reliable Mobile Sizing
+    const isMobileMap = window.innerWidth < 768;
     const editorMap = L.map('map', {
         zoomControl: true,
         scrollWheelZoom: true,
         preferCanvas: true
-    }).setView([35.8714, 128.6014], 13); // Default Daegu Center
+    }).setView(isMobileMap ? [35.8595, 128.6180] : [35.8650, 128.6050], 13); // Daegu Core Commercial Districts
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
@@ -519,10 +526,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         disableClusteringAtZoom: 16,
         spiderfyOnMaxZoom: true,
         showCoverageOnHover: false,
-        maxClusterRadius: 45,
+        maxClusterRadius: isMobileMap ? 60 : 45,
         chunkedLoading: true
     });
     editorMap.addLayer(markersClusterGroup);
+
+    // Prevent gray partial tiles on mobile load, resize, or orientation changes
+    const refreshMapTiles = () => {
+        try { editorMap.invalidateSize(true); } catch (e) {}
+    };
+    setTimeout(refreshMapTiles, 120);
+    setTimeout(refreshMapTiles, 450);
+    window.addEventListener('resize', () => setTimeout(refreshMapTiles, 120), { passive: true });
+    window.addEventListener('orientationchange', () => setTimeout(refreshMapTiles, 250), { passive: true });
 
     // Mobile zoom scroll lock & filter swipe hint logic
     const lockMobileScroll = () => {
@@ -1382,12 +1398,12 @@ ${conditionBlock}
 
         const filters = [
             { id: 'all', label: '전체보기', emoji: '👀', count: counts.all },
-            { id: 'mookwonri', label: '무권리', emoji: '🔥', count: counts.mookwonri },
+            { id: 'mookwonri', label: '무권리', emoji: '🎁', count: counts.mookwonri },
             { id: 'floor1', label: '1층 상가', emoji: '🏪', count: counts.floor1 },
             { id: 'large50', label: '50평+ 대형', emoji: '🏢', count: counts.large50 },
             { id: 'parking', label: '주차편리', emoji: '🚗', count: counts.parking },
             { id: 'station', label: '역세권(600m)', emoji: '🚇', count: counts.station },
-            { id: 'sale', label: '매매만', emoji: '💰', count: counts.sale }
+            { id: 'sale', label: '매매만', emoji: '🏷️', count: counts.sale }
         ];
 
         desktopContainer.innerHTML = filters.map(f => {

@@ -535,7 +535,7 @@ export default async function handler(req, res) {
             const imgMatch = trimmed.match(/!\[(.*?)\]\((.*?)\)/);
             if (imgMatch) {
               const rawAlt = (imgMatch[1] || '').trim();
-              const isGenericAlt = !rawAlt || rawAlt === 'image' || rawAlt === '사진' || /^사진\s*\d*$/.test(rawAlt);
+              const isGenericAlt = !rawAlt || rawAlt === 'image' || rawAlt === '사진' || /^사진\s*\d*$/.test(rawAlt) || /^(KakaoTalk_|IMG_|DSC|PXL_|Screenshot|photo|pic|\d{8}[_-]\d+)/i.test(rawAlt) || /\.(jpe?g|png|webp|gif|heic)$/i.test(rawAlt);
               const alt = isGenericAlt
                 ? `${cleanLoc} ${fullType}${specStr ? ` (${specStr})` : ''} 실매물 현장사진 ${imgIndex + 1} - 최가네부동산 매물번호 ${realPropNo}`
                 : rawAlt;
@@ -694,7 +694,7 @@ export default async function handler(req, res) {
                   <p class="text-[11px] text-muted mt-0.5">함께 비교해 보시면 좋은 최가네부동산의 검증된 상가·사무실 실매물입니다.</p>
                 </div>
                 <div class="flex items-center gap-2 text-xs font-extrabold">
-                  <a href="${baseUrl}/property-news" class="text-[#003891] hover:underline">전체 매물리스트 →</a>
+                  <a href="${baseUrl}/property-news?category=${encodeURIComponent('매물리스트')}" class="text-[#003891] hover:underline">전체 매물리스트 →</a>
                   <span class="text-slate-300">|</span>
                   <a href="${baseUrl}/map" class="text-[#003891] hover:underline">지도로 찾기 →</a>
                 </div>

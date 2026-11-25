@@ -1116,10 +1116,38 @@ function extractExternalSearchInflow() {
     return null;
 }
 
+function isAdminOrInternalAnalyticsContext() {
+    try {
+        const path = (window.location.pathname || '').toLowerCase();
+        const search = (window.location.search || '').toLowerCase();
+        if (path.includes('admin') || path.includes('news-write') || search.includes('preview=admin')) return true;
+        if (typeof isAdmin === 'function' && isAdmin()) return true;
+    } catch (e) {}
+    return false;
+}
+
 function recordPageView() {
     try {
+        if (isAdminOrInternalAnalyticsContext()) return;
         const todayStr = getKSTDateStr();
-        
+
+        // 1일 1회 순수 방문자(UV) 판별 및 세션 첫 진입 판별
+        let isNewVisitor = false;
+        try {
+            if (localStorage.getItem('choi_uv_date') !== todayStr) {
+                localStorage.setItem('choi_uv_date', todayStr);
+                isNewVisitor = true;
+            }
+        } catch (e) {}
+
+        let isSessionFirst = false;
+        try {
+            if (!sessionStorage.getItem('choi_session_entered')) {
+                sessionStorage.setItem('choi_session_entered', '1');
+                isSessionFirst = true;
+            }
+        } catch (e) { isSessionFirst = true; }
+
         let pageData = JSON.parse(localStorage.getItem('analytics_page_views') || '{"total":0,"today":0,"date":""}');
         if (pageData.date !== todayStr) {
             pageData.date = todayStr;
@@ -1131,11 +1159,16 @@ function recordPageView() {
 
         let dailyHistory = JSON.parse(localStorage.getItem('analytics_daily_history') || '{}');
         if (!dailyHistory[todayStr]) {
-            dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {}, searchKeywords: {} };
+            dailyHistory[todayStr] = { date: todayStr, count: 0, uniqueCount: 0, referrers: {}, postViews: {}, searchKeywords: {} };
         }
         dailyHistory[todayStr].count += 1;
+        if (isNewVisitor) {
+            dailyHistory[todayStr].uniqueCount = (dailyHistory[todayStr].uniqueCount || 0) + 1;
+        }
 
-        const source = getReferrerSource();
+        const rawSource = getReferrerSource();
+        // 새로고침이나 같은 세션 내 재접속(referrer 비어있음)을 '직접 접속'으로 중복 부풀리지 않고 '내부 이동'으로 처리
+        const source = (rawSource === '직접 접속 / 카카오톡 링크' && !isSessionFirst) ? '내부 이동' : rawSource;
         if (source !== '내부 이동') {
             if (!dailyHistory[todayStr].referrers) dailyHistory[todayStr].referrers = {};
             dailyHistory[todayStr].referrers[source] = (dailyHistory[todayStr].referrers[source] || 0) + 1;
@@ -1174,6 +1207,7 @@ function recordPageView() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 type: 'pageview',
+                isNewVisitor,
                 referrer: source,
                 inflowKeyword: inflow ? inflow.keyword : '',
                 inflowSource: inflow ? inflow.source : ''
@@ -1217,6 +1251,7 @@ function recordSearchQuery(query, source = '홈페이지 검색') {
 
 function recordPostView(postId, postTitle) {
     if (!postId) return;
+    if (isAdminOrInternalAnalyticsContext()) return;
     try {
         const todayStr = getKSTDateStr();
         
@@ -1326,13 +1361,14 @@ function getAnalyticsSummary(remoteData = null) {
                 date: ds.slice(5),
                 fullDate: ds,
                 count: entry.count || 0,
+                uniqueCount: entry.uniqueCount || 0,
                 referrers: entry.referrers || {},
                 postViews: entry.postViews || {}
             });
         }
 
-        // Helper: Format referrer list for a given referrers map
-        const calcReferrers = (refMap, targetTotal = 0) => {
+        // Helper: Format referrer list for a given referrers map (Strictly actual external/first-entry inflows; NEVER inflate with internal page clicks!)
+        const calcReferrers = (refMap) => {
             const mapCopy = {};
             let currentSum = 0;
             if (refMap && typeof refMap === 'object') {
@@ -1347,13 +1383,6 @@ function getAnalyticsSummary(remoteData = null) {
                     mapCopy[cleanSrc] = (mapCopy[cleanSrc] || 0) + c;
                     currentSum += c;
                 });
-            }
-
-            if (targetTotal > currentSum) {
-                const diff = targetTotal - currentSum;
-                const directKey = '직접 접속 / 카카오톡 링크';
-                mapCopy[directKey] = (mapCopy[directKey] || 0) + diff;
-                currentSum = targetTotal;
             }
 
             return Object.entries(mapCopy)
@@ -1644,6 +1673,7 @@ function getAnalyticsSummary(remoteData = null) {
             desktopCount,
             totalPageviews: Math.max(pageData.total || 0, allVisitsSum || 0),
             todayPageviews: todayVisitCount,
+            todayUniqueVisitors: Math.max((remoteData && remoteData.todayDate === todayStr ? (remoteData.todayUniqueVisitors || 0) : 0), (todayEntry.uniqueCount || 0)),
             postViewsMap: postViews,
             likes: (remoteData && remoteData.likes) ? remoteData.likes : {},
             totalLikes: (remoteData && remoteData.totalLikes) ? remoteData.totalLikes : 0,
@@ -2158,28 +2188,10 @@ async function submitClientLead(e) {
 }
 
 function initMobileBottomBar() {
-    if (window.location.pathname.includes('admin.html')) return;
-    if (document.getElementById('mobile-bottom-bar')) return;
-
-    const bar = document.createElement('div');
-    bar.id = 'mobile-bottom-bar';
-    bar.className = 'lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07102b]/95 backdrop-blur border-t border-[#1d3870] px-2 py-2 flex items-center justify-around text-white shadow-2xl pb-safe no-print';
-    bar.innerHTML = `
-        <a href="tel:010-3548-4000" class="flex flex-col items-center justify-center text-xs text-amber-400 hover:text-amber-300 font-bold px-2 py-1">
-            <span class="material-symbols-outlined text-xl">call</span>
-            <span>전화 상담</span>
-        </a>
-        <button onclick="showLeadForm('buyer')" class="flex flex-col items-center justify-center text-xs text-blue-300 hover:text-white font-medium px-2 py-1">
-            <span class="material-symbols-outlined text-xl">edit_note</span>
-            <span>매물 의뢰</span>
-        </button>
-
-        <a href="map.html" class="flex flex-col items-center justify-center text-xs text-slate-300 hover:text-white font-medium px-2 py-1">
-            <span class="material-symbols-outlined text-xl">map</span>
-            <span>매물 지도</span>
-        </a>
-    `;
-    document.body.appendChild(bar);
+    // Disabled legacy injected navy bar: every public page already renders its own crisp native mobile bottom bar.
+    // Keeping this function as a cleanup no-op prevents 2 colliding fixed bottom bars on mobile viewports.
+    const existing = document.getElementById('mobile-bottom-bar');
+    if (existing) existing.remove();
 }
 
 if (document.readyState === 'loading') {
@@ -2312,6 +2324,73 @@ function closePrivacyModal() {
 
 window.openPrivacyModal = openPrivacyModal;
 window.closePrivacyModal = closePrivacyModal;
+
+function openTermsModal() {
+    let modal = document.getElementById('terms-of-service-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'terms-of-service-modal';
+        modal.className = 'fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300';
+        modal.onclick = (e) => { if (e.target === modal) closeTermsModal(); };
+        modal.innerHTML = `
+        <div class="bg-white dark:bg-[#0b1739] text-slate-900 dark:text-slate-100 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden" style="word-break: keep-all;">
+            <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-[#142654]">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">description</span>
+                    <h3 class="text-base sm:text-lg font-bold">홈페이지 이용약관</h3>
+                </div>
+                <button type="button" onclick="closeTermsModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg transition-colors cursor-pointer">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
+            <div class="p-5 sm:p-6 overflow-y-auto space-y-5 text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                <div class="bg-blue-50 dark:bg-blue-950/40 p-3.5 rounded-xl border border-blue-100 dark:border-blue-900 text-blue-900 dark:text-blue-200 font-medium">
+                    본 약관은 최가네부동산공인중개사사무소(이하 "사무소")가 운영하는 웹사이트(choi114.com)에서 제공하는 상가·사무실·건물 매물 정보 및 상담 서비스의 이용 조건과 절차를 규정합니다.
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-1.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-4 bg-blue-600 rounded-full inline-block"></span> 제1조 (매물 정보의 성격 및 유의사항)
+                    </h4>
+                    <p>홈페이지에 게시된 모든 매물 정보(면적, 보증금, 월세, 관리비, 권리금, 입주 가능일 등)는 등록 시점을 기준으로 확인된 실매물 정보입니다. 다만 부동산 거래 특성상 실시간 계약 체결 또는 임대인 사정에 따라 조건이 변동될 수 있으므로, 최종 계약 전 반드시 담당 공인중개사의 최신 확인을 거치시기 바랍니다.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-1.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-4 bg-blue-600 rounded-full inline-block"></span> 제2조 (중개보수 및 법정 의무)
+                    </h4>
+                    <p>사무소의 부동산 중개보수는 「공인중개사법」 및 대구광역시 조례에서 정한 법정 상한 요율 범위 내에서 의뢰인과 상호 협의하여 결정하며, 계약 체결 시 중개대상물 확인·설명서를 성실히 교부합니다.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-1.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-4 bg-blue-600 rounded-full inline-block"></span> 제3조 (저작권 및 무단 전재 금지)
+                    </h4>
+                    <p>본 홈페이지에 게시된 매물 사진, 브리핑 리포트, 분석 문구 및 콘텐츠의 저작권은 사무소에 귀속됩니다. 사전 서면 동의 없이 상업적 목적으로 무단 복제·배포하거나 타 플랫폼에 재게시하는 행위를 금합니다.</p>
+                </div>
+                <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-xl space-y-1 text-slate-700 dark:text-slate-300">
+                    <h4 class="font-bold text-sm text-slate-900 dark:text-white mb-1">중개사무소 정보</h4>
+                    <p>• <b>상호명</b>: 최가네부동산공인중개사사무소 (대표 공인중개사 최이명)</p>
+                    <p>• <b>개설등록번호</b>: 제27260-2024-00085호 | 매수신청대리인 등록번호: 12-25-21</p>
+                    <p>• <b>소재지</b>: 대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구)</p>
+                    <p>• <b>문의전화</b>: 010-3548-4000 / 053-746-7114</p>
+                </div>
+            </div>
+            <div class="p-4 bg-slate-50 dark:bg-[#142654] border-t border-slate-200 dark:border-slate-700 flex justify-end">
+                <button type="button" onclick="closeTermsModal()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-md transition-colors cursor-pointer">
+                    확인 및 닫기
+                </button>
+            </div>
+        </div>`;
+        document.body.appendChild(modal);
+    }
+    modal.classList.remove('hidden');
+}
+
+function closeTermsModal() {
+    const modal = document.getElementById('terms-of-service-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+window.openTermsModal = openTermsModal;
+window.closeTermsModal = closeTermsModal;
 
 
 
@@ -2641,10 +2720,13 @@ function initFloatingQuickBar() {
     if (path.includes('admin') || path.includes('news-write')) return;
     if (document.getElementById('floating-quick-bar')) return;
 
-    // 1. Floating Pill Widget Button
+    // 1. Floating Pill Widget Button (Cleared cleanly above mobile bottom bar, footer Agent Login, and Leaflet map attribution)
+    const isMapPage = path.includes('/map') || path.endsWith('map.html');
     const bar = document.createElement('div');
     bar.id = 'floating-quick-bar';
-    bar.className = 'fixed bottom-20 right-3.5 md:bottom-8 md:right-8 z-40 flex items-center gap-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-3.5 py-2.5 rounded-full shadow-xl border border-slate-200 dark:border-slate-700 hover:scale-105 active:scale-95 transition-all cursor-pointer no-print select-none';
+    bar.className = isMapPage
+        ? 'fixed bottom-[76px] right-3 md:bottom-11 md:right-4 z-40 flex items-center gap-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-3 py-2 rounded-full shadow-xl border border-slate-200 dark:border-slate-700 hover:scale-105 active:scale-95 transition-all cursor-pointer no-print select-none'
+        : 'fixed bottom-[76px] right-3 md:bottom-6 md:right-6 z-40 flex items-center gap-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-3.5 py-2.5 rounded-full shadow-xl border border-slate-200 dark:border-slate-700 hover:scale-105 active:scale-95 transition-all cursor-pointer no-print select-none';
     bar.innerHTML = `
         <div onclick="openQuickBarModal('fav')" class="flex items-center gap-1.5 text-xs font-black text-rose-600 dark:text-rose-400 cursor-pointer" title="관심 찜 목록 보기">
             <span class="material-symbols-outlined text-[19px]" style="font-variation-settings: 'FILL' 1; color:#f43f5e;">favorite</span>

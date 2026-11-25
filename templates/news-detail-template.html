@@ -121,9 +121,11 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
         }
     }catch(_e){}</script>
 <style>
-html, body, input, select, textarea, button, table, th, td, div, p, span, a, li {
+html, body, input, select, textarea, button, table, th, td, div, p, span, a, li, h1, h2, h3, h4 {
     font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Malgun Gothic", sans-serif !important;
     letter-spacing: -0.02em;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 }
 body, p, #post-text-content, #article-content, .content-body {
     font-weight: 400;
@@ -162,6 +164,9 @@ h1, h2, h3, h4, #post-title, #article-title, .main-title, .hero-title {
         display: flex !important;
         margin-top: 20px !important;
         page-break-inside: avoid !important;
+    }
+    #detail-extra-photos {
+        display: grid !important;
     }
 }
 
@@ -445,15 +450,15 @@ h1, h2, h3, h4, #post-title, #article-title, .main-title, .hero-title {
     </article>
     <div id="seo-geo-bottom-sections" class="mt-6 space-y-6 no-print"></div>
 </main>
-<footer class="bg-ink-footer dark:bg-on-surface text-surface-variant py-xxl px-lg border-t border-outline-variant">
+<footer class="bg-ink-footer dark:bg-on-surface text-surface-variant pt-xxl pb-28 md:pb-20 px-lg border-t border-outline-variant">
     <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-xl mb-xl">
             <div class="md:col-span-2">
                 <h2 class="font-subsection-h3 text-surface-container-lowest mb-md">최가네부동산공인중개사사무소</h2>
                 <div class="flex flex-col gap-2 font-body text-label-sm text-faint">
-                    <p class="">등록번호: 27260-2024-00085 | 매수신청대리인 등록번호: 12-25-21</p>
-                    <p class="">주소: 대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구)</p>
-                    <p class="">이메일: cym10003@gmail.com | 전화번호: 010-3548-4000</p><div class="">대표소장 공인중개사: 최이명</div>
+                    <p class=""><span class="whitespace-nowrap">등록번호: 27260-2024-00085</span> <span class="text-outline-variant/40 mx-1">|</span> <span class="whitespace-nowrap">매수신청대리인 등록번호: 12-25-21</span></p>
+                    <p class="">주소: 대구광역시 수성구 수성동1가 72-3번지 <span class="whitespace-nowrap">(대구은행역 2번 출구)</span></p>
+                    <p class=""><span class="whitespace-nowrap">이메일: cym10003@gmail.com</span> <span class="text-outline-variant/40 mx-1">|</span> <span class="whitespace-nowrap">전화번호: 010-3548-4000</span></p><div class="">대표소장 공인중개사: 최이명</div>
                 </div>
             </div>
             <div>
@@ -462,7 +467,7 @@ h1, h2, h3, h4, #post-title, #article-title, .main-title, .hero-title {
                     <a href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer" class="text-faint hover:text-surface-bright transition-colors">오시는 길</a>
                     <button onclick="showLeadForm('buyer')" class="text-faint hover:text-surface-bright transition-colors flex items-center gap-1 cursor-pointer text-left"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button>
                     <button type="button" onclick="openPrivacyModal()" class="text-faint hover:text-surface-bright transition-colors text-left cursor-pointer">개인정보 처리방침</button>
-                    <a href="#" class="text-faint hover:text-surface-bright transition-colors">이용약관</a>
+                    <button type="button" onclick="openTermsModal()" class="text-faint hover:text-surface-bright transition-colors text-left cursor-pointer">이용약관</button>
                 </nav>
             </div>
             <div>
@@ -475,7 +480,7 @@ h1, h2, h3, h4, #post-title, #article-title, .main-title, .hero-title {
             </div>
         </div>
         <div class="pt-lg border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-md">
-            <p class="font-body text-label-sm text-faint">© 2024 최가네부동산공인중개사사무소. All rights reserved.</p>
+            <p class="font-body text-label-sm text-faint">© 2026 최가네부동산공인중개사사무소. All rights reserved.</p>
             <a id="agent-login-btn" href="admin.html" class="font-body text-label-sm text-faint hover:text-surface-bright transition-colors">Agent Login</a>
         </div>
     </div>
@@ -529,7 +534,7 @@ h1, h2, h3, h4, #post-title, #article-title, .main-title, .hero-title {
     </a>
   </div>
 </div>
-<script src="db.js?v=20261125_v259"></script>
+<script src="db.js?v=20261125_v260"></script>
 <script>
 let currentLoadedPost = null;
 
@@ -1344,13 +1349,182 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const splitResult = splitContentByImages(post.content);
+        const postImagesEl = document.getElementById('post-images');
         if (splitResult.imagesMarkdown.trim()) {
-            document.getElementById('post-images').innerHTML = renderMarkdown(splitResult.imagesMarkdown);
-            document.getElementById('post-images').classList.remove('hidden');
+            const propNoStr = getPropertyDisplayNumber(post);
+            const cleanBaseTitle = (post.title || '최가네부동산 매물').replace(/"/g, '&quot;');
+            const parsedImgs = [];
+            const imgRegex = /!\[(.*?)\]\((.*?)\)/g;
+            let mImg;
+            while ((mImg = imgRegex.exec(splitResult.imagesMarkdown)) !== null) {
+                const rawAlt = (mImg[1] || '').trim();
+                let url = (mImg[2] || '').trim();
+                if (!url) continue;
+                if (url.includes('raw.githubusercontent.com')) {
+                    url = url.replace(/raw\.githubusercontent\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)\/main\//g, 'cdn.jsdelivr.net/gh/$1/$2@main/');
+                }
+                const isRawFilename = !rawAlt || rawAlt === 'image' || rawAlt === '사진' || /^사진\s*\d*$/.test(rawAlt) || /^(KakaoTalk_|IMG_|DSC|PXL_|Screenshot|photo|pic|\d{8}[_-]\d+)/i.test(rawAlt) || /\.(jpe?g|png|webp|gif|heic)$/i.test(rawAlt);
+                const seoAlt = isRawFilename
+                    ? `${cleanBaseTitle} 현장사진 ${parsedImgs.length + 1} (매물번호 ${propNoStr})`
+                    : rawAlt.replace(/"/g, '&quot;');
+                parsedImgs.push({ url, alt: seoAlt });
+            }
+
+            if (parsedImgs.length > 0) {
+                window._detailGalleryImages = parsedImgs;
+                const total = parsedImgs.length;
+                const hero = parsedImgs[0];
+                const previewGrid = parsedImgs.slice(1, 5);
+                const extraGrid = parsedImgs.slice(5);
+
+                const heroHtml = `
+                    <div class="relative rounded-xl overflow-hidden shadow-card-soft bg-surface-container border border-hairline cursor-pointer group" onclick="openDetailPhotoLightbox(0)">
+                        <img src="${hero.url}" alt="${hero.alt}" onerror="handlePostImgError(this, '${post.id}')" class="w-full max-h-[520px] object-cover group-hover:scale-[1.02] transition-transform duration-300" />
+                        <div class="absolute top-3 right-3 bg-slate-900/75 backdrop-blur-xs text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md no-print">
+                            <span class="material-symbols-outlined text-[15px]">photo_library</span>
+                            <span>사진 총 ${total}장 · 클릭해 크게 보기</span>
+                        </div>
+                    </div>
+                `;
+
+                const previewGridHtml = previewGrid.length > 0 ? `
+                    <div class="grid grid-cols-2 gap-2.5 mt-2.5">
+                        ${previewGrid.map((img, i) => {
+                            const idx = i + 1;
+                            const isLastPreviewWithMore = (i === previewGrid.length - 1) && extraGrid.length > 0;
+                            return `
+                                <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-surface-container border border-hairline cursor-pointer group" onclick="openDetailPhotoLightbox(${idx})">
+                                    <img src="${img.url}" alt="${img.alt}" loading="lazy" onerror="handlePostImgError(this, '${post.id}')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                    ${isLastPreviewWithMore ? `
+                                        <div class="absolute inset-0 bg-slate-900/55 flex flex-col items-center justify-center text-white font-black text-sm sm:text-base no-print">
+                                            <span>+${extraGrid.length}장 더보기</span>
+                                            <span class="text-[11px] font-medium opacity-90 mt-0.5">전체 사진 크게 보기</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                ` : '';
+
+                const extraGridHtml = extraGrid.length > 0 ? `
+                    <div id="detail-extra-photos" class="hidden grid-cols-2 gap-2.5 mt-2.5">
+                        ${extraGrid.map((img, i) => `
+                            <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-surface-container border border-hairline cursor-pointer group" onclick="openDetailPhotoLightbox(${i + 5})">
+                                <img src="${img.url}" alt="${img.alt}" loading="lazy" onerror="handlePostImgError(this, '${post.id}')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="mt-3 flex flex-wrap items-center justify-center gap-2 no-print">
+                        <button type="button" id="toggle-extra-photos-btn" onclick="toggleDetailExtraPhotos()" class="px-4 py-2.5 rounded-xl bg-soft-blue hover:bg-primary text-primary hover:text-white border border-primary/25 font-extrabold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs">
+                            <span class="material-symbols-outlined text-[17px]">expand_more</span>
+                            <span>현장 사진 전체 펼치기 (+${extraGrid.length}장)</span>
+                        </button>
+                        <button type="button" onclick="openDetailPhotoLightbox(0)" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs">
+                            <span class="material-symbols-outlined text-[17px]">slideshow</span>
+                            <span>슬라이드로 한 장씩 크게 보기</span>
+                        </button>
+                    </div>
+                ` : '';
+
+                postImagesEl.innerHTML = heroHtml + previewGridHtml + extraGridHtml;
+                postImagesEl.classList.remove('hidden');
+            } else {
+                postImagesEl.innerHTML = renderMarkdown(splitResult.imagesMarkdown);
+                postImagesEl.classList.remove('hidden');
+            }
         } else {
-            document.getElementById('post-images').classList.add('hidden');
+            postImagesEl.classList.add('hidden');
         }
         document.getElementById('post-text-content').innerHTML = renderMarkdown(splitResult.textMarkdown);
+
+        window.toggleDetailExtraPhotos = function() {
+            const extraEl = document.getElementById('detail-extra-photos');
+            const btnEl = document.getElementById('toggle-extra-photos-btn');
+            if (!extraEl) return;
+            const isHidden = extraEl.classList.contains('hidden');
+            if (isHidden) {
+                extraEl.classList.remove('hidden');
+                extraEl.classList.add('grid');
+                if (btnEl) btnEl.innerHTML = '<span class="material-symbols-outlined text-[17px]">expand_less</span><span>추가 사진 접기</span>';
+            } else {
+                extraEl.classList.add('hidden');
+                extraEl.classList.remove('grid');
+                const cnt = (window._detailGalleryImages ? window._detailGalleryImages.length - 5 : 0);
+                if (btnEl) btnEl.innerHTML = `<span class="material-symbols-outlined text-[17px]">expand_more</span><span>현장 사진 전체 펼치기 (+${cnt}장)</span>`;
+            }
+        };
+
+        window._detailLightboxIdx = 0;
+        window.openDetailPhotoLightbox = function(startIdx = 0) {
+            const imgs = window._detailGalleryImages || [];
+            if (imgs.length === 0) return;
+            window._detailLightboxIdx = Math.max(0, Math.min(startIdx, imgs.length - 1));
+            let modal = document.getElementById('detail-photo-lightbox');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'detail-photo-lightbox';
+                modal.className = 'fixed inset-0 z-[9999] bg-slate-950/92 backdrop-blur-xs flex flex-col justify-between p-3 sm:p-5 select-none no-print';
+                modal.onclick = (e) => { if (e.target === modal || e.target.id === 'detail-lb-stage') closeDetailPhotoLightbox(); };
+                modal.innerHTML = `
+                    <div class="max-w-5xl w-full mx-auto flex items-center justify-between text-white gap-2">
+                        <span id="detail-lb-counter" class="bg-[#003891] text-white text-xs sm:text-sm font-extrabold px-3 py-1 rounded-lg">1 / 1</span>
+                        <span id="detail-lb-caption" class="text-xs sm:text-sm font-bold text-slate-200 truncate flex-1 text-center"></span>
+                        <button type="button" onclick="closeDetailPhotoLightbox()" class="w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white cursor-pointer shrink-0">
+                            <span class="material-symbols-outlined text-2xl">close</span>
+                        </button>
+                    </div>
+                    <div id="detail-lb-stage" class="relative flex-1 flex items-center justify-center w-full max-w-6xl mx-auto my-2 overflow-hidden">
+                        <button type="button" onclick="event.stopPropagation(); stepDetailLightbox(-1)" class="absolute left-1 sm:left-3 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 hover:bg-white text-slate-900 shadow-xl flex items-center justify-center cursor-pointer">
+                            <span class="material-symbols-outlined text-2xl sm:text-3xl">chevron_left</span>
+                        </button>
+                        <img id="detail-lb-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" onclick="event.stopPropagation()" class="max-w-full max-h-[78vh] object-contain rounded-xl shadow-2xl" />
+                        <button type="button" onclick="event.stopPropagation(); stepDetailLightbox(1)" class="absolute right-1 sm:right-3 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 hover:bg-white text-slate-900 shadow-xl flex items-center justify-center cursor-pointer">
+                            <span class="material-symbols-outlined text-2xl sm:text-3xl">chevron_right</span>
+                        </button>
+                    </div>
+                    <div class="text-center text-[11px] text-slate-300">좌우 화살표(←/→) 또는 모바일 좌우 스와이프로 모든 사진을 빠르게 넘겨볼 수 있습니다</div>
+                `;
+                document.body.appendChild(modal);
+                let sx = 0;
+                modal.addEventListener('touchstart', (e) => { if (e.touches[0]) sx = e.touches[0].clientX; }, { passive: true });
+                modal.addEventListener('touchend', (e) => {
+                    if (!e.changedTouches[0]) return;
+                    const dx = e.changedTouches[0].clientX - sx;
+                    if (Math.abs(dx) > 40) stepDetailLightbox(dx < 0 ? 1 : -1);
+                }, { passive: true });
+                document.addEventListener('keydown', (e) => {
+                    const m = document.getElementById('detail-photo-lightbox');
+                    if (!m || m.classList.contains('hidden')) return;
+                    if (e.key === 'ArrowLeft') stepDetailLightbox(-1);
+                    else if (e.key === 'ArrowRight') stepDetailLightbox(1);
+                    else if (e.key === 'Escape') closeDetailPhotoLightbox();
+                });
+            }
+            modal.classList.remove('hidden');
+            updateDetailLightbox();
+        };
+        window.stepDetailLightbox = function(delta) {
+            const imgs = window._detailGalleryImages || [];
+            if (imgs.length <= 1) return;
+            window._detailLightboxIdx = (window._detailLightboxIdx + delta + imgs.length) % imgs.length;
+            updateDetailLightbox();
+        };
+        window.closeDetailPhotoLightbox = function() {
+            const m = document.getElementById('detail-photo-lightbox');
+            if (m) m.classList.add('hidden');
+        };
+        function updateDetailLightbox() {
+            const imgs = window._detailGalleryImages || [];
+            const cur = imgs[window._detailLightboxIdx];
+            if (!cur) return;
+            const imgEl = document.getElementById('detail-lb-img');
+            const cntEl = document.getElementById('detail-lb-counter');
+            const capEl = document.getElementById('detail-lb-caption');
+            if (imgEl) { imgEl.src = cur.url; imgEl.alt = cur.alt; }
+            if (cntEl) cntEl.textContent = `${window._detailLightboxIdx + 1} / ${imgs.length}`;
+            if (capEl) capEl.textContent = cur.alt;
+        }
 
         renderLinkPreviews();
 

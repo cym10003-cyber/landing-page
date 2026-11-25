@@ -6,9 +6,9 @@
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<style>html,body,input,select,textarea,button,table,th,td,div,p,span,a,li{font-family:"Pretendard Variable","Pretendard",-apple-system,BlinkMacSystemFont,system-ui,Roboto,"Malgun Gothic",sans-serif;letter-spacing:-0.02em;}body,p{font-weight:400;letter-spacing:-0.02em;}h1,h2,h3,h4{font-weight:700;letter-spacing:-0.02em;}.material-symbols-outlined{font-family:'Material Symbols Outlined'!important;letter-spacing:normal!important;}</style>
+<style>html,body,input,select,textarea,button,table,th,td,div,p,span,a,li,h1,h2,h3,h4{font-family:"Pretendard Variable","Pretendard",-apple-system,BlinkMacSystemFont,system-ui,Roboto,"Malgun Gothic",sans-serif !important;letter-spacing:-0.02em;word-break:keep-all;overflow-wrap:break-word;}body,p{font-weight:400;letter-spacing:-0.02em;}h1,h2,h3,h4{font-weight:700;letter-spacing:-0.02em;}.material-symbols-outlined{font-family:'Material Symbols Outlined'!important;letter-spacing:normal!important;}</style>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -171,8 +171,8 @@
 <div class="max-w-7xl mx-auto px-lg md:px-lg py-section grid md:grid-cols-2 gap-xl items-center relative z-10 grid-cols-1">
 <div class="order-2 md:order-1 flex flex-col gap-lg">
 <div class="inline-flex items-center gap-2 bg-dark-chip text-surface-container-lowest px-3 py-1.5 rounded-full font-label-sm text-label-sm w-fit">
-<span class="" style="font-family: Inter; letter-spacing: 0.6px; text-transform: uppercase;">Premium Commercial Real Estate</span></div>
-<h1 class="font-display-hero-mobile md:font-display-hero text-surface-container-lowest text-display-hero-mobile md:text-display-hero text-[32px]">대구 전 지역<br class="">사무실, 상가 전문 부동산<div class="">최가네부동산</div></h1>
+<span class="tracking-wider uppercase">Premium Commercial Real Estate</span></div>
+<h1 class="font-display-hero-mobile md:font-display-hero text-surface-container-lowest text-[30px] sm:text-display-hero-mobile md:text-display-hero leading-[1.3]">대구 전 지역<br class="">사무실, 상가 전문 부동산<br class="">최가네부동산</h1>
 <p class="font-body text-body text-primary-fixed-dim max-w-xl text-lg leading-relaxed">수성구 및 달구벌대로 50~300평 중대형 매물 다량 확보중.<br class="">공공기관 및 대형법인, 학원, 병의원, 보험사 사무실 등 중개이력 다수.<br class="">대구 전 지역 사무실, 상가 매매 및 임대 전문 부동산.</p>
 <div class="pt-sm">
 <a class="bg-surface-container-lowest text-primary-container font-button text-button rounded-button px-[25px] py-[14px] hover:bg-surface-container-low transition-colors shadow-strong-elevated inline-flex items-center justify-center" href="tel:010-3548-4000"><span class="material-symbols-outlined text-[20px] mr-2">phone_in_talk</span>상담 전화 연결</a>
@@ -261,7 +261,7 @@
 <span class="material-symbols-outlined text-[32px] text-sky-400 shrink-0" data-icon="domain" data-weight="fill" style="font-variation-settings: 'FILL' 1;">domain</span>
 <div class="flex-1 flex flex-col h-full min-w-0">
 <h3 class="font-bold text-[18px] sm:text-[20px] md:text-[21px] text-white leading-snug tracking-tight break-keep">대형법인, 비뇨기과, 치과, 학원, 보험사 등 다수 중개</h3>
-<div class="overflow-y-auto max-h-[320px] md:max-h-[500px] mt-3 pr-2 text-[13px] sm:text-[13.5px] leading-relaxed font-body custom-scrollbar space-y-1.5" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.4) transparent;">
+<div id="about-track-scroll" class="overflow-y-auto max-h-[340px] md:max-h-[500px] mt-3 pr-2 text-[13px] sm:text-[13.5px] leading-relaxed font-body custom-scrollbar space-y-1.5" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.4) transparent;">
 <div class="py-0.5 flex items-start gap-1.5"><span class="shrink-0 text-emerald-400">✅</span><span class="text-white font-medium">대구지방고용노동청 고용관리과 KT대구타워 중개</span></div>
 <div class="py-0.5 flex items-start gap-1.5"><span class="shrink-0 text-emerald-400">✅</span><span class="text-white font-medium">서울@비뇨기과의원 대구점 신천동 e편한세상동대구역센텀스퀘어 중개</span></div>
 <div class="py-0.5 flex items-start gap-1.5"><span class="shrink-0 text-emerald-400">✅</span><span class="text-white font-medium">만촌리더@치과 만촌동 성원넥서스 중개</span></div>
@@ -302,6 +302,7 @@
 <div class="py-0.5 flex items-start gap-1.5"><span class="shrink-0 text-emerald-400">✅</span><span class="text-white font-medium">L@상사 호산동 사무실 중개</span></div>
 <div class="pt-2 pb-1 text-amber-300 font-bold border-t border-white/20 mt-2">이외 다수 보험사, 일반사무실 및 카페, 음식점 등 중개</div>
 </div>
+<button type="button" id="about-track-expand-btn" onclick="const el=document.getElementById('about-track-scroll'); if(!el) return; const exp=el.classList.toggle('max-h-none'); el.classList.toggle('max-h-[340px]', !exp); this.textContent = exp ? '중개이력 접기 ▲' : '전체 중개이력 모두 펼치기 ▼';" class="md:hidden mt-3 w-full py-2 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-bold border border-white/20 cursor-pointer transition">전체 중개이력 모두 펼치기 ▼</button>
 </div>
 </div>
 </div>
@@ -344,15 +345,15 @@
 </section>
 </main>
 <!-- Footer -->
-<footer class="bg-ink-footer dark:bg-on-surface text-surface-variant py-xxl px-lg border-t border-outline-variant">
+<footer class="bg-ink-footer dark:bg-on-surface text-surface-variant pt-xxl pb-28 md:pb-20 px-lg border-t border-outline-variant">
 <div class="max-w-7xl mx-auto">
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-xl mb-xl">
 <div class="md:col-span-2">
 <h2 class="font-subsection-h3 text-surface-container-lowest mb-md">최가네부동산공인중개사사무소</h2>
 <div class="flex flex-col gap-2 font-body text-label-sm text-faint">
-<p class="">등록번호: 27260-2024-00085 | 매수신청대리인 등록번호: 12-25-21</p>
-<p class="">주소: 대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구)</p>
-<p class="">이메일: cym10003@gmail.com | 전화번호: 010-3548-4000</p><div class="">대표소장 공인중개사: 최이명</div>
+<p class=""><span class="whitespace-nowrap">등록번호: 27260-2024-00085</span> <span class="text-outline-variant/40 mx-1">|</span> <span class="whitespace-nowrap">매수신청대리인 등록번호: 12-25-21</span></p>
+<p class="">주소: 대구광역시 수성구 수성동1가 72-3번지 <span class="whitespace-nowrap">(대구은행역 2번 출구)</span></p>
+<p class=""><span class="whitespace-nowrap">이메일: cym10003@gmail.com</span> <span class="text-outline-variant/40 mx-1">|</span> <span class="whitespace-nowrap">전화번호: 010-3548-4000</span></p><div class="">대표소장 공인중개사: 최이명</div>
 </div>
 </div>
 <div>
@@ -361,7 +362,7 @@
 <a class="text-faint hover:text-surface-bright transition-colors" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-faint hover:text-surface-bright transition-colors flex items-center gap-1 cursor-pointer text-left"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button>
 <button type="button" onclick="openPrivacyModal()" class="text-faint hover:text-surface-bright transition-colors text-left cursor-pointer">개인정보 처리방침</button>
-<a class="text-faint hover:text-surface-bright transition-colors" href="#">이용약관</a>
+<button type="button" onclick="openTermsModal()" class="text-faint hover:text-surface-bright transition-colors text-left cursor-pointer">이용약관</button>
 </nav>
 </div>
 <div>
@@ -374,27 +375,28 @@
 </div>
 </div>
 <div class="pt-lg border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-md">
-<p class="font-body text-label-sm text-faint">© 2024 최가네부동산공인중개사사무소. All rights reserved.</p>
+<p class="font-body text-label-sm text-faint">© 2026 최가네부동산공인중개사사무소. All rights reserved.</p>
 <a id="agent-login-btn" href="admin.html" class="font-body text-label-sm text-faint hover:text-surface-bright transition-colors">Agent Login</a>
 </div>
 </div>
 </footer>
-<div class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-hairline flex justify-around items-center py-2 z-50 md:hidden shadow-lg">
-  <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">home</span>
+<!-- Mobile Bottom Navigation Bar (Unified High Converting Call Bar) -->
+<div class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest/95 backdrop-blur-md border-t border-hairline py-2 px-3 z-50 md:hidden flex items-center gap-2 shadow-strong-elevated">
+  <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-11 h-11 shrink-0">
+    <span class="material-symbols-outlined text-[22px]">home</span>
     <span class="text-[10px] font-medium">홈</span>
   </a>
-  <a href="about.html" class="flex flex-col items-center justify-center text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">info</span>
-    <span class="text-[10px] font-medium">소개</span>
+  <a href="map.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-11 h-11 shrink-0">
+    <span class="material-symbols-outlined text-[22px]">map</span>
+    <span class="text-[10px] font-medium">지도</span>
   </a>
-  <a href="map.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">map</span>
-    <span class="text-[10px] font-medium">매물지도</span>
+  <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-1 bg-[#fee500] hover:bg-[#fdd835] text-[#3c1e1e] py-2.5 px-2 rounded-xl shadow-xs font-black text-xs active:scale-95 whitespace-nowrap">
+    <span class="material-symbols-outlined text-[17px]">chat</span>
+    <span>카톡상담</span>
   </a>
-  <a href="tel:010-3548-4000" class="flex flex-col items-center justify-center text-muted hover:text-primary w-12 h-12">
-    <span class="material-symbols-outlined text-2xl">call</span>
-    <span class="text-[10px] font-medium">전화</span>
+  <a href="tel:010-3548-4000" class="flex-[1.2] flex items-center justify-center gap-1.5 bg-[#003891] hover:bg-blue-800 text-white py-2.5 px-3 rounded-xl shadow-md font-black text-xs active:scale-95 whitespace-nowrap">
+    <span class="material-symbols-outlined text-[18px] text-amber-300">call</span>
+    <span>010-3548-4000</span>
   </a>
 </div>
 
@@ -424,7 +426,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261125_v259"></script>
+<script src="db.js?v=20261125_v260"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     // Mobile Drawer Toggle

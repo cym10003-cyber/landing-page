@@ -4,10 +4,10 @@ import path from 'path';
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cache-Control, Pragma, Authorization, X-Requested-With');
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    return res.status(204).end();
   }
 
   const owner = 'cym10003-cyber';
@@ -63,17 +63,23 @@ export default async function handler(req, res) {
           const todayStr = new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0];
           if (!analytics.dailyHistory) analytics.dailyHistory = {};
           if (!analytics.dailyHistory[todayStr]) {
-            analytics.dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {}, likes: {}, inflowLandings: {} };
+            analytics.dailyHistory[todayStr] = { date: todayStr, count: 0, uniqueCount: 0, referrers: {}, postViews: {}, likes: {}, inflowLandings: {} };
           }
           if (analytics.todayDate !== todayStr) {
             analytics.todayDate = todayStr;
             analytics.todayPageviews = analytics.dailyHistory[todayStr].count || 0;
+            analytics.todayUniqueVisitors = analytics.dailyHistory[todayStr].uniqueCount || 0;
           }
 
           if (type === 'pageview') {
             analytics.totalPageviews = (analytics.totalPageviews || 0) + 1;
             analytics.dailyHistory[todayStr].count = (analytics.dailyHistory[todayStr].count || 0) + 1;
             analytics.todayPageviews = Math.max((analytics.todayPageviews || 0) + 1, analytics.dailyHistory[todayStr].count);
+
+            if (bodyData.isNewVisitor === true) {
+              analytics.dailyHistory[todayStr].uniqueCount = (analytics.dailyHistory[todayStr].uniqueCount || 0) + 1;
+              analytics.todayUniqueVisitors = Math.max((analytics.todayUniqueVisitors || 0) + 1, analytics.dailyHistory[todayStr].uniqueCount);
+            }
 
             const referrer = bodyData.referrer || '직접 접속 / 카카오톡 링크';
             if (referrer !== '내부 이동' && !referrer.includes('vercel.app') && !referrer.includes('choi114.com') && !referrer.includes('localhost') && !referrer.includes('127.0.0.1')) {

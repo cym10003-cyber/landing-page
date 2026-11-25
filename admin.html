@@ -219,8 +219,9 @@
             <!-- Analytics Summary KPI Cards -->
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-md">
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
-                    <span class="text-xs font-semibold text-muted mb-xs">👥 오늘 방문자 수</span>
+                    <span class="text-xs font-semibold text-muted mb-xs">👥 오늘 방문 현황</span>
                     <span id="stat-today-views" class="text-2xl md:text-3xl font-bold text-primary">0명</span>
+                    <span id="stat-today-sub" class="text-[11px] text-muted mt-1 font-medium">관리자 접속 자동 제외</span>
                 </div>
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
                     <span class="text-xs font-semibold text-muted mb-xs">🌐 누적 총 방문 수</span>
@@ -257,10 +258,13 @@
 
                 <!-- Referrer Traffic Sources Card with Period Toggle -->
                 <div class="bg-surface-container-lowest p-lg rounded-xl shadow-card-soft border border-hairline flex flex-col">
-                    <div class="flex justify-between items-center mb-md flex-wrap gap-xs">
-                        <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
-                            <span class="material-symbols-outlined text-primary">alt_route</span> 손님 유입 경로 TOP
-                        </h3>
+                    <div class="flex justify-between items-start mb-md flex-wrap gap-xs">
+                        <div>
+                            <h3 class="font-bold text-lg text-ink flex items-center gap-xs">
+                                <span class="material-symbols-outlined text-primary">alt_route</span> 손님 유입 경로 TOP
+                            </h3>
+                            <p class="text-[11px] text-muted mt-0.5">실제 외부·첫 유입 기준 (홈페이지 내부 이동 · 관리자 접속 제외)</p>
+                        </div>
                         <div class="flex bg-surface-container rounded-lg p-0.5 text-[11px] sm:text-xs font-semibold overflow-x-auto max-w-full">
                             <button id="ref-period-today" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">오늘</button>
                             <button id="ref-period-yesterday" class="px-2 sm:px-2.5 py-1 rounded-md text-muted hover:text-ink transition-all cursor-pointer whitespace-nowrap">어제</button>
@@ -1262,7 +1266,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261125_v259"></script>
+<script src="db.js?v=20261125_v260"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
@@ -1564,7 +1568,17 @@ async function renderAnalyticsView() {
     const summary = getAnalyticsSummary(remoteAnalytics);
     
     // KPI Cards
-    document.getElementById('stat-today-views').textContent = (summary.todayPageviews || 0) + '명';
+    const todayUV = summary.todayUniqueVisitors || 0;
+    const todayPV = summary.todayPageviews || 0;
+    const statTodayEl = document.getElementById('stat-today-views');
+    const statTodaySub = document.getElementById('stat-today-sub');
+    if (todayUV > 0) {
+        if (statTodayEl) statTodayEl.textContent = todayUV + '명';
+        if (statTodaySub) statTodaySub.textContent = `순수 방문자 · 페이지 조회 ${todayPV}회 (관리자 제외)`;
+    } else {
+        if (statTodayEl) statTodayEl.textContent = todayPV + '회';
+        if (statTodaySub) statTodaySub.textContent = '페이지 조회 합계 · 신규 순수방문자 집계 중 (관리자 제외)';
+    }
     document.getElementById('stat-total-views').textContent = (summary.totalPageviews || 0) + '회';
     document.getElementById('stat-total-searches').textContent = summary.totalSearches + '회';
     const totalDev = (summary.mobileCount + summary.desktopCount) || 1;
@@ -1580,11 +1594,12 @@ async function renderAnalyticsView() {
             const isToday = d.fullDate === (summary.todayDate || new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0]);
             const dateLabel = isToday ? `${d.date} (오늘)` : d.date;
             const barColor = isToday ? 'bg-primary' : 'bg-blue-mid/70';
+            const countLabel = d.uniqueCount > 0 ? `순수 ${d.uniqueCount}명 · 조회 ${d.count}회` : `${d.count}회`;
             return `
                 <div class="flex flex-col gap-1 text-sm border-b border-hairline/50 pb-xs">
                     <div class="flex justify-between items-center text-xs">
                         <span class="font-semibold ${isToday ? 'text-primary font-bold' : 'text-muted'}">${dateLabel}</span>
-                        <span class="font-bold text-ink">${d.count}명</span>
+                        <span class="font-bold text-ink">${countLabel}</span>
                     </div>
                     <div class="w-full bg-surface-container rounded-full h-2 overflow-hidden flex items-center">
                         <div class="${barColor} h-full rounded-full transition-all duration-500" style="width: ${Math.max(pct, 4)}%"></div>

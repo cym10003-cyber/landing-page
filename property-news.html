@@ -10,14 +10,7 @@ function getPropertyDisplayNumber(p) {
 }
 
     if (window.location.hostname.endsWith(".vercel.app")) {
-        window.location.replace("https://choi114.com" + window.location.pathname + window.location.search);
-    }
-    // Force browser to load fresh property-news.html page if version mismatch
-    const currentVersion = '20260715_v240';
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('v') !== currentVersion) {
-        params.set('v', currentVersion);
-        window.location.replace(window.location.pathname + '?' + params.toString());
+        window.location.replace("https://www.choi114.com" + window.location.pathname + window.location.search);
     }
     // Break back-forward cache (bfcache)
     window.addEventListener('pageshow', function(event) {
@@ -138,9 +131,11 @@ function getPropertyDisplayNumber(p) {
         }
     }catch(_e){}</script>
 <style>
-    html, body, input, select, textarea, button, table, th, td, div, p, span, a, li {
+    html, body, input, select, textarea, button, table, th, td, div, p, span, a, li, h1, h2, h3, h4 {
         font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Malgun Gothic", sans-serif !important;
         letter-spacing: -0.02em;
+        word-break: keep-all;
+        overflow-wrap: break-word;
     }
     body, p, #modal-body, #post-text-content, .post-content {
         font-weight: 400;
@@ -320,23 +315,23 @@ function getPropertyDisplayNumber(p) {
 <!-- News Content Area -->
 <div id="news-content-area" class="col-span-12 md:col-span-9 flex flex-col gap-lg">
 <div class="flex flex-col sm:flex-row gap-md justify-between items-center bg-surface-container-lowest p-md rounded-xl border border-hairline shadow-sm">
-    <div class="flex flex-col gap-xs w-full max-w-xl">
-        <div class="flex flex-row gap-xs sm:gap-sm items-center w-full">
-            <div class="relative flex-1">
+    <div class="flex flex-col gap-xs w-full max-w-2xl">
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-sm items-stretch sm:items-center w-full">
+            <div class="relative flex-1 min-w-0">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <span class="material-symbols-outlined text-primary text-[20px] font-bold">search</span>
                 </div>
-                <input type="text" id="search-input" class="focus:ring-2 focus:ring-primary focus:border-primary block w-full pl-9 pr-20 text-sm border-2 border-primary/40 rounded-xl py-2.5 bg-white dark:bg-slate-800 text-ink dark:text-white font-medium shadow-inner placeholder:text-muted" placeholder="동 이름(범어동), 매물번호(1651), 업종, 키워드로 검색...">
+                <input type="text" id="search-input" class="focus:ring-2 focus:ring-primary focus:border-primary block w-full pl-9 pr-20 text-sm border-2 border-primary/40 rounded-xl py-2.5 bg-white dark:bg-slate-800 text-ink dark:text-white font-medium shadow-inner placeholder:text-muted" placeholder="동 이름(범어동), 매물번호(1651), 업종 검색...">
                 <!-- 선명하고 눈에 띄는 파란색 검색 버튼 -->
-                <button id="search-button" class="absolute inset-y-1 right-1 px-3.5 flex items-center gap-1 bg-primary hover:bg-blue-mid text-white rounded-lg cursor-pointer font-extrabold text-sm z-10 border-0 shadow-md active:scale-95 transition-all">
+                <button id="search-button" class="absolute inset-y-1 right-1 px-3.5 flex items-center gap-1 bg-primary hover:bg-blue-mid text-white rounded-lg cursor-pointer font-extrabold text-sm z-10 border-0 shadow-md active:scale-95 transition-all whitespace-nowrap">
                     <span class="material-symbols-outlined text-[16px]">search</span>
                     검색
                 </button>
             </div>
             <!-- 지도보기 (서브 스타일 보조 버튼) -->
-            <a href="map.html" class="flex items-center justify-center gap-xs bg-soft-blue text-primary border border-primary/20 px-3.5 py-2.5 rounded-xl text-sm font-bold hover:bg-primary hover:text-white transition-all shadow-xs whitespace-nowrap">
+            <a href="map.html" class="flex items-center justify-center gap-xs bg-soft-blue text-primary border border-primary/20 px-3.5 py-2.5 rounded-xl text-sm font-bold hover:bg-primary hover:text-white transition-all shadow-xs whitespace-nowrap shrink-0">
                 <span class="material-symbols-outlined text-[18px]">map</span>
-                지도보기
+                매물지도로 보기
             </a>
         </div>
         <div class="text-[12px] text-muted flex flex-wrap gap-x-2 gap-y-1 items-center px-1 pt-0.5">
@@ -379,7 +374,18 @@ function getPropertyDisplayNumber(p) {
     </div>
     <div id="property-filter-chips" class="flex flex-wrap gap-1.5 pt-0.5"></div>
 </div>
-<div id="news-list" class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- 부동산 소식 탭에서 실매물 리스트로 바로 이동하는 배너 -->
+<div id="news-to-maemul-banner" class="hidden bg-blue-50/90 border border-blue-200 rounded-xl px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div class="text-xs sm:text-sm font-bold text-[#003891] flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-[18px] shrink-0">apartment</span>
+        <span>대구 전 지역 실시간 상가·사무실 실매물 리스트를 찾고 계신가요?</span>
+    </div>
+    <a href="property-news.html?category=매물리스트" class="inline-flex items-center justify-center gap-1 px-3.5 py-2 rounded-lg bg-[#003891] hover:bg-blue-800 text-white text-xs font-extrabold whitespace-nowrap shrink-0 transition">
+        <span>실매물 전체보기</span>
+        <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+    </a>
+</div>
+<div id="news-list" class="grid grid-cols-1 md:grid-cols-2 gap-lg items-stretch">
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 중구 남산동</div>
         <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795395321891" class="hover:text-primary no-underline text-ink">대구중구사무실임대 남산동 반월당역초역세권 무권리 고정주차 3대 인테리어완비 대구상가임대 매물번호:1815</a></h2>
@@ -477,6 +483,12 @@ function getPropertyDisplayNumber(p) {
         <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794385927233" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 수성구 만촌동 학원 병의원 만촌역초역세권 달구벌대로 대구상가임대 매물번호:1033</a></h2>
     </article>
 </div>
+<div id="load-more-wrap" class="hidden pt-4 pb-2 flex flex-col items-center gap-2">
+    <button id="load-more-btn" type="button" onclick="loadMoreProperties()" class="px-6 py-3 rounded-xl bg-white hover:bg-soft-blue text-[#003891] border-2 border-[#003891]/30 hover:border-[#003891] font-extrabold text-sm shadow-sm transition-all cursor-pointer flex items-center gap-2 active:scale-95">
+        <span class="material-symbols-outlined text-[19px]">expand_more</span>
+        <span id="load-more-label">매물 더 보기</span>
+    </button>
+</div>
 <div id="empty-state" class="hidden py-xxl text-center">
     <span class="material-symbols-outlined text-5xl text-muted mb-md">feed</span>
     <h3 class="font-bold text-ink text-lg mb-xs">등록된 게시글이 없습니다.</h3>
@@ -485,15 +497,15 @@ function getPropertyDisplayNumber(p) {
 </div>
 </main>
 <!-- Footer Shared Component -->
-<footer class="bg-ink-footer dark:bg-on-surface text-surface-variant py-xxl px-lg border-t border-outline-variant">
+<footer class="bg-ink-footer dark:bg-on-surface text-surface-variant pt-xxl pb-28 md:pb-20 px-lg border-t border-outline-variant">
 <div class="max-w-7xl mx-auto">
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-xl mb-xl">
 <div class="md:col-span-2">
 <h2 class="font-subsection-h3 text-surface-container-lowest mb-md">최가네부동산공인중개사사무소</h2>
 <div class="flex flex-col gap-2 font-body text-label-sm text-faint">
-<p class="">등록번호: 27260-2024-00085 | 매수신청대리인 등록번호: 12-25-21</p>
-<p class="">주소: 대구광역시 수성구 수성동1가 72-3번지 (대구은행역 2번 출구)</p>
-<p class="">이메일: cym10003@gmail.com | 전화번호: 010-3548-4000</p><div class="">대표소장 공인중개사: 최이명</div>
+<p class=""><span class="whitespace-nowrap">등록번호: 27260-2024-00085</span> <span class="text-outline-variant/40 mx-1">|</span> <span class="whitespace-nowrap">매수신청대리인 등록번호: 12-25-21</span></p>
+<p class="">주소: 대구광역시 수성구 수성동1가 72-3번지 <span class="whitespace-nowrap">(대구은행역 2번 출구)</span></p>
+<p class=""><span class="whitespace-nowrap">이메일: cym10003@gmail.com</span> <span class="text-outline-variant/40 mx-1">|</span> <span class="whitespace-nowrap">전화번호: 010-3548-4000</span></p><div class="">대표소장 공인중개사: 최이명</div>
 </div>
 </div>
 <div>
@@ -502,7 +514,7 @@ function getPropertyDisplayNumber(p) {
 <a class="text-faint hover:text-surface-bright transition-colors" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-faint hover:text-surface-bright transition-colors flex items-center gap-1 cursor-pointer text-left"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button>
 <button type="button" onclick="openPrivacyModal()" class="text-faint hover:text-surface-bright transition-colors text-left cursor-pointer">개인정보 처리방침</button>
-<a class="text-faint hover:text-surface-bright transition-colors" href="#">이용약관</a>
+<button type="button" onclick="openTermsModal()" class="text-faint hover:text-surface-bright transition-colors text-left cursor-pointer">이용약관</button>
 </nav>
 </div>
 <div>
@@ -515,7 +527,7 @@ function getPropertyDisplayNumber(p) {
 </div>
 </div>
 <div class="pt-lg border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-md">
-<p class="font-body text-label-sm text-faint">© 2024 최가네부동산공인중개사사무소. All rights reserved.</p>
+<p class="font-body text-label-sm text-faint">© 2026 최가네부동산공인중개사사무소. All rights reserved.</p>
 <a id="agent-login-btn" href="admin.html" class="font-body text-label-sm text-faint hover:text-surface-bright transition-colors">Agent Login</a>
 </div>
 </div>
@@ -566,7 +578,7 @@ function getPropertyDisplayNumber(p) {
     </a>
   </div>
 </div>
-<script src="db.js?v=20261125_v259"></script>
+<script src="db.js?v=20261125_v260"></script>
 <script>
 let allPosts = [];
 let selectedCategory = 'ALL';
@@ -1039,6 +1051,7 @@ function updateLayoutForCategory(category) {
     const contentArea = document.getElementById('news-content-area');
     const maemulBtn = document.querySelector('.category-btn[data-category="매물리스트"]');
     const smartFilterSec = document.getElementById('smart-filter-section');
+    const newsToMaemulBanner = document.getElementById('news-to-maemul-banner');
     
     // Hide 매물리스트 button from the news sidebar completely
     if (maemulBtn) {
@@ -1055,6 +1068,7 @@ function updateLayoutForCategory(category) {
             smartFilterSec.classList.remove('hidden');
             smartFilterSec.classList.add('flex');
         }
+        if (newsToMaemulBanner) newsToMaemulBanner.classList.add('hidden');
         renderSmartFilterChips();
     } else {
         if (aside) aside.classList.remove('hidden');
@@ -1066,6 +1080,7 @@ function updateLayoutForCategory(category) {
             smartFilterSec.classList.add('hidden');
             smartFilterSec.classList.remove('flex');
         }
+        if (newsToMaemulBanner) newsToMaemulBanner.classList.remove('hidden');
     }
 }
 
@@ -1295,10 +1310,140 @@ function shuffleArray(arr) {
     return array;
 }
 
+const PAGE_BATCH_SIZE = 24;
+let currentDisplayPosts = [];
+let currentVisibleLimit = PAGE_BATCH_SIZE;
+
+function loadMoreProperties() {
+    currentVisibleLimit += PAGE_BATCH_SIZE;
+    renderCurrentBatch();
+}
+window.loadMoreProperties = loadMoreProperties;
+
+function renderCurrentBatch() {
+    const container = document.getElementById('news-list');
+    const loadMoreWrap = document.getElementById('load-more-wrap');
+    const loadMoreLabel = document.getElementById('load-more-label');
+    if (!container) return;
+
+    const batch = currentDisplayPosts.slice(0, currentVisibleLimit);
+    container.innerHTML = batch.map(post => {
+        let textSummary = '';
+        let featureIdx = -1;
+        let matchLength = 0;
+        if (post.content) {
+            const match = post.content.match(/^.*매물\s*특징.*$/m);
+            if (match) {
+                featureIdx = match.index;
+                matchLength = match[0].length;
+            }
+        }
+        if (featureIdx !== -1) {
+            const afterFeatures = post.content.substring(featureIdx + matchLength);
+            const lines = afterFeatures.split('\n');
+            const featureLines = [];
+            for (let line of lines) {
+                const plainLine = line.replace(/<[^>]*>/g, '').trim();
+                if (plainLine.includes('매물정보') || plainLine.includes('중개') || plainLine.includes('이력') || (plainLine.startsWith('[') && plainLine.endsWith(']'))) {
+                    break;
+                }
+                if (plainLine) {
+                    let cleanLine = plainLine
+                        .replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s.,()\[\]{}~_\-+\*&%!?:;\/\\'"~`·•]/g, '')
+                        .trim();
+                    if (cleanLine) {
+                        featureLines.push(cleanLine);
+                    }
+                }
+                if (featureLines.length >= 3) {
+                    break;
+                }
+            }
+            if (featureLines.length > 0) {
+                textSummary = featureLines.map(line => '• ' + line).join(' ');
+            }
+        }
+        if (!textSummary) {
+            let textOnly = post.content || '';
+            const boilerplateIdx = textOnly.indexOf('주요 중개 이력');
+            if (boilerplateIdx !== -1) {
+                textOnly = textOnly.substring(0, boilerplateIdx);
+            }
+            textSummary = markdownToText(textOnly)
+                .replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s.,()\[\]{}~_\-+\*&%!?:;\/\\'"~`·•]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .slice(0, 100) + '...';
+        }
+        const rawImage = (typeof extractPostImage === 'function' ? extractPostImage(post) : (getFirstImage(post.content) || getFallbackImage(post.id)));
+        const image = (rawImage && String(rawImage).trim()) ? String(rawImage).trim() : getFallbackImage(post.id);
+        const isMaemul = post.category === '매물리스트' || post.category === '매물';
+        const flags = isMaemul ? evaluatePropertyFilters(post) : null;
+        const propNo = getPropertyDisplayNumber(post);
+        const safeAlt = `${(post.title || '최가네부동산 매물').replace(/"/g, '&quot;')} 대표 사진`;
+
+        return `
+            <article class="h-full bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline overflow-hidden group cursor-pointer flex flex-col transition-transform hover:-translate-y-1 hover:scale-[1.01] duration-300" onclick="location.href='news-detail.html?id=${post.id}'">
+                <div class="h-48 w-full relative overflow-hidden bg-surface-container shrink-0">
+                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${image}" alt="${safeAlt}" data-id="${post.id}" onerror="handlePostImgError(this, '${post.id}')" loading="lazy"/>
+                    <div class="absolute top-md left-md bg-dark-chip text-white font-label-sm text-label-sm px-sm py-xs rounded">
+                        ${post.category || '일반'}
+                    </div>
+                    <button type="button" onclick="event.stopPropagation(); toggleFavoriteById('${post.id}')" class="fav-btn-${post.id} absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs flex items-center justify-center shadow-md hover:scale-110 active:scale-90 transition-all z-10 cursor-pointer border border-slate-200/60 dark:border-slate-700/60" title="관심 매물 찜하기">
+                        <span class="material-symbols-outlined text-[19px] ${typeof isFavoritePost === 'function' && isFavoritePost(post.id) ? 'text-rose-500' : 'text-slate-400'}" style="font-variation-settings: 'FILL' ${typeof isFavoritePost === 'function' && isFavoritePost(post.id) ? 1 : 0};">favorite</span>
+                    </button>
+                </div>
+                <div class="p-lg flex-1 flex flex-col gap-sm">
+                    <div class="flex flex-col gap-xs">
+                        ${flags ? `
+                            <div class="flex flex-wrap gap-1 items-center min-h-[24px] mb-1">
+                                ${flags.nearestStation && (flags.nearestStation.distance <= 600 || flags.nearestStation.fromText) ? `<span class="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 px-2 py-0.5 rounded text-[11px] font-bold">🚇 ${flags.nearestStation.name} 도보 ${flags.nearestStation.walkMin}분</span>` : ''}
+                                ${flags.isFloor1 ? `<span class="bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 px-2 py-0.5 rounded text-[11px] font-bold">🏪 1층</span>` : ''}
+                                ${flags.isMookwonri ? `<span class="bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200/80 px-2 py-0.5 rounded text-[11px] font-bold">🎁 무권리</span>` : ''}
+                                ${flags.isParkingConvenient ? `<span class="bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/80 px-2 py-0.5 rounded text-[11px] font-bold">🚗 주차편리</span>` : ''}
+                                ${flags.isLarge50 ? `<span class="bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 px-2 py-0.5 rounded text-[11px] font-bold">🏢 50평+</span>` : ''}
+                                ${flags.isSale ? `<span class="bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200/80 px-2 py-0.5 rounded text-[11px] font-bold">🏷️ 매매</span>` : ''}
+                            </div>
+                        ` : ''}
+                        <h2 class="font-subsection-h3 text-lg text-ink group-hover:text-primary-container transition-colors line-clamp-2 min-h-[3.25rem]">${post.title}</h2>
+                    </div>
+                    <p class="font-body text-body text-muted line-clamp-2 min-h-[2.75rem]">${textSummary}</p>
+                    <div class="pt-2.5 border-t border-hairline flex flex-nowrap items-center justify-between gap-1.5 sm:gap-2 mt-auto" onclick="event.stopPropagation()">
+                        <span class="text-xs font-black text-[#003891] dark:text-blue-300 bg-blue-50 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-800 px-2 py-0.5 rounded-md flex items-center gap-1 shrink-0 whitespace-nowrap">
+                            <span class="material-symbols-outlined text-[14px]">tag</span> 매물번호: ${propNo}
+                        </span>
+                        <div class="flex items-center gap-1 sm:gap-1.5 shrink-0 whitespace-nowrap">
+                            <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation(); prepareKakaoConsultationFromList('${post.id}')" class="inline-flex items-center gap-1 bg-[#fee500] text-[#191600] hover:bg-[#fdd835] text-[12px] font-black px-2.5 sm:px-3 py-1.5 rounded-lg shadow-xs border border-[#d4be00] transition-all active:scale-95 shrink-0 whitespace-nowrap">
+                                <span class="material-symbols-outlined text-[14px]">chat</span> 카톡
+                            </a>
+                            <a href="tel:010-3548-4000" onclick="event.stopPropagation()" class="inline-flex items-center gap-1 bg-[#003891] hover:bg-blue-800 text-white text-[12px] font-black px-2.5 sm:px-3 py-1.5 rounded-lg shadow-sm transition-all active:scale-95 shrink-0 whitespace-nowrap">
+                                <span class="material-symbols-outlined text-[14px] text-amber-300">call</span> 전화
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        `;
+    }).join('');
+
+    if (loadMoreWrap) {
+        const remaining = currentDisplayPosts.length - batch.length;
+        if (remaining > 0) {
+            loadMoreWrap.classList.remove('hidden');
+            if (loadMoreLabel) {
+                loadMoreLabel.textContent = `매물 더 보기 (${batch.length} / ${currentDisplayPosts.length}건 · +${Math.min(remaining, PAGE_BATCH_SIZE)}건 더보기)`;
+            }
+        } else {
+            loadMoreWrap.classList.add('hidden');
+        }
+    }
+}
+
 function renderList(shouldShuffle = false) {
     const query = document.getElementById('search-input').value.normalize('NFC').toLowerCase().trim();
     const container = document.getElementById('news-list');
     const emptyState = document.getElementById('empty-state');
+    const loadMoreWrap = document.getElementById('load-more-wrap');
 
     let filtered = allPosts.filter(post => {
         const matchesCategory = selectedCategory === 'ALL' ? post.category !== '매물리스트' : post.category === selectedCategory;
@@ -1349,7 +1494,9 @@ function renderList(shouldShuffle = false) {
     }
 
     if (filtered.length === 0) {
+        currentDisplayPosts = [];
         container.innerHTML = '';
+        if (loadMoreWrap) loadMoreWrap.classList.add('hidden');
         emptyState.classList.remove('hidden');
         return;
     }
@@ -1359,101 +1506,9 @@ function renderList(shouldShuffle = false) {
     if (selectedCategory === '매물리스트' && (!query || shouldShuffle || currentSmartFilter !== 'all')) {
         displayPosts = shuffleArray(filtered);
     }
-    container.innerHTML = displayPosts.map(post => {
-        let textSummary = '';
-        let featureIdx = -1;
-        let matchLength = 0;
-        if (post.content) {
-            const match = post.content.match(/^.*매물\s*특징.*$/m);
-            if (match) {
-                featureIdx = match.index;
-                matchLength = match[0].length;
-            }
-        }
-        if (featureIdx !== -1) {
-            const afterFeatures = post.content.substring(featureIdx + matchLength);
-            const lines = afterFeatures.split('\n');
-            const featureLines = [];
-            for (let line of lines) {
-                const plainLine = line.replace(/<[^>]*>/g, '').trim();
-                if (plainLine.includes('매물정보') || plainLine.includes('중개') || plainLine.includes('이력') || (plainLine.startsWith('[') && plainLine.endsWith(']'))) {
-                    break;
-                }
-                if (plainLine) {
-                    let cleanLine = plainLine
-                        .replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s.,()\[\]{}~_\-+\*&%!?:;\/\\'"~`·•]/g, '')
-                        .trim();
-                    if (cleanLine) {
-                        featureLines.push(cleanLine);
-                    }
-                }
-                if (featureLines.length >= 3) {
-                    break;
-                }
-            }
-            if (featureLines.length > 0) {
-                textSummary = featureLines.map(line => '• ' + line).join(' ');
-            }
-        }
-        if (!textSummary) {
-            let textOnly = post.content || '';
-            const boilerplateIdx = textOnly.indexOf('주요 중개 이력');
-            if (boilerplateIdx !== -1) {
-                textOnly = textOnly.substring(0, boilerplateIdx);
-            }
-            textSummary = markdownToText(textOnly)
-                .replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s.,()\[\]{}~_\-+\*&%!?:;\/\\'"~`·•]/g, '')
-                .replace(/\s+/g, ' ')
-                .trim()
-                .slice(0, 100) + '...';
-        }
-        const image = (typeof extractPostImage === 'function' ? extractPostImage(post) : (getFirstImage(post.content) || getFallbackImage(post.id)));
-        const isMaemul = post.category === '매물리스트' || post.category === '매물';
-        const flags = isMaemul ? evaluatePropertyFilters(post) : null;
-
-        return `
-            <article class="bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline overflow-hidden group cursor-pointer flex flex-col transition-transform hover:-translate-y-1 hover:scale-[1.02] duration-300" onclick="location.href='news-detail.html?id=${post.id}'">
-                <div class="h-48 w-full relative overflow-hidden bg-surface-container">
-                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${image}" alt="" data-id="${post.id}" onerror="handlePostImgError(this, '${post.id}')" loading="lazy"/>
-                    <div class="absolute top-md left-md bg-dark-chip text-white font-label-sm text-label-sm px-sm py-xs rounded">
-                        ${post.category || '일반'}
-                    </div>
-                    <button type="button" onclick="event.stopPropagation(); toggleFavoriteById('${post.id}')" class="fav-btn-${post.id} absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs flex items-center justify-center shadow-md hover:scale-110 active:scale-90 transition-all z-10 cursor-pointer border border-slate-200/60 dark:border-slate-700/60" title="관심 매물 찜하기">
-                        <span class="material-symbols-outlined text-[19px] ${typeof isFavoritePost === 'function' && isFavoritePost(post.id) ? 'text-rose-500' : 'text-slate-400'}" style="font-variation-settings: 'FILL' ${typeof isFavoritePost === 'function' && isFavoritePost(post.id) ? 1 : 0};">favorite</span>
-                    </button>
-                </div>
-                <div class="p-lg flex-1 flex flex-col gap-sm justify-between">
-                    <div class="flex flex-col gap-xs">
-                        ${flags ? `
-                            <div class="flex flex-wrap gap-1 items-center mb-1">
-                                ${flags.nearestStation && (flags.nearestStation.distance <= 600 || flags.nearestStation.fromText) ? `<span class="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 px-2 py-0.5 rounded text-[11px] font-bold">🚇 ${flags.nearestStation.name} 도보 ${flags.nearestStation.walkMin}분</span>` : ''}
-                                ${flags.isFloor1 ? `<span class="bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 px-2 py-0.5 rounded text-[11px] font-bold">🏪 1층</span>` : ''}
-                                ${flags.isMookwonri ? `<span class="bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200/80 px-2 py-0.5 rounded text-[11px] font-bold">🎁 무권리</span>` : ''}
-                                ${flags.isParkingConvenient ? `<span class="bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/80 px-2 py-0.5 rounded text-[11px] font-bold">🚗 주차편리</span>` : ''}
-                                ${flags.isLarge50 ? `<span class="bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 px-2 py-0.5 rounded text-[11px] font-bold">🏢 50평+</span>` : ''}
-                                ${flags.isSale ? `<span class="bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200/80 px-2 py-0.5 rounded text-[11px] font-bold">🏷️ 매매</span>` : ''}
-                            </div>
-                        ` : ''}
-                        <h2 class="font-subsection-h3 text-lg mb-xs text-ink group-hover:text-primary-container transition-colors line-clamp-2">${post.title}</h2>
-                    </div>
-                    <p class="font-body text-body text-muted line-clamp-2">${textSummary}</p>
-                    <div class="pt-2.5 border-t border-hairline flex flex-nowrap items-center justify-between gap-1.5 sm:gap-2 mt-auto" onclick="event.stopPropagation()">
-                        <span class="text-xs font-black text-[#003891] dark:text-blue-300 bg-blue-50 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-800 px-2 py-0.5 rounded-md flex items-center gap-1 shrink-0 whitespace-nowrap">
-                            <span class="material-symbols-outlined text-[14px]">tag</span> 매물번호: ${getPropertyDisplayNumber(post)}
-                        </span>
-                        <div class="flex items-center gap-1 sm:gap-1.5 shrink-0 whitespace-nowrap">
-                            <a href="https://open.kakao.com/o/smt2j0Ri" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation(); prepareKakaoConsultationFromList('${post.id}')" class="inline-flex items-center gap-1 bg-[#fee500] text-[#191600] hover:bg-[#fdd835] text-[12px] font-black px-2.5 sm:px-3 py-1.5 rounded-lg shadow-xs border border-[#d4be00] transition-all active:scale-95 shrink-0 whitespace-nowrap">
-                                <span class="material-symbols-outlined text-[14px]">chat</span> 카톡
-                            </a>
-                            <a href="tel:010-3548-4000" onclick="event.stopPropagation()" class="inline-flex items-center gap-1 bg-[#003891] hover:bg-blue-800 text-white text-[12px] font-black px-2.5 sm:px-3 py-1.5 rounded-lg shadow-sm transition-all active:scale-95 shrink-0 whitespace-nowrap">
-                                <span class="material-symbols-outlined text-[14px] text-amber-300">call</span> 전화
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        `;
-    }).join('');
+    currentDisplayPosts = displayPosts;
+    currentVisibleLimit = PAGE_BATCH_SIZE;
+    renderCurrentBatch();
 }
 </script>
 
@@ -1462,7 +1517,7 @@ function filterByQuickTag(tag) {
     const input = document.getElementById('search-input');
     if (input) {
         input.value = tag;
-        filterPosts();
+        renderList();
     }
 }
 </script>
