@@ -729,9 +729,13 @@
                             저장 즉시 손님 전용 링크(<code class="text-primary font-bold">choi114.com/briefing?id=...</code>)에 모든 변경사항이 실시간 반영됩니다.
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <button type="button" onclick="openCurrentBriefingPreview()" class="px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer">
-                                <span class="material-symbols-outlined text-[18px]">visibility</span>
-                                <span>손님화면 미리보기</span>
+                            <button type="button" onclick="openCurrentBriefingPreview('branded')" class="px-3.5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer">
+                                <span class="material-symbols-outlined text-[18px]">print</span>
+                                <span>최가네 브리핑 미리보기/인쇄</span>
+                            </button>
+                            <button type="button" onclick="openCurrentBriefingPreview('internal')" class="px-3.5 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer" title="최가네부동산 상호·연락처·명함을 숨긴 메트라이프 등 기업 내부 보고용 화면으로 엽니다">
+                                <span class="material-symbols-outlined text-[18px]">domain_verification</span>
+                                <span>내부보고용(최가네숨김) 미리보기/인쇄</span>
                             </button>
                             <button type="button" onclick="saveCurrentBriefing(true)" class="flex-1 sm:flex-initial px-6 py-3 rounded-xl bg-[#003891] hover:bg-blue-800 text-white font-extrabold text-sm flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
                                 <span class="material-symbols-outlined text-[19px]">cloud_upload</span>
@@ -2668,8 +2672,11 @@ function renderSavedBriefingsList() {
                     <button type="button" onclick="copyBriefingKakaoMsg('${escAdminHtml(b.id)}')" class="px-3 py-2 rounded-lg bg-[#003891] hover:bg-blue-800 text-white font-extrabold text-xs flex items-center gap-1 cursor-pointer">
                         <span class="material-symbols-outlined text-[15px]">chat</span> 카톡 안내문+링크 복사
                     </button>
-                    <button type="button" onclick="openSavedBriefingPreview('${escAdminHtml(b.id)}')" class="px-3 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs flex items-center gap-1 cursor-pointer">
-                        <span class="material-symbols-outlined text-[15px]">print</span> 손님화면 / A4인쇄
+                    <button type="button" onclick="openSavedBriefingPreview('${escAdminHtml(b.id)}', 'branded')" class="px-3 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs flex items-center gap-1 cursor-pointer" title="최가네부동산 명시 브리핑 화면/인쇄">
+                        <span class="material-symbols-outlined text-[15px]">print</span> 최가네 브리핑/인쇄
+                    </button>
+                    <button type="button" onclick="openSavedBriefingPreview('${escAdminHtml(b.id)}', 'internal')" class="px-3 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs flex items-center gap-1 cursor-pointer" title="최가네부동산을 숨긴 내부 보고용 브리핑 화면/인쇄">
+                        <span class="material-symbols-outlined text-[15px]">domain_verification</span> 내부보고용(최가네숨김)
                     </button>
                     <button type="button" onclick="loadBriefingIntoEditor('${escAdminHtml(b.id)}', true)" class="px-2.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-0.5 cursor-pointer">
                         <span class="material-symbols-outlined text-[15px]">edit</span> 수정
@@ -2776,19 +2783,21 @@ function toggleAllBriefingMemos(checkAll) {
 }
 window.toggleAllBriefingMemos = toggleAllBriefingMemos;
 
-async function openCurrentBriefingPreview() {
+async function openCurrentBriefingPreview(mode = 'branded') {
     await saveCurrentBriefing(false, true);
     const id = (document.getElementById('bf-id')?.value || 'sample_vip_01').trim();
-    window.open(`briefing.html?id=${encodeURIComponent(id)}&preview=admin`, '_blank');
+    const modeQuery = mode === 'internal' ? '&mode=internal' : '';
+    window.open(`briefing.html?id=${encodeURIComponent(id)}&preview=admin${modeQuery}`, '_blank');
 }
 window.openCurrentBriefingPreview = openCurrentBriefingPreview;
 
-async function openSavedBriefingPreview(id) {
+async function openSavedBriefingPreview(id, mode = 'branded') {
     const curEditingId = (document.getElementById('bf-id')?.value || '').trim();
     if (String(curEditingId) === String(id)) {
         await saveCurrentBriefing(false, true);
     }
-    window.open(`briefing.html?id=${encodeURIComponent(id)}&preview=admin`, '_blank');
+    const modeQuery = mode === 'internal' ? '&mode=internal' : '';
+    window.open(`briefing.html?id=${encodeURIComponent(id)}&preview=admin${modeQuery}`, '_blank');
 }
 window.openSavedBriefingPreview = openSavedBriefingPreview;
 
