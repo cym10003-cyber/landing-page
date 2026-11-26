@@ -285,7 +285,7 @@ async function savePost(postData) {
         // Step 2: PUT updated posts.json
         const base64Content = utf8ToBase64(postsStr);
         const bodyObj = {
-          message: postData.id ? `feat: update post ${postData.id}` : `feat: add new post`,
+          message: postData.id ? `feat: update post ${postData.id} [skip ci] [skip vercel]` : `feat: add new post [skip ci] [skip vercel]`,
           content: base64Content,
           branch: 'main'
         };
@@ -302,9 +302,8 @@ async function savePost(postData) {
 
         if (putRes.ok) {
           savedToGit = true;
-          try {
-            fetch('https://api.vercel.com/v1/integrations/deploy/prj_qegayNObhh5O8C6xc9zyAtGxst2D/rjbOZRIWc3', { method: 'POST' });
-          } catch(e) {}
+          // Note: Live pages & SSR APIs fetch data/posts.json directly from GitHub,
+          // so we do NOT fire a redundant Vercel deploy hook on every post save.
           // Notify Naver & Bing/ChatGPT immediately via IndexNow when a public listing is saved
           if (updatedPost && updatedPost.id && !updatedPost.isPrivate) {
             try {
@@ -392,7 +391,7 @@ async function deletePost(id) {
     if (sha) {
       const base64Content = utf8ToBase64(postsStr);
       const body = {
-        message: `feat: delete post ${id}`,
+        message: `feat: delete post ${id} [skip ci] [skip vercel]`,
         content: base64Content,
         sha: sha,
         branch: 'main'
@@ -460,7 +459,7 @@ async function togglePostPrivate(id) {
 
         const base64Content = utf8ToBase64(postsStr);
         const body = {
-          message: `feat: toggle private status for post ${id} to ${isNowPrivate}`,
+          message: `feat: toggle private status for post ${id} to ${isNowPrivate} [skip ci] [skip vercel]`,
           content: base64Content,
           branch: 'main'
         };
