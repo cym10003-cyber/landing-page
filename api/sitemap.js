@@ -44,22 +44,13 @@ export default async function handler(req, res) {
   const protocol = 'https';
   const baseUrl = `${protocol}://${host}`;
 
-  // Static & Regional Hub URLs
+  // Static Canonical URLs (Exclude ?region= query duplicates since /property-news has canonical=/property-news)
   const todayStr = new Date().toISOString().split('T')[0];
-  const regions = ['수성구', '중구', '달서구', '동구', '북구', '서구', '남구', '달성군', '경산'];
-  const regionalHubUrls = regions.map(reg => ({
-    loc: `${baseUrl}/property-news?category=${encodeURIComponent('매물리스트')}&region=${encodeURIComponent(reg)}`,
-    lastmod: todayStr,
-    changefreq: 'daily',
-    priority: '0.85'
-  }));
-
   const staticUrls = [
     { loc: `${baseUrl}/`, lastmod: todayStr, changefreq: 'daily', priority: '1.0' },
     { loc: `${baseUrl}/about`, lastmod: '2026-07-10', changefreq: 'monthly', priority: '0.8' },
     { loc: `${baseUrl}/map`, lastmod: todayStr, changefreq: 'daily', priority: '0.9' },
-    { loc: `${baseUrl}/property-news`, lastmod: todayStr, changefreq: 'daily', priority: '0.9' },
-    ...regionalHubUrls
+    { loc: `${baseUrl}/property-news`, lastmod: todayStr, changefreq: 'daily', priority: '0.9' }
   ];
 
   const escXml = (s) => String(s || '')

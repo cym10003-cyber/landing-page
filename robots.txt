@@ -8,43 +8,25 @@ Disallow: /news-write
 Disallow: /news-write.html
 Disallow: /api/
 
-# Explicitly allow Major Search Engines
+# Major Search Engines & AI Crawlers (inherit same Disallow rules explicitly per RFC 9309)
 User-agent: Googlebot
-Allow: /
-
 User-agent: Yeti
-Allow: /
-
 User-agent: Daum
-Allow: /
-
 User-agent: Bingbot
-Allow: /
-
-# AI Search & Generative Engine Optimization (GEO)
 User-agent: GPTBot
-Allow: /
-
 User-agent: ChatGPT-User
-Allow: /
-
 User-agent: Google-Extended
-Allow: /
-
 User-agent: ClaudeBot
-Allow: /
-
 User-agent: anthropic-ai
-Allow: /
-
 User-agent: PerplexityBot
-Allow: /
-
 User-agent: Applebot
-Allow: /
-
 User-agent: Applebot-Extended
 Allow: /
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /news-write
+Disallow: /news-write.html
+Disallow: /api/
 
 # Sitemaps
 Sitemap: https://www.choi114.com/sitemap.xml

@@ -205,13 +205,13 @@ function getPropertyDisplayNumber(p) {
 <!-- TopNavBar Shared Component -->
 <nav class="bg-surface-container-lowest dark:bg-inverse-surface w-full top-0 sticky border-b border-hairline dark:border-outline-variant z-50 flat no-shadows">
 <div class="flex justify-between items-center px-lg py-md max-w-7xl mx-auto">
-<div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed flex items-center"><a href="index.html">최가네부동산<span class="inline md:hidden xl:inline">공인중개사사무소</span></a></div>
-<div class="hidden md:flex gap-1.5 lg:gap-3 xl:gap-lg items-center text-xs lg:text-sm font-semibold shrink-0"><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="index.html">홈</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="about.html">최가네부동산 소개</a>
-<a id="nav-maemul" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?category=매물리스트&v=20260715_v240">매물리스트</a>
-<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="map.html">매물지도</a>
+<div class="font-display-hero text-xl font-bold text-primary dark:text-primary-fixed flex items-center"><a href="/">최가네부동산<span class="inline md:hidden xl:inline">공인중개사사무소</span></a></div>
+<div class="hidden md:flex gap-1.5 lg:gap-3 xl:gap-lg items-center text-xs lg:text-sm font-semibold shrink-0"><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="/">홈</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="/about">최가네부동산 소개</a>
+<a id="nav-maemul" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="/property-news?category=매물리스트">매물리스트</a>
+<a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="/map">매물지도</a>
 <a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="property-news.html?v=20260715_v240">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a>
+<a id="nav-news" class="text-primary dark:text-primary-bright font-bold border-b-2 border-primary pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="/property-news">부동산 소식</a><a class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1" href="https://naver.me/xTsFNLzT" rel="noopener noreferrer" target="_blank">오시는 길</a>
 <button onclick="showLeadForm('buyer')" class="text-muted dark:text-on-surface-variant border-b-2 border-transparent pb-1 hover:text-primary-bright transition-colors duration-200 scale-95 active:opacity-80 transition-all flex items-center gap-1 cursor-pointer"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button></div>
 <a class="bg-primary-container text-white px-2.5 py-1.5 lg:px-[25px] lg:py-[14px] rounded font-button text-xs lg:text-button shadow-button-strong hover:bg-blue-mid transition-colors hidden md:flex items-center gap-1 lg:gap-sm whitespace-nowrap shrink-0" href="tel:010-3548-4000">
 <span class="material-symbols-outlined text-[18px]">call</span>
@@ -329,7 +329,7 @@ function getPropertyDisplayNumber(p) {
                 </button>
             </div>
             <!-- 지도보기 (서브 스타일 보조 버튼) -->
-            <a href="map.html" class="flex items-center justify-center gap-xs bg-soft-blue text-primary border border-primary/20 px-3.5 py-2.5 rounded-xl text-sm font-bold hover:bg-primary hover:text-white transition-all shadow-xs whitespace-nowrap shrink-0">
+            <a href="/map" class="flex items-center justify-center gap-xs bg-soft-blue text-primary border border-primary/20 px-3.5 py-2.5 rounded-xl text-sm font-bold hover:bg-primary hover:text-white transition-all shadow-xs whitespace-nowrap shrink-0">
                 <span class="material-symbols-outlined text-[18px]">map</span>
                 매물지도로 보기
             </a>
@@ -353,16 +353,16 @@ function getPropertyDisplayNumber(p) {
     <span class="text-xs font-extrabold text-primary mr-1 flex items-center gap-1">
         <span class="material-symbols-outlined text-[16px]">location_on</span> 지역별 매물:
     </span>
-    <a href="property-news.html?category=매물리스트" data-region="" class="region-hub-link px-2.5 py-1 rounded-lg bg-primary text-white text-xs font-extrabold no-underline transition">대구 전체</a>
-    <a href="property-news.html?category=매물리스트&amp;region=수성구" data-region="수성구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">수성구</a>
-    <a href="property-news.html?category=매물리스트&amp;region=중구" data-region="중구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">중구</a>
-    <a href="property-news.html?category=매물리스트&amp;region=달서구" data-region="달서구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">달서구</a>
-    <a href="property-news.html?category=매물리스트&amp;region=동구" data-region="동구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">동구</a>
-    <a href="property-news.html?category=매물리스트&amp;region=북구" data-region="북구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">북구</a>
-    <a href="property-news.html?category=매물리스트&amp;region=서구" data-region="서구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">서구</a>
-    <a href="property-news.html?category=매물리스트&amp;region=남구" data-region="남구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">남구</a>
-    <a href="property-news.html?category=매물리스트&amp;region=달성군" data-region="달성군" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">달성군</a>
-    <a href="property-news.html?category=매물리스트&amp;region=경산" data-region="경산" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">경산시</a>
+    <a href="/property-news?category=매물리스트" data-region="" class="region-hub-link px-2.5 py-1 rounded-lg bg-primary text-white text-xs font-extrabold no-underline transition">대구 전체</a>
+    <a href="/property-news?category=매물리스트&amp;region=수성구" data-region="수성구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">수성구</a>
+    <a href="/property-news?category=매물리스트&amp;region=중구" data-region="중구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">중구</a>
+    <a href="/property-news?category=매물리스트&amp;region=달서구" data-region="달서구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">달서구</a>
+    <a href="/property-news?category=매물리스트&amp;region=동구" data-region="동구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">동구</a>
+    <a href="/property-news?category=매물리스트&amp;region=북구" data-region="북구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">북구</a>
+    <a href="/property-news?category=매물리스트&amp;region=서구" data-region="서구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">서구</a>
+    <a href="/property-news?category=매물리스트&amp;region=남구" data-region="남구" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">남구</a>
+    <a href="/property-news?category=매물리스트&amp;region=달성군" data-region="달성군" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">달성군</a>
+    <a href="/property-news?category=매물리스트&amp;region=경산" data-region="경산" class="region-hub-link px-2.5 py-1 rounded-lg bg-surface-container text-ink hover:bg-soft-blue hover:text-primary text-xs font-bold no-underline transition">경산시</a>
 </nav>
 <!-- 원클릭 스마트 필터 섹션 (매물리스트 전용) -->
 <div id="smart-filter-section" class="hidden bg-surface-container-lowest p-md rounded-xl border border-hairline shadow-sm flex-col gap-2">
@@ -380,7 +380,7 @@ function getPropertyDisplayNumber(p) {
         <span class="material-symbols-outlined text-[18px] shrink-0">apartment</span>
         <span>대구 전 지역 실시간 상가·사무실 실매물 리스트를 찾고 계신가요?</span>
     </div>
-    <a href="property-news.html?category=매물리스트" class="inline-flex items-center justify-center gap-1 px-3.5 py-2 rounded-lg bg-[#003891] hover:bg-blue-800 text-white text-xs font-extrabold whitespace-nowrap shrink-0 transition">
+    <a href="/property-news?category=매물리스트" class="inline-flex items-center justify-center gap-1 px-3.5 py-2 rounded-lg bg-[#003891] hover:bg-blue-800 text-white text-xs font-extrabold whitespace-nowrap shrink-0 transition">
         <span>실매물 전체보기</span>
         <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
     </a>
@@ -388,99 +388,99 @@ function getPropertyDisplayNumber(p) {
 <div id="news-list" class="grid grid-cols-1 md:grid-cols-2 gap-lg items-stretch">
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 중구 남산동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795395321891" class="hover:text-primary no-underline text-ink">대구중구사무실임대 남산동 반월당역초역세권 무권리 고정주차 3대 인테리어완비 대구상가임대 매물번호:1815</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1795395321891" class="hover:text-primary no-underline text-ink">대구중구사무실임대 남산동 반월당역초역세권 무권리 고정주차 3대 인테리어완비 대구상가임대 매물번호:1815</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 중구 남산동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795395073187" class="hover:text-primary no-underline text-ink">대구상가임대 중구 반월당역 초역세권 동양생명빌딩 업무시설 고정주차 3대 인테리어완비 매물번호:1814</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1795395073187" class="hover:text-primary no-underline text-ink">대구상가임대 중구 반월당역 초역세권 동양생명빌딩 업무시설 고정주차 3대 인테리어완비 매물번호:1814</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 중구 남산동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795394892627" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 동양생명빌딩 고정주차3대 인테리어완비 중구 남산동 반월당역 초역세권 매물번호:1813</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1795394892627" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 동양생명빌딩 고정주차3대 인테리어완비 중구 남산동 반월당역 초역세권 매물번호:1813</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 수성구 지산동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795162107409" class="hover:text-primary no-underline text-ink">수성구사무실임대 지산동 무권리 주차편리 고정주차 5대 황금역 초역세권 동대구로 상가 매물번호:1271</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1795162107409" class="hover:text-primary no-underline text-ink">수성구사무실임대 지산동 무권리 주차편리 고정주차 5대 황금역 초역세권 동대구로 상가 매물번호:1271</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 수성구 지산동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795161679519" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 고정주차5대 수성구 지산동 황금역 동대구로 시설 인테리어완비 상가 매물번호:1270</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1795161679519" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 고정주차5대 수성구 지산동 황금역 동대구로 시설 인테리어완비 상가 매물번호:1270</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 효목동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795137081431" class="hover:text-primary no-underline text-ink">대구건물매매 동구 효목동 동대구역 인근 사옥추천 매입후 리모델링 상가 주택 매매 매물번호:5561</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1795137081431" class="hover:text-primary no-underline text-ink">대구건물매매 동구 효목동 동대구역 인근 사옥추천 매입후 리모델링 상가 주택 매매 매물번호:5561</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 동인동4가</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795052292648" class="hover:text-primary no-underline text-ink">대구상가매매 중구 동인동4가 신천대로 인근 수익률 4.2% 준신축 건물 꼬마빌딩 매물번호:5560</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1795052292648" class="hover:text-primary no-underline text-ink">대구상가매매 중구 동인동4가 신천대로 인근 수익률 4.2% 준신축 건물 꼬마빌딩 매물번호:5560</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 달서구 유천동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795051015886" class="hover:text-primary no-underline text-ink">대구상가매매 대곡역 초역세권 유천동 수익률 4.5% 임차인 구성 좋은 공실걱정없는 건물 빌딩 매물번호:5559</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1795051015886" class="hover:text-primary no-underline text-ink">대구상가매매 대곡역 초역세권 유천동 수익률 4.5% 임차인 구성 좋은 공실걱정없는 건물 빌딩 매물번호:5559</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 수성구 수성동1가</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795047170895" class="hover:text-primary no-underline text-ink">대구수성구사무실임대 수성동1가 동성초등학교네거리 무권리 신축건물 대구상가임대 매물번호:1803</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1795047170895" class="hover:text-primary no-underline text-ink">대구수성구사무실임대 수성동1가 동성초등학교네거리 무권리 신축건물 대구상가임대 매물번호:1803</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 수성구 수성동1가</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795046989560" class="hover:text-primary no-underline text-ink">대구사무실임대 수성구 수성동1가 무권리 동성초등학교네거리 신축건물 매물번호:1805</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1795046989560" class="hover:text-primary no-underline text-ink">대구사무실임대 수성구 수성동1가 무권리 동성초등학교네거리 신축건물 매물번호:1805</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 수성구 수성동1가</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1795046139281" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 수성구 수성동1가 동성초등학교네거리 대로변 신축건물 1층 대구사무실임대 매물번호:1807</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1795046139281" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 수성구 수성동1가 동성초등학교네거리 대로변 신축건물 1층 대구사무실임대 매물번호:1807</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 수성동3가</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794979996756" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 주차편리 수성구 수성동3가 달구벌대로 수협G타워 7층 상가임대 매물번호:1809</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794979996756" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 주차편리 수성구 수성동3가 달구벌대로 수협G타워 7층 상가임대 매물번호:1809</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 수성구 만촌동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794815831189" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 병원 의원 만촌역초역세권 달구벌대로 수성엠비션타워 5층 매물번호:1784</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794815831189" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 병원 의원 만촌역초역세권 달구벌대로 수성엠비션타워 5층 매물번호:1784</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 정평동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794815174969" class="hover:text-primary no-underline text-ink">대구사무실임대 경산시 정평동 정평역 초역세권 멋진 뷰티샵 화장실2개 샤워실 대구상가임대 매물번호:1808</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794815174969" class="hover:text-primary no-underline text-ink">대구사무실임대 경산시 정평동 정평역 초역세권 멋진 뷰티샵 화장실2개 샤워실 대구상가임대 매물번호:1808</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 수성동2가</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794810756317" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 병원 의원 한의원 인테리어 및 시설완비 수성구 수성동 수성시장역 초역세권 주차편리 매물번호:1794</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794810756317" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 병원 의원 한의원 인테리어 및 시설완비 수성구 수성동 수성시장역 초역세권 주차편리 매물번호:1794</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 두류동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794795000532" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 달서구 두류동 감삼역초역세권 인테리어완비 두류센트레빌더시티 2층 상가임대 매물번호:1802</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794795000532" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 달서구 두류동 감삼역초역세권 인테리어완비 두류센트레빌더시티 2층 상가임대 매물번호:1802</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 동인동3가</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794791092132" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 중구 동인동 신천대로 이용편리 주차 매우 편리한 미주빌딩 매물번호:1573</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794791092132" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 중구 동인동 신천대로 이용편리 주차 매우 편리한 미주빌딩 매물번호:1573</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 이곡동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794789880344" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 달서구 이곡동 성서이마트 사거리 코너건물 2층 주차편리 식당 음식점 사무실 임대 매물번호:1799</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794789880344" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 달서구 이곡동 성서이마트 사거리 코너건물 2층 주차편리 식당 음식점 사무실 임대 매물번호:1799</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 수성구 황금동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794788932095" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 학원 수성구 황금동 동대구로 가시성좋은 코너건물 대구상가임대 범어천로공영주차장 주차편리 매물번호:1800</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794788932095" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 학원 수성구 황금동 동대구로 가시성좋은 코너건물 대구상가임대 범어천로공영주차장 주차편리 매물번호:1800</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 남구 봉덕동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794530971808" class="hover:text-primary no-underline text-ink">대구사무실임대 남구 봉덕동 주차편리 KT봉덕빌딩 무권리 대구상가임대 매물번호:1785</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794530971808" class="hover:text-primary no-underline text-ink">대구사무실임대 남구 봉덕동 주차편리 KT봉덕빌딩 무권리 대구상가임대 매물번호:1785</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 동구 신천동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794448536810" class="hover:text-primary no-underline text-ink">대구사무실임대 동대구역 무권리 동구 신천동 인테리어 완비 주차편리 대구상가임대 매물번호:1514</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794448536810" class="hover:text-primary no-underline text-ink">대구사무실임대 동대구역 무권리 동구 신천동 인테리어 완비 주차편리 대구상가임대 매물번호:1514</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 동구 신천동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794447675151" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 동구 신천동 병의원 사무실 인테리어완비 주차 편리 동대구역 초역세권 매물번호:1515</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794447675151" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 동구 신천동 병의원 사무실 인테리어완비 주차 편리 동대구역 초역세권 매물번호:1515</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 대구 수성구 만촌동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794386096848" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 학원 병의원 사무실 달구벌대로 수성구 만촌동 만촌역 초역세권 대구사무실임대 매물번호:1032</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794386096848" class="hover:text-primary no-underline text-ink">대구상가임대 무권리 학원 병의원 사무실 달구벌대로 수성구 만촌동 만촌역 초역세권 대구사무실임대 매물번호:1032</a></h2>
     </article>
     <article class="bg-surface-container-lowest p-4 rounded-xl border border-hairline shadow-xs">
         <div class="text-xs font-bold text-primary mb-1">매물리스트 · 만촌동</div>
-        <h2 class="text-base font-bold text-ink"><a href="news-detail.html?id=1794385927233" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 수성구 만촌동 학원 병의원 만촌역초역세권 달구벌대로 대구상가임대 매물번호:1033</a></h2>
+        <h2 class="text-base font-bold text-ink"><a href="/news-detail?id=1794385927233" class="hover:text-primary no-underline text-ink">대구사무실임대 무권리 수성구 만촌동 학원 병의원 만촌역초역세권 달구벌대로 대구상가임대 매물번호:1033</a></h2>
     </article>
 </div>
 <div id="load-more-wrap" class="hidden pt-4 pb-2 flex flex-col items-center gap-2">
@@ -534,11 +534,11 @@ function getPropertyDisplayNumber(p) {
 </footer>
 <!-- Mobile Bottom Navigation Bar (High Converting Call Bar) -->
 <div class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest/95 backdrop-blur-md border-t border-hairline py-2 px-3 z-50 md:hidden flex items-center gap-2 shadow-strong-elevated">
-  <a href="index.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-11 h-11 shrink-0">
+  <a href="/" class="flex flex-col items-center justify-center text-muted hover:text-primary w-11 h-11 shrink-0">
     <span class="material-symbols-outlined text-[22px]">home</span>
     <span class="text-[10px] font-medium">홈</span>
   </a>
-  <a href="map.html" class="flex flex-col items-center justify-center text-muted hover:text-primary w-11 h-11 shrink-0">
+  <a href="/map" class="flex flex-col items-center justify-center text-muted hover:text-primary w-11 h-11 shrink-0">
     <span class="material-symbols-outlined text-[22px]">map</span>
     <span class="text-[10px] font-medium">지도</span>
   </a>
@@ -562,12 +562,12 @@ function getPropertyDisplayNumber(p) {
       </button>
     </div>
     <nav class="flex flex-col gap-md font-nav text-nav">
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="index.html">홈</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="about.html">최가네부동산 소개</a>
-      <a id="mobile-nav-maemul" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?category=매물리스트&v=20260715_v240">매물리스트</a>
-      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="map.html">매물지도</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="/">홈</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="/about">최가네부동산 소개</a>
+      <a id="mobile-nav-maemul" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="/property-news?category=매물리스트">매물리스트</a>
+      <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="/map">매물지도</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://choiim83.neonet.co.kr/novo-agency-home/view/offerings/OfferingsList.neo?select_menu=A&amp;offer_gbn=M&amp;offerings_gbn=ST" target="_blank">매물 정보</a>
-      <a id="mobile-nav-news" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="property-news.html?v=20260715_v240">부동산 소식</a>
+      <a id="mobile-nav-news" class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="/property-news">부동산 소식</a>
       <a class="text-muted hover:text-primary py-sm border-b border-hairline/50" href="https://naver.me/xTsFNLzT" target="_blank">오시는 길</a>
       <button onclick="showLeadForm('buyer')" class="text-primary hover:text-blue-700 py-sm flex items-center gap-1 font-bold text-left cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit_note</span> 매물의뢰</button>
 
@@ -1405,7 +1405,7 @@ function renderCurrentBatch() {
         const safeAlt = `${(post.title || '최가네부동산 매물').replace(/"/g, '&quot;')} 대표 사진`;
 
         return `
-            <article class="h-full bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline overflow-hidden group cursor-pointer flex flex-col transition-transform hover:-translate-y-1 hover:scale-[1.01] duration-300" onclick="location.href='news-detail.html?id=${post.id}'">
+            <article class="h-full bg-surface-container-lowest rounded-xl shadow-card-soft border border-hairline overflow-hidden group cursor-pointer flex flex-col transition-transform hover:-translate-y-1 hover:scale-[1.01] duration-300" onclick="location.href='/news-detail?id=${post.id}'">
                 <div class="h-48 w-full relative overflow-hidden bg-surface-container shrink-0">
                     <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${image}" alt="${safeAlt}" data-id="${post.id}" onerror="handlePostImgError(this, '${post.id}')" loading="lazy"/>
                     <div class="absolute top-md left-md bg-dark-chip text-white font-label-sm text-label-sm px-sm py-xs rounded">

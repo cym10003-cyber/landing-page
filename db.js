@@ -2264,7 +2264,7 @@ window.switchLeadTab = switchLeadTab;
 window.handleFloorClick = handleFloorClick;
 window.submitClientLead = submitClientLead;
 function quickFilterKeyword(keyword) {
-    if (window.location.pathname.includes('property-news.html')) {
+    if (window.location.pathname.includes('property-news')) {
         const searchInput = document.getElementById('search-input');
         if (searchInput) {
             searchInput.value = keyword;
@@ -2273,7 +2273,7 @@ function quickFilterKeyword(keyword) {
             else if (typeof filterPosts === 'function') filterPosts();
         }
     } else {
-        window.location.href = `property-news.html?search=${encodeURIComponent(keyword)}&v=20260715_v233`;
+        window.location.href = `/property-news?search=${encodeURIComponent(keyword)}`;
     }
 }
 window.quickFilterKeyword = quickFilterKeyword;
@@ -2988,7 +2988,7 @@ function renderQuickBarFavorites() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     매물 사진 우측 상단의 하트(♥)를 누르면 관심 매물에 쏙 담아 한 번에 비교 상담받으실 수 있습니다!
                 </p>
-                <a href="property-news.html?v=20260715_v233" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="/property-news" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -3029,7 +3029,7 @@ function renderQuickBarFavorites() {
                                 매물번호: ${item.propNumber || item.id}
                             </span>
                         </div>
-                        <a href="news-detail.html?id=${item.id}" onclick="closeQuickBarModal()" class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white hover:text-blue-600 truncate no-underline">
+                        <a href="/news-detail?id=${item.id}" onclick="closeQuickBarModal()" class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white hover:text-blue-600 truncate no-underline">
                             ${item.title}
                         </a>
                     </div>
@@ -3057,7 +3057,7 @@ function renderQuickBarRecents() {
                 <p class="text-xs text-slate-500 max-w-xs leading-relaxed">
                     관심 있는 매물 상세페이지를 방문하시면 이곳에 자동으로 최근 본 목록이 기록됩니다!
                 </p>
-                <a href="property-news.html?v=20260715_v233" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
+                <a href="/property-news" onclick="closeQuickBarModal()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#003891] text-white font-bold text-xs shadow-md no-underline hover:bg-blue-800 transition-all">
                     매물리스트 보러가기
                 </a>
             </div>
@@ -3094,7 +3094,7 @@ function renderQuickBarRecents() {
                             <span class="text-[11px] font-black text-[#003891] dark:text-blue-300 bg-blue-50 dark:bg-blue-950 px-1.5 py-0.2 rounded border border-blue-200 dark:border-blue-800 w-fit">
                                 매물번호: ${item.propNumber || item.id}
                             </span>
-                            <a href="news-detail.html?id=${item.id}" onclick="closeQuickBarModal()" class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white hover:text-blue-600 truncate no-underline">
+                            <a href="/news-detail?id=${item.id}" onclick="closeQuickBarModal()" class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white hover:text-blue-600 truncate no-underline">
                                 ${item.title}
                             </a>
                         </div>
