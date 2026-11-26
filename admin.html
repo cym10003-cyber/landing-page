@@ -1558,12 +1558,13 @@
   </div>
 </div>
 <script src="db.js?v=20261126_v264"></script>
-<script src="broker-suite.js?v=20261126_v1"></script>
+<script src="broker-suite.js?v=20261126_v2"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
 
     if (isAdmin()) {
+        try { localStorage.setItem('isAdmin', 'true'); } catch (e) {}
         document.getElementById('dashboard-view').classList.remove('hidden');
         loadDashboardList();
         renderClientLeadsTab();
@@ -1707,6 +1708,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         document.getElementById('logout-btn').onclick = () => {
             sessionStorage.removeItem('isAdmin');
+            try { localStorage.removeItem('isAdmin'); } catch (e) {}
             window.location.reload();
         };
     } else {
@@ -1721,6 +1723,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const validPasswords = [config.admin_password, 'choi!!@@', 'admin1234'].filter(Boolean);
             if (validPasswords.includes(passwordInput)) {
                 sessionStorage.setItem('isAdmin', 'true');
+                try { localStorage.setItem('isAdmin', 'true'); } catch (e) {}
                 window.location.reload();
             } else {
                 errorDiv.innerText = "비밀번호가 올바르지 않습니다.";

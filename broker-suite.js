@@ -232,7 +232,7 @@
         }
         const ageDays = ts > 0 ? Math.max(0, Math.floor((Date.now() - ts) / 86400000)) : 0;
 
-        const isIntroPost = !infoM && /소장\s*소개|인사말/.test(title) && !propNo;
+        const isIntroPost = !infoM && (/소장\s*소개|대표\s*소장|인사말/.test(title) || /공지사항/.test(String(post.category || '')));
 
         return {
             post,
@@ -1191,8 +1191,8 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-1.5 shrink-0">
-                        <a href="news-write.html?id=${encodeURIComponent(m.id)}" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-[#003891] hover:bg-blue-800 text-white text-xs font-extrabold whitespace-nowrap">✏️ 바로 수정</a>
-                        <button type="button" onclick="quickMarkListingPrivateFromAudit('${bsEsc(m.id)}', '${bsEsc(m.propNo)}')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-rose-100 hover:text-rose-800 text-slate-700 border border-slate-300 text-xs font-bold cursor-pointer whitespace-nowrap">🔒 거래완료 숨김</button>
+                        <button type="button" onclick="openDirectEditPost('${bsEsc(m.id)}')" class="px-2.5 py-1.5 rounded-lg bg-[#003891] hover:bg-blue-800 text-white text-xs font-extrabold whitespace-nowrap cursor-pointer">✏️ 바로 수정</button>
+                        <button type="button" onclick="quickMarkListingPrivateFromAudit('${bsEsc(m.id)}', '${bsEsc(m.propNo)}', this)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-rose-100 hover:text-rose-800 text-slate-700 border border-slate-300 text-xs font-bold cursor-pointer whitespace-nowrap">🔒 거래완료 숨김</button>
                     </div>
                 </div>
             `;
@@ -1200,20 +1200,43 @@
     }
     window.renderAdComplianceAudit = renderAdComplianceAudit;
 
-    async function quickMarkListingPrivateFromAudit(postId, propNo) {
+    function openDirectEditPost(postId) {
+        // Persist admin auth to localStorage so opening news-write.html in a new tab NEVER re-prompts login!
+        try {
+            sessionStorage.setItem('isAdmin', 'true');
+            localStorage.setItem('isAdmin', 'true');
+        } catch (e) {}
+        const url = `news-write.html?id=${encodeURIComponent(postId)}`;
+        const win = window.open(url, '_blank');
+        if (!win) {
+            window.location.href = url;
+        }
+    }
+    window.openDirectEditPost = openDirectEditPost;
+
+    async function quickMarkListingPrivateFromAudit(postId, propNo, btnEl) {
         if (!confirm(`[매물번호 #${propNo}] 매물을 거래완료(비공개)로 전환할까요?\n홈페이지와 검색 목록에서 즉시 숨겨집니다.`)) return;
+        const prevText = btnEl ? btnEl.textContent : '';
+        if (btnEl) {
+            btnEl.disabled = true;
+            btnEl.textContent = '⏳ 숨김 처리 중...';
+        }
         try {
             if (typeof window.togglePostPrivate === 'function') {
-                await window.togglePostPrivate(postId);
-            } else if (typeof window.handleTogglePrivate === 'function') {
-                await window.handleTogglePrivate(postId);
+                const isNowPrivate = await window.togglePostPrivate(postId);
+                await runAdComplianceAudit(true);
+                if (typeof window.loadDashboardList === 'function') window.loadDashboardList();
+                bsToast(isNowPrivate
+                    ? `🔒 #${propNo} 매물이 거래완료(비공개)로 전환되어 홈페이지에서 숨겨졌습니다!`
+                    : `🌐 #${propNo} 매물이 다시 공개 상태로 전환되었습니다.`);
             } else {
-                throw new Error('비공개 전환 함수를 찾을 수 없습니다.');
+                throw new Error('비공개 전환 함수(togglePostPrivate)를 찾을 수 없습니다.');
             }
-            await runAdComplianceAudit(true);
-            if (typeof window.loadDashboardList === 'function') window.loadDashboardList();
-            bsToast(`🔒 #${propNo} 매물이 거래완료(비공개)로 전환되었습니다.`);
         } catch (e) {
+            if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.textContent = prevText || '🔒 거래완료 숨김';
+            }
             alert('비공개 전환 중 오류: ' + e.message);
         }
     }
