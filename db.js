@@ -1,4 +1,4 @@
-console.log("Antigravity db.js version: 20261126_v262");
+console.log("Antigravity db.js version: 20261126_v263");
 // Force clear localStorage posts cache if version changes to flush stale client isPrivate cache
 const APP_VERSION = "20261125_v261";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
@@ -4370,11 +4370,12 @@ function buildNaverBlogContent(post, options = {}) {
         `입주 시기나 렌트프리 등 구체적인 협의 사항은 현장 미팅 시 최선을 다해 조율해 드리겠습니다.`
     ];
 
+    const specHeadingText = '중개대상물 정보\n(포스팅 현시점, 건축물대장상 정보)';
     const sectionTitleSets = [
-        { feat: `[ 현장 핵심 특징 (매물번호 ${sp.propNo}번) ]`, spec: `[ 매물 상세 정보 (매물번호 ${sp.propNo}번) ]`, rec: `[ 추천 업종 및 상담 안내 ]` },
-        { feat: `■ 현장 체크 포인트 (NO.${sp.propNo})`, spec: `■ 매물 기본 제원 및 조건`, rec: `■ 추천 업종 및 현장 문의` },
-        { feat: `✔ 매물번호 ${sp.propNo}번 주요 특징`, spec: `✔ 한눈에 보는 매물 정보`, rec: `✔ 추천 업종 및 브리핑 마무리` },
-        { feat: `◈ 입지 및 내부 핵심 포인트`, spec: `◈ 매물번호 ${sp.propNo}번 상세 명세`, rec: `◈ 추천 업종 및 관람 안내` }
+        { feat: `[ 현장 핵심 특징 (매물번호 ${sp.propNo}번) ]`, spec: specHeadingText, rec: `[ 추천 업종 및 상담 안내 ]` },
+        { feat: `■ 현장 체크 포인트 (NO.${sp.propNo})`, spec: specHeadingText, rec: `■ 추천 업종 및 현장 문의` },
+        { feat: `✔ 매물번호 ${sp.propNo}번 주요 특징`, spec: specHeadingText, rec: `✔ 추천 업종 및 브리핑 마무리` },
+        { feat: `◈ 입지 및 내부 핵심 포인트`, spec: specHeadingText, rec: `◈ 추천 업종 및 관람 안내` }
     ];
     const secTitles = pick(sectionTitleSets, 2);
 
@@ -4572,7 +4573,7 @@ function buildNaverBlogContent(post, options = {}) {
 
     // Build [📌 복붙 100% 안전: 매물정보 표(18항목) + 홈페이지 안내 + 중개사 명함] Combined HTML & Text!
     const specAndFooterHtmlParts = [];
-    specAndFooterHtmlParts.push(`<p><b>${esc(secTitles.spec)}</b></p>`);
+    specAndFooterHtmlParts.push(`<p><b>중개대상물 정보</b><br>(포스팅 현시점, 건축물대장상 정보)</p>`);
     specAndFooterHtmlParts.push(tableOnlyHtml);
     specAndFooterHtmlParts.push(`<p><br></p>`);
     if (linkMode === 'text') {
