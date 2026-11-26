@@ -1,4 +1,4 @@
-console.log("Antigravity db.js version: 20261125_v261");
+console.log("Antigravity db.js version: 20261126_v262");
 // Force clear localStorage posts cache if version changes to flush stale client isPrivate cache
 const APP_VERSION = "20261125_v261";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
@@ -3946,8 +3946,8 @@ function extractNaverBlogSpecs(post) {
     const deposit = getField(/보증금\s*:\s*([^\n]+)/i);
     const rent = getField(/(?:월세|임대료)\s*:\s*([^\n]+)/i);
     const salePrice = getField(/매매가\s*:\s*([^\n]+)/i);
-    const maintFee = getField(/관리비\s*:\s*([^\n]+)/i);
-    let keyMoney = getField(/권리금\s*:\s*([^\n]+)/i);
+    const maintFee = getField(/공용\s*관리비\s*:\s*([^\n]+)/i) || getField(/관리비\s*:\s*([^\n]+)/i);
+    let keyMoney = getField(/권리금(?:\([^)]*\))?\s*:\s*([^\n]+)/i);
     const isNoKeyMoney = /무권리|권리금\s*없음|권리금\s*0/.test(fullText);
     if (!keyMoney) keyMoney = isNoKeyMoney ? '무권리 (권리금 없음)' : '현장 협의';
 
@@ -3961,38 +3961,27 @@ function extractNaverBlogSpecs(post) {
     else if (/상가/.test(title)) mainType = '상가';
     else if (/사무실/.test(rawContent)) mainType = '사무실';
 
-    const rawArea = getField(/(?:전용면적|공급면적|계약면적|면적|평수)\s*:\s*([^\n]+)/i);
-    let pyeongNum = 0;
-    const pMatch = (rawArea + ' ' + title + ' ' + rawContent).match(/([0-9]+(?:\.[0-9]+)?)\s*평/);
-    if (pMatch) pyeongNum = Math.round(parseFloat(pMatch[1]) * 100) / 100;
-    const m2Match = (rawArea + ' ' + rawContent).match(/([0-9]+(?:\.[0-9]+)?)\s*(?:㎡|m2)/i);
-    let m2Num = m2Match ? Math.round(parseFloat(m2Match[1]) * 100) / 100 : (pyeongNum > 0 ? Math.round(pyeongNum * 3.3058 * 100) / 100 : 0);
-    if (!pyeongNum && m2Num > 0) pyeongNum = Math.round((m2Num / 3.3058) * 100) / 100;
+    // Extract ONLY property info lines from 🏢매물정보🏢 block FIRST (starting AFTER 매물정보 heading so top 📢 promo banners NEVER truncate it!)
+    let propInfoSection = rawContent;
+    const infoHeaderMatch = rawContent.match(/🏢?\s*매물\s*정보\s*🏢?/);
+    if (infoHeaderMatch) {
+        propInfoSection = rawContent.slice(infoHeaderMatch.index + infoHeaderMatch[0].length);
+        propInfoSection = propInfoSection.split(/⭐\s*매물\s*특징|📢|💼\s*본\s*건물|🏬/)[0];
+    } else {
+        const firstCheckIdx = rawContent.indexOf('✅');
+        if (firstCheckIdx >= 0) {
+            propInfoSection = rawContent.slice(firstCheckIdx).split(/⭐\s*매물\s*특징|📢|💼\s*본\s*건물|🏬/)[0];
+        } else {
+            propInfoSection = rawContent.split(/⭐\s*매물\s*특징|💼\s*본\s*건물|🏬/)[0];
+        }
+    }
 
-    // Separate Total Floor (총 층수) and Current Floor (해당 층수)
-    const totalFloor = getField(/총\s*층\s*수?\s*:\s*([^\n]+)/i);
-    const currentFloor = getField(/해당\s*층\s*수?\s*:\s*([^\n]+)/i)
-        || getField(/(?<!총\s*)층\s*수?\s*:\s*([^\n]+)/i)
-        || ((title.match(/([0-9]+층|지하[0-9]+층|1층)/) || [])[1] || '상세 문의');
-    const floor = currentFloor;
-
-    const parking = getField(/주차\s*:\s*([^\n]+)/i) || (/주차/.test(title) ? '주차 편리 (전용 주차공간 확보)' : '건물 내 주차 가능');
-    const usage = getField(/(?:중개대상물\s*종류|건축물\s*용도|용도)\s*:\s*([^\n]+)/i) || (mainType === '사무실' ? '업무시설 / 근린생활시설' : '근린생활시설');
-    const direction = getField(/방향\s*:\s*([^\n]+)/i);
-    const moveIn = getField(/(?:입주\s*가능일|입주시기|입주)\s*:\s*([^\n]+)/i) || (/즉시/.test(fullText) ? '즉시 입주 가능 (상호 협의)' : '상호 협의 가능');
-    const approvalDate = getField(/(?:사용승인일|준공일)\s*:\s*([^\n]+)/i);
-    const restroom = getField(/(?:욕실\s*수|화장실)\s*:\s*([^\n]+)/i) || (/내부화장실/.test(fullText) ? '내부 화장실 완비' : '층별 남녀구분 화장실');
-    const elevator = getField(/엘리베이터\s*:\s*([^\n]+)/i) || (/엘리베이터|승강기|엘베/.test(fullText) ? '승강기(엘리베이터) 운행 중' : '');
-    const customRecBiz = getField(/추천\s*업종\s*:\s*([^\n]+)/i);
-
-    // Extract ONLY property info lines from 🏢매물정보🏢 block (stop before ⭐매물특징⭐, 📢, or 🏬주요중개 이력🏬)
-    const propInfoSection = rawContent.split(/⭐\s*매물\s*특징|📢|💼\s*본\s*건물/)[0];
     const statutoryLines = [];
     const infoLines = propInfoSection.split('\n');
     for (let i = 0; i < infoLines.length; i++) {
         const line = infoLines[i].trim();
         if (line.startsWith('✅')) {
-            let cleanLine = line.replace(/^✅\s*/, '').trim();
+            let cleanLine = line.replace(/^✅\s*/, '').replace(/：/g, ':').trim();
             // If next line is a parenthetical continuation like "(중개의뢰인이 알려준 면적으로...)", merge it
             if (i + 1 < infoLines.length) {
                 const nextLine = infoLines[i + 1].trim();
@@ -4006,6 +3995,62 @@ function extractNaverBlogSpecs(post) {
             }
         }
     }
+
+    // Parse supply/contract area & exclusive area separately so BOTH are preserved accurately!
+    const getInfoField = (regex) => {
+        const mInfo = propInfoSection.match(regex);
+        if (mInfo) return mInfo[1].trim();
+        return getField(regex);
+    };
+    const parseAreaSpec = (rawVal) => {
+        const clean = String(rawVal || '').trim();
+        if (!clean) return { raw: '', pyeong: 0, m2: 0 };
+        const pm = clean.match(/([0-9]+(?:\.[0-9]+)?)\s*평/);
+        const mm = clean.match(/([0-9]+(?:\.[0-9]+)?)\s*(?:㎡|m2|m²)/i);
+        let pyeong = pm ? Math.round(parseFloat(pm[1]) * 100) / 100 : 0;
+        let m2 = mm ? Math.round(parseFloat(mm[1]) * 100) / 100 : (pyeong > 0 ? Math.round(pyeong * 3.3058 * 100) / 100 : 0);
+        if (!pyeong && m2 > 0) pyeong = Math.round((m2 / 3.3058) * 100) / 100;
+        return { raw: clean, pyeong, m2 };
+    };
+
+    const supplyAreaRaw = getInfoField(/공급\s*면적\s*:\s*([^\n]+)/i);
+    const contractAreaRaw = getInfoField(/계약\s*면적\s*:\s*([^\n]+)/i);
+    const exclusiveAreaRaw = getInfoField(/전용\s*면적\s*:\s*([^\n]+)/i);
+    const genericAreaRaw = getInfoField(/(?:^|\n)\s*(?:✅\s*)?(?:면적|평수)\s*:\s*([^\n]+)/i);
+
+    const supplyAreaSpec = parseAreaSpec(supplyAreaRaw || contractAreaRaw);
+    const exclusiveAreaSpec = parseAreaSpec(exclusiveAreaRaw);
+    const genericAreaSpec = parseAreaSpec(genericAreaRaw);
+
+    const primaryAreaSpec = exclusiveAreaSpec.raw
+        ? exclusiveAreaSpec
+        : (genericAreaSpec.raw ? genericAreaSpec : supplyAreaSpec);
+    const rawArea = primaryAreaSpec.raw || getField(/(?:전용면적|공급면적|계약면적|면적|평수)\s*:\s*([^\n]+)/i);
+    let pyeongNum = primaryAreaSpec.pyeong;
+    let m2Num = primaryAreaSpec.m2;
+    if (!pyeongNum && !m2Num) {
+        const pMatch = (rawArea + ' ' + title + ' ' + rawContent).match(/([0-9]+(?:\.[0-9]+)?)\s*평/);
+        if (pMatch) pyeongNum = Math.round(parseFloat(pMatch[1]) * 100) / 100;
+        const m2Match = (rawArea + ' ' + rawContent).match(/([0-9]+(?:\.[0-9]+)?)\s*(?:㎡|m2|m²)/i);
+        m2Num = m2Match ? Math.round(parseFloat(m2Match[1]) * 100) / 100 : (pyeongNum > 0 ? Math.round(pyeongNum * 3.3058 * 100) / 100 : 0);
+        if (!pyeongNum && m2Num > 0) pyeongNum = Math.round((m2Num / 3.3058) * 100) / 100;
+    }
+
+    // Separate Total Floor (총 층수) and Current Floor (해당 층수)
+    const totalFloor = getInfoField(/총\s*층\s*수?\s*:\s*([^\n]+)/i);
+    const currentFloor = getInfoField(/해당\s*층\s*수?\s*:\s*([^\n]+)/i)
+        || getInfoField(/(?<!총\s*)층\s*수?\s*:\s*([^\n]+)/i)
+        || ((title.match(/([0-9]+층|지하[0-9]+층|1층)/) || [])[1] || '상세 문의');
+    const floor = currentFloor;
+
+    const parking = getInfoField(/주차\s*:\s*([^\n]+)/i) || (/주차/.test(title) ? '주차 편리 (전용 주차공간 확보)' : '건물 내 주차 가능');
+    const usage = getInfoField(/(?:중개대상물\s*종류|건축물\s*용도|용도)\s*:\s*([^\n]+)/i) || (mainType === '사무실' ? '업무시설 / 근린생활시설' : '근린생활시설');
+    const direction = getInfoField(/방향\s*:\s*([^\n]+)/i);
+    const moveIn = getInfoField(/(?:입주\s*가능일|입주시기|입주)\s*:\s*([^\n]+)/i) || (/즉시/.test(fullText) ? '즉시 입주 가능 (상호 협의)' : '상호 협의 가능');
+    const approvalDate = getInfoField(/(?:사용승인일|준공일)\s*:\s*([^\n]+)/i);
+    const restroom = getInfoField(/(?:욕실\s*수|화장실)\s*:\s*([^\n]+)/i) || (/내부화장실/.test(fullText) ? '내부 화장실 완비' : '층별 남녀구분 화장실');
+    const elevator = getInfoField(/엘리베이터\s*:\s*([^\n]+)/i) || (/엘리베이터|승강기|엘베/.test(fullText) ? '승강기(엘리베이터) 운행 중' : '');
+    const customRecBiz = getField(/추천\s*업종\s*:\s*([^\n]+)/i);
 
     // Extract feature bullets (🔎 lines at the start of a line ONLY — never match hyphens in phone/registration numbers!)
     const featMatches = [...rawContent.matchAll(/(?:^|\n)\s*(?:🔎|▶|•|✔|✓|★)\s*([^\n]+)/g)]
@@ -4079,6 +4124,11 @@ function extractNaverBlogSpecs(post) {
         pyeongNum,
         m2Num,
         rawArea,
+        supplyAreaRaw,
+        contractAreaRaw,
+        exclusiveAreaRaw,
+        supplyAreaSpec,
+        exclusiveAreaSpec,
         floor,
         currentFloor,
         totalFloor,
@@ -4114,10 +4164,22 @@ function buildNaverBlogContent(post, options = {}) {
     const seed = Math.abs(baseSeed + (_currentNaverBlogVariationSeed * 7));
     const pick = (arr, offset = 0) => arr[(seed + offset) % arr.length];
 
-    const pyeongStr = sp.pyeongNum > 0
-        ? (incM2 && sp.m2Num > 0 ? `약 ${sp.pyeongNum}평 (${sp.m2Num}㎡)` : `약 ${sp.pyeongNum}평`)
-        : (sp.rawArea || '상세 면적 문의');
-    const shortPyeong = sp.pyeongNum > 0 ? `${Math.round(sp.pyeongNum)}평` : '';
+    const formatAreaPair = (spec) => {
+        if (!spec || !spec.pyeong) return spec && spec.raw ? spec.raw : '';
+        return (incM2 && spec.m2 > 0) ? `약 ${spec.pyeong}평 (${spec.m2}㎡)` : `약 ${spec.pyeong}평`;
+    };
+    const hasSupplyAndExclusive = Boolean(sp.supplyAreaSpec && sp.supplyAreaSpec.pyeong > 0 && sp.exclusiveAreaSpec && sp.exclusiveAreaSpec.pyeong > 0);
+    const supplyLabel = (sp.contractAreaRaw && !sp.supplyAreaRaw) ? '계약' : '공급';
+    const pyeongStr = hasSupplyAndExclusive
+        ? `전용 ${formatAreaPair(sp.exclusiveAreaSpec)} / ${supplyLabel} ${formatAreaPair(sp.supplyAreaSpec)}`
+        : (sp.exclusiveAreaSpec && sp.exclusiveAreaSpec.pyeong > 0
+            ? `전용 ${formatAreaPair(sp.exclusiveAreaSpec)}`
+            : (sp.pyeongNum > 0
+                ? (incM2 && sp.m2Num > 0 ? `약 ${sp.pyeongNum}평 (${sp.m2Num}㎡)` : `약 ${sp.pyeongNum}평`)
+                : (sp.rawArea || '상세 면적 문의')));
+    const shortPyeong = sp.exclusiveAreaSpec && sp.exclusiveAreaSpec.pyeong > 0
+        ? `전용 ${Math.round(sp.exclusiveAreaSpec.pyeong)}평`
+        : (sp.pyeongNum > 0 ? `${Math.round(sp.pyeongNum)}평` : '');
     const hlStr = sp.highlights.slice(0, 2).join(' ');
 
     const locPrefix = sp.dong ? `대구 ${sp.gu} ${sp.dong}` : `대구 ${sp.gu}`;
@@ -4159,12 +4221,50 @@ function buildNaverBlogContent(post, options = {}) {
             `주차 여건 : ${sp.parking}`
         ];
 
-    // Verbatim statutory disclosure block (매물정보 lines only — zero emojis, zero 주요중개 이력)
+    // Helper: enrich statutory area lines with ㎡ (or 평) when incM2 (평·㎡ 병기) is checked
+    const formatStatutoryLine = (line) => {
+        if (!incM2) return line;
+        if (/^(?:공급\s*면적|전용\s*면적|계약\s*면적|대지\s*면적|건축\s*면적|연면적|면적)\s*:/.test(line)) {
+            const hasM2 = /(?:㎡|m2|m²)/i.test(line);
+            const hasPyeong = /([0-9]+(?:\.[0-9]+)?)\s*평/.test(line);
+            if (hasPyeong && !hasM2) {
+                return line.replace(/([0-9]+(?:\.[0-9]+)?)\s*평/, (full, numStr) => {
+                    const pVal = parseFloat(numStr);
+                    if (isNaN(pVal) || pVal <= 0) return full;
+                    const m2Val = Math.round(pVal * 3.3058 * 100) / 100;
+                    return `${full} (${m2Val}㎡)`;
+                });
+            }
+            if (hasM2 && !hasPyeong) {
+                return line.replace(/([0-9]+(?:\.[0-9]+)?)\s*(?:㎡|m2|m²)/i, (full, numStr) => {
+                    const mVal = parseFloat(numStr);
+                    if (isNaN(mVal) || mVal <= 0) return full;
+                    const pVal = Math.round((mVal / 3.3058) * 100) / 100;
+                    return `${full} (약 ${pVal}평)`;
+                });
+            }
+        }
+        return line;
+    };
+
+    const fallbackAreaLines = [];
+    if (sp.supplyAreaSpec && sp.supplyAreaSpec.raw) {
+        const sLabel = (sp.contractAreaRaw && !sp.supplyAreaRaw) ? '계약면적' : '공급면적';
+        fallbackAreaLines.push(formatStatutoryLine(`${sLabel} : ${sp.supplyAreaSpec.raw}`));
+    }
+    if (sp.exclusiveAreaSpec && sp.exclusiveAreaSpec.raw) {
+        fallbackAreaLines.push(formatStatutoryLine(`전용면적 : ${sp.exclusiveAreaSpec.raw}`));
+    }
+    if (fallbackAreaLines.length === 0) {
+        fallbackAreaLines.push(`면적 : ${pyeongStr}`);
+    }
+
+    // Verbatim statutory disclosure block (매물정보 lines only — preserves BOTH 공급면적 & 전용면적 + all 18+ statutory fields!)
     const statutoryDisclosureList = (Array.isArray(sp.statutoryLines) && sp.statutoryLines.length >= 4)
-        ? sp.statutoryLines
+        ? sp.statutoryLines.map(formatStatutoryLine)
         : [
             `위치 : ${sp.cleanAddr}`,
-            `면적 : ${pyeongStr}`,
+            ...fallbackAreaLines,
             ...(sp.trade === '매매'
                 ? [`매매가 : ${sp.salePrice || '별도 문의'}`]
                 : [
@@ -4253,7 +4353,7 @@ function buildNaverBlogContent(post, options = {}) {
         `면적 규모는 ${pyeongStr}(해당층 ${floorSummaryStr})이고, ${sp.isNoKeyMoney ? '무권리 매물로 초기 시설비 부담 없이 입주하실 수 있습니다.' : '공간 구획이 잘 잡혀 있어 활용도가 높습니다.'}`,
         `${pyeongStr} 규모에 ${floorSummaryStr}에 해당하며, 주차는 [${sp.parking}] 여건을 갖추고 있습니다.`,
         `해당 층수는 ${floorSummaryStr}, 면적은 ${pyeongStr}이며 ${sp.isNoKeyMoney ? '별도 권리금 없이 진행 가능한 실속형 매물입니다.' : '채광과 내부 동선이 깔끔하게 정돈되어 있습니다.'}`,
-        `전용·공급 면적 기준 ${pyeongStr}(${floorSummaryStr}) 규모로, 입주 시기는 [${sp.moveIn}] 조건입니다.`,
+        `면적 기준 ${pyeongStr}(${floorSummaryStr}) 규모로, 입주 시기는 [${sp.moveIn}] 조건입니다.`,
         `규모는 ${pyeongStr}, 층수는 ${floorSummaryStr}이며 ${sp.isNoKeyMoney ? '무권리 조건에 내부 컨디션이 잘 갖춰져 있습니다.' : '업종에 맞춰 바로 세팅하기 좋은 구조입니다.'}`,
         `${floorSummaryStr}에 위치한 ${pyeongStr} 공간으로, 주차(${sp.parking}) 및 기본 설비가 잘 뒷받침되어 있습니다.`,
         `면적 ${pyeongStr} / ${floorSummaryStr} 구성이며, ${sp.isNoKeyMoney ? '권리금 부담 없는 무권리 매물입니다.' : '실물 컨디션을 현장에서 직접 보시면 더욱 만족하실 공간입니다.'}`
