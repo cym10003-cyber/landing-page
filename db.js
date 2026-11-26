@@ -89,16 +89,12 @@ async function getPosts() {
   }
 
   // Tier 2: Try fetching raw JSON directly from GitHub main branch if REST API failed or token missing
+  // Note: raw.githubusercontent.com rejects custom Cache-Control/Pragma/User-Agent CORS preflight headers,
+  // so rely on cache-busting query params (?t=&r=) + fetch cache:'no-store' option without custom headers.
   if (!remotePosts && hasGit) {
     try {
       const rawUrl = `https://raw.githubusercontent.com/${config.github_owner}/${config.github_repo}/main/${config.data_file_path}?t=${Date.now()}&r=${Math.random()}`;
-      const rawRes = await fetch(rawUrl, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache'
-        }
-      });
+      const rawRes = await fetch(rawUrl, { cache: 'no-store' });
       if (rawRes.ok) {
         remotePosts = await rawRes.json();
       }
@@ -462,7 +458,7 @@ async function togglePostPrivate(id) {
           }
         }
 
-        const base64Content = btoa(unescape(encodeURIComponent(postsStr)));
+        const base64Content = utf8ToBase64(postsStr);
         const body = {
           message: `feat: toggle private status for post ${id} to ${isNowPrivate}`,
           content: base64Content,
@@ -2462,47 +2458,120 @@ const DB_FALLBACK_IMAGES = [
     "https://lh3.googleusercontent.com/aida-public/AB6AXuBX-myFJEALqPkFc0UZCHTJBXA6awz2lb1x7CsHBsodkyWcOb4dFyIrQ7miBRsZzkCQsts2rpJQTJ_N47oxy9pqCPTEfNXS3NHKCMkRR70oJMLmv9PL22NpqPbHRPIKlHi-Qs7QQ7TknYmky-L46atqcY8lpca7UO2sMXud3m1jVI3hdBWoATZ_cU4-lSpj9kMOE_jCyevOxw6lK_GnvTrhScMpybyiamp8f-e7gNBHU232V9aXqK1Kl8B_O1atEmar0FARd4PHHPI"
 ];
 
-function handlePostImgError(el, postId) {
+window._workingImgUrlMap = window._workingImgUrlMap || {};
+
+function resolveCachedPostImgUrl(url) {
+    if (!url || typeof url !== 'string') return url;
+    const trimmed = url.trim();
+    if (window._workingImgUrlMap && window._workingImgUrlMap[trimmed]) {
+        return window._workingImgUrlMap[trimmed];
+    }
+    return trimmed;
+}
+window.resolveCachedPostImgUrl = resolveCachedPostImgUrl;
+
+function handlePostImgError(el, postId, options) {
     if (!el) return;
+    const opts = options || {};
+    const noStockFallback = opts.noStockFallback === true || el.dataset.noStockFallback === '1';
+
     let step = parseInt(el.dataset.errorStep || '0', 10);
     el.dataset.errorStep = String(step + 1);
 
-    const originalSrc = el.getAttribute('data-original-src') || el.src || '';
-    if (!el.getAttribute('data-original-src')) {
+    const originalSrc = el.getAttribute('data-original-src') || el.getAttribute('src') || el.src || '';
+    if (!el.getAttribute('data-original-src') && originalSrc) {
         el.setAttribute('data-original-src', originalSrc);
     }
 
+    const rememberOnLoad = (candidateUrl) => {
+        if (!originalSrc || !candidateUrl) return;
+        const onSuccess = () => {
+            window._workingImgUrlMap = window._workingImgUrlMap || {};
+            window._workingImgUrlMap[originalSrc] = candidateUrl;
+            el.removeEventListener('load', onSuccess);
+        };
+        el.addEventListener('load', onSuccess, { once: true });
+    };
+
+    const assetPathMatch = originalSrc.match(/images\/[^?#]+/);
+    const assetRelPath = assetPathMatch ? assetPathMatch[0] : '';
+    const isAssetsRepo = originalSrc.includes('landing-page-assets');
+    const isMainRepo = !isAssetsRepo && originalSrc.includes('landing-page');
+
+    // Step 0: Switch primary CDN <-> GitHub Raw (supports both @main and @<40-char commitSha>)
     if (step === 0) {
         if (originalSrc.includes('cdn.jsdelivr.net/gh/')) {
-            el.src = originalSrc
-                .replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main', 'raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main')
-                .replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main', 'raw.githubusercontent.com/cym10003-cyber/landing-page/main');
-            return;
+            const nextUrl = originalSrc.replace(
+                /cdn\.jsdelivr\.net\/gh\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)@[^/]+\//,
+                'raw.githubusercontent.com/$1/$2/main/'
+            );
+            if (nextUrl !== originalSrc) {
+                rememberOnLoad(nextUrl);
+                el.src = nextUrl;
+                return;
+            }
         } else if (originalSrc.includes('raw.githubusercontent.com/')) {
-            el.src = originalSrc
-                .replace('raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main', 'cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main')
-                .replace('raw.githubusercontent.com/cym10003-cyber/landing-page/main', 'cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main');
-            return;
+            const nextUrl = originalSrc.replace(
+                /raw\.githubusercontent\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)\/[^/]+\//,
+                'cdn.jsdelivr.net/gh/$1/$2@main/'
+            );
+            if (nextUrl !== originalSrc) {
+                rememberOnLoad(nextUrl);
+                el.src = nextUrl;
+                return;
+            }
         }
+        step = 1;
+        el.dataset.errorStep = '2';
     }
 
-    if (step === 1 && originalSrc.includes('landing-page-assets')) {
-        const m = originalSrc.match(/images\/[^?#]+/);
-        if (m) {
-            el.src = `https://fastly.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/${m[0]}`;
-            return;
-        }
+    // Step 1: Fastly jsDelivr mirror
+    if (step === 1 && isAssetsRepo && assetRelPath) {
+        const nextUrl = `https://fastly.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/${assetRelPath}`;
+        rememberOnLoad(nextUrl);
+        el.src = nextUrl;
+        return;
     }
 
-    if (step === 2 && originalSrc.includes('landing-page-assets')) {
-        const m = originalSrc.match(/images\/[^?#]+/);
-        if (m) {
-            el.src = `https://cdn.statically.io/gh/cym10003-cyber/landing-page-assets/main/${m[0]}`;
-            return;
+    // Step 2: Gcore jsDelivr mirror
+    if (step === 2 && isAssetsRepo && assetRelPath) {
+        const nextUrl = `https://gcore.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/${assetRelPath}`;
+        rememberOnLoad(nextUrl);
+        el.src = nextUrl;
+        return;
+    }
+
+    // Step 3: Statically CDN mirror
+    if (step === 3 && isAssetsRepo && assetRelPath) {
+        const nextUrl = `https://cdn.statically.io/gh/cym10003-cyber/landing-page-assets/main/${assetRelPath}`;
+        rememberOnLoad(nextUrl);
+        el.src = nextUrl;
+        return;
+    }
+
+    // Step 4: Cache-busted direct GitHub Raw retry (bypasses any negative browser/ISP edge cache)
+    if (step === 4 && (isAssetsRepo || isMainRepo) && assetRelPath) {
+        const repoName = isAssetsRepo ? 'landing-page-assets' : 'landing-page';
+        const nextUrl = `https://raw.githubusercontent.com/cym10003-cyber/${repoName}/main/${assetRelPath}?retry=${Date.now()}`;
+        rememberOnLoad(nextUrl);
+        el.src = nextUrl;
+        return;
+    }
+
+    // If caller requested no stock photo substitution (e.g. editor attachment list or photo lightbox),
+    // avoid replacing a real listing photo with an unrelated stock image.
+    if (noStockFallback) {
+        el.onerror = null;
+        el.removeAttribute('onerror');
+        el.dataset.imgFailed = '1';
+        if (typeof opts.onFinalFail === 'function') {
+            try { opts.onFinalFail(el, originalSrc); } catch(e) {}
         }
+        return;
     }
 
     el.removeAttribute('alt');
+    el.onerror = null;
     el.removeAttribute('onerror');
     const key = String(postId || originalSrc || '1');
     const hash = key.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);

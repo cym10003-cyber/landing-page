@@ -272,6 +272,7 @@
                             <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="스마일">😊</button>
                             <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="체크">✅</button>
                             <button type="button" class="emoji-item p-xs text-base hover:bg-surface-container-high rounded bg-transparent border-0 cursor-pointer" title="확인">🔎</button>
+                        </div>
                     </div>
                     
                     <div class="w-px h-4 bg-hairline mx-xs"></div>
@@ -284,7 +285,12 @@
                 <textarea id="content" required rows="12" class="block w-full border-hairline rounded-b-lg rounded-t-none border-t-0 py-2.5 focus:ring-primary focus:border-primary text-sm font-mono bg-surface-container-low" placeholder="마크다운(Markdown) 문법을 사용해 본문을 작성할 수 있습니다.&#10;예:&#10;# 큰 제목&#10;## 소제목&#10;- 리스트 아이템&#10;**굵은 글씨** 등"></textarea>
                 <!-- Attached Images Preview -->
                 <div id="attached-images-section" class="hidden mt-sm p-sm bg-surface-container rounded-lg border border-hairline">
-                    <span class="block text-[11px] font-semibold text-muted mb-xs">본문 첨부 사진 목록 ( X 버튼 클릭 시 본문에서 해당 사진 삭제 )</span>
+                    <div class="flex items-center justify-between gap-2 mb-xs flex-wrap">
+                        <span id="attached-images-count-label" class="text-[11px] font-semibold text-muted">본문 첨부 사진 목록 ( X 버튼 클릭 시 본문에서 해당 사진 삭제 )</span>
+                        <button type="button" onclick="reloadAttachedImageThumbnails()" class="text-[11px] font-bold text-primary hover:text-blue-mid bg-white border border-hairline px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition">
+                            <span class="material-symbols-outlined text-[13px]">refresh</span> 사진 다시 불러오기
+                        </button>
+                    </div>
                     <div id="attached-images-preview" class="flex flex-wrap gap-sm"></div>
                 </div>
 
@@ -368,21 +374,21 @@
                 <nav class="flex flex-col gap-2 font-body text-label-sm">
                     <a href="https://naver.me/xTsFNLzT" target="_blank" rel="noopener noreferrer" class="text-faint hover:text-surface-bright transition-colors">오시는 길</a>
                     <button onclick="showLeadForm('buyer')" class="text-faint hover:text-surface-bright transition-colors flex items-center gap-1 cursor-pointer text-left"><span class="material-symbols-outlined text-[16px]">edit_note</span> 매물의뢰</button>
-                    <a href="#" class="text-faint hover:text-surface-bright transition-colors">개인정보처리방침</a>
-                    <a href="#" class="text-faint hover:text-surface-bright transition-colors">이용약관</a>
+                    <button type="button" onclick="openPrivacyModal()" class="text-faint hover:text-surface-bright transition-colors text-left cursor-pointer">개인정보 처리방침</button>
+                    <button type="button" onclick="openTermsModal()" class="text-faint hover:text-surface-bright transition-colors text-left cursor-pointer">이용약관</button>
                 </nav>
             </div>
             <div>
                 <h3 class="font-nav text-nav text-surface-container-lowest mb-md">Social</h3>
                 <div class="flex gap-md items-center whitespace-nowrap">
-                    <a href="#" class="text-faint hover:text-surface-bright transition-colors">블로그</a>
-                    <a href="#" class="text-faint hover:text-surface-bright transition-colors">유튜브</a>
-                    <a href="#" class="text-faint hover:text-surface-bright transition-colors">인스타그램</a>
+                    <a href="https://blog.naver.com/freemo_co_kr" target="_blank" class="text-faint hover:text-surface-bright transition-colors">블로그</a>
+                    <a href="https://www.youtube.com/@auction-choi" target="_blank" rel="noopener noreferrer" class="text-faint hover:text-surface-bright transition-colors">유튜브</a>
+                    <a href="https://www.instagram.com/cym10003" target="_blank" class="text-faint hover:text-surface-bright transition-colors">인스타그램</a>
                 </div>
             </div>
         </div>
         <div class="pt-lg border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-md">
-            <p class="font-body text-label-sm text-faint">© 2024 최가네부동산공인중개사사무소. All rights reserved.</p>
+            <p class="font-body text-label-sm text-faint">© 2026 최가네부동산공인중개사사무소. All rights reserved.</p>
             <a id="agent-login-btn" href="admin.html" class="font-body text-label-sm text-faint hover:text-surface-bright transition-colors">Agent Login</a>
         </div>
     </div>
@@ -432,7 +438,7 @@
     </a>
   </div>
 </div>
-<script src="db.js?v=20261126_v264"></script>
+<script src="db.js?v=20261127_v265"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     requireAdmin();
@@ -516,17 +522,77 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ----------------------------------------------------
     // Attached Images Preview & Deletion Logic
     // ----------------------------------------------------
-    function updateAttachedImagesPreview() {
+    let lastAttachedImagesSignature = null;
+
+    window.handleAttachedThumbError = function(imgEl) {
+        if (!imgEl || typeof handlePostImgError !== 'function') return;
+        handlePostImgError(imgEl, actualPostId || postId || '', {
+            noStockFallback: true,
+            onFinalFail: (el) => {
+                el.classList.add('hidden');
+                const retryBtn = el.parentNode && el.parentNode.querySelector('.thumb-retry-btn');
+                if (retryBtn) retryBtn.classList.remove('hidden');
+            }
+        });
+    };
+
+    window.retrySingleAttachedThumb = function(btnEl) {
+        const box = btnEl && btnEl.parentNode;
+        const imgEl = box && box.querySelector('img');
+        if (!imgEl) return;
+        const orig = imgEl.getAttribute('data-original-src') || imgEl.getAttribute('src') || '';
+        const m = orig.match(/images\/[^?#]+/);
+        const retryUrl = m
+            ? `https://raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main/${m[0]}?retry=${Date.now()}`
+            : (orig + (orig.includes('?') ? '&' : '?') + 'retry=' + Date.now());
+        btnEl.classList.add('hidden');
+        imgEl.classList.remove('hidden');
+        imgEl.dataset.errorStep = '0';
+        imgEl.onerror = () => window.handleAttachedThumbError(imgEl);
+        imgEl.src = retryUrl;
+    };
+
+    window.reloadAttachedImageThumbnails = function() {
+        const previewContainer = document.getElementById('attached-images-preview');
+        if (!previewContainer) return;
+        previewContainer.querySelectorAll('img[data-original-src]').forEach(imgEl => {
+            const orig = imgEl.getAttribute('data-original-src') || '';
+            if (!orig) return;
+            const retryBtn = imgEl.parentNode && imgEl.parentNode.querySelector('.thumb-retry-btn');
+            if (retryBtn) retryBtn.classList.add('hidden');
+            imgEl.classList.remove('hidden');
+            imgEl.dataset.errorStep = '0';
+            imgEl.onerror = () => window.handleAttachedThumbError(imgEl);
+            const m = orig.match(/images\/[^?#]+/);
+            if (m && (!imgEl.complete || imgEl.naturalWidth === 0 || imgEl.dataset.imgFailed === '1')) {
+                imgEl.dataset.imgFailed = '';
+                imgEl.src = `https://raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main/${m[0]}?retry=${Date.now()}`;
+            } else {
+                imgEl.dataset.imgFailed = '';
+                imgEl.src = (typeof resolveCachedPostImgUrl === 'function') ? resolveCachedPostImgUrl(orig) : orig;
+            }
+        });
+    };
+
+    function updateAttachedImagesPreview(forceRender = false) {
         const textarea = document.getElementById('content');
         if (!textarea) return;
         const content = textarea.value;
         const previewSection = document.getElementById('attached-images-section');
         const previewContainer = document.getElementById('attached-images-preview');
+        const countLabel = document.getElementById('attached-images-count-label');
         
         if (!previewSection || !previewContainer) return;
         
         const imgRegex = /!\[(.*?)\]\((.*?)\)/g;
         const matches = [...content.matchAll(imgRegex)];
+
+        // Skip DOM rebuild when user is only editing text (prevents re-fetching & breaking thumbnails on every keystroke)
+        const signature = matches.map(m => `${m[1]}::${m[2]}`).join('\n');
+        if (!forceRender && signature === lastAttachedImagesSignature) {
+            return;
+        }
+        lastAttachedImagesSignature = signature;
         
         if (matches.length === 0) {
             previewSection.classList.add('hidden');
@@ -535,33 +601,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
         previewSection.classList.remove('hidden');
+        if (countLabel) {
+            countLabel.textContent = `본문 첨부 사진 목록 총 ${matches.length}장 ( X 버튼 클릭 시 본문에서 해당 사진 삭제 )`;
+        }
         
         previewContainer.innerHTML = matches.map((match, index) => {
-            const altText = match[1];
-            const url = match[2];
+            const altText = (match[1] || '').trim();
+            const rawUrl = (match[2] || '').trim();
+            let displayUrl = rawUrl;
+            if (displayUrl.includes('raw.githubusercontent.com')) {
+                displayUrl = displayUrl.replace(/raw\.githubusercontent\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)\/main\//g, 'cdn.jsdelivr.net/gh/$1/$2@main/');
+            }
+            if (typeof resolveCachedPostImgUrl === 'function') {
+                displayUrl = resolveCachedPostImgUrl(displayUrl);
+            }
             
-            // Clean/simplify filename for display
-            let cleanName = altText || '사진';
-            if (cleanName.includes('-KakaoTalk_')) {
-                const parts = cleanName.split('-KakaoTalk_');
-                cleanName = '카톡_' + parts[parts.length - 1];
-            } else if (url) {
-                const urlParts = url.split('/');
-                cleanName = urlParts[urlParts.length - 1];
-            }
-            if (cleanName.length > 12) {
-                cleanName = cleanName.slice(0, 10) + '...';
-            }
+            // Clean/simplify display label (show clear order number + short hint)
+            const safeTitle = (altText || rawUrl.split('/').pop() || `사진 ${index + 1}`).replace(/"/g, '&quot;');
+            const labelText = `사진 ${index + 1}`;
             
             return `
                 <div class="relative flex flex-col items-center p-1 bg-surface-container-lowest border border-hairline rounded shadow-card-soft group" style="width: 80px;">
-                    <div class="relative w-16 h-16 overflow-hidden rounded bg-surface-container">
-                        <img src="${url}" class="w-full h-full object-cover" />
-                        <button type="button" class="absolute top-0.5 right-0.5 bg-error text-white rounded-full w-4 h-4 flex items-center justify-center shadow hover:bg-red-700 cursor-pointer border-0" onclick="removeImageFromContent(${index})" title="본문에서 삭제">
+                    <div class="relative w-16 h-16 overflow-hidden rounded bg-surface-container flex items-center justify-center">
+                        <img src="${displayUrl}" data-original-src="${rawUrl.replace(/"/g, '&quot;')}" data-no-stock-fallback="1" onerror="handleAttachedThumbError(this)" loading="lazy" alt="첨부 사진 ${index + 1}" class="w-full h-full object-cover" />
+                        <button type="button" class="thumb-retry-btn hidden absolute inset-0 bg-slate-100 hover:bg-blue-50 text-[10px] font-bold text-primary flex flex-col items-center justify-center gap-0.5 cursor-pointer border-0 p-1" onclick="retrySingleAttachedThumb(this)" title="클릭해 다시 불러오기">
+                            <span class="material-symbols-outlined text-[16px]">refresh</span>
+                            <span>재시도</span>
+                        </button>
+                        <button type="button" class="absolute top-0.5 right-0.5 bg-error text-white rounded-[9999px] w-4 h-4 flex items-center justify-center shadow hover:bg-red-700 cursor-pointer border-0 z-10" onclick="removeImageFromContent(${index})" title="본문에서 삭제">
                             <span class="material-symbols-outlined text-[10px] font-bold">close</span>
                         </button>
                     </div>
-                    <span class="text-[9px] text-muted truncate w-full text-center mt-1" title="${altText}">${cleanName}</span>
+                    <span class="text-[10px] font-semibold text-muted truncate w-full text-center mt-1" title="${safeTitle}">${labelText}</span>
                 </div>
             `;
         }).join('');
@@ -579,14 +650,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             const matchIndex = matches[index].index;
             const newContent = content.slice(0, matchIndex) + content.slice(matchIndex + fullMatch.length);
             textarea.value = newContent;
-            textarea.dispatchEvent(new Event('input'));
+            updateAttachedImagesPreview(true);
         }
     };
 
     // Bind event listener to textarea
     const contentTextarea = document.getElementById('content');
     if (contentTextarea) {
-        contentTextarea.addEventListener('input', updateAttachedImagesPreview);
+        contentTextarea.addEventListener('input', () => updateAttachedImagesPreview(false));
     }
 
     let chosenCoords = null;
@@ -940,7 +1011,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         removeHtmlBtn.addEventListener('click', function() {
             const contentEl = document.getElementById('content');
             let content = contentEl.value || '';
-            if (!content.includes('<') && !content.includes('style') && !content.includes('blog-container')) {
+            if (!loadedStyleBlock && !content.includes('<') && !content.includes('style') && !content.includes('blog-container')) {
                 alert('이 글에는 삭제할 HTML 전단지 양식이 없습니다.');
                 return;
             }
@@ -965,6 +1036,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             finalContent += cleanText;
 
+            loadedStyleBlock = '';
             contentEl.value = finalContent.trim();
             contentEl.dispatchEvent(new Event('input'));
 
@@ -1189,6 +1261,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const text = textarea.value;
             
             textarea.value = text.substring(0, start) + iframeEmbed + text.substring(end);
+            textarea.dispatchEvent(new Event('input'));
             videoModal.classList.add('hidden');
             textarea.focus();
             textarea.selectionStart = textarea.selectionEnd = start + iframeEmbed.length;
@@ -1215,6 +1288,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const text = textarea.value;
                 
                 textarea.value = text.substring(0, start) + videoTag + text.substring(end);
+                textarea.dispatchEvent(new Event('input'));
                 videoModal.classList.add('hidden');
                 textarea.focus();
                 textarea.selectionStart = textarea.selectionEnd = start + videoTag.length;

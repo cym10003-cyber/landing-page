@@ -534,15 +534,20 @@ export default async function handler(req, res) {
 
             const imgMatch = trimmed.match(/!\[(.*?)\]\((.*?)\)/);
             if (imgMatch) {
-              const rawAlt = (imgMatch[1] || '').trim();
-              const isGenericAlt = !rawAlt || rawAlt === 'image' || rawAlt === '사진' || /^사진\s*\d*$/.test(rawAlt) || /^(KakaoTalk_|IMG_|DSC|PXL_|Screenshot|photo|pic|\d{8}[_-]\d+)/i.test(rawAlt) || /\.(jpe?g|png|webp|gif|heic)$/i.test(rawAlt);
+              const rawAlt = (imgMatch[1] || '').trim().replace(/\s*-\s*복사본\s*$/, '').trim();
+              const isGenericAlt = !rawAlt
+                || /KakaoTalk_|post_img_|01035484000/i.test(rawAlt)
+                || /^(image|사진\s*\d*|스크린샷|다운로드|캡처|무제|제목\s*없음|IMG_|DSC|PXL_|Screenshot|photo|pic|BandPhoto|SE-|\d{8}[_-]\d+)/i.test(rawAlt)
+                || /\.(jpe?g|png|webp|gif|heic)$/i.test(rawAlt)
+                || /^[0-9a-f]{16,}$/i.test(rawAlt)
+                || /^[a-zA-Z0-9_\-\.\s()]+$/.test(rawAlt);
               const alt = isGenericAlt
                 ? `${cleanLoc} ${fullType}${specStr ? ` (${specStr})` : ''} 실매물 현장사진 ${imgIndex + 1} - 최가네부동산 매물번호 ${realPropNo}`
                 : rawAlt;
               const src = imgMatch[2];
               preImages.push(`
                 <div class="mb-4 rounded-xl overflow-hidden shadow-card-soft bg-surface-container border border-hairline">
-                  <img src="${src}" alt="${alt.replace(/"/g, '&quot;')}" class="w-full h-auto object-cover max-h-[600px] mx-auto" loading="lazy" />
+                  <img src="${src}" alt="${alt.replace(/"/g, '&quot;')}" onerror="if(typeof handlePostImgError==='function'){handlePostImgError(this, '${post.id}');}" class="w-full h-auto object-cover max-h-[600px] mx-auto" loading="lazy" />
                 </div>
               `);
               imgIndex++;

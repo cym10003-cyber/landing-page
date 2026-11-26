@@ -945,7 +945,7 @@
     </div>
 
     <!-- Photo & Official Document Gallery Lightbox Modal (PC Left/Right Arrows + Zoom + Mobile Touch Swipe) -->
-    <div id="photo-lightbox" class="fixed inset-0 bg-slate-950/92 backdrop-blur-xs z-[9999] hidden flex flex-col justify-between p-2 sm:p-5 no-print select-none" onclick="handleLightboxBackdropClick(event)">
+    <div id="photo-lightbox" class="fixed inset-0 bg-black/95 backdrop-blur-sm z-[9999] hidden flex flex-col justify-between p-2 sm:p-5 no-print select-none" style="background-color: rgba(2, 6, 23, 0.94); backdrop-filter: blur(6px);" onclick="handleLightboxBackdropClick(event)">
         <!-- Top Bar -->
         <div class="max-w-6xl w-full mx-auto flex flex-wrap items-center justify-between gap-2 text-white z-20 px-1" onclick="event.stopPropagation()">
             <div class="flex items-center gap-2 min-w-0">
@@ -1136,7 +1136,7 @@
         </div>
     </div>
 
-    <script src="db.js?v=20261126_v264"></script>
+    <script src="db.js?v=20261127_v265"></script>
     <script>
         let _briefing = null;
         let _attachedMemos = [];

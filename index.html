@@ -632,59 +632,10 @@ if(window.location.hostname.endsWith(".vercel.app")){window.location.replace("ht
     </a>
   </div>
 </div>
-<script src="db.js?v=20261126_v264"></script>
+<script src="db.js?v=20261127_v265"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-    function handlePostImgError(el, postId) {
-    if (!el) return;
-    let step = parseInt(el.dataset.errorStep || '0', 10);
-    el.dataset.errorStep = String(step + 1);
-
-    const originalSrc = el.getAttribute('data-original-src') || el.src || '';
-    if (!el.getAttribute('data-original-src')) {
-        el.setAttribute('data-original-src', originalSrc);
-    }
-
-    if (step === 0) {
-        if (originalSrc.includes('cdn.jsdelivr.net/gh/')) {
-            el.src = originalSrc
-                .replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main', 'raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main')
-                .replace('cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main', 'raw.githubusercontent.com/cym10003-cyber/landing-page/main');
-            return;
-        } else if (originalSrc.includes('raw.githubusercontent.com/')) {
-            el.src = originalSrc
-                .replace('raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main', 'cdn.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main')
-                .replace('raw.githubusercontent.com/cym10003-cyber/landing-page/main', 'cdn.jsdelivr.net/gh/cym10003-cyber/landing-page@main');
-            return;
-        }
-    }
-
-    if (step === 1 && originalSrc.includes('landing-page-assets')) {
-        const m = originalSrc.match(/images\/[^?#]+/);
-        if (m) {
-            el.src = 'https://fastly.jsdelivr.net/gh/cym10003-cyber/landing-page-assets@main/' + (m ? m[0] : '');
-            return;
-        }
-    }
-
-    if (step === 2 && originalSrc.includes('landing-page-assets')) {
-        const m = originalSrc.match(/images\/[^?#]+/);
-        if (m) {
-            el.src = 'https://cdn.statically.io/gh/cym10003-cyber/landing-page-assets/main/' + (m ? m[0] : '');
-            return;
-        }
-    }
-
-    el.removeAttribute('alt');
-    el.removeAttribute('onerror');
-    const key = String(postId || originalSrc || '1');
-    const hash = key.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const fallbacks = (typeof DB_FALLBACK_IMAGES !== 'undefined' && Array.isArray(DB_FALLBACK_IMAGES) && DB_FALLBACK_IMAGES.length > 0)
-        ? DB_FALLBACK_IMAGES
-        : fallbackImages;
-    el.src = fallbacks[hash % fallbacks.length];
-}
-window.handlePostImgError = handlePostImgError;
+    // Image fallback is provided globally by db.js (window.handlePostImgError with 5-mirror + @commitSha support).
 
     const fallbackImages = [
         "https://lh3.googleusercontent.com/aida-public/AB6AXuCkR-wQyhx_M0SJF0T5FH04XUIMeg6qiswo7SylZDzAmaNZvZNKh-wSI9vVX9PD3ylL4DgGtEcd9m-jU4fF9tHKVSy84-4kUI67OMbysZG-c-eZ-HNPMnu2O57NDO0AJxiPsGRrtHLH_CUoVJXqZF9XBhPBL4bFlBVSwxWLNpZySjR3UivnfVo-2scUE5413YQbsf2XE13SapJwBA4jwKU5GONGrtt6hTLhBS3CDMiaaNXF9Hn9317Qs6JQYBaTuvRjbvGd69nQyzw",

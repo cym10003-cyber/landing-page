@@ -346,7 +346,7 @@ h1, h2, h3, h4, #post-title, #article-title, .main-title, .hero-title {
             </div>
             <h1 id="post-title" class="font-display-hero-mobile md:font-subsection-h3 text-2xl md:text-3xl text-ink font-bold leading-snug">로딩 중...</h1>
             <div id="admin-controls" class="hidden flex gap-sm border-t border-hairline pt-md mt-sm flex-wrap">
-                <button type="button" onclick="openNaverBlogGeneratorModal(window.__INITIAL_POST__ || new URLSearchParams(window.location.search).get('id'))" class="bg-[#03c75a] hover:bg-[#02b350] text-white font-bold text-button px-lg py-2.5 rounded-lg flex items-center gap-xs cursor-pointer transition-colors shadow-xs">
+                <button type="button" onclick="openNaverBlogGeneratorModal(window._currentPost || window.__INITIAL_POST__ || new URLSearchParams(window.location.search).get('id'))" class="bg-[#03c75a] hover:bg-[#02b350] text-white font-bold text-button px-lg py-2.5 rounded-lg flex items-center gap-xs cursor-pointer transition-colors shadow-xs">
                     <span class="material-symbols-outlined text-[18px]">article</span> 네이버 블로그 상위노출 원고 생성
                 </button>
                 <button id="private-toggle-btn" class="bg-amber-100 text-amber-900 hover:bg-amber-200 font-button text-button px-lg py-2.5 rounded-lg flex items-center gap-xs cursor-pointer transition-colors">
@@ -535,7 +535,7 @@ h1, h2, h3, h4, #post-title, #article-title, .main-title, .hero-title {
   </div>
 </div>
 <script>window.__SKIP_AUTO_PAGEVIEW__ = true;</script>
-<script src="db.js?v=20261126_v264"></script>
+<script src="db.js?v=20261127_v265"></script>
 <script>
 let currentLoadedPost = null;
 
@@ -1002,14 +1002,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } catch(e) {}
 
-        // 2. Try posts_cache for recently edited version
+        // 2. Try posts_cache for recently edited version (only if genuinely newer than SSR initial post)
         if (!post) {
             try {
                 const cached = localStorage.getItem('posts_cache');
                 if (cached) {
                     const cachedArr = JSON.parse(cached);
                     const cp = cachedArr.find(p => String(p.id) === String(postId));
-                    if (cp && cp.updatedAt && (Date.now() - cp.updatedAt < 1800000)) {
+                    const ssrUpdatedAt = Number((window.__INITIAL_POST__ && window.__INITIAL_POST__.updatedAt) || 0);
+                    const cpUpdatedAt = Number((cp && cp.updatedAt) || 0);
+                    if (cp && cpUpdatedAt > 0 && cpUpdatedAt >= ssrUpdatedAt && (Date.now() - cpUpdatedAt < 1800000)) {
                         post = cp;
                     }
                 }
@@ -1370,6 +1372,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             const parsedImgs = [];
             const imgRegex = /!\[(.*?)\]\((.*?)\)/g;
             let mImg;
+            const isRawImageAlt = (altStr) => {
+                const s = (altStr || '').trim();
+                if (!s) return true;
+                if (/KakaoTalk_|post_img_|01035484000/i.test(s)) return true;
+                if (/^(image|사진\s*\d*|스크린샷|다운로드|캡처|무제|제목\s*없음|IMG_|DSC|PXL_|Screenshot|photo|pic|BandPhoto|SE-|\d{8}[_-]\d+)/i.test(s)) return true;
+                if (/\.(jpe?g|png|webp|gif|heic)$/i.test(s)) return true;
+                if (/^[0-9a-f]{16,}$/i.test(s)) return true;
+                if (/^[a-zA-Z0-9_\-\.\s()]+$/.test(s)) return true;
+                return false;
+            };
             while ((mImg = imgRegex.exec(splitResult.imagesMarkdown)) !== null) {
                 const rawAlt = (mImg[1] || '').trim();
                 let url = (mImg[2] || '').trim();
@@ -1377,11 +1389,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (url.includes('raw.githubusercontent.com')) {
                     url = url.replace(/raw\.githubusercontent\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)\/main\//g, 'cdn.jsdelivr.net/gh/$1/$2@main/');
                 }
-                const isRawFilename = !rawAlt || rawAlt === 'image' || rawAlt === '사진' || /^사진\s*\d*$/.test(rawAlt) || /^(KakaoTalk_|IMG_|DSC|PXL_|Screenshot|photo|pic|\d{8}[_-]\d+)/i.test(rawAlt) || /\.(jpe?g|png|webp|gif|heic)$/i.test(rawAlt);
-                const seoAlt = isRawFilename
+                const resolvedUrl = (typeof resolveCachedPostImgUrl === 'function') ? resolveCachedPostImgUrl(url) : url;
+                const cleanedHumanAlt = rawAlt.replace(/\s*-\s*복사본\s*$/, '').trim();
+                const seoAlt = isRawImageAlt(cleanedHumanAlt)
                     ? `${cleanBaseTitle} 현장사진 ${parsedImgs.length + 1} (매물번호 ${propNoStr})`
-                    : rawAlt.replace(/"/g, '&quot;');
-                parsedImgs.push({ url, alt: seoAlt });
+                    : cleanedHumanAlt.replace(/"/g, '&quot;');
+                parsedImgs.push({ url: resolvedUrl, rawUrl: url, alt: seoAlt });
             }
 
             if (parsedImgs.length > 0) {
@@ -1393,8 +1406,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 const heroHtml = `
                     <div class="relative rounded-xl overflow-hidden shadow-card-soft bg-surface-container border border-hairline cursor-pointer group" onclick="openDetailPhotoLightbox(0)">
-                        <img src="${hero.url}" alt="${hero.alt}" onerror="handlePostImgError(this, '${post.id}')" class="w-full max-h-[520px] object-cover group-hover:scale-[1.02] transition-transform duration-300" />
-                        <div class="absolute top-3 right-3 bg-slate-900/75 backdrop-blur-xs text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md no-print">
+                        <img data-gallery-idx="0" src="${hero.url}" alt="${hero.alt}" onerror="handlePostImgError(this, '${post.id}')" class="w-full max-h-[520px] object-cover group-hover:scale-[1.02] transition-transform duration-300" />
+                        <div class="absolute top-3 right-3 bg-slate-900/75 backdrop-blur-sm text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md no-print">
                             <span class="material-symbols-outlined text-[15px]">photo_library</span>
                             <span>사진 총 ${total}장 · 클릭해 크게 보기</span>
                         </div>
@@ -1408,7 +1421,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             const isLastPreviewWithMore = (i === previewGrid.length - 1) && extraGrid.length > 0;
                             return `
                                 <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-surface-container border border-hairline cursor-pointer group" onclick="openDetailPhotoLightbox(${idx})">
-                                    <img src="${img.url}" alt="${img.alt}" loading="lazy" onerror="handlePostImgError(this, '${post.id}')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                    <img data-gallery-idx="${idx}" src="${img.url}" alt="${img.alt}" loading="lazy" onerror="handlePostImgError(this, '${post.id}')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                     ${isLastPreviewWithMore ? `
                                         <div class="absolute inset-0 bg-slate-900/55 flex flex-col items-center justify-center text-white font-black text-sm sm:text-base no-print">
                                             <span>+${extraGrid.length}장 더보기</span>
@@ -1425,16 +1438,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div id="detail-extra-photos" class="hidden grid-cols-2 gap-2.5 mt-2.5">
                         ${extraGrid.map((img, i) => `
                             <div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-surface-container border border-hairline cursor-pointer group" onclick="openDetailPhotoLightbox(${i + 5})">
-                                <img src="${img.url}" alt="${img.alt}" loading="lazy" onerror="handlePostImgError(this, '${post.id}')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                <img data-gallery-idx="${i + 5}" src="${img.url}" alt="${img.alt}" loading="lazy" onerror="handlePostImgError(this, '${post.id}')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                             </div>
                         `).join('')}
                     </div>
                     <div class="mt-3 flex flex-wrap items-center justify-center gap-2 no-print">
-                        <button type="button" id="toggle-extra-photos-btn" onclick="toggleDetailExtraPhotos()" class="px-4 py-2.5 rounded-xl bg-soft-blue hover:bg-primary text-primary hover:text-white border border-primary/25 font-extrabold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs">
+                        <button type="button" id="toggle-extra-photos-btn" onclick="toggleDetailExtraPhotos()" class="px-4 py-2.5 rounded-xl bg-soft-blue hover:bg-primary text-primary hover:text-white border border-primary/25 font-extrabold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
                             <span class="material-symbols-outlined text-[17px]">expand_more</span>
                             <span>현장 사진 전체 펼치기 (+${extraGrid.length}장)</span>
                         </button>
-                        <button type="button" onclick="openDetailPhotoLightbox(0)" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs">
+                        <button type="button" onclick="openDetailPhotoLightbox(0)" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
                             <span class="material-symbols-outlined text-[17px]">slideshow</span>
                             <span>슬라이드로 한 장씩 크게 보기</span>
                         </button>
@@ -1478,26 +1491,37 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!modal) {
                 modal = document.createElement('div');
                 modal.id = 'detail-photo-lightbox';
-                modal.className = 'fixed inset-0 z-[9999] bg-slate-950/92 backdrop-blur-xs flex flex-col justify-between p-3 sm:p-5 select-none no-print';
+                modal.className = 'fixed inset-0 z-[9999] bg-black/95 backdrop-blur-sm flex flex-col justify-between p-3 sm:p-5 select-none no-print';
+                modal.style.backgroundColor = 'rgba(2, 6, 23, 0.94)';
+                modal.style.backdropFilter = 'blur(6px)';
                 modal.onclick = (e) => { if (e.target === modal || e.target.id === 'detail-lb-stage') closeDetailPhotoLightbox(); };
                 modal.innerHTML = `
-                    <div class="max-w-5xl w-full mx-auto flex items-center justify-between text-white gap-2">
-                        <span id="detail-lb-counter" class="bg-[#003891] text-white text-xs sm:text-sm font-extrabold px-3 py-1 rounded-lg">1 / 1</span>
-                        <span id="detail-lb-caption" class="text-xs sm:text-sm font-bold text-slate-200 truncate flex-1 text-center"></span>
-                        <button type="button" onclick="closeDetailPhotoLightbox()" class="w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white cursor-pointer shrink-0">
+                    <div class="max-w-5xl w-full mx-auto flex items-center justify-between text-white gap-2 z-20">
+                        <span id="detail-lb-counter" class="bg-[#003891] text-white text-xs sm:text-sm font-extrabold px-3 py-1 rounded-lg shrink-0 shadow">1 / 1</span>
+                        <span id="detail-lb-caption" class="text-xs sm:text-sm font-bold text-slate-100 truncate flex-1 text-center"></span>
+                        <button type="button" onclick="closeDetailPhotoLightbox()" aria-label="사진 닫기" class="w-9 h-9 sm:w-10 sm:h-10 rounded-[9999px] bg-white/20 hover:bg-white/30 border border-white/25 flex items-center justify-center text-white cursor-pointer shrink-0 transition">
                             <span class="material-symbols-outlined text-2xl">close</span>
                         </button>
                     </div>
                     <div id="detail-lb-stage" class="relative flex-1 flex items-center justify-center w-full max-w-6xl mx-auto my-2 overflow-hidden">
-                        <button type="button" onclick="event.stopPropagation(); stepDetailLightbox(-1)" class="absolute left-1 sm:left-3 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 hover:bg-white text-slate-900 shadow-xl flex items-center justify-center cursor-pointer">
+                        <button type="button" onclick="event.stopPropagation(); stepDetailLightbox(-1)" aria-label="이전 사진" class="absolute left-1 sm:left-3 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-[9999px] bg-white/95 hover:bg-white text-slate-900 shadow-xl flex items-center justify-center cursor-pointer transition active:scale-95">
                             <span class="material-symbols-outlined text-2xl sm:text-3xl">chevron_left</span>
                         </button>
-                        <img id="detail-lb-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" onclick="event.stopPropagation()" class="max-w-full max-h-[78vh] object-contain rounded-xl shadow-2xl" />
-                        <button type="button" onclick="event.stopPropagation(); stepDetailLightbox(1)" class="absolute right-1 sm:right-3 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 hover:bg-white text-slate-900 shadow-xl flex items-center justify-center cursor-pointer">
+                        <div id="detail-lb-loading" class="hidden absolute inset-0 flex flex-col items-center justify-center text-slate-200 pointer-events-none z-10 gap-2">
+                            <span class="material-symbols-outlined text-4xl animate-spin">progress_activity</span>
+                            <span class="text-xs font-semibold">고화질 사진 불러오는 중...</span>
+                        </div>
+                        <div id="detail-lb-error" class="hidden flex flex-col items-center justify-center gap-3 text-slate-200 bg-slate-900/80 border border-white/15 rounded-2xl px-6 py-8 text-center z-10" onclick="event.stopPropagation()">
+                            <span class="material-symbols-outlined text-4xl text-amber-300">broken_image</span>
+                            <div class="text-sm font-bold">사진 서버 응답이 지연되고 있습니다.</div>
+                            <button type="button" onclick="retryDetailLightboxImg()" class="px-4 py-2 rounded-lg bg-[#003891] hover:bg-blue-700 text-white text-xs font-extrabold cursor-pointer">다시 불러오기</button>
+                        </div>
+                        <img id="detail-lb-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" onclick="event.stopPropagation()" class="max-w-full max-h-[78vh] object-contain rounded-xl shadow-2xl transition-opacity duration-200" />
+                        <button type="button" onclick="event.stopPropagation(); stepDetailLightbox(1)" aria-label="다음 사진" class="absolute right-1 sm:right-3 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-[9999px] bg-white/95 hover:bg-white text-slate-900 shadow-xl flex items-center justify-center cursor-pointer transition active:scale-95">
                             <span class="material-symbols-outlined text-2xl sm:text-3xl">chevron_right</span>
                         </button>
                     </div>
-                    <div class="text-center text-[11px] text-slate-300">좌우 화살표(←/→) 또는 모바일 좌우 스와이프로 모든 사진을 빠르게 넘겨볼 수 있습니다</div>
+                    <div class="text-center text-[11px] text-slate-200 z-20">좌우 화살표(←/→) 또는 모바일 좌우 스와이프로 모든 사진을 빠르게 넘겨볼 수 있습니다</div>
                 `;
                 document.body.appendChild(modal);
                 let sx = 0;
@@ -1516,6 +1540,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             }
             modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
             updateDetailLightbox();
         };
         window.stepDetailLightbox = function(delta) {
@@ -1527,17 +1552,71 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.closeDetailPhotoLightbox = function() {
             const m = document.getElementById('detail-photo-lightbox');
             if (m) m.classList.add('hidden');
+            document.body.style.overflow = '';
         };
-        function updateDetailLightbox() {
+        window.retryDetailLightboxImg = function() {
+            updateDetailLightbox(true);
+        };
+        function updateDetailLightbox(forceRawRetry = false) {
             const imgs = window._detailGalleryImages || [];
-            const cur = imgs[window._detailLightboxIdx];
+            const idx = window._detailLightboxIdx;
+            const cur = imgs[idx];
             if (!cur) return;
             const imgEl = document.getElementById('detail-lb-img');
             const cntEl = document.getElementById('detail-lb-counter');
             const capEl = document.getElementById('detail-lb-caption');
-            if (imgEl) { imgEl.src = cur.url; imgEl.alt = cur.alt; }
-            if (cntEl) cntEl.textContent = `${window._detailLightboxIdx + 1} / ${imgs.length}`;
+            const loadingEl = document.getElementById('detail-lb-loading');
+            const errEl = document.getElementById('detail-lb-error');
+
+            if (cntEl) cntEl.textContent = `${idx + 1} / ${imgs.length}`;
             if (capEl) capEl.textContent = cur.alt;
+            if (!imgEl) return;
+
+            // Prefer already-loaded working URL from gallery thumbnail or cached mirror map
+            let bestUrl = (typeof resolveCachedPostImgUrl === 'function') ? resolveCachedPostImgUrl(cur.rawUrl || cur.url) : cur.url;
+            if (!forceRawRetry) {
+                const thumbImg = document.querySelector(`#post-images img[data-gallery-idx="${idx}"]`);
+                if (thumbImg && thumbImg.complete && thumbImg.naturalWidth > 0 && thumbImg.src && !thumbImg.src.startsWith('data:')) {
+                    bestUrl = thumbImg.currentSrc || thumbImg.src;
+                }
+            } else {
+                const m = (cur.rawUrl || cur.url || '').match(/images\/[^?#]+/);
+                if (m) {
+                    bestUrl = `https://raw.githubusercontent.com/cym10003-cyber/landing-page-assets/main/${m[0]}?retry=${Date.now()}`;
+                }
+            }
+
+            imgEl.dataset.errorStep = '0';
+            imgEl.dataset.noStockFallback = '1';
+            imgEl.setAttribute('data-original-src', cur.rawUrl || cur.url);
+            imgEl.classList.remove('hidden');
+            imgEl.style.opacity = '0.25';
+            if (errEl) errEl.classList.add('hidden');
+            if (loadingEl) loadingEl.classList.remove('hidden');
+
+            imgEl.onload = () => {
+                imgEl.style.opacity = '1';
+                if (loadingEl) loadingEl.classList.add('hidden');
+                if (errEl) errEl.classList.add('hidden');
+            };
+            imgEl.onerror = () => {
+                if (typeof handlePostImgError === 'function') {
+                    handlePostImgError(imgEl, window._currentDetailPostId || '', {
+                        noStockFallback: true,
+                        onFinalFail: () => {
+                            imgEl.classList.add('hidden');
+                            if (loadingEl) loadingEl.classList.add('hidden');
+                            if (errEl) errEl.classList.remove('hidden');
+                        }
+                    });
+                }
+            };
+            imgEl.alt = cur.alt;
+            imgEl.src = bestUrl;
+            if (imgEl.complete && imgEl.naturalWidth > 0) {
+                imgEl.style.opacity = '1';
+                if (loadingEl) loadingEl.classList.add('hidden');
+            }
         }
 
         renderLinkPreviews();
