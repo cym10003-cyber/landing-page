@@ -34,10 +34,11 @@ export default async function handler(req, res) {
     }
   };
 
-  // Noise filter: exclude residential-only / personal credit loan / non-real-estate spam in curated feeds
-  const NOISE_TITLE_REGEX = /디딤돌대출|보금자리론|신생아\s*특례|중저신용|신용대출|카드론|현금서비스|청년\s*월세|전세사기|빌라왕|공공데이터\s*개방|청약\s*경쟁률|로또\s*청약|다자녀\s*특공|주담대\s*갈아타기|주식\s*추천|비트코인|가상자산|코인\s*시세|프로야구|연예|드라마|예능/i;
+  // Noise filter: exclude residential-only / personal credit loan / PR-fluff / award spam in curated feeds
+  const NOISE_TITLE_REGEX = /디딤돌대출|보금자리론|신생아\s*특례|중저신용|신용대출|카드론|현금서비스|청년\s*월세|전세사기|빌라왕|공공데이터\s*개방|청약\s*경쟁률|로또\s*청약|다자녀\s*특공|주담대\s*갈아타기|주식\s*추천|비트코인|가상자산|코인\s*시세|프로야구|연예|드라마|예능|^\[(?:패트롤|동정|인사|부고|포토|사진|영상|알림|단신|게시판|모집)\]|장관상\s*수상|표창\s*수상|도장\s*로봇|봉사활동|기부금|나눔\s*행사|MOU\s*체결/i;
+  const OTHER_LOCAL_CITY_REGEX = /^(?:\[[^\]]+\]\s*)?(?:부산|광주|대전|인천|제주|울산|강원|충북|충남|전북|전남|세종|창원|청주|전주|수원|용인|화성)/;
   const SEOUL_APT_ONLY_REGEX = /(서울\s*아파트|강남\s*아파트|강남3구|마용성|노도강|경기\s*아파트|수도권\s*청약|분양가\s*상한제)/i;
-  const COMMERCIAL_OR_DAEGU_REGEX = /(대구|수성구|범어|동대구|달구벌|경북|경산|상가|오피스|사무실|빌딩|꼬마빌딩|공실|임대차|권리금|렌트프리|상업용|수익형|상권|용도변경|임대료|소상공인|기준금리|취득세|양도세|종부세|부가세|국토부|도시철도|재건축|재개발)/i;
+  const COMMERCIAL_OR_DAEGU_REGEX = /(대구|수성구|범어|동대구|달구벌|경북|경산|상가|오피스|사무실|빌딩|꼬마빌딩|공실|임대차|권리금|렌트프리|상업용|수익형|상권|용도변경|임대료|소상공인|기준금리|국채금리|취득세|양도세|종부세|부가세|국토부|도시철도|재건축|재개발)/i;
 
   function decodeXmlEntities(str) {
     if (!str) return '';
@@ -68,9 +69,10 @@ export default async function handler(req, res) {
     let score = 40;
     if (/대구|수성구|범어|만촌|동대구|달구벌|반월당|경북|경산/.test(t)) score += 36;
     if (/상가|오피스|사무실|빌딩|꼬마빌딩|공실|상업용|수익형|상권|임대차|권리금|렌트프리|임대료|용도변경/.test(t)) score += 32;
-    if (/기준금리|한국은행|취득세|양도세|종부세|부가세|세제|국토부|국토교통부|도시철도|트램|철도|규제\s*완화/.test(t)) score += 20;
+    if (/기준금리|국채금리|시중금리|한국은행|취득세|양도세|종부세|부가세|세제|국토부|국토교통부|도시철도|트램|철도|규제\s*완화/.test(t)) score += 20;
     if (catKey === 'daegu' && /대구|경북|수성구/.test(t)) score += 10;
     if (catKey === 'commercial' && /상가|오피스|빌딩|공실|임대/.test(t)) score += 10;
+    if (OTHER_LOCAL_CITY_REGEX.test(t) && !/대구|경북|전국|지방/.test(t)) score -= 24;
     if (SEOUL_APT_ONLY_REGEX.test(t) && !/상가|오피스|빌딩|대구/.test(t)) score -= 28;
     const ageHours = Math.max(0, (Date.now() - (pubTime || Date.now())) / 3600000);
     if (ageHours <= 24) score += 10;
@@ -111,8 +113,8 @@ export default async function handler(req, res) {
       },
       {
         topic: 'building_yield',
-        test: /(꼬마빌딩|수익형|상업용\s*부동산|빌딩\s*매매|상가\s*매매|임대수익률|캡레이트)/,
-        summary: `수익형 빌딩·상업용 부동산 거래 흐름(${sourceName})으로, 매수가 대비 순수익률과 우량 임차인 구성 여부가 자산 가치를 좌우하는 추세입니다.`,
+        test: /(꼬마빌딩|수익형|상업용\s*부동산|빌딩\s*(?:매매|투자)|상가\s*(?:매매|투자)|오피스\s*투자|임대수익률|캡레이트)/,
+        summary: `수익형 빌딩·상업용 부동산 투자 흐름(${sourceName})으로, 금리·매수가 대비 순수익률과 우량 임차인 구성 여부가 자산 가치를 좌우하는 추세입니다.`,
         brokerTip: `매수·매도 검토 시 단순 수익률뿐 아니라 공실 리스크·리모델링 가치·임대차 승계 조건까지 실무 기준으로 꼼꼼히 분석해 드립니다.`
       },
       {
@@ -129,8 +131,8 @@ export default async function handler(req, res) {
       },
       {
         topic: 'base_rate',
-        test: /(기준금리|한국은행|한은|금통위|금리\s*동결|금리\s*인하|금리\s*인상)/,
-        summary: `기준금리 방향성 관련 핵심 소식(${sourceName})으로, 향후 상업용 부동산 담보대출 이자 부담과 수익형 매물 투자 심리에 직접적인 기준이 됩니다.`,
+        test: /(기준금리|국채금리|시중금리|한국은행|한은|금통위|금리\s*동결|금리\s*인하|금리\s*인상|금리\s*올)/,
+        summary: `금리 방향성 관련 핵심 소식(${sourceName})으로, 향후 상업용 부동산 담보대출 이자 부담과 수익형 매물 투자 심리에 직접적인 기준이 됩니다.`,
         brokerTip: `금리 변곡점에서는 보유 건물 대환 조건 점검과 임대 보증금·월세 비율 조정을 통해 실질 수익률을 미리 방어하시는 것이 유리합니다.`
       },
       {
