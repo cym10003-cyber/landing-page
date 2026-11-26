@@ -51,14 +51,137 @@ export default async function handler(req, res) {
     return res.status(200).json(type === 'analytics' ? {} : []);
   }
 
-  // POST: Record pageviews, postviews, or search logs
+  // POST: Record pageviews, postviews, likes, search logs, or admin day cleanup
   if (req.method === 'POST') {
     try {
       const bodyData = req.body || {};
       const { type } = bodyData;
 
-      // Handle pageview, postview, and like (favorite) recording centrally
-      if (type === 'pageview' || type === 'postview' || type === 'like') {
+      const BOT_UA_REGEX = /bot|crawl|spider|slurp|googlebot|bingbot|yeti|naverbot|daumoa|yandex|baiduspider|duckduckbot|facebookexternalhit|facebot|twitterbot|kakaotalk-scrap|kakaostory|slackbot|discordbot|telegrambot|whatsapp|linkedinbot|applebot|petalbot|ahrefsbot|semrushbot|mj12bot|dotbot|bytespider|gptbot|claudebot|oai-searchbot|perplexitybot|headlesschrome|playwright|puppeteer|selenium|phantomjs|lighthouse|pagespeed|gtmetrix|pingdom|uptimerobot|curl\/|wget\/|python-requests|python-urllib|axios\/|go-http-client|java\/|okhttp|httpclient/i;
+      const reqUa = String(req.headers['user-agent'] || '').trim();
+      const isBotRequest = !reqUa || BOT_UA_REGEX.test(reqUa);
+
+      // Helper: atomic GitHub read-modify-write with 409 conflict retry (up to 4 attempts)
+      const saveAnalyticsWithRetry = async (mutatorFn, commitLabel) => {
+        if (!token) {
+          try {
+            const localFilePath = path.join(process.cwd(), analyticsPath);
+            if (fs.existsSync(localFilePath)) {
+              let analytics = JSON.parse(fs.readFileSync(localFilePath, 'utf8'));
+              analytics = mutatorFn(analytics);
+              fs.writeFileSync(localFilePath, JSON.stringify(analytics, null, 2), 'utf8');
+              return { success: true, analytics, localOnly: true };
+            }
+          } catch (e) {}
+          return { success: true, localOnly: true };
+        }
+
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${analyticsPath}`;
+        const headers = {
+          'Accept': 'application/vnd.github.v3+json',
+          'Authorization': `Bearer ${token}`
+        };
+
+        let lastAnalytics = null;
+        for (let attempt = 0; attempt < 4; attempt++) {
+          const getRes = await fetch(`${url}?t=${Date.now()}`, { headers });
+          let sha = null;
+          let analytics = { totalPageviews: 0, todayPageviews: 0, todayUniqueVisitors: 0, todayDate: '', dailyHistory: {}, likes: {}, totalLikes: 0, recentLikes: [] };
+
+          if (getRes.ok) {
+            const data = await getRes.json();
+            sha = data.sha;
+            try {
+              const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
+              analytics = JSON.parse(contentStr);
+            } catch (e) {}
+          }
+
+          analytics = mutatorFn(analytics);
+          lastAnalytics = analytics;
+
+          const jsonStr = JSON.stringify(analytics, null, 2);
+          const contentBase64 = Buffer.from(jsonStr, 'utf8').toString('base64');
+
+          const putRes = await fetch(url, {
+            method: 'PUT',
+            headers: { ...headers, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              message: `analytics: ${commitLabel} [skip ci] [skip vercel]`,
+              content: contentBase64,
+              ...(sha ? { sha } : {})
+            })
+          });
+
+          if (putRes.ok) {
+            return { success: true, analytics };
+          }
+          if (putRes.status === 409 || putRes.status === 422) {
+            await new Promise(r => setTimeout(r, 140 + Math.floor(Math.random() * 220)));
+            continue;
+          }
+          break;
+        }
+        return { success: true, analytics: lastAnalytics, fallback: true };
+      };
+
+      // Admin-authenticated daily bot-cleanup / reconciliation action
+      if (type === 'admin_clean_day') {
+        let expectedPw = (process.env.ADMIN_PASSWORD || '').trim();
+        if (!expectedPw) {
+          try {
+            const cfgPath = path.join(process.cwd(), 'config/git_config.json');
+            if (fs.existsSync(cfgPath)) {
+              const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+              expectedPw = String(cfg.admin_password || '').trim();
+            }
+          } catch (e) {}
+        }
+        if (!expectedPw) expectedPw = 'admin1234';
+        if (String(bodyData.password || '').trim() !== expectedPw) {
+          return res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        const targetDate = String(bodyData.targetDate || new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0]).trim();
+        const result = await saveAnalyticsWithRetry((analytics) => {
+          if (!analytics.dailyHistory) analytics.dailyHistory = {};
+          const prev = analytics.dailyHistory[targetDate] || { date: targetDate, count: 0, uniqueCount: 0, referrers: {}, postViews: {}, likes: {}, inflowLandings: {} };
+          const prevCount = Number(prev.count || 0);
+
+          const nextCount = typeof bodyData.count === 'number' ? Math.max(0, bodyData.count) : prevCount;
+          const nextUnique = typeof bodyData.uniqueCount === 'number' ? Math.max(0, bodyData.uniqueCount) : (prev.uniqueCount || 0);
+          const nextReferrers = (bodyData.referrers && typeof bodyData.referrers === 'object') ? bodyData.referrers : (prev.referrers || {});
+          const nextPostViews = (bodyData.postViews && typeof bodyData.postViews === 'object') ? bodyData.postViews : (prev.postViews || {});
+
+          analytics.dailyHistory[targetDate] = {
+            ...prev,
+            date: targetDate,
+            count: nextCount,
+            uniqueCount: nextUnique,
+            referrers: nextReferrers,
+            postViews: nextPostViews
+          };
+
+          const delta = prevCount - nextCount;
+          if (delta > 0 && typeof analytics.totalPageviews === 'number') {
+            analytics.totalPageviews = Math.max(0, analytics.totalPageviews - delta);
+          }
+          if (analytics.todayDate === targetDate) {
+            analytics.todayPageviews = nextCount;
+            analytics.todayUniqueVisitors = nextUnique;
+          }
+          return analytics;
+        }, `clean bot traffic ${targetDate}`);
+        return res.status(200).json(result);
+      }
+
+      // Drop automated crawlers / search bots / headless scrapers on all tracking writes
+      if (isBotRequest) {
+        return res.status(200).json({ success: true, ignoredBot: true });
+      }
+
+      // Handle pageview, postview, combined pageview_and_postview, and like recording centrally
+      if (type === 'pageview' || type === 'postview' || type === 'pageview_and_postview' || type === 'like') {
         const updateAnalyticsData = (analytics) => {
           const todayStr = new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0];
           if (!analytics.dailyHistory) analytics.dailyHistory = {};
@@ -71,7 +194,7 @@ export default async function handler(req, res) {
             analytics.todayUniqueVisitors = analytics.dailyHistory[todayStr].uniqueCount || 0;
           }
 
-          if (type === 'pageview') {
+          if (type === 'pageview' || type === 'pageview_and_postview') {
             analytics.totalPageviews = (analytics.totalPageviews || 0) + 1;
             analytics.dailyHistory[todayStr].count = (analytics.dailyHistory[todayStr].count || 0) + 1;
             analytics.todayPageviews = Math.max((analytics.todayPageviews || 0) + 1, analytics.dailyHistory[todayStr].count);
@@ -88,14 +211,9 @@ export default async function handler(req, res) {
               if (!analytics.dailyHistory[todayStr].referrers) analytics.dailyHistory[todayStr].referrers = {};
               analytics.dailyHistory[todayStr].referrers[cleanRef] = (analytics.dailyHistory[todayStr].referrers[cleanRef] || 0) + 1;
             }
-            if (bodyData.inflowKeyword && String(bodyData.inflowKeyword).trim().length >= 2) {
-              const kw = String(bodyData.inflowKeyword).trim();
-              const src = bodyData.inflowSource || '검색유입';
-              const key = `[${src}] ${kw}`;
-              if (!analytics.dailyHistory[todayStr].searchKeywords) analytics.dailyHistory[todayStr].searchKeywords = {};
-              analytics.dailyHistory[todayStr].searchKeywords[key] = (analytics.dailyHistory[todayStr].searchKeywords[key] || 0) + 1;
-            }
-          } else if (type === 'postview' && bodyData.postId) {
+          }
+
+          if ((type === 'postview' || type === 'pageview_and_postview') && bodyData.postId) {
             const pid = String(bodyData.postId);
             if (!analytics.dailyHistory[todayStr].postViews) analytics.dailyHistory[todayStr].postViews = {};
             analytics.dailyHistory[todayStr].postViews[pid] = (analytics.dailyHistory[todayStr].postViews[pid] || 0) + 1;
@@ -105,14 +223,17 @@ export default async function handler(req, res) {
               if (!analytics.dailyHistory[todayStr].inflowLandings) analytics.dailyHistory[todayStr].inflowLandings = {};
               analytics.dailyHistory[todayStr].inflowLandings[lKey] = (analytics.dailyHistory[todayStr].inflowLandings[lKey] || 0) + 1;
             }
-            if (bodyData.inflowKeyword && String(bodyData.inflowKeyword).trim().length >= 2) {
-              const kw = String(bodyData.inflowKeyword).trim();
-              const src = bodyData.inflowSource || '검색유입';
-              const key = `[${src}] ${kw}`;
-              if (!analytics.dailyHistory[todayStr].searchKeywords) analytics.dailyHistory[todayStr].searchKeywords = {};
-              analytics.dailyHistory[todayStr].searchKeywords[key] = (analytics.dailyHistory[todayStr].searchKeywords[key] || 0) + 1;
-            }
-          } else if (type === 'like' && bodyData.postId) {
+          }
+
+          if ((type === 'pageview' || type === 'postview' || type === 'pageview_and_postview') && bodyData.inflowKeyword && String(bodyData.inflowKeyword).trim().length >= 2) {
+            const kw = String(bodyData.inflowKeyword).trim();
+            const src = bodyData.inflowSource || '검색유입';
+            const key = `[${src}] ${kw}`;
+            if (!analytics.dailyHistory[todayStr].searchKeywords) analytics.dailyHistory[todayStr].searchKeywords = {};
+            analytics.dailyHistory[todayStr].searchKeywords[key] = (analytics.dailyHistory[todayStr].searchKeywords[key] || 0) + 1;
+          }
+
+          if (type === 'like' && bodyData.postId) {
             const pid = String(bodyData.postId);
             const isUnlike = bodyData.action === 'unlike';
             if (!analytics.likes) analytics.likes = {};
@@ -156,56 +277,10 @@ export default async function handler(req, res) {
           return analytics;
         };
 
-        if (!token) {
-          try {
-            const localFilePath = path.join(process.cwd(), analyticsPath);
-            if (fs.existsSync(localFilePath)) {
-              let analytics = JSON.parse(fs.readFileSync(localFilePath, 'utf8'));
-              analytics = updateAnalyticsData(analytics);
-              fs.writeFileSync(localFilePath, JSON.stringify(analytics, null, 2), 'utf8');
-              return res.status(200).json({ success: true, analytics, localOnly: true });
-            }
-          } catch(e) {}
-          return res.status(200).json({ success: true, localOnly: true });
-        }
-
         try {
-          const url = `https://api.github.com/repos/${owner}/${repo}/contents/${analyticsPath}`;
-          const headers = {
-            'Accept': 'application/vnd.github.v3+json',
-            'Authorization': `Bearer ${token}`
-          };
-
-          const getRes = await fetch(url, { headers });
-          let sha = null;
-          let analytics = { totalPageviews: 0, todayPageviews: 0, todayDate: '', dailyHistory: {}, likes: {}, totalLikes: 0, recentLikes: [] };
-
-          if (getRes.ok) {
-            const data = await getRes.json();
-            sha = data.sha;
-            try {
-              const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
-              analytics = JSON.parse(contentStr);
-            } catch(e) {}
-          }
-
-          analytics = updateAnalyticsData(analytics);
-
-          const jsonStr = JSON.stringify(analytics, null, 2);
-          const contentBase64 = Buffer.from(jsonStr, 'utf8').toString('base64');
-
-          await fetch(url, {
-            method: 'PUT',
-            headers: { ...headers, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              message: `analytics: record ${type} [skip ci] [skip vercel]`,
-              content: contentBase64,
-              ...(sha ? { sha } : {})
-            })
-          });
-
-          return res.status(200).json({ success: true, analytics });
-        } catch(e) {
+          const result = await saveAnalyticsWithRetry(updateAnalyticsData, `record ${type}`);
+          return res.status(200).json(result);
+        } catch (e) {
           console.error("Central analytics update failed:", e);
           return res.status(200).json({ success: true, fallback: true });
         }

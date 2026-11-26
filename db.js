@@ -1,4 +1,4 @@
-console.log("Antigravity db.js version: 20261126_v263");
+console.log("Antigravity db.js version: 20261126_v264");
 // Force clear localStorage posts cache if version changes to flush stale client isPrivate cache
 const APP_VERSION = "20261125_v261";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
@@ -1118,8 +1118,23 @@ function extractExternalSearchInflow() {
     return null;
 }
 
+function isAutomatedBotTraffic() {
+    try {
+        if (typeof navigator === 'undefined') return true;
+        if (navigator.webdriver === true) return true;
+        if (typeof document !== 'undefined' && document.visibilityState === 'prerender') return true;
+        const ua = String(navigator.userAgent || '').trim();
+        if (!ua) return true;
+        if (/bot|crawl|spider|slurp|googlebot|bingbot|yeti|naverbot|daumoa|yandex|baiduspider|duckduckbot|facebookexternalhit|facebot|twitterbot|kakaotalk-scrap|kakaostory|slackbot|discordbot|telegrambot|whatsapp|linkedinbot|applebot|petalbot|ahrefsbot|semrushbot|mj12bot|dotbot|bytespider|gptbot|claudebot|oai-searchbot|perplexitybot|headlesschrome|playwright|puppeteer|selenium|phantomjs|lighthouse|pagespeed|gtmetrix|pingdom|uptimerobot|curl\/|wget\/|python-requests|axios\/|go-http-client/i.test(ua)) {
+            return true;
+        }
+    } catch (e) {}
+    return false;
+}
+
 function isAdminOrInternalAnalyticsContext() {
     try {
+        if (isAutomatedBotTraffic()) return true;
         const path = (window.location.pathname || '').toLowerCase();
         const search = (window.location.search || '').toLowerCase();
         if (path.includes('admin') || path.includes('news-write') || search.includes('preview=admin')) return true;
@@ -1128,27 +1143,38 @@ function isAdminOrInternalAnalyticsContext() {
     return false;
 }
 
+let _didRecordPageViewThisLoad = false;
+
+function computeVisitorSessionMeta(todayStr) {
+    let isNewVisitor = false;
+    try {
+        if (localStorage.getItem('choi_uv_date') !== todayStr) {
+            localStorage.setItem('choi_uv_date', todayStr);
+            isNewVisitor = true;
+        }
+    } catch (e) {}
+
+    let isSessionFirst = false;
+    try {
+        if (!sessionStorage.getItem('choi_session_entered')) {
+            sessionStorage.setItem('choi_session_entered', '1');
+            isSessionFirst = true;
+        }
+    } catch (e) { isSessionFirst = true; }
+
+    const rawSource = getReferrerSource();
+    // 새로고침이나 같은 세션 내 재접속(referrer 비어있음)을 '직접 접속'으로 중복 부풀리지 않고 '내부 이동'으로 처리
+    const source = (rawSource === '직접 접속 / 카카오톡 링크' && !isSessionFirst) ? '내부 이동' : rawSource;
+    return { isNewVisitor, isSessionFirst, rawSource, source };
+}
+
 function recordPageView() {
     try {
         if (isAdminOrInternalAnalyticsContext()) return;
+        if (_didRecordPageViewThisLoad) return;
+        _didRecordPageViewThisLoad = true;
         const todayStr = getKSTDateStr();
-
-        // 1일 1회 순수 방문자(UV) 판별 및 세션 첫 진입 판별
-        let isNewVisitor = false;
-        try {
-            if (localStorage.getItem('choi_uv_date') !== todayStr) {
-                localStorage.setItem('choi_uv_date', todayStr);
-                isNewVisitor = true;
-            }
-        } catch (e) {}
-
-        let isSessionFirst = false;
-        try {
-            if (!sessionStorage.getItem('choi_session_entered')) {
-                sessionStorage.setItem('choi_session_entered', '1');
-                isSessionFirst = true;
-            }
-        } catch (e) { isSessionFirst = true; }
+        const { isNewVisitor, source } = computeVisitorSessionMeta(todayStr);
 
         let pageData = JSON.parse(localStorage.getItem('analytics_page_views') || '{"total":0,"today":0,"date":""}');
         if (pageData.date !== todayStr) {
@@ -1168,9 +1194,6 @@ function recordPageView() {
             dailyHistory[todayStr].uniqueCount = (dailyHistory[todayStr].uniqueCount || 0) + 1;
         }
 
-        const rawSource = getReferrerSource();
-        // 새로고침이나 같은 세션 내 재접속(referrer 비어있음)을 '직접 접속'으로 중복 부풀리지 않고 '내부 이동'으로 처리
-        const source = (rawSource === '직접 접속 / 카카오톡 링크' && !isSessionFirst) ? '내부 이동' : rawSource;
         if (source !== '내부 이동') {
             if (!dailyHistory[todayStr].referrers) dailyHistory[todayStr].referrers = {};
             dailyHistory[todayStr].referrers[source] = (dailyHistory[todayStr].referrers[source] || 0) + 1;
@@ -1219,7 +1242,9 @@ function recordPageView() {
 }
 
 try {
-    recordPageView();
+    if (!window.__SKIP_AUTO_PAGEVIEW__) {
+        recordPageView();
+    }
 } catch(e){}
 
 function recordSearchQuery(query, source = '홈페이지 검색') {
@@ -1256,7 +1281,26 @@ function recordPostView(postId, postTitle) {
     if (isAdminOrInternalAnalyticsContext()) return;
     try {
         const todayStr = getKSTDateStr();
-        
+        const shouldBundlePageview = !_didRecordPageViewThisLoad;
+        let isNewVisitor = false;
+        let source = getReferrerSource();
+
+        if (shouldBundlePageview) {
+            _didRecordPageViewThisLoad = true;
+            const meta = computeVisitorSessionMeta(todayStr);
+            isNewVisitor = meta.isNewVisitor;
+            source = meta.source;
+
+            let pageData = JSON.parse(localStorage.getItem('analytics_page_views') || '{"total":0,"today":0,"date":""}');
+            if (pageData.date !== todayStr) {
+                pageData.date = todayStr;
+                pageData.today = 0;
+            }
+            pageData.total += 1;
+            pageData.today += 1;
+            localStorage.setItem('analytics_page_views', JSON.stringify(pageData));
+        }
+
         const views = JSON.parse(localStorage.getItem('analytics_post_views') || '{}');
         if (!views[postId]) {
             views[postId] = { id: postId, title: postTitle || '매물 상세', count: 0, lastViewed: Date.now() };
@@ -1268,13 +1312,21 @@ function recordPostView(postId, postTitle) {
 
         let dailyHistory = JSON.parse(localStorage.getItem('analytics_daily_history') || '{}');
         if (!dailyHistory[todayStr]) {
-            dailyHistory[todayStr] = { date: todayStr, count: 0, referrers: {}, postViews: {}, searchKeywords: {} };
+            dailyHistory[todayStr] = { date: todayStr, count: 0, uniqueCount: 0, referrers: {}, postViews: {}, searchKeywords: {} };
+        }
+        if (shouldBundlePageview) {
+            dailyHistory[todayStr].count = (dailyHistory[todayStr].count || 0) + 1;
+            if (isNewVisitor) {
+                dailyHistory[todayStr].uniqueCount = (dailyHistory[todayStr].uniqueCount || 0) + 1;
+            }
+            if (source !== '내부 이동') {
+                if (!dailyHistory[todayStr].referrers) dailyHistory[todayStr].referrers = {};
+                dailyHistory[todayStr].referrers[source] = (dailyHistory[todayStr].referrers[source] || 0) + 1;
+            }
         }
         if (!dailyHistory[todayStr].postViews) dailyHistory[todayStr].postViews = {};
-        
         dailyHistory[todayStr].postViews[postId] = (dailyHistory[todayStr].postViews[postId] || 0) + 1;
 
-        const source = getReferrerSource();
         let inflowLandingEngine = '';
         if (source.includes('네이버')) inflowLandingEngine = '네이버';
         else if (source.includes('구글')) inflowLandingEngine = '구글';
@@ -1305,16 +1357,19 @@ function recordPostView(postId, postTitle) {
             if (!dailyHistory[todayStr].searchKeywords) dailyHistory[todayStr].searchKeywords = {};
             const kKey = `[${inflow.source}] ${inflow.keyword}`;
             dailyHistory[todayStr].searchKeywords[kKey] = (dailyHistory[todayStr].searchKeywords[kKey] || 0) + 1;
+            if (shouldBundlePageview) recordSearchQuery(inflow.keyword, inflow.source);
         }
 
         localStorage.setItem('analytics_daily_history', JSON.stringify(dailyHistory));
 
-        // Sync postview to server for unified cross-device analytics
+        // Sync atomically to server in ONE request (zero 409 collision between pageview & postview!)
         fetch('/api/analytics', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                type: 'postview',
+                type: shouldBundlePageview ? 'pageview_and_postview' : 'postview',
+                isNewVisitor,
+                referrer: source,
                 postId,
                 postTitle,
                 inflowLandingEngine,
