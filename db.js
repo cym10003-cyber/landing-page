@@ -71,9 +71,7 @@ async function getPosts() {
       const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}?t=${Date.now()}`;
       const headers = {
         'Accept': 'application/vnd.github.v3+json',
-        'Authorization': `token ${config.github_token}`,
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache'
+        'Authorization': `token ${config.github_token}`
       };
       const res = await fetch(url, { headers, cache: 'no-store' });
       if (res.ok) {
