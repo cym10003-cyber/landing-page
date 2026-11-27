@@ -46,26 +46,33 @@ export default async function handler(req, res) {
   let posts = null;
 
   const token = (process.env.GITHUB_TOKEN || '').trim();
-  try {
-    const ghApiUrl = `https://api.github.com/repos/cym10003-cyber/landing-page/contents/data/posts.json?t=${Date.now()}`;
-    const headers = { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Vercel-Serverless-Function' };
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-    const apiRes = await fetch(ghApiUrl, { headers, cache: 'no-store' });
-    if (apiRes.ok) {
-      const apiData = await apiRes.json();
-      if (apiData && apiData.content) {
-        posts = JSON.parse(Buffer.from(apiData.content, 'base64').toString('utf8'));
+  const dataRepos = ['landing-page-assets', 'landing-page'];
+  for (const repoName of dataRepos) {
+    if (posts) break;
+    try {
+      const ghApiUrl = `https://api.github.com/repos/cym10003-cyber/${repoName}/contents/data/posts.json?t=${Date.now()}`;
+      const headers = { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Vercel-Serverless-Function' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      const apiRes = await fetch(ghApiUrl, { headers, cache: 'no-store' });
+      if (apiRes.ok) {
+        const apiData = await apiRes.json();
+        if (apiData && apiData.content) {
+          posts = JSON.parse(Buffer.from(apiData.content, 'base64').toString('utf8'));
+        }
       }
-    }
-  } catch (e) {}
+    } catch (e) {}
+  }
 
   if (!posts) {
-    try {
-      const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/landing-page/main/data/posts.json?t=${Date.now()}`, {
-        headers: { 'User-Agent': 'Vercel-Serverless-Function', 'Cache-Control': 'no-cache' }
-      });
-      if (ghRes.ok) posts = await ghRes.json();
-    } catch (e) {}
+    for (const repoName of dataRepos) {
+      if (posts) break;
+      try {
+        const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/${repoName}/main/data/posts.json?t=${Date.now()}`, {
+          headers: { 'User-Agent': 'Vercel-Serverless-Function', 'Cache-Control': 'no-cache' }
+        });
+        if (ghRes.ok) posts = await ghRes.json();
+      } catch (e) {}
+    }
   }
 
   if (!posts && fs.existsSync(postsPath)) {

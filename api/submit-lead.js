@@ -8,38 +8,43 @@ export default async function handler(req, res) {
   }
 
   const owner = 'cym10003-cyber';
-  const repo = 'landing-page';
+  const repo = 'landing-page-assets';
+  const legacyRepo = 'landing-page';
   const path = 'data/leads.json';
   const token = (process.env.GITHUB_TOKEN || '').trim();
 
-  // GET: Fetch all leads from GitHub REST API (real-time zero CDN caching)
+  // GET: Fetch all leads from GitHub REST API (data repo first, legacy fallback)
   if (req.method === 'GET') {
-    try {
-      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-      const headers = {
-        'Accept': 'application/vnd.github.v3+json'
-      };
-      if (token) headers['Authorization'] = `Bearer ${token}`;
+    for (const rName of [repo, legacyRepo]) {
+      try {
+        const url = `https://api.github.com/repos/${owner}/${rName}/contents/${path}`;
+        const headers = {
+          'Accept': 'application/vnd.github.v3+json'
+        };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
 
-      const ghRes = await fetch(`${url}?t=${Date.now()}`, { headers });
-      if (ghRes.ok) {
-        const data = await ghRes.json();
-        if (data && data.content) {
-          const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
-          const leads = JSON.parse(contentStr);
-          return res.status(200).json(Array.isArray(leads) ? leads : []);
+        const ghRes = await fetch(`${url}?t=${Date.now()}`, { headers });
+        if (ghRes.ok) {
+          const data = await ghRes.json();
+          if (data && data.content) {
+            const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
+            const leads = JSON.parse(contentStr);
+            return res.status(200).json(Array.isArray(leads) ? leads : []);
+          }
         }
-      }
-    } catch(e) {}
+      } catch(e) {}
+    }
 
     // Fallback to raw GitHub
-    try {
-      const rawRes = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${path}?t=${Date.now()}`);
-      if (rawRes.ok) {
-        const leads = await rawRes.json();
-        return res.status(200).json(Array.isArray(leads) ? leads : []);
-      }
-    } catch(e) {}
+    for (const rName of [repo, legacyRepo]) {
+      try {
+        const rawRes = await fetch(`https://raw.githubusercontent.com/${owner}/${rName}/main/${path}?t=${Date.now()}`);
+        if (rawRes.ok) {
+          const leads = await rawRes.json();
+          return res.status(200).json(Array.isArray(leads) ? leads : []);
+        }
+      } catch(e) {}
+    }
 
     return res.status(200).json([]);
   }
@@ -226,26 +231,33 @@ export default async function handler(req, res) {
         }
       } catch(e) {}
 
-      // Persist lead to GitHub data/leads.json if GITHUB_TOKEN is available
+      // Persist lead to GitHub data/leads.json in data repo (with legacy read fallback)
       if (token) {
         try {
-          const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+          const writeUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
           const headers = {
             'Accept': 'application/vnd.github.v3+json',
             'Authorization': `Bearer ${token}`
           };
 
-          const getRes = await fetch(url, { headers });
           let sha = null;
           let leadsList = [];
 
-          if (getRes.ok) {
-            const data = await getRes.json();
-            sha = data.sha;
-            try {
-              const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
-              leadsList = JSON.parse(contentStr);
-            } catch(e) {}
+          for (const rName of [repo, legacyRepo]) {
+            const readUrl = `https://api.github.com/repos/${owner}/${rName}/contents/${path}?t=${Date.now()}`;
+            const getRes = await fetch(readUrl, { headers });
+            if (getRes.ok) {
+              const data = await getRes.json();
+              if (rName === repo) sha = data.sha;
+              try {
+                const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
+                const parsed = JSON.parse(contentStr);
+                if (Array.isArray(parsed)) {
+                  leadsList = parsed;
+                  break;
+                }
+              } catch(e) {}
+            }
           }
 
           if (!Array.isArray(leadsList)) leadsList = [];
@@ -260,7 +272,7 @@ export default async function handler(req, res) {
           };
           if (sha) body.sha = sha;
 
-          await fetch(url, {
+          await fetch(writeUrl, {
             method: 'PUT',
             headers: { ...headers, 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
@@ -282,21 +294,28 @@ export default async function handler(req, res) {
       const { id } = req.query;
       if (!token) return res.status(401).json({ error: 'Token missing' });
 
-      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+      const writeUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
       const headers = {
         'Accept': 'application/vnd.github.v3+json',
         'Authorization': `Bearer ${token}`
       };
 
-      const getRes = await fetch(url, { headers });
-      if (!getRes.ok) return res.status(404).json({ error: 'File not found' });
-      const data = await getRes.json();
-      const sha = data.sha;
-      const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
-      let leadsList = [];
-      try {
-        leadsList = JSON.parse(contentStr) || [];
-      } catch(e) {}
+      let sha = null;
+      let leadsList = null;
+      for (const rName of [repo, legacyRepo]) {
+        const readUrl = `https://api.github.com/repos/${owner}/${rName}/contents/${path}?t=${Date.now()}`;
+        const getRes = await fetch(readUrl, { headers });
+        if (getRes.ok) {
+          const data = await getRes.json();
+          if (rName === repo) sha = data.sha;
+          const contentStr = Buffer.from(data.content, 'base64').toString('utf8');
+          try {
+            leadsList = JSON.parse(contentStr) || [];
+            break;
+          } catch(e) {}
+        }
+      }
+      if (!Array.isArray(leadsList)) return res.status(404).json({ error: 'File not found' });
 
       if (id) {
         leadsList = leadsList.filter(l => String(l.id) !== String(id));
@@ -307,14 +326,16 @@ export default async function handler(req, res) {
       const jsonStr = JSON.stringify(leadsList, null, 2);
       const contentBase64 = Buffer.from(jsonStr, 'utf8').toString('base64');
 
-      const delRes = await fetch(url, {
+      const putBody = {
+        message: id ? `feat: delete lead ${id} [skip ci] [skip vercel]` : 'feat: clear all leads [skip ci] [skip vercel]',
+        content: contentBase64
+      };
+      if (sha) putBody.sha = sha;
+
+      const delRes = await fetch(writeUrl, {
         method: 'PUT',
         headers: { ...headers, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: id ? `feat: delete lead ${id} [skip ci] [skip vercel]` : 'feat: clear all leads [skip ci] [skip vercel]',
-          content: contentBase64,
-          sha
-        })
+        body: JSON.stringify(putBody)
       });
 
       if (delRes.ok) {

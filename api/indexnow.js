@@ -45,12 +45,15 @@ export default async function handler(req, res) {
       urlList.push(`${BASE_URL}/about`);
 
       let posts = null;
-      try {
-        const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/landing-page/main/data/posts.json?t=${Date.now()}`, {
-          headers: { 'User-Agent': 'Vercel-Serverless-Function', 'Cache-Control': 'no-cache' }
-        });
-        if (ghRes.ok) posts = await ghRes.json();
-      } catch (e) {}
+      for (const repoName of ['landing-page-assets', 'landing-page']) {
+        if (posts) break;
+        try {
+          const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/${repoName}/main/data/posts.json?t=${Date.now()}`, {
+            headers: { 'User-Agent': 'Vercel-Serverless-Function', 'Cache-Control': 'no-cache' }
+          });
+          if (ghRes.ok) posts = await ghRes.json();
+        } catch (e) {}
+      }
 
       if (!posts) {
         const postsPath = path.join(process.cwd(), 'data', 'posts.json');

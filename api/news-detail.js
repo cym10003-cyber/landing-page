@@ -374,37 +374,44 @@ export default async function handler(req, res) {
     try {
       let posts = null;
 
-      // Tier 1: Try GitHub REST API for real-time un-cached content
+      // Tier 1: Try GitHub REST API for real-time un-cached content (data repo first, legacy fallback)
       const token = (process.env.GITHUB_TOKEN || '').trim();
-      try {
-        const ghApiUrl = `https://api.github.com/repos/cym10003-cyber/landing-page/contents/data/posts.json?t=${Date.now()}`;
-        const headers = { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Vercel-Serverless-Function' };
-        if (token) headers['Authorization'] = `Bearer ${token}`;
-        const apiRes = await fetch(ghApiUrl, { headers, cache: 'no-store' });
-        if (apiRes.ok) {
-          const apiData = await apiRes.json();
-          if (apiData && apiData.content) {
-            const contentStr = Buffer.from(apiData.content, 'base64').toString('utf8');
-            posts = JSON.parse(contentStr);
+      const dataRepos = ['landing-page-assets', 'landing-page'];
+      for (const repoName of dataRepos) {
+        if (posts) break;
+        try {
+          const ghApiUrl = `https://api.github.com/repos/cym10003-cyber/${repoName}/contents/data/posts.json?t=${Date.now()}`;
+          const headers = { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Vercel-Serverless-Function' };
+          if (token) headers['Authorization'] = `Bearer ${token}`;
+          const apiRes = await fetch(ghApiUrl, { headers, cache: 'no-store' });
+          if (apiRes.ok) {
+            const apiData = await apiRes.json();
+            if (apiData && apiData.content) {
+              const contentStr = Buffer.from(apiData.content, 'base64').toString('utf8');
+              posts = JSON.parse(contentStr);
+            }
           }
-        }
-      } catch (e) {}
+        } catch (e) {}
+      }
 
       // Tier 2: Try fetching raw posts from GitHub
       if (!posts) {
-        try {
-          const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/landing-page/main/data/posts.json?t=${Date.now()}&r=${Math.random()}`, {
-            headers: {
-              'User-Agent': 'Vercel-Serverless-Function',
-              'Cache-Control': 'no-cache, no-store, must-revalidate',
-              'Pragma': 'no-cache'
+        for (const repoName of dataRepos) {
+          if (posts) break;
+          try {
+            const ghRes = await fetch(`https://raw.githubusercontent.com/cym10003-cyber/${repoName}/main/data/posts.json?t=${Date.now()}&r=${Math.random()}`, {
+              headers: {
+                'User-Agent': 'Vercel-Serverless-Function',
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache'
+              }
+            });
+            if (ghRes.ok) {
+              posts = await ghRes.json();
             }
-          });
-          if (ghRes.ok) {
-            posts = await ghRes.json();
+          } catch (ghErr) {
+            console.warn(`GitHub raw fetch failed (${repoName}):`, ghErr);
           }
-        } catch (ghErr) {
-          console.warn('GitHub raw fetch failed, using local posts.json fallback:', ghErr);
         }
       }
 

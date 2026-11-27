@@ -1,4 +1,4 @@
-console.log("Antigravity db.js version: 20261126_v264");
+console.log("Antigravity db.js version: 20261127_v266");
 // Force clear localStorage posts cache if version changes to flush stale client isPrivate cache
 const APP_VERSION = "20261125_v261";
 if (localStorage.getItem('app_version') !== APP_VERSION) {
@@ -65,24 +65,29 @@ async function getPosts() {
 
   let remotePosts = null;
 
+  const candidateRepos = [...new Set([config.github_repo, 'landing-page-assets', 'landing-page'].filter(Boolean))];
+
   // Tier 1: Try GitHub REST API for un-cached real-time data if token is available
   if (hasGit && config.github_token) {
-    try {
-      const url = `https://api.github.com/repos/${config.github_owner}/${config.github_repo}/contents/${config.data_file_path}?t=${Date.now()}`;
-      const headers = {
-        'Accept': 'application/vnd.github.v3+json',
-        'Authorization': `token ${config.github_token}`
-      };
-      const res = await fetch(url, { headers, cache: 'no-store' });
-      if (res.ok) {
-        const data = await res.json();
-        const decodedStr = base64ToUtf8(data.content);
-        if (decodedStr) {
-          remotePosts = JSON.parse(decodedStr);
+    for (const repoName of candidateRepos) {
+      if (remotePosts) break;
+      try {
+        const url = `https://api.github.com/repos/${config.github_owner}/${repoName}/contents/${config.data_file_path}?t=${Date.now()}`;
+        const headers = {
+          'Accept': 'application/vnd.github.v3+json',
+          'Authorization': `token ${config.github_token}`
+        };
+        const res = await fetch(url, { headers, cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          const decodedStr = base64ToUtf8(data.content);
+          if (decodedStr) {
+            remotePosts = JSON.parse(decodedStr);
+          }
         }
+      } catch (e) {
+        console.warn(`GitHub REST API fetch failed (${repoName}), trying fallback:`, e);
       }
-    } catch (e) {
-      console.warn("GitHub REST API fetch failed, trying raw CDN:", e);
     }
   }
 
@@ -90,14 +95,17 @@ async function getPosts() {
   // Note: raw.githubusercontent.com rejects custom Cache-Control/Pragma/User-Agent CORS preflight headers,
   // so rely on cache-busting query params (?t=&r=) + fetch cache:'no-store' option without custom headers.
   if (!remotePosts && hasGit) {
-    try {
-      const rawUrl = `https://raw.githubusercontent.com/${config.github_owner}/${config.github_repo}/main/${config.data_file_path}?t=${Date.now()}&r=${Math.random()}`;
-      const rawRes = await fetch(rawUrl, { cache: 'no-store' });
-      if (rawRes.ok) {
-        remotePosts = await rawRes.json();
+    for (const repoName of candidateRepos) {
+      if (remotePosts) break;
+      try {
+        const rawUrl = `https://raw.githubusercontent.com/${config.github_owner}/${repoName}/main/${config.data_file_path}?t=${Date.now()}&r=${Math.random()}`;
+        const rawRes = await fetch(rawUrl, { cache: 'no-store' });
+        if (rawRes.ok) {
+          remotePosts = await rawRes.json();
+        }
+      } catch (e) {
+        console.warn(`Raw GitHub fetch failed (${repoName}):`, e);
       }
-    } catch (e) {
-      console.warn("Raw GitHub fetch failed:", e);
     }
   }
 
