@@ -22,5 +22,17 @@
     "notion_synced": true,
     "notebooklm_synced": true,
     "updated_at": "2026-11-03T09:42:00"
+  },
+  {
+    "id": "law-search",
+    "name": "대한민국 법령 및 판례 실시간 검색",
+    "description": "대한민국 법률, 시행령, 시행규칙, 판례, 조례 검색 및 법조문·과태료 조회가 필요할 때 반드시 사용합니다. law-mcp 도구를 호출하여 국가법령정보센터(law.go.kr)의 공인 데이터를 실시간으로 조회합니다.",
+    "category": "Legal & MCP",
+    "tags": ["법률", "공인중개사법", "법조문", "판례", "조례", "과태료", "law-mcp"],
+    "trigger_keywords": ["법", "법률", "법조문", "시행령", "시행규칙", "판례", "조례", "과태료", "벌금", "법제처"],
+    "path": "_agent/skills/law-search/SKILL.md",
+    "notion_synced": true,
+    "notebooklm_synced": true,
+    "updated_at": "2026-11-27T13:37:00"
   }
 ]
