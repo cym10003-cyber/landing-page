@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "law-mcp": {
+      "serverUrl": "https://www.law.go.kr/lawmcp"
+    }
+  }
+}
